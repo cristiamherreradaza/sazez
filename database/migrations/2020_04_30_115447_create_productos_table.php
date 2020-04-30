@@ -1,0 +1,51 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateProductosTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('productos', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('marca_id');
+            $table->foreign('marca_id')->references('id')->on('marcas');
+            $table->unsignedBigInteger('categoria_id');
+            $table->foreign('categoria_id')->references('id')->on('categorias');
+            $table->string('codigo', 150)->nullable();
+            $table->string('nombre', 255)->nullable();
+            $table->string('nombre_venta', 500)->nullable();
+            $table->string('tipo', 120)->nullable();
+            $table->string('modelo', 120)->nullable();
+            $table->decimal('precio_compra', 15, 2)->default(0);
+            $table->decimal('largo', 6, 2)->default(0);
+            $table->decimal('ancho', 6, 2)->default(0);
+            $table->decimal('alto', 6, 2)->default(0);
+            $table->decimal('peso', 6, 2)->default(0);
+            $table->string('colores', 30)->nullable();
+            $table->text('descripcion')->nullable();
+            $table->string('url_referencia', 500)->nullable();
+            $table->string('video', 500)->nullable();
+            $table->string('estado', 30)->nullable();
+            $table->datetime('borrado', 0)->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('productos');
+    }
+}
