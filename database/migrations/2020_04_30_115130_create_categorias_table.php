@@ -15,9 +15,11 @@ class CreateCategoriasTable extends Migration
     {
         Schema::create('categorias', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('nombre', 80)->nullable();
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado', 0)->nullable();
+            $table->datetime('borrado')->nullable();
             $table->timestamps();
         });
     }

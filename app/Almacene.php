@@ -4,17 +4,20 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Marca extends Model
+class Almacene extends Model
 {
     protected $fillable = [
     	'user_id',
-        'nombre',
+    	'nombre',
+    	'direccion',
+    	'telefono',
         'estado',
         'borrado',
     ];
 
-    public function producto()
+    public function user()
     {
-        return $this->hasOne('App\Producto');
+        return $this->belongsTo('App\User');
     }
+
 }

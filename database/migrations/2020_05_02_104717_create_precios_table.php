@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMarcasTable extends Migration
+class CreatePreciosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,15 @@ class CreateMarcasTable extends Migration
      */
     public function up()
     {
-        Schema::create('marcas', function (Blueprint $table) {
+        Schema::create('precios', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('nombre', 80)->nullable();
+            $table->unsignedBigInteger('producto_id');
+            $table->foreign('producto_id')->references('id')->on('productos');
+            $table->unsignedBigInteger('escala_id');
+            $table->foreign('escala_id')->references('id')->on('escalas');
+            $table->decimal('precio', 15, 2)->default(0);
             $table->string('estado', 30)->nullable();
             $table->datetime('borrado')->nullable();
             $table->timestamps();
@@ -31,6 +35,6 @@ class CreateMarcasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('marcas');
+        Schema::dropIfExists('precios');
     }
 }

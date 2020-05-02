@@ -4,16 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Categoria extends Model
+class Escala extends Model
 {
     protected $fillable = [
+    	'user_id',
         'nombre',
         'estado',
         'borrado',
     ];
 
-    public function producto()
+    public function user()
     {
-        return $this->hasOne('App\Producto');
+        return $this->belongsTo('App\User');
     }
+
 }

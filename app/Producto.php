@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Producto extends Model
 {
     protected $fillable = [
+        'user_id',
         'marca_id',
         'categoria_id',
         'codigo',
@@ -24,20 +25,31 @@ class Producto extends Model
         'url_referencia',
         'video',
         'estado',
+        'borrado',
     ];
-
-    public function asignatura()
-    {
-        return $this->belongsTo('App\Asignatura');
-    }
-
-    public function turno()
-    {
-        return $this->belongsTo('App\Turno');
-    }
 
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function marca()
+    {
+        return $this->belongsTo('App\Marca');
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo('App\Categoria');
+    }
+
+    public function caracteristica()
+    {
+        return $this->hasMany('App\caracteristica');
+    }
+
+    public function precio()
+    {
+        return $this->hasMany('App\Precio');
     }
 }

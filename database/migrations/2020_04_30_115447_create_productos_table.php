@@ -15,6 +15,8 @@ class CreateProductosTable extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('marca_id');
             $table->foreign('marca_id')->references('id')->on('marcas');
             $table->unsignedBigInteger('categoria_id');
@@ -34,7 +36,7 @@ class CreateProductosTable extends Migration
             $table->string('url_referencia', 500)->nullable();
             $table->string('video', 500)->nullable();
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado', 0)->nullable();
+            $table->datetime('borrado')->nullable();
             $table->timestamps();
         });
     }
