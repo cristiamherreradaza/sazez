@@ -31,7 +31,7 @@ class CreateProductosTable extends Migration
             $table->decimal('ancho', 6, 2)->default(0);
             $table->decimal('alto', 6, 2)->default(0);
             $table->decimal('peso', 6, 2)->default(0);
-            $table->string('colores', 30)->nullable();
+            $table->string('colores', 50)->nullable();
             $table->text('descripcion')->nullable();
             $table->string('url_referencia', 500)->nullable();
             $table->string('video', 500)->nullable();

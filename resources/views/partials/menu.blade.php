@@ -28,7 +28,12 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap">PERSONAL</li>
                 <li>
-                    <a href="{{ url('Carrera/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Malla Curricular</span></a>
+                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                            class="hide-menu">PRODUCTOS</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ url('Producto/nuevo') }}">Nuevo</a></li>
+                        <li><a href="{{ url('Producto/listado') }}">Listado</a></li>
+                    </ul>
                 </li>
                 <li>
                     <a href="{{ url('User/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Personal</span></a>
