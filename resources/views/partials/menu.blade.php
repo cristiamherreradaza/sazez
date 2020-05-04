@@ -36,6 +36,9 @@
                     </ul>
                 </li>
                 <li>
+                    <a href="{{ url('Marca/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">MARCAS</span></a>
+                </li>
+                <li>
                     <a href="{{ url('User/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Personal</span></a>
                 </li>
                 <li>
