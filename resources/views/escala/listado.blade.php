@@ -14,8 +14,8 @@
 <div class="card card-outline-info">
     <div class="card-header">
         <h4 class="mb-0 text-white">
-            MARCAS &nbsp;&nbsp;
-            <button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nueva_marca()"><i class="fas fa-plus"></i> &nbsp; NUEVA MARCA</button>
+            ESCALAS &nbsp;&nbsp;
+            <button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nueva_marca()"><i class="fas fa-plus"></i> &nbsp; NUEVA ESCALA</button>
         </h4>
     </div>
     <div class="card-body" id="lista">
@@ -29,13 +29,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($marcas as $key => $marca)
+                    @foreach($escalas as $key => $escala)
                         <tr>
                             <td>{{ ($key+1) }}</td>
-                            <td>{{ $marca->nombre }}</td>
+                            <td>{{ $escala->nombre }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar marca"  onclick="editar('{{ $marca->id }}', '{{ $marca->nombre }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar marca"  onclick="eliminar('{{ $marca->id }}', '{{ $marca->nombre }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar escala"  onclick="editar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar escala"  onclick="eliminar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -46,48 +46,46 @@
 </div>
 
 
-<!-- inicio modal marca nueva -->
-<div id="modal_marcas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- inicio modal nueva escala -->
+<div id="nueva_escala" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">NUEVA MARCA</h4>
+                    <h4 class="modal-title" id="myModalLabel">NUEVA ESCALA</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('Marca/guardar') }}" method="POST">
+                    <form action="{{ url('Escala/guardar') }}" method="POST">
                         @csrf
                         <div class="row">
-
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="control-label">Nombre</label>
-                                    <input name="nombre_marca" type="text" id="nombre_marca" class="form-control" required>
+                                    <input name="nombre_escala" type="text" id="nombre_escala" class="form-control" required>
                                 </div>
                             </div>
-
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_marca()">GUARDAR MARCA</button>
+                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_escala()">GUARDAR ESCALA</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<!-- fin modal marca nueva -->
+<!-- fin modal nueva escala -->
 
-<!-- inicio modal editar marca -->
-<div id="editar_marcas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- inicio modal editar escala -->
+<div id="editar_escalas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">EDITAR MARCA</h4>
+                    <h4 class="modal-title" id="myModalLabel">EDITAR ESCALA</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ url('Marca/actualizar') }}" method="POST">
+                    <form action="{{ url('Escala/actualizar') }}" method="POST">
                         @csrf
                         <input type="hidden" name="id" id="id" value="">
                         <div class="row">
@@ -101,13 +99,13 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="actualiza_marca()">ACTUALIZAR MARCA</button>
+                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_escala()">ACTUALIZAR ESCALA</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<!-- fin modal editar marca -->
+<!-- fin modal editar escala -->
 
 @stop
 
@@ -181,32 +179,29 @@
     function nueva_marca()
     {
         $("#marca_id").val("");
-        $("#nombre_marca").val("");
-        $("#modal_marcas").modal('show');
+        $("#nombre_escala").val("");
+        $("#nueva_escala").modal('show');
     }
 
-    function guarda_marca()
+    function guardar_escala()
     {
-        var nombre_marca = $("#nombre_marca").val();
-        if(nombre_marca.length>0){
+        var nombre_escala = $("#nombre_escala").val();
+        if(nombre_escala.length>0){
             $.ajax({
-                url: "{{ url('Marca/guardar') }}",
+                url: "{{ url('Escala/guardar') }}",
                 method: "POST",
                 data: {
-                    nombre_marca : nombre_marca
+                    nombre_escala : nombre_escala
                 },
                 cache: false,
                 success: function(data)
                 {
                     Swal.fire(
                         'Excelente!',
-                        'Una nueva marca fue registrada.',
+                        'Una nueva escala fue registrada.',
                         'success'
                     ).then(function() {
-                        //$("#modal_marcas").modal('hide');
                         location.reload();
-                        //location.reload("#lista");
-                        //$("#lista").load("#lista");
                     });
                 }
             });
@@ -224,16 +219,16 @@
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
-        $("#editar_marcas").modal('show');
+        $("#editar_escalas").modal('show');
     }
 
-    function actualiza_marca()
+    function actualizar_escala()
     {
         var id = $("#id").val();
         var nombre = $("#nombre").val();
         if(nombre.length>0){
             $.ajax({
-                url: "{{ url('Marca/actualizar') }}",
+                url: "{{ url('Escala/actualizar') }}",
                 method: "POST",
                 data: {
                     id : id,
@@ -244,13 +239,10 @@
                 {
                     Swal.fire(
                         'Excelente!',
-                        'Marca actualizada correctamente.',
+                        'Escala actualizada correctamente.',
                         'success'
                     ).then(function() {
-                        //$("#editar_marcas").modal('hide');
                         location.reload();
-                        //location.reload("#lista");
-                        //$("#lista").load("#lista");
                     });
                 }
             });
@@ -278,7 +270,7 @@
         }).then((result) => {
             if (result.value) {
                 $.ajax({
-                    url: "{{ url('Marca/eliminar') }}",
+                    url: "{{ url('Escala/eliminar') }}",
                     method: "POST",
                     data: {
                         id : id
@@ -287,7 +279,7 @@
                     success: function (data) {
                         Swal.fire(
                             'Excelente!',
-                            'La marca fue eliminada',
+                            'La escala fue eliminada',
                             'success'
                         ).then(function() {
                             location.reload();

@@ -49,6 +49,13 @@
                         <li><a href="{{ url('Almacen/listado') }}">Listado</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                            class="hide-menu">ESCALAS</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ url('Escala/listado') }}">Listado</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

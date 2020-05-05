@@ -56,3 +56,9 @@ Route::get('Almacen/listado', 'AlmacenController@listado');
 Route::post('Almacen/guardar', 'AlmacenController@guardar');
 Route::post('Almacen/actualizar', 'AlmacenController@actualizar');
 Route::post('Almacen/eliminar', 'AlmacenController@eliminar');
+
+// ESCALAS
+Route::get('Escala/listado', 'EscalaController@listado');
+Route::post('Escala/guardar', 'EscalaController@guardar');
+Route::post('Escala/actualizar', 'EscalaController@actualizar');
+Route::post('Escala/eliminar', 'EscalaController@eliminar');
