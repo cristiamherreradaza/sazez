@@ -53,3 +53,6 @@ Route::post('Marca/eliminar', 'MarcaController@eliminar');
 
 // ALMACENES
 Route::get('Almacen/listado', 'AlmacenController@listado');
+Route::post('Almacen/guardar', 'AlmacenController@guardar');
+Route::post('Almacen/actualizar', 'AlmacenController@actualizar');
+Route::post('Almacen/eliminar', 'AlmacenController@eliminar');

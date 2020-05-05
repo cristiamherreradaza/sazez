@@ -188,27 +188,36 @@
     function guarda_marca()
     {
         var nombre_marca = $("#nombre_marca").val();
-        $.ajax({
-            url: "{{ url('Marca/guardar') }}",
-            method: "POST",
-            data: {
-                nombre_marca : nombre_marca
-            },
-            cache: false,
-            success: function(data)
-            {
-                Swal.fire(
-                    'Excelente!',
-                    'Una nueva marca fue registrada.',
-                    'success'
-                ).then(function() {
-                    //$("#modal_marcas").modal('hide');
-                    location.reload();
-                    //location.reload("#lista");
-                    //$("#lista").load("#lista");
-                });
-            }
-        });
+        if(nombre_marca.lenth>0){
+            $.ajax({
+                url: "{{ url('Marca/guardar') }}",
+                method: "POST",
+                data: {
+                    nombre_marca : nombre_marca
+                },
+                cache: false,
+                success: function(data)
+                {
+                    Swal.fire(
+                        'Excelente!',
+                        'Una nueva marca fue registrada.',
+                        'success'
+                    ).then(function() {
+                        //$("#modal_marcas").modal('hide');
+                        location.reload();
+                        //location.reload("#lista");
+                        //$("#lista").load("#lista");
+                    });
+                }
+            });
+        }else{
+            Swal.fire(
+                'Oops...',
+                'Es necesario llenar el campo Nombre',
+                'error'
+            )
+        }
+        
     }
 
     function editar(id, nombre)
@@ -222,29 +231,37 @@
     {
         var id = $("#id").val();
         var nombre = $("#nombre").val();
-        //alert(id);
-        $.ajax({
-            url: "{{ url('Marca/actualizar') }}",
-            method: "POST",
-            data: {
-                id : id,
-                nombre : nombre
-            },
-            cache: false,
-            success: function(data)
-            {
-                Swal.fire(
-                    'Excelente!',
-                    'Marca actualizada correctamente.',
-                    'success'
-                ).then(function() {
-                    //$("#editar_marcas").modal('hide');
-                    location.reload();
-                    //location.reload("#lista");
-                    //$("#lista").load("#lista");
-                });
-            }
-        });
+        if(nombre.length>0){
+            $.ajax({
+                url: "{{ url('Marca/actualizar') }}",
+                method: "POST",
+                data: {
+                    id : id,
+                    nombre : nombre
+                },
+                cache: false,
+                success: function(data)
+                {
+                    Swal.fire(
+                        'Excelente!',
+                        'Marca actualizada correctamente.',
+                        'success'
+                    ).then(function() {
+                        //$("#editar_marcas").modal('hide');
+                        location.reload();
+                        //location.reload("#lista");
+                        //$("#lista").load("#lista");
+                    });
+                }
+            });
+        }else{
+            Swal.fire(
+                'Oops...',
+                'Es necesario llenar el campo Nombre',
+                'error'
+            )
+        }
+        
     }
 
     function eliminar(id, nombre)
