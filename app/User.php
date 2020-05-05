@@ -44,7 +44,7 @@ class User extends Authenticatable
         'numero_referencia',
         'name',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     /**

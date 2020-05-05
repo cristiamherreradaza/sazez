@@ -21,7 +21,7 @@ class CreateCaracteristicasTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->text('descripcion')->nullable();
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

@@ -27,13 +27,14 @@
 
                             <div class="vtabs ">
                                 <ul class="nav nav-tabs tabs-vertical" role="tablist">
-                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home9" role="tab"><span><i class="ti-agenda"></i> PRINCIPAL</span></a> </li>
-                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#profile9" role="tab"><span><i class="ti-ruler-pencil"></i> DETALLES</span></a> </li>
-                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#messages9" role="tab"><span><i class="ti-image"></i> MULTIMEDIA</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#principal" role="tab"><span><i class="ti-agenda"></i> PRINCIPAL</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#precios" role="tab"><span><i class="ti-money"></i> PRECIOS</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#detalles" role="tab"><span><i class="ti-ruler-pencil"></i> DETALLES</span></a> </li>
+                                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#multimedia" role="tab"><span><i class="ti-image"></i> MULTIMEDIA</span></a> </li>
                                 </ul>
                                 <!-- Tab panes -->
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="home9" role="tabpanel">
+                                    <div class="tab-pane active" id="principal" role="tabpanel">
                                         <div class="p-3">
                                             <div class="row">
                                                 <div class="col-md-2">
@@ -82,22 +83,21 @@
                                             </div>
 
                                             <div class="row">
-
-                                                <div class="col-md-2">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>CANTIDAD </label>
                                                         <input type="number" class="form-control" name="cantidad" id="cantidad" min="0">
                                                     </div>
                                                 </div>
-                                            
-                                                <div class="col-md-2">
+                                                
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>P/COMPRA </label>
                                                         <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any">
                                                     </div>
                                                 </div>
-                                            
-                                                <div class="col-md-2">
+                                                
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>ALMACEN </label>
                                                         <select name="almacene_id" class="form-control">
@@ -106,12 +106,34 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                </div>
+                                                </div>                                                
+                                            </div>
+
                                             
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane p-3" id="precios" role="tabpanel">
+                                        <div class="row">
+                                           <div class="table-responsive">
+                                                <table class="table no-wrap">
+                                                    <tbody>
+                                                     @foreach ($escalas as $key => $e)
+                                                     <tr>
+                                                         <td>{{ $e->nombre }}</td>
+                                                         <td>
+                                                             <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any">
+                                                             <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
+                                                         </td>
+                                                     </tr>
+                                                     @endforeach
+                                                    </tbody>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane  p-3" id="profile9" role="tabpanel">
+
+                                    <div class="tab-pane  p-3" id="detalles" role="tabpanel">
                                         <div class="row">
 
                                             <div class="col">
@@ -174,7 +196,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="tab-pane p-3" id="messages9" role="tabpanel">
+                                    <div class="tab-pane p-3" id="multimedia" role="tabpanel">
                                         <div class="row">
 
                                             <div class="col-md-6">

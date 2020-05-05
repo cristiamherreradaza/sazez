@@ -23,7 +23,7 @@ class CreatePreciosTable extends Migration
             $table->foreign('escala_id')->references('id')->on('escalas');
             $table->decimal('precio', 15, 2)->default(0);
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

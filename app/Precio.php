@@ -12,7 +12,7 @@ class Precio extends Model
     	'escala_id',
         'precio',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function user()

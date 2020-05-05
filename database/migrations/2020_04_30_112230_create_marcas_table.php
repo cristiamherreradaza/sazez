@@ -19,7 +19,7 @@ class CreateMarcasTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('nombre', 80)->nullable();
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

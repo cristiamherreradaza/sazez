@@ -36,7 +36,7 @@ class CreateProductosTable extends Migration
             $table->string('url_referencia', 500)->nullable();
             $table->string('video', 500)->nullable();
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

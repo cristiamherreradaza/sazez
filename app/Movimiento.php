@@ -15,7 +15,7 @@ class Movimiento extends Model
         'ingreso',
         'salida',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function user()

@@ -9,7 +9,7 @@ class Categoria extends Model
     protected $fillable = [
         'nombre',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function producto()

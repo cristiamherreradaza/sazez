@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Producto extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'user_id',
         'marca_id',
@@ -25,8 +27,10 @@ class Producto extends Model
         'url_referencia',
         'video',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
+
+    protected $dates = ['deleted_at'];
 
     public function user()
     {

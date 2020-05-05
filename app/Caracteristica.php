@@ -11,7 +11,7 @@ class Caracteristica extends Model
         'producto_id',
         'descripcion',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function producto()

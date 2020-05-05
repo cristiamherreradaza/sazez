@@ -21,7 +21,7 @@ class CreateAlmacenesTable extends Migration
             $table->string('direccion', 255)->nullable();
             $table->string('telefonos', 150)->nullable();
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }

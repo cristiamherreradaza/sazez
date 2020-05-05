@@ -35,18 +35,6 @@
                         <li><a href="{{ url('Producto/listado') }}">Listado</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="{{ url('User/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Personal</span></a>
-                </li>
-                <li>
-                    <a href="{{ url('notaspropuesta/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Ponderacion</span></a>
-                </li>
-                <li>
-                    <a href="{{ url('nota/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Asignatura</span></a>
-                </li>
-                <li>
-                    <a href="{{ url('Inscripcion/inscripcion') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Inscripciones</span></a>
-                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

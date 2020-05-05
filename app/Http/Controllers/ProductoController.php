@@ -7,6 +7,7 @@ use DataTables;
 use App\Almacene;
 use App\Producto;
 use App\Categoria;
+use App\Escala;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -15,10 +16,11 @@ class ProductoController extends Controller
 {
     public function nuevo()
     {
-        $marcas = Marca::where('borrado', NULL)->get();
-        $categorias = Categoria::where('borrado', NULL)->get();
-        $almacenes = Almacene::where('borrado', NULL)->get();
-        return view('producto/nuevo')->with(compact('marcas', 'categorias', 'almacenes'));
+        $marcas = Marca::where('deleted_at', NULL)->get();
+        $categorias = Categoria::where('deleted_at', NULL)->get();
+        $almacenes = Almacene::where('deleted_at', NULL)->get();
+        $escalas = Escala::where('deleted_at', NULL)->get();
+        return view('producto/nuevo')->with(compact('marcas', 'categorias', 'almacenes', 'escalas'));
     }
 
     public function listado()
@@ -45,7 +47,9 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
-        // dd($request->all());
+    	$data = Producto::find(1)->delete();
+        dd($request->all());
+        // dd($request->precio_venta);
         $nuevoProducto                 = new Producto();
         $nuevoProducto->user_id        = Auth::user()->id;
         $nuevoProducto->marca_id       = $request->marca_id;

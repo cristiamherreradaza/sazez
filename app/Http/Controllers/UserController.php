@@ -40,13 +40,13 @@ class UserController extends Controller
 
         $datos_persona = User::find($usuario_id);
 
-        $turnos = Turno::where('borrado', NULL)->get();
+        $turnos = Turno::where('deleted_at', NULL)->get();
 
-        $asignaturas = Asignatura::where('borrado', NULL)
+        $asignaturas = Asignatura::where('deleted_at', NULL)
                     ->where('anio_vigente', $gestion_vigente)
                     ->get();
 
-        $asignaturas_docente = NotasPropuesta::where('borrado', NULL)
+        $asignaturas_docente = NotasPropuesta::where('deleted_at', NULL)
                             ->where('user_id', $usuario_id)
                             ->where('anio_vigente', $gestion_vigente)
                             ->get();
@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         $error_duplicado = 0;
         $asignacionGuardada = 0;
-        $validacion = NotasPropuesta::where('borrado', NULL)
+        $validacion = NotasPropuesta::where('deleted_at', NULL)
                     ->where('asignatura_id', $request->asignatura_id)
                     ->where('user_id', $request->user_id)
                     ->where('turno_id', $request->turno_id)
@@ -91,7 +91,7 @@ class UserController extends Controller
         $datosNP = NotasPropuesta::find($np_id);
 
         $eliminaNP = NotasPropuesta::find($np_id);
-        $eliminaNP->borrado = date('Y-m-d H:i:s');
+        $eliminaNP->deleted_at = date('Y-m-d H:i:s');
         $eliminaNP->save();
         return response()->json([
             'usuario' => $datosNP->user_id

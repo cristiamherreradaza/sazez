@@ -12,7 +12,7 @@ class Almacene extends Model
     	'direccion',
     	'telefono',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function user()

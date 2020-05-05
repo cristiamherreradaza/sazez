@@ -10,7 +10,7 @@ class Escala extends Model
     	'user_id',
         'nombre',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function user()

@@ -10,7 +10,7 @@ class Marca extends Model
     	'user_id',
         'nombre',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function producto()

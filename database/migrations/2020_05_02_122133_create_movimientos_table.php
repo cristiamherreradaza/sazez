@@ -26,7 +26,7 @@ class CreateMovimientosTable extends Migration
             $table->decimal('ingreso', 15, 2)->default(0);
             $table->decimal('salida', 15, 2)->default(0);
             $table->string('estado', 30)->nullable();
-            $table->datetime('borrado')->nullable();
+            $table->datetime('deleted_at')->nullable();
             $table->timestamps();
         });
     }
