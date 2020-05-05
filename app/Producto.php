@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Producto extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'user_id',
         'marca_id',
-        'categoria_id',
+        'tipo_id',
         'codigo',
         'nombre',
         'nombre_venta',
@@ -30,7 +31,7 @@ class Producto extends Model
         'deleted_at',
     ];
 
-    protected $dates = ['deleted_at'];
+    // protected $dates = ['deleted_at'];
 
     public function user()
     {
@@ -42,9 +43,9 @@ class Producto extends Model
         return $this->belongsTo('App\Marca');
     }
 
-    public function categoria()
+    public function tipo()
     {
-        return $this->belongsTo('App\Categoria');
+        return $this->belongsTo('App\Tipo');
     }
 
     public function caracteristica()

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Escala extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
     	'user_id',
         'nombre',

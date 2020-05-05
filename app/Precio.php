@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Precio extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [
     	'user_id',
     	'producto_id',
