@@ -10,7 +10,6 @@ class AlmacenController extends Controller
 {
     public function listado()
     {
-        $sw=0;
-        return view('almacen.listado')->with(compact('sw'));
+        
     }
 }

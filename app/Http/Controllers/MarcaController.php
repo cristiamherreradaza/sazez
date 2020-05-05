@@ -10,7 +10,7 @@ class MarcaController extends Controller
 {
     public function listado()
     {
-        $marcas = Marca::where('borrado', NULL)
+        $marcas = Marca::where('deleted_at', NULL)
                         ->get();
         //dd($marcas);
         return view('marca.listado')->with(compact('marcas'));
@@ -37,8 +37,9 @@ class MarcaController extends Controller
     public function eliminar(Request $request)
     {
         $marca = Marca::find($request->id);
-        $marca->borrado = date('Y-m-d H:i:s');
-        $marca->save();
+        //$marca->borrado = date('Y-m-d H:i:s');
+        //$marca->save();
+        $marca->delete();
         return redirect('Marca/listado');
     }
 }

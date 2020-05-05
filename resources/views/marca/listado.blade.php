@@ -202,7 +202,7 @@
                     'Una nueva marca fue registrada.',
                     'success'
                 ).then(function() {
-                    $("#modal_marcas").modal('hide');
+                    //$("#modal_marcas").modal('hide');
                     location.reload();
                     //location.reload("#lista");
                     //$("#lista").load("#lista");
@@ -238,7 +238,7 @@
                     'Marca actualizada correctamente.',
                     'success'
                 ).then(function() {
-                    $("#editar_marcas").modal('hide');
+                    //$("#editar_marcas").modal('hide');
                     location.reload();
                     //location.reload("#lista");
                     //$("#lista").load("#lista");
