@@ -37,6 +37,13 @@
                 </li>
                 <li>
                     <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                            class="hide-menu">CATEGORIAS</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ url('Categoria/listado') }}">Listado</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span
                             class="hide-menu">MARCAS</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="{{ url('Marca/listado') }}">Listado</a></li>

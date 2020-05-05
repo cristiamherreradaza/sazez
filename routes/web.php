@@ -62,3 +62,9 @@ Route::get('Escala/listado', 'EscalaController@listado');
 Route::post('Escala/guardar', 'EscalaController@guardar');
 Route::post('Escala/actualizar', 'EscalaController@actualizar');
 Route::post('Escala/eliminar', 'EscalaController@eliminar');
+
+//CATEGORIAS
+Route::get('Categoria/listado', 'CategoriaController@listado');
+Route::post('Categoria/guardar', 'CategoriaController@guardar');
+Route::post('Categoria/actualizar', 'CategoriaController@actualizar');
+Route::post('Categoria/eliminar', 'CategoriaController@eliminar');
