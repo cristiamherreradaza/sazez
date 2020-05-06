@@ -33,10 +33,12 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// PRODUCTOS
 Route::get('Producto/nuevo', 'ProductoController@nuevo');
 Route::post('Producto/guarda', 'ProductoController@guarda');
 Route::get('Producto/listado', 'ProductoController@listado');
 Route::get('Producto/ajax_listado', 'ProductoController@ajax_listado');
+Route::get('Producto/edita/{producto_id}', 'ProductoController@edita');
 
 Route::get('User/listado', 'UserController@listado');
 Route::get('User/ajax_listado', 'UserController@ajax_listado');

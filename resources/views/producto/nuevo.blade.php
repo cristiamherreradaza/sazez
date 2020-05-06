@@ -5,7 +5,9 @@
 @endsection
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('assets/plugins/dropify/dist/css/dropify.min.css') }}">
+    <link href="{{ asset('assets/plugins/dropify/dist/css/dropify.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/plugins/multiselect/css/multi-select.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -37,25 +39,32 @@
                                     <div class="tab-pane active" id="principal" role="tabpanel">
                                         <div class="p-3">
                                             <div class="row">
-                                                <div class="col-md-2">
+                                                <div class="col-md-1">
                                                     <div class="form-group">
                                                         <label>CODIGO </label>
-                                                        <input type="text" class="form-control" name="codigo" id="codigo">
+                                                        <input type="text" class="form-control" name="codigo" id="codigo" required>
                                                     </div>
                                                 </div>
                                         
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>NOMBRE </label>
-                                                        <input type="text" class="form-control" name="nombre" id="nombre">
+                                                        <input type="text" class="form-control" name="nombre" id="nombre" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>NOMBRE COMERCIAL</label>
+                                                        <input type="text" class="form-control" name="nombre_venta" id="nombre_venta">
                                                     </div>
                                                 </div>
                                         
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>CATEGORIA </label>
-                                                        <select name="categoria_id" class="form-control">
-                                                            @foreach ($categorias as $c)
+                                                        <label>TIPOS </label>
+                                                        <select name="tipo_id" class="form-control">
+                                                            @foreach ($tipos as $c)
                                                                 <option value="{{ $c->id }}">{{ $c->nombre }}</option>
                                                             @endforeach
                                                         </select>
@@ -64,10 +73,14 @@
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>TIPO </label>
-                                                        <input type="text" class="form-control" name="tipo" id="tipo">
+                                                        <label>MODELO </label>
+                                                        <input type="text" class="form-control" name="modelo" id="modelo">
                                                     </div>
                                                 </div>
+                                        
+                                            </div>
+
+                                            <div class="row">
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
@@ -79,25 +92,22 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                        
-                                            </div>
 
-                                            <div class="row">
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>CANTIDAD </label>
                                                         <input type="number" class="form-control" name="cantidad" id="cantidad" min="0">
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>P/COMPRA </label>
                                                         <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any">
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-4">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>ALMACEN </label>
                                                         <select name="almacene_id" class="form-control">
@@ -106,7 +116,20 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                </div>                                                
+                                                </div>
+                                                
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>CATEGORIAS </label>
+                                                        <input type="hidden" value="" id="categorias_valores" name="categorias_valores">
+                                                        <select class="select2 mb-2 select2-multiple" name="categorias" id="categorias" style="width: 100%" multiple="multiple" data-placeholder="Choose">
+                                                            @foreach ($categorias as $c)
+                                                                <option value="{{ $c->id }}" selected>{{ $c->nombre }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
                                             </div>
 
                                             
@@ -115,21 +138,17 @@
 
                                     <div class="tab-pane p-3" id="precios" role="tabpanel">
                                         <div class="row">
-                                           <div class="table-responsive">
-                                                <table class="table no-wrap">
-                                                    <tbody>
-                                                     @foreach ($escalas as $key => $e)
-                                                     <tr>
-                                                         <td>{{ $e->nombre }}</td>
-                                                         <td>
-                                                             <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any">
-                                                             <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
-                                                         </td>
-                                                     </tr>
-                                                     @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                            @foreach ($escalas as $key => $e)
+                                                <div class="col-md-12">
+                                                    <div class="form-group row">
+                                                        <label class="col-sm-3 text-right col-form-label">{{ $e->nombre }}</label>
+                                                        <div class="col-md-3">
+                                                            <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any">
+                                                            <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
 
@@ -174,10 +193,9 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-6 nopadding">
+                                            <div class="col-md-4 nopadding">
                                                 <div class="form-group">
                                                     <label>CARACTERISTICAS </label>
-                                                    <div id="education_fields"></div>
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="" >
 
@@ -185,12 +203,14 @@
                                                             <button class="btn btn-success" type="button" onclick="education_fields();"><i class="fa fa-plus"></i></button>
                                                         </div>
                                                     </div>
+                                                    <br>
+                                                    <div id="education_fields"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 nopadding">
+                                            <div class="col-md-8 nopadding">
                                                 <div class="form-group">
                                                     <label>DESCRIPCION </label>
-                                                    <textarea class="form-control" rows="5" name="descripcion"></textarea>
+                                                    <textarea class="form-control" id="mymce" rows="5" name="descripcion"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,13 +272,38 @@
 </div>
 @stop
 @section('js')
+
 <script src="{{ asset('assets/plugins/dropify/dist/js/dropify.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
+<script src="{{ asset('assets/plugins/tinymce/tinymce.min.js') }}"></script>
+
 <script>
 var room = 1;
 
 $(document).ready(function() {
-    // Basic
+
     $('.dropify').dropify();
+    $("#categorias").select2();
+    $("#categorias").change(function(){
+        valores = $("#categorias").val();
+        $("#categorias_valores").val(valores);
+    });
+
+    if ($("#mymce").length > 0) {
+        tinymce.init({
+        selector: "textarea#mymce",
+        theme: "modern",
+        height: 300,
+        plugins: [
+        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+        "save table contextmenu directionality emoticons template paste textcolor"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist  numlist outdent indent | l ink image | print preview media fullpage | forecolor backcolor emoticons",
+        
+        });
+    }
 });       
 
 function education_fields() {
@@ -268,11 +313,11 @@ var objTo = document.getElementById('education_fields')
 var divtest = document.createElement("div");
 divtest.setAttribute("class", "form-group removeclass" + room);
 var rdiv = 'removeclass' + room;
-divtest.innerHTML = '<div class="input-group">\
+divtest.innerHTML = '<div class="clear"></div>\
+                        <div class="input-group">\
                                 <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="">\
                                 <div class="input-group-append"> <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i> </button></div>\
-                            </div>\
-                    <div class="clear"></div>';
+                            </div>';
 
     objTo.appendChild(divtest)
     }
