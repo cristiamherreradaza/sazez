@@ -13,3 +13,4 @@ yarn-error.log
 .phpintel/*
 sazez.sublime-workspace
 sazez.code-workspace
+/public/imagenesProductos/
