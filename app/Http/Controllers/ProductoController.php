@@ -10,10 +10,13 @@ use DataTables;
 use App\Almacene;
 use App\Producto;
 use App\Categoria;
+use App\Movimiento;
+use App\ImagenesProducto;
 use App\CategoriasProducto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProductoController extends Controller
 {
@@ -59,7 +62,10 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
+        // $nombre = Hash::make($hoy);
         // dd(Auth::user()->id);
+       
+        // echo $path;
         
         // dd($request->precio_venta);
         $nuevoProducto                 = new Producto();
@@ -83,28 +89,58 @@ class ProductoController extends Controller
 
         $producto_id = $nuevoProducto->id;
 
-        $categorias = $request->categorias_valores;
-        $array_categorias = explode(',', $categorias);
-
-        foreach ($array_categorias as $key => $ac) 
+        if ($request->has('categorias_valores')) 
         {
-            $nuevaCategoria               = new CategoriasProducto();
-            $nuevaCategoria->user_id      = Auth::user()->id;
-            $nuevaCategoria->categoria_id = $ac;
-            $nuevaCategoria->producto_id  = $producto_id;
-            $nuevaCategoria->save();
+            $categorias = $request->categorias_valores;
+            $array_categorias = explode(',', $categorias);
+
+            foreach ($array_categorias as $key => $ac) {
+                $nuevaCategoria               = new CategoriasProducto();
+                $nuevaCategoria->user_id      = Auth::user()->id;
+                $nuevaCategoria->categoria_id = $ac;
+                $nuevaCategoria->producto_id  = $producto_id;
+                $nuevaCategoria->save();
+            }
         }
 
-        foreach ($request->precio_venta as $key => $pv) {
-            // echo $request->escalas[$key] . ' ' . $pv . '<br />';
-            $nuevoPrecio = new Precio();
-            $nuevoPrecio->user_id = Auth::user()->id;
-            $nuevoPrecio->producto_id = $producto_id;
-            $nuevoPrecio->escala_id = $request->escalas[$key];
-            $nuevoPrecio->precio = $pv;
-            $nuevoPrecio->save();
+        if ($request->has('precio_venta')) 
+        {
+            foreach ($request->precio_venta as $key => $pv) {
+                // echo $request->escalas[$key] . ' ' . $pv . '<br />';
+                $nuevoPrecio              = new Precio();
+                $nuevoPrecio->user_id     = Auth::user()->id;
+                $nuevoPrecio->producto_id = $producto_id;
+                $nuevoPrecio->escala_id   = $request->escalas[$key];
+                $nuevoPrecio->precio      = $pv;
+                $nuevoPrecio->save();
+            }
+
         }
-        // dd($request->all());
+
+        if ($archivo = $request->file('foto')) 
+        {
+            $direccion = 'imagenesProductos/'; // upload path
+            $nombreArchivo = date('YmdHis') . "." . $archivo->getClientOriginalExtension();
+            $archivo->move($direccion, $nombreArchivo);
+
+            $imagenProducto              = new ImagenesProducto();
+            $imagenProducto->user_id     = Auth::user()->id;
+            $imagenProducto->producto_id = $producto_id;
+            $imagenProducto->imagen      = $nombreArchivo;
+            $imagenProducto->save();
+            // $insert['file'] = "$nombreArchivo";
+        }
+
+        if ($request->cantidad > 0) {
+            $movimiento = new Movimiento();
+            $movimiento->user_id       = Auth::user()->id;
+            $movimiento->producto_id   = $producto_id;
+            $movimiento->almacene_id   = $request->almacene_id;
+            $movimiento->precio_compra = $request->precio_compra;
+            $movimiento->ingreso       = $request->cantidad;
+            $movimiento->save();
+        }
+
         return redirect('Producto/listado');
     }
 

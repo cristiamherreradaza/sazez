@@ -96,14 +96,14 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>CANTIDAD </label>
-                                                        <input type="number" class="form-control" name="cantidad" id="cantidad" min="0">
+                                                        <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" required>
                                                     </div>
                                                 </div>
                                                 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>P/COMPRA </label>
-                                                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any">
+                                                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any" required>
                                                     </div>
                                                 </div>
                                                 
@@ -122,9 +122,9 @@
                                                     <div class="form-group">
                                                         <label>CATEGORIAS </label>
                                                         <input type="hidden" value="" id="categorias_valores" name="categorias_valores">
-                                                        <select class="select2 mb-2 select2-multiple" name="categorias" id="categorias" style="width: 100%" multiple="multiple" data-placeholder="Choose">
+                                                        <select class="select2 mb-2 select2-multiple" name="categorias" id="categorias" style="width: 100%" multiple="multiple" data-placeholder="Choose" required>
                                                             @foreach ($categorias as $c)
-                                                                <option value="{{ $c->id }}" selected>{{ $c->nombre }}</option>
+                                                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -143,7 +143,7 @@
                                                     <div class="form-group row">
                                                         <label class="col-sm-3 text-right col-form-label">{{ $e->nombre }}</label>
                                                         <div class="col-md-3">
-                                                            <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any">
+                                                            <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any" value="0">
                                                             <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
                                                         </div>
                                                     </div>
@@ -165,28 +165,28 @@
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>LARGO </label>
-                                                    <input type="text" class="form-control" name="largo" id="largo" min="0" step="any">
+                                                    <input type="text" class="form-control" name="largo" id="largo" min="0" step="any" value="0">
                                                 </div>
                                             </div>
                                         
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>ANCHO </label>
-                                                    <input type="text" class="form-control" name="ancho" id="ancho" min="0" step="any">
+                                                    <input type="text" class="form-control" name="ancho" id="ancho" min="0" step="any" value="0">
                                                 </div>
                                             </div>
                                         
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>ALTO </label>
-                                                    <input type="text" class="form-control" name="alto" id="alto" min="0" step="any">
+                                                    <input type="text" class="form-control" name="alto" id="alto" min="0" step="any" value="0">
                                                 </div>
                                             </div>
 
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>PESO </label>
-                                                    <input type="text" class="form-control" name="peso" id="peso" min="0" step="any">
+                                                    <input type="text" class="form-control" name="peso" id="peso" min="0" step="any" value="0">
                                                 </div>
                                             </div>
                                         
@@ -294,7 +294,7 @@ $(document).ready(function() {
         tinymce.init({
         selector: "textarea#mymce",
         theme: "modern",
-        height: 300,
+        height: 200,
         plugins: [
         "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",

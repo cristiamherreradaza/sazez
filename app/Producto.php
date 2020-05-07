@@ -57,4 +57,15 @@ class Producto extends Model
     {
         return $this->hasMany('App\Precio');
     }
+
+    public function categorias()
+    {
+        return $this->hasMany('App\CategoriasProducto');
+    }
+
+    public function imagenes()
+    {
+        return $this->hasMany('App\ImagenesProducto');
+    }
+
 }
