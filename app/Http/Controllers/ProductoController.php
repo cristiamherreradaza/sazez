@@ -45,8 +45,8 @@ class ProductoController extends Controller
             ->select(
                 'productos.id', 
                 'productos.codigo', 
-                'productos.nombre as producto', 
-                'productos.nombre_venta as venta', 
+                'productos.nombre as nombre', 
+                'productos.nombre_venta', 
                 'tipos.nombre as tipo', 
                 'marcas.nombre as marca', 
                 'productos.colores'

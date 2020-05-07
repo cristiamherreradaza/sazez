@@ -69,12 +69,12 @@ $(document).ready(function() {
         "serverSide": true,
         "ajax": "{{ url('Producto/ajax_listado') }}",
         "columns": [
-            {data: 'codigo'},
-            {data: 'producto'},
-            {data: 'venta'},
-            {data: 'tipo'},
-            {data: 'marca'},
-            {data: 'colores'},
+            {data: 'codigo', name: 'codigo'},
+            {data: 'nombre', name: 'nombre'},
+            {data: 'nombre_venta', name: 'nombre_venta'},
+            {data: 'tipo', name: 'tipos.nombre'},
+            {data: 'marca', name: 'marcas.nombre'},
+            {data: 'colores', name: 'colores'},
             {data: 'action'},
         ]
     } );
