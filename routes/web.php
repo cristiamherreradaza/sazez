@@ -71,6 +71,11 @@ Route::post('Marca/guardar', 'MarcaController@guardar');
 Route::post('Marca/actualizar', 'MarcaController@actualizar');
 Route::get('Marca/eliminar/{id}', 'MarcaController@eliminar');
 
+// USUARIOS
+Route::get('User/listado', 'UserController@listado');
+Route::post('User/guardar', 'UserController@guardar');
+Route::post('User/actualizar', 'UserController@actualizar');
+Route::get('User/eliminar/{id}', 'UserController@eliminar');
 
 
 

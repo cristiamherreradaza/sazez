@@ -18,9 +18,8 @@ class Almacene extends Model
         'deleted_at',
     ];
 
-    public function user()
+    public function usuarios()
     {
-        return $this->belongsTo('App\User');
+        return $this->hasMany('App\User');
     }
-
 }
