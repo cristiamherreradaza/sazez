@@ -17,6 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'almacen_id',
         'apellido_paterno',
         'apellido_materno',
         'nombres',
@@ -65,6 +66,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function almacen()
+    {
+        return $this->belongsTo('App\Almacene');
+    }
 
     public function notas()
     {

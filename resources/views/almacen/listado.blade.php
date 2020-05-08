@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('metadatos')
-<meta name="csrf-token" content="{{ csrf_token() }}"/>
-@endsection
-
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
@@ -54,13 +50,13 @@
 <div id="nuevo_almacen" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">NUEVO ALMACEN</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">NUEVO ALMACEN</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Almacen/guardar') }}" method="POST">
+                @csrf
                 <div class="modal-body">
-                    <form action="{{ url('Almacen/guardar') }}" method="POST">
-                        @csrf
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group">
@@ -71,7 +67,7 @@
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label class="control-label">Telefonos</label>
-                                    <input name="telefonos_almacen" type="text" id="telefonos_almacen" class="form-control" required>
+                                    <input name="telefonos_almacen" type="text" id="telefonos_almacen" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -83,10 +79,9 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_almacen()">GUARDAR ALMACEN</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_almacen()">GUARDAR ALMACEN</button>
                 </div>
             </form>
         </div>
@@ -98,40 +93,39 @@
 <div id="editar_almacenes" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">EDITAR ALMACEN</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">EDITAR ALMACEN</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Almacen/actualizar') }}" method="POST">
+                @csrf
                 <div class="modal-body">
-                    <form action="{{ url('Almacen/actualizar') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id" id="id" value="">
-                        <div class="row">
-                            <div class="col-md-7">
-                                <div class="form-group">
-                                    <label class="control-label">Nombre</label>
-                                    <input name="nombre" type="text" id="nombre" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="control-label">Telefonos</label>
-                                    <input name="telefonos" type="text" id="telefonos" class="form-control" required>
-                                </div>
+                    <input type="hidden" name="id" id="id" value="">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input name="nombre" type="text" id="nombre" class="form-control" required>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Dirección</label>
-                                    <input name="direccion" type="text" id="direccion" class="form-control" required>
-                                </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label">Telefonos</label>
+                                <input name="telefonos" type="text" id="telefonos" class="form-control">
                             </div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Dirección</label>
+                                <input name="direccion" type="text" id="direccion" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_almacen()">ACTUALIZAR ALMACEN</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_almacen()">ACTUALIZAR ALMACEN</button>
                 </div>
             </form>
         </div>
@@ -201,19 +195,8 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
-    $.ajaxSetup({
-        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     function nuevo_almacen()
     {
-        $("#marca_id").val("");
-        $("#nombre_almacen").val("");
-        $("#telefonos_almacen").val("");
-        $("#direccion_almacen").val("");
         $("#nuevo_almacen").modal('show');
     }
 
@@ -223,26 +206,11 @@
         var telefonos_almacen = $("#telefonos_almacen").val();
         var direccion_almacen = $("#direccion_almacen").val();
         if(nombre_almacen.length>0 && direccion_almacen.length>0){
-            $.ajax({
-                url: "{{ url('Almacen/guardar') }}",
-                method: "POST",
-                data: {
-                    nombre_almacen : nombre_almacen,
-                    telefonos_almacen : telefonos_almacen,
-                    direccion_almacen : direccion_almacen
-                },
-                cache: false,
-                success: function(data)
-                {
-                    Swal.fire(
-                        'Excelente!',
-                        'Un nuevo almacen fue registrado.',
-                        'success'
-                    ).then(function() {
-                        location.reload();
-                    });
-                }
-            });
+            Swal.fire(
+                'Excelente!',
+                'Un nuevo almacen fue registrado.',
+                'success'
+            )
         }else{
             Swal.fire(
                 'Oops...',
@@ -268,27 +236,11 @@
         var telefonos = $("#telefonos").val();
         var direccion = $("#direccion").val();
         if(nombre.length>0 && direccion.length>0){
-            $.ajax({
-                url: "{{ url('Almacen/actualizar') }}",
-                method: "POST",
-                data: {
-                    id : id,
-                    nombre : nombre,
-                    telefonos : telefonos,
-                    direccion : direccion
-                },
-                cache: false,
-                success: function(data)
-                {
-                    Swal.fire(
-                        'Excelente!',
-                        'Almacen actualizado correctamente.',
-                        'success'
-                    ).then(function() {
-                        location.reload();
-                    });
-                }
-            });
+            Swal.fire(
+                'Excelente!',
+                'Almacen actualizado correctamente.',
+                'success'
+            )
         }else{
             Swal.fire(
                 'Oops...',
@@ -311,22 +263,12 @@
             cancelButtonText: "Cancelar",
         }).then((result) => {
             if (result.value) {
-                $.ajax({
-                    url: "{{ url('Almacen/eliminar') }}",
-                    method: "POST",
-                    data: {
-                        id : id
-                    },
-                    cache: false,
-                    success: function (data) {
-                        Swal.fire(
-                            'Excelente!',
-                            'El Almacen fue eliminado',
-                            'success'
-                        ).then(function() {
-                            location.reload();
-                        });
-                    }
+                Swal.fire(
+                    'Excelente!',
+                    'El almacen fue eliminado',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Almacen/eliminar') }}/"+id;
                 });
             }
         })

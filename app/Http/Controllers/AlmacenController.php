@@ -10,8 +10,7 @@ class AlmacenController extends Controller
 {
     public function listado()
     {
-        $almacenes = Almacene::where('deleted_at', NULL)
-                            ->get();
+        $almacenes = Almacene::get();
         return view('almacen.listado')->with(compact('almacenes'));                            
     }
 

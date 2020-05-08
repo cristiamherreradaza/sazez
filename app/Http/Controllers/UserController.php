@@ -9,19 +9,61 @@ use App\Asignatura;
 use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function listado()
+    {
+        $usuarios = User::get();
+        return view('usuario.listado')->with(compact('usuarios'));
+    }
+
+    public function guardar(Request $request)
+    {
+        if($request->password_usuario == $request->confirm_password_usuario)
+        {
+            $usuario = new User();
+            $usuario->name = $request->nombre_usuario;
+            $usuario->rol = $request->rol_usuario;
+            $usuario->email = $request->email_usuario;
+            $usuario->password = Hash::make($request->password_usuario);
+            $usuario->save();
+        }
+        return redirect('User/listado');
+    }
+
+    public function actualizar(Request $request)
+    {
+        if($request->password == $request->confirm_password)
+        {
+            $usuario = User::find($request->id);
+            $usuario->name = $request->nombre;
+            $usuario->rol = $request->rol;
+            $usuario->email = $request->email;
+            $usuario->password = Hash::make($request->password);
+            $usuario->save();
+        }
+        return redirect('User/listado');
+    }
+
+    public function eliminar(Request $request)
+    {
+        $usuario = User::find($request->id);
+        $usuario->delete();
+        return redirect('User/listado');
+    }
+
     public function asignar()
     {
         $users = User::where('vigente', 'si')->get();
         return view('user.asignar')->with(compact('users'));
     }
 
-    public function listado()
-    {
-    	return view('user.listado');
-    }
+    // public function listado()
+    // {
+    // 	return view('user.listado');
+    // }
 
     public function ajax_listado()
     {

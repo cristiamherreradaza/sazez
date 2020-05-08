@@ -10,8 +10,7 @@ class CategoriaController extends Controller
 {
     public function listado()
     {
-        $categorias = Categoria::where('deleted_at', NULL)
-                        ->get();
+        $categorias = Categoria::get();
         return view('categoria.listado')->with(compact('categorias'));
     }
 
@@ -33,9 +32,9 @@ class CategoriaController extends Controller
         return redirect('Categoria/listado');
     }
 
-    public function eliminar(Request $request)
+    public function eliminar($id)
     {
-        $categoria = Categoria::find($request->id);
+        $categoria = Categoria::find($id);
         $categoria->delete();
         return redirect('Categoria/listado');
     }

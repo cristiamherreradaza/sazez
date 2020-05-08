@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('metadatos')
-<meta name="csrf-token" content="{{ csrf_token() }}"/>
-@endsection
-
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
@@ -50,25 +46,24 @@
 <div id="nueva_categoria" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">NUEVA CATEGORIA</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">NUEVA CATEGORIA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Categoria/guardar') }}" method="POST">
+                @csrf
                 <div class="modal-body">
-                    <form action="{{ url('Categoria/guardar') }}" method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Nombre</label>
-                                    <input name="nombre_categoria" type="text" id="nombre_categoria" class="form-control" required>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input name="nombre_categoria" type="text" id="nombre_categoria" class="form-control" required>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_categoria()">GUARDAR CATEGORIA</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_categoria()">GUARDAR CATEGORIA</button>
                 </div>
             </form>
         </div>
@@ -80,13 +75,13 @@
 <div id="editar_categorias" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">EDITAR CATEGORIA</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ url('Categoria/actualizar') }}" method="POST">
-                        @csrf
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">EDITAR CATEGORIA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Categoria/actualizar') }}" method="POST">
+                @csrf
+                <div class="modal-body">        
                         <input type="hidden" name="id" id="id" value="">
                         <div class="row">
                             <div class="col-md-12">
@@ -96,10 +91,9 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_categoria()">ACTUALIZAR CATEGORIA</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_categoria()">ACTUALIZAR CATEGORIA</button>
                 </div>
             </form>
         </div>
@@ -169,17 +163,8 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
-    $.ajaxSetup({
-        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     function nueva_categoria()
     {
-        $("#marca_id").val("");
-        $("#nombre_categoria").val("");
         $("#nueva_categoria").modal('show');
     }
 
@@ -187,24 +172,11 @@
     {
         var nombre_categoria = $("#nombre_categoria").val();
         if(nombre_categoria.length>0){
-            $.ajax({
-                url: "{{ url('Categoria/guardar') }}",
-                method: "POST",
-                data: {
-                    nombre_categoria : nombre_categoria
-                },
-                cache: false,
-                success: function(data)
-                {
-                    Swal.fire(
-                        'Excelente!',
-                        'Una nueva categoria fue registrada.',
-                        'success'
-                    ).then(function() {
-                        location.reload();
-                    });
-                }
-            });
+            Swal.fire(
+                'Excelente!',
+                'Una nueva categoria fue registrada.',
+                'success'
+            )
         }else{
             Swal.fire(
                 'Oops...',
@@ -212,7 +184,6 @@
                 'error'
             )
         }
-        
     }
 
     function editar(id, nombre)
@@ -227,25 +198,11 @@
         var id = $("#id").val();
         var nombre = $("#nombre").val();
         if(nombre.length>0){
-            $.ajax({
-                url: "{{ url('Categoria/actualizar') }}",
-                method: "POST",
-                data: {
-                    id : id,
-                    nombre : nombre
-                },
-                cache: false,
-                success: function(data)
-                {
-                    Swal.fire(
-                        'Excelente!',
-                        'Categoria actualizada correctamente.',
-                        'success'
-                    ).then(function() {
-                        location.reload();
-                    });
-                }
-            });
+            Swal.fire(
+                'Excelente!',
+                'Categoria actualizada correctamente.',
+                'success'
+            )
         }else{
             Swal.fire(
                 'Oops...',
@@ -269,22 +226,12 @@
             cancelButtonText: "Cancelar",
         }).then((result) => {
             if (result.value) {
-                $.ajax({
-                    url: "{{ url('Categoria/eliminar') }}",
-                    method: "POST",
-                    data: {
-                        id : id
-                    },
-                    cache: false,
-                    success: function (data) {
-                        Swal.fire(
-                            'Excelente!',
-                            'La categoria fue eliminada',
-                            'success'
-                        ).then(function() {
-                            location.reload();
-                        });
-                    }
+                Swal.fire(
+                    'Excelente!',
+                    'La categoria fue eliminada',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Categoria/eliminar') }}/"+id;
                 });
             }
         })
