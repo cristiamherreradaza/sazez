@@ -14,9 +14,11 @@ use App\Movimiento;
 use App\ImagenesProducto;
 use App\CategoriasProducto;
 use Illuminate\Http\Request;
+use App\Imports\ProductosImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductoController extends Controller
 {
@@ -148,6 +150,13 @@ class ProductoController extends Controller
     {
         $producto = Producto::find($producto_id);
         dd($producto);
+    }
+
+    public function importaExcel(Request $request)
+    {
+        $archivo = public_path('excels\formato_productos.xlsx');
+        // dd($archivo);
+        Excel::import(new ProductosImport, $archivo);
     }
 
     public function ajax_verifica_codigo()

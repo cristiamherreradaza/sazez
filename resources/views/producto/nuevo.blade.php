@@ -27,7 +27,7 @@
                         @csrf
                         <div class="card-body">
 
-                            <div class="vtabs ">
+                            <div class="vtabs">
                                 <ul class="nav nav-tabs tabs-vertical" role="tablist">
                                     <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#principal" role="tab"><span><i class="ti-agenda"></i> PRINCIPAL</span></a> </li>
                                     <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#precios" role="tab"><span><i class="ti-money"></i> PRECIOS</span></a> </li>
@@ -266,6 +266,51 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-outline-primary">
+                    <div class="card-header" onclick="muestra_formulario_importacion()">
+                        <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
+                    </div>
+                    <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
+                        <form action="/Producto/importa_excel" method="post" enctype="multipart/form-data">
+                            <div class="row">
+                            
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>SELECCIONE ARCHIVO EXCEL</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">ARCHIVO</span>
+                                            </div>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                                <label class="custom-file-label" for="inputGroupFile01">Seleccione...</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>&nbsp;</label>
+                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Importar</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>&nbsp;</label>
+                                    <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Descargar Formato</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <label>&nbsp;</label>
+                                    <button type="button" class="btn waves-effect waves-light btn-block btn-primary">Ver Formato</button>
+                                </div>
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Row -->
     </div>
     <!-- Column -->
@@ -305,6 +350,11 @@ $(document).ready(function() {
         });
     }
 });       
+
+function muestra_formulario_importacion()
+{
+    $("#bloque_formulario_importacion").toggle('slow');
+}
 
 function education_fields() {
 
