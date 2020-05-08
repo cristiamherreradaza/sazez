@@ -10,8 +10,7 @@ class EscalaController extends Controller
 {
     public function listado()
     {
-        $escalas = Escala::where('deleted_at', NULL)
-                        ->get();
+        $escalas = Escala::get();
         return view('escala.listado')->with(compact('escalas'));
     }
 

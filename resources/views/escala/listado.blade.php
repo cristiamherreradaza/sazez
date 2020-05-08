@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('metadatos')
-<meta name="csrf-token" content="{{ csrf_token() }}"/>
-@endsection
-
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
@@ -50,25 +46,24 @@
 <div id="nueva_escala" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">NUEVA ESCALA</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">NUEVA ESCALA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Escala/guardar') }}" method="POST">
+                @csrf
                 <div class="modal-body">
-                    <form action="{{ url('Escala/guardar') }}" method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Nombre</label>
-                                    <input name="nombre_escala" type="text" id="nombre_escala" class="form-control" required>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input name="nombre_escala" type="text" id="nombre_escala" class="form-control" required>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_escala()">GUARDAR ESCALA</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_escala()">GUARDAR ESCALA</button>
                 </div>
             </form>
         </div>
@@ -80,26 +75,25 @@
 <div id="editar_escalas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">EDITAR ESCALA</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">EDITAR ESCALA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Escala/actualizar') }}" method="POST">
+                @csrf
                 <div class="modal-body">
-                    <form action="{{ url('Escala/actualizar') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="id" id="id" value="">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Nombre</label>
-                                    <input name="nombre" type="text" id="nombre" class="form-control" required>
-                                </div>
+                    <input type="hidden" name="id" id="id" value="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input name="nombre" type="text" id="nombre" class="form-control" required>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_escala()">ACTUALIZAR ESCALA</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_escala()">ACTUALIZAR ESCALA</button>
                 </div>
             </form>
         </div>
@@ -169,17 +163,8 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
-    $.ajaxSetup({
-        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     function nueva_marca()
     {
-        $("#marca_id").val("");
-        $("#nombre_escala").val("");
         $("#nueva_escala").modal('show');
     }
 
@@ -187,24 +172,11 @@
     {
         var nombre_escala = $("#nombre_escala").val();
         if(nombre_escala.length>0){
-            $.ajax({
-                url: "{{ url('Escala/guardar') }}",
-                method: "POST",
-                data: {
-                    nombre_escala : nombre_escala
-                },
-                cache: false,
-                success: function(data)
-                {
-                    Swal.fire(
-                        'Excelente!',
-                        'Una nueva escala fue registrada.',
-                        'success'
-                    ).then(function() {
-                        location.reload();
-                    });
-                }
-            });
+            Swal.fire(
+                'Excelente!',
+                'Una nueva escala fue registrada.',
+                'success'
+            )
         }else{
             Swal.fire(
                 'Oops...',
@@ -227,25 +199,11 @@
         var id = $("#id").val();
         var nombre = $("#nombre").val();
         if(nombre.length>0){
-            $.ajax({
-                url: "{{ url('Escala/actualizar') }}",
-                method: "POST",
-                data: {
-                    id : id,
-                    nombre : nombre
-                },
-                cache: false,
-                success: function(data)
-                {
-                    Swal.fire(
-                        'Excelente!',
-                        'Escala actualizada correctamente.',
-                        'success'
-                    ).then(function() {
-                        location.reload();
-                    });
-                }
-            });
+            Swal.fire(
+                'Excelente!',
+                'Escala actualizada correctamente.',
+                'success'
+            )
         }else{
             Swal.fire(
                 'Oops...',
@@ -269,22 +227,12 @@
             cancelButtonText: "Cancelar",
         }).then((result) => {
             if (result.value) {
-                $.ajax({
-                    url: "{{ url('Escala/eliminar') }}",
-                    method: "POST",
-                    data: {
-                        id : id
-                    },
-                    cache: false,
-                    success: function (data) {
-                        Swal.fire(
-                            'Excelente!',
-                            'La escala fue eliminada',
-                            'success'
-                        ).then(function() {
-                            location.reload();
-                        });
-                    }
+                Swal.fire(
+                    'Excelente!',
+                    'La escala fue eliminada',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Escala/eliminar') }}/"+id;
                 });
             }
         })
