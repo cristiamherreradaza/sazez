@@ -154,6 +154,19 @@ class ProductoController extends Controller
 
     public function importaExcel(Request $request)
     {
+        // if ($archivo = $request->file('foto')) {
+        //     $direccion = 'imagenesProductos/'; // upload path
+        //     $nombreArchivo = date('YmdHis') . "." . $archivo->getClientOriginalExtension();
+        //     $archivo->move($direccion, $nombreArchivo);
+
+        //     $imagenProducto              = new ImagenesProducto();
+        //     $imagenProducto->user_id     = Auth::user()->id;
+        //     $imagenProducto->producto_id = $producto_id;
+        //     $imagenProducto->imagen      = $nombreArchivo;
+        //     $imagenProducto->save();
+        //     // $insert['file'] = "$nombreArchivo";
+        // }
+
         $archivo = public_path('excels\formato_productos.xlsx');
         // dd($archivo);
         Excel::import(new ProductosImport, $archivo);
@@ -161,6 +174,7 @@ class ProductoController extends Controller
 
     public function ajax_verifica_codigo()
     {
+        
 
     }
 
