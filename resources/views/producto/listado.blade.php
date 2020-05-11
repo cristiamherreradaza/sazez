@@ -19,7 +19,6 @@
                         <tr>
                             <th>COD</th>
                             <th>NOMBRE</th>
-                            <th>NOMBRE VENTA</th>
                             <th>TIPO</th>
                             <th>MARCA</th>
                             <th>COLOR</th>
@@ -71,7 +70,6 @@ $(document).ready(function() {
         "columns": [
             {data: 'codigo', name: 'codigo'},
             {data: 'nombre', name: 'nombre'},
-            {data: 'nombre_venta', name: 'nombre_venta'},
             {data: 'tipo', name: 'tipos.nombre'},
             {data: 'marca', name: 'marcas.nombre'},
             {data: 'colores', name: 'colores'},

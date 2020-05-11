@@ -27,14 +27,15 @@ class CreateProductosTable extends Migration
             $table->string('tipo', 120)->nullable();
             $table->string('modelo', 120)->nullable();
             $table->decimal('precio_compra', 15, 2)->default(0);
+            $table->decimal('cantidad_minima', 15, 2)->default(0);
             $table->decimal('largo', 6, 2)->default(0);
             $table->decimal('ancho', 6, 2)->default(0);
             $table->decimal('alto', 6, 2)->default(0);
             $table->decimal('peso', 6, 2)->default(0);
             $table->string('colores', 50)->nullable();
             $table->text('descripcion')->nullable();
-            $table->string('url_referencia', 500)->nullable();
-            $table->string('video', 500)->nullable();
+            $table->text('url_referencia')->nullable();
+            $table->text('video')->nullable();
             $table->string('estado', 30)->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

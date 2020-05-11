@@ -136,13 +136,13 @@
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane p-3" id="precios" role="tabpanel">
+                                    <div class="tab-pane p-6" id="precios" role="tabpanel">
                                         <div class="row">
                                             @foreach ($escalas as $key => $e)
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
-                                                        <label class="col-sm-3 text-right col-form-label">{{ $e->nombre }}</label>
-                                                        <div class="col-md-3">
+                                                        <label class="col-sm-6 text-right col-form-label">{{ $e->nombre }}</label>
+                                                        <div class="col-md-6">
                                                             <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any" value="0">
                                                             <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
                                                         </div>
