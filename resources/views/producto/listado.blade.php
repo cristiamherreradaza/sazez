@@ -39,18 +39,6 @@
 <script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
 <script>
-    // $(function () {
-    //     $('#config-table').DataTable({
-    //         responsive: true,
-    //         "order": [
-    //             [0, 'asc']
-    //         ],
-    //         "language": {
-    //             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
-    //         }
-    //     });
-
-    // });
 
 $(document).ready(function() {
     //  console.log('testOne');     para debug, ayuda a ver hasta donde se ejecuta la funcion
@@ -92,10 +80,10 @@ $(document).ready(function() {
 
 } );
 
-function asigna_materias(user_id)
+function edita_producto(producto_id)
 {
-    // console.log(user_id);
-    window.location.href = "{{ url('User/asigna_materias') }}/" + user_id;
+    // console.log(producto_id);
+    window.location.href = "{{ url('Producto/edita') }}/" + producto_id;
 }
 
 </script>

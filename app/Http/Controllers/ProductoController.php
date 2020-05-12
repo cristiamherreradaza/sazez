@@ -56,9 +56,8 @@ class ProductoController extends Controller
 
         return Datatables::of($productos)
             ->addColumn('action', function ($productos) {
-                return '<button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
             })
-            ->editColumn('id', 'ID: {{$id}}')
             ->make(true);    
     }
 
@@ -149,7 +148,16 @@ class ProductoController extends Controller
     public function edita(Request $request, $producto_id)
     {
         $producto = Producto::find($producto_id);
-        dd($producto);
+        $marcas = Marca::where('deleted_at', NULL)->get();
+        $categorias = Categoria::where('deleted_at', NULL)->get();
+        $categorias_productos = CategoriasProducto::where('producto_id', $producto_id)->get();
+        // dd($categorias_productos);
+        $almacenes = Almacene::where('deleted_at', NULL)->get();
+        $escalas = Escala::where('deleted_at', NULL)->get();
+        $tipos = Tipo::all();
+        return view('producto.edita')->with(compact('producto', 'marcas', 'categorias', 'almacenes', 'escalas', 'tipos', 'categorias_productos'));
+
+        // dd($producto);
     }
 
     public function importaExcel(Request $request)
@@ -174,8 +182,6 @@ class ProductoController extends Controller
 
     public function ajax_verifica_codigo()
     {
-        
 
     }
-
 }
