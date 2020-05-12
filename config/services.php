@@ -30,4 +30,22 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),             // Your Github Client ID
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),     // Your Github Client Secret
+        'redirect' => env('GITHUB_CALLBACK'),               // Your Github Callback Url
+    ],
+
+    'facebook' => [
+        'client_id' => env('FACEBOOK_CLIENT_ID'),           // Your Facebook Client ID
+        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),   // Your Facebook Client Secret
+        'redirect' => env('FACEBOOK_CALLBACK'),             // Your Facebook Callback Url
+    ],
+
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),           // Your Google Client ID
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),   // Your Google Client Secret
+        'redirect' => env('GOOGLE_CALLBACK'),             // Your Google Callback Url
+    ],
+
 ];
