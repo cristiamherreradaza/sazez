@@ -8,6 +8,7 @@
     <link href="{{ asset('assets/plugins/dropify/dist/css/dropify.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/plugins/multiselect/css/multi-select.css') }}" rel="stylesheet" type="text/css" />
+        <link href="../assets/plugins/dropzone-master/dist/dropzone.css" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('content')
@@ -226,22 +227,49 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6 nopadding">
+                                            <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>URL VIDEO </label>
                                                     <input type="text" class="form-control" name="video" id="video">
                                                 </div>
                                             </div>
-                                        
+
                                         </div>
 
                                         <div class="row">
 
-                                            <div class="col-lg-6 col-md-12">
+                                            <div class="col-md-3">
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <h4 class="card-title">Imagen</h4>
-                                                        <input type="file" id="input-file-now" class="dropify" name="foto" />
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Imagen</h4>
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Imagen</h4>
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Imagen</h4>
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
                                                     </div>
                                                 </div>
                                             </div>

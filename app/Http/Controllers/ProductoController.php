@@ -64,7 +64,7 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
-        // dd($request->caracteristica);
+        // dd($request->all());
         $nuevoProducto                 = new Producto();
         $nuevoProducto->user_id        = Auth::user()->id;
         $nuevoProducto->marca_id       = $request->marca_id;
@@ -85,6 +85,19 @@ class ProductoController extends Controller
         $nuevoProducto->save();
 
         $producto_id = $nuevoProducto->id;
+
+        if ($request->caracteristica[0] != null) 
+        {
+            foreach ($request->caracteristica as $key => $c) 
+            {
+                $caracteristica = new Caracteristica();
+                $caracteristica->user_id = Auth::user()->id;
+                $caracteristica->producto_id = $producto_id;
+                $caracteristica->descripcion = $c;
+                $caracteristica->save();
+            }
+
+        }
 
         if ($request->has('categorias_valores')) 
         {
@@ -114,18 +127,21 @@ class ProductoController extends Controller
 
         }
 
-        if ($archivo = $request->file('foto')) 
+        if ($request->fotos[0] != null) 
         {
-            $direccion = 'imagenesProductos/'; // upload path
-            $nombreArchivo = date('YmdHis') . "." . $archivo->getClientOriginalExtension();
-            $archivo->move($direccion, $nombreArchivo);
+            foreach ($request->fotos as $key => $f) 
+            {
+                $archivo = $f;
+                $direccion = 'imagenesProductos/'; // upload path
+                $nombreArchivo = date('YmdHis').$key. "." . $archivo->getClientOriginalExtension();
+                $archivo->move($direccion, $nombreArchivo);
 
-            $imagenProducto              = new ImagenesProducto();
-            $imagenProducto->user_id     = Auth::user()->id;
-            $imagenProducto->producto_id = $producto_id;
-            $imagenProducto->imagen      = $nombreArchivo;
-            $imagenProducto->save();
-            // $insert['file'] = "$nombreArchivo";
+                $imagenProducto              = new ImagenesProducto();
+                $imagenProducto->user_id     = Auth::user()->id;
+                $imagenProducto->producto_id = $producto_id;
+                $imagenProducto->imagen      = $nombreArchivo;
+                $imagenProducto->save();
+            }
         }
 
         if ($request->cantidad > 0) {

@@ -31,7 +31,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 mt-2 text-center">
                 <div class="social">
-                    <!-- <a href="{{ url('login/github') }}" class="btn btn-dark" data-toggle="tooltip" title="Acceder con Github"> <i aria-hidden="true" class="mdi mdi-github-circle"></i> </a> -->
+                    <a href="{{ url('login/github') }}" class="btn btn-dark" data-toggle="tooltip" title="Acceder con Github"> <i aria-hidden="true" class="mdi mdi-github-circle"></i> </a>
                     <a href="{{ url('login/facebook') }}" class="btn btn-facebook" data-toggle="tooltip" title="Acceder con Facebook"> <i aria-hidden="true" class="fab fa-facebook"></i> </a>
                     <!-- <a href="javascript:void(0)" class="btn btn-twitter" data-toggle="tooltip" title="Acceder con Twitter"> <i aria-hidden="true" class="fab fa-twitter"></i> </a> -->
                     <a href="{{ url('login/google') }}" class="btn btn-googleplus" data-toggle="tooltip" title="Acceder con Google"> <i aria-hidden="true" class="fab fa-google-plus"></i> </a>
