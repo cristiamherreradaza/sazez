@@ -33,6 +33,18 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+// LOGIN SOCIALITE GITHUB
+Route::get('login/github', 'Auth\LoginController@redirectToProvider');
+Route::get('login/github/callback', 'Auth\LoginController@handleProviderCallback');
+
+// LOGIN SOCIALITE FACEBOOK
+Route::get('login/facebook', 'Auth\LoginController@redirectToProviderFacebook');
+Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallbackFacebook');
+
+// LOGIN SOCIALITE GOOGLE
+Route::get('login/google', 'Auth\LoginController@redirectToProviderGoogle');
+Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallbackGoogle');
+
 // PRODUCTOS
 Route::get('Producto/nuevo', 'ProductoController@nuevo');
 Route::post('Producto/guarda', 'ProductoController@guarda');

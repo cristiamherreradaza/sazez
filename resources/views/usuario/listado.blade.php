@@ -69,7 +69,12 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Rol</label>
-                                <input name="rol_usuario" type="text" id="rol_usuario" class="form-control" required>
+                                <select name="rol_usuario" id="rol_usuario" class="form-control">
+                                    <option value="Cliente"> Cliente </option>
+                                    <option value="Distribuidor"> Distribuidor </option>
+                                    <option value="Almacenero"> Almacenero </option>
+                                    <option value="Administrador"> Administrador </option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -127,7 +132,12 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Rol</label>
-                                <input name="rol" type="text" id="rol" class="form-control" required>
+                                <select name="rol" id="rol" class="form-control">
+                                    <option value="Cliente"> Cliente </option>
+                                    <option value="Distribuidor"> Distribuidor </option>
+                                    <option value="Almacenero"> Almacenero </option>
+                                    <option value="Administrador"> Administrador </option>
+                                </select>
                             </div>
                         </div>
                     </div>
