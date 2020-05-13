@@ -241,7 +241,7 @@
                                             <div class="col-md-3">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h4 class="card-title">Imagen</h4>
+                                                        <h4 class="card-title">Imagen 1</h4>
                                                         <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
                                                     </div>
                                                 </div>
@@ -250,7 +250,7 @@
                                             <div class="col-md-3">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h4 class="card-title">Imagen</h4>
+                                                        <h4 class="card-title">Imagen 2</h4>
                                                         <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
                                                     </div>
                                                 </div>
@@ -259,7 +259,7 @@
                                             <div class="col-md-3">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h4 class="card-title">Imagen</h4>
+                                                        <h4 class="card-title">Imagen 3</h4>
                                                         <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
                                                     </div>
                                                 </div>
@@ -268,7 +268,7 @@
                                             <div class="col-md-3">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h4 class="card-title">Imagen</h4>
+                                                        <h4 class="card-title">Imagen 4</h4>
                                                         <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
                                                     </div>
                                                 </div>
