@@ -39,14 +39,14 @@
                                     <div class="tab-pane active" id="principal" role="tabpanel">
                                         <div class="p-3">
                                             <div class="row">
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>CODIGO </label>
                                                         <input type="text" class="form-control" name="codigo" id="codigo" required>
                                                     </div>
                                                 </div>
                                         
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>NOMBRE </label>
                                                         <input type="text" class="form-control" name="nombre" id="nombre" required>
@@ -100,7 +100,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>P/COMPRA </label>
                                                         <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any" required>
@@ -118,7 +118,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="col-md-5">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>CATEGORIAS </label>
                                                         <input type="hidden" value="" id="categorias_valores" name="categorias_valores">

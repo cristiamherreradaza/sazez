@@ -11,6 +11,7 @@ use App\Almacene;
 use App\Producto;
 use App\Categoria;
 use App\Movimiento;
+use App\Caracteristica;
 use App\ImagenesProducto;
 use App\CategoriasProducto;
 use Illuminate\Http\Request;
@@ -63,12 +64,7 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
-        // $nombre = Hash::make($hoy);
-        // dd(Auth::user()->id);
-       
-        // echo $path;
-        
-        // dd($request->precio_venta);
+        // dd($request->caracteristica);
         $nuevoProducto                 = new Producto();
         $nuevoProducto->user_id        = Auth::user()->id;
         $nuevoProducto->marca_id       = $request->marca_id;
@@ -142,6 +138,8 @@ class ProductoController extends Controller
             $movimiento->save();
         }
 
+
+
         return redirect('Producto/listado');
     }
 
@@ -151,12 +149,23 @@ class ProductoController extends Controller
         $marcas = Marca::where('deleted_at', NULL)->get();
         $categorias = Categoria::where('deleted_at', NULL)->get();
         $categorias_productos = CategoriasProducto::where('producto_id', $producto_id)->get();
+        $precios = Precio::where('producto_id', $producto_id)->get();
+        $caracteristicas_producto = Caracteristica::where('producto_id', $producto_id)->get();
         // dd($categorias_productos);
         $almacenes = Almacene::where('deleted_at', NULL)->get();
         $escalas = Escala::where('deleted_at', NULL)->get();
         $tipos = Tipo::all();
-        return view('producto.edita')->with(compact('producto', 'marcas', 'categorias', 'almacenes', 'escalas', 'tipos', 'categorias_productos'));
-
+        return view('producto.edita')->with(compact(
+                                                'producto', 
+                                                'marcas', 
+                                                'categorias', 
+                                                'almacenes', 
+                                                'escalas', 
+                                                'tipos', 
+                                                'categorias_productos', 
+                                                'precios',
+                                                'caracteristicas_producto'
+                                            ));
         // dd($producto);
     }
 

@@ -140,10 +140,10 @@
                                                     <label
                                                         class="col-sm-6 text-right col-form-label">{{ $e->nombre }}</label>
                                                     <div class="col-md-6">
-                                                        <input type="number" class="form-control" name="precio_venta[]"
-                                                            id="precio_venta" min="0" step="any" value="0">
-                                                        <input type="hidden" class="form-control" name="escalas[]"
-                                                            id="escala" value="{{ $e->id }}">
+                                                        @foreach ($precios as $p)
+                                                            <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any" value="{{ ($p->escala_id==$e->id)?$p->precio:0 }}">
+                                                        @endforeach
+                                                        <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -157,39 +157,35 @@
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label>COLOR </label>
-                                                    <input type="text" class="form-control" name="colores" id="color">
+                                                    <input type="text" class="form-control" name="colores" id="color" value="{{ $producto->colores }}">
                                                 </div>
                                             </div>
 
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>LARGO </label>
-                                                    <input type="text" class="form-control" name="largo" id="largo"
-                                                        min="0" step="any" value="0">
+                                                    <input type="text" class="form-control" name="largo" id="largo" min="0" step="any" value="{{ $producto->largo }}">
                                                 </div>
                                             </div>
 
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>ANCHO </label>
-                                                    <input type="text" class="form-control" name="ancho" id="ancho"
-                                                        min="0" step="any" value="0">
+                                                    <input type="text" class="form-control" name="ancho" id="ancho" min="0" step="any" value="{{ $producto->ancho }}">
                                                 </div>
                                             </div>
 
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>ALTO </label>
-                                                    <input type="text" class="form-control" name="alto" id="alto"
-                                                        min="0" step="any" value="0">
+                                                    <input type="text" class="form-control" name="alto" id="alto" min="0" step="any" value="{{ $producto->alto }}">
                                                 </div>
                                             </div>
 
                                             <div class="col nopadding">
                                                 <div class="form-group">
                                                     <label>PESO </label>
-                                                    <input type="text" class="form-control" name="peso" id="peso"
-                                                        min="0" step="any" value="0">
+                                                    <input type="text" class="form-control" name="peso" id="peso" min="0" step="any" value="{{ $producto->peso }}">
                                                 </div>
                                             </div>
 
@@ -199,14 +195,22 @@
                                             <div class="col-md-4 nopadding">
                                                 <div class="form-group">
                                                     <label>CARACTERISTICAS </label>
+                                                    
+                                                    @foreach ($caracteristicas_producto as $cp)
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="{{ $cp->descripcion }}">
+                                                        
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-danger" type="button" onclick="education_fields();"><i class="fa fa-minus"></i></button>
+                                                            </div>
+                                                        </div>    
+                                                    <br>
+                                                    @endforeach
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="caracteristica"
-                                                            name="caracteristica[]" value="">
-
+                                                        <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="">
+                                                    
                                                         <div class="input-group-append">
-                                                            <button class="btn btn-success" type="button"
-                                                                onclick="education_fields();"><i
-                                                                    class="fa fa-plus"></i></button>
+                                                            <button class="btn btn-success" type="button" onclick="education_fields();"><i class="fa fa-plus"></i></button>
                                                         </div>
                                                     </div>
                                                     <br>
@@ -216,8 +220,7 @@
                                             <div class="col-md-8 nopadding">
                                                 <div class="form-group">
                                                     <label>DESCRIPCION </label>
-                                                    <textarea class="form-control" id="mymce" rows="5"
-                                                        name="descripcion"></textarea>
+                                                    <textarea class="form-control" id="mymce" rows="5" name="descripcion">{{ $producto->descripcion }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -351,11 +354,15 @@ $(document).ready(function() {
         $("#categorias_valores").val(valores);
     });
 
+    // $('#mymce').html({{ $producto->largo }});
+    // tinymce.activeEditor.setContent('<span>some</span> html');
+
     if ($("#mymce").length > 0) {
         tinymce.init({
         selector: "textarea#mymce",
         theme: "modern",
         height: 200,
+        // setContent: "algo",
         plugins: [
         "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
