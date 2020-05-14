@@ -18,8 +18,23 @@ class Almacene extends Model
         'deleted_at',
     ];
 
-    public function usuarios()
+    public function users()
     {
         return $this->hasMany('App\User');
+    }
+
+    public function pedidos()
+    {
+        return $this->hasMany('App\Pedido');
+    }
+
+    public function cotizaciones()
+    {
+        return $this->hasMany('App\Cotizaciones');
+    }
+
+    public function ventas()
+    {
+        return $this->hasMany('App\Venta');
     }
 }

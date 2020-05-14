@@ -52,13 +52,45 @@ class User extends Authenticatable
         return $this->belongsTo('App\Almacene');
     }
 
-    public function notas()
+    public function combos()
     {
-        return $this->hasMany('App\Nota');
+        return $this->hasMany('App\Combo');
     }
 
-    public function notaspropuestas()
+    public function combos_productos()
     {
-        return $this->hasMany('App\NotasPropuesta');
+        return $this->hasMany('App\CombosProducto');
+    }
+
+    public function pedidos()
+    {
+        return $this->hasMany('App\Pedido');
+    }
+
+    public function pedidos_productos()
+    {
+        return $this->hasMany('App\PedidosProducto');
+    }
+
+    //comprobar para dos casos
+    public function cotizaciones()
+    {
+        return $this->hasMany('App\Cotizacione');
+    }
+
+    public function cotizaciones_productos()
+    {
+        return $this->hasMany('App\CotizacionesProducto');
+    }
+
+    //comprobar para dos casos
+    public function ventas()
+    {
+        return $this->hasMany('App\Venta');
+    }
+
+    public function ventas_productos()
+    {
+        return $this->hasMany('App\VentasProducto');
     }
 }
