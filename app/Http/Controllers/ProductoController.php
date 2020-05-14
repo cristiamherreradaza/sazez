@@ -64,8 +64,13 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
+        if ($request->producto_id) {
+            $nuevoProducto = Producto::find($request->producto_id);
+
+        }else{
+            $nuevoProducto = new Producto();
+        }
         // dd($request->all());
-        $nuevoProducto                 = new Producto();
         $nuevoProducto->user_id        = Auth::user()->id;
         $nuevoProducto->marca_id       = $request->marca_id;
         $nuevoProducto->tipo_id        = $request->tipo_id;
@@ -84,17 +89,27 @@ class ProductoController extends Controller
         $nuevoProducto->video          = $request->video;
         $nuevoProducto->save();
 
-        $producto_id = $nuevoProducto->id;
+        if ($request->producto_id) {
+            $producto_id          = $request->producto_id;
+            $borraCaracteristicas = Caracteristica::where('producto_id', $producto_id)->delete();
+            $borraCategorias      = CategoriasProducto::where('producto_id', $producto_id)->delete();
+            $borraPrecios         = Precio::where('producto_id', $producto_id)->delete();
+            $borraImagenes        = ImagenesProducto::where('producto_id', $producto_id)->delete();
+        } else {
+            $producto_id = $nuevoProducto->id;
+        }
 
         if ($request->caracteristica[0] != null) 
         {
             foreach ($request->caracteristica as $key => $c) 
             {
-                $caracteristica = new Caracteristica();
-                $caracteristica->user_id = Auth::user()->id;
-                $caracteristica->producto_id = $producto_id;
-                $caracteristica->descripcion = $c;
-                $caracteristica->save();
+                if ($c != null) {
+                    $caracteristica = new Caracteristica();
+                    $caracteristica->user_id = Auth::user()->id;
+                    $caracteristica->producto_id = $producto_id;
+                    $caracteristica->descripcion = $c;
+                    $caracteristica->save();
+                }
             }
 
         }
@@ -154,7 +169,29 @@ class ProductoController extends Controller
             $movimiento->save();
         }
 
+        return redirect('Producto/listado');
+    }
 
+    public function guardaEdicion(Request $request)
+    {
+        $producto = Producto::find($request->producto_id);
+        $producto->user_id        = Auth::user()->id;
+        $producto->marca_id       = $request->marca_id;
+        $producto->tipo_id        = $request->tipo_id;
+        $producto->codigo         = $request->codigo;
+        $producto->nombre         = $request->nombre;
+        $producto->nombre_venta   = $request->nombre_venta;
+        $producto->modelo         = $request->modelo;
+        $producto->precio_compra  = $request->precio_compra;
+        $producto->largo          = $request->largo;
+        $producto->ancho          = $request->ancho;
+        $producto->alto           = $request->alto;
+        $producto->peso           = $request->peso;
+        $producto->colores        = $request->colores;
+        $producto->descripcion    = $request->descripcion;
+        $producto->url_referencia = $request->url_referencia;
+        $producto->video          = $request->video;
+        $producto->save();
 
         return redirect('Producto/listado');
     }
@@ -167,6 +204,7 @@ class ProductoController extends Controller
         $categorias_productos = CategoriasProducto::where('producto_id', $producto_id)->get();
         $precios = Precio::where('producto_id', $producto_id)->get();
         $caracteristicas_producto = Caracteristica::where('producto_id', $producto_id)->get();
+        $imagenes_producto = ImagenesProducto::where('producto_id', $producto_id)->get();
         // dd($categorias_productos);
         $almacenes = Almacene::where('deleted_at', NULL)->get();
         $escalas = Escala::where('deleted_at', NULL)->get();
@@ -180,7 +218,8 @@ class ProductoController extends Controller
                                                 'tipos', 
                                                 'categorias_productos', 
                                                 'precios',
-                                                'caracteristicas_producto'
+                                                'caracteristicas_producto',
+                                                'imagenes_producto'
                                             ));
         // dd($producto);
     }
@@ -208,5 +247,19 @@ class ProductoController extends Controller
     public function ajax_verifica_codigo()
     {
 
+    }
+
+    public function elimina_imagen(Request $request, $imagen_id, $producto_id)
+    {
+        ImagenesProducto::destroy($imagen_id);
+        return response()->json([
+            'sw' => 1
+        ]);
+    }
+
+    public function ajaxMuestraImgProducto(Request $request, $producto_id)
+    {
+        $imagenes_producto = ImagenesProducto::where('producto_id', $producto_id)->get();
+        return view('producto.ajaxMuestraImgProducto')->with(compact('imagenes_producto'));
     }
 }

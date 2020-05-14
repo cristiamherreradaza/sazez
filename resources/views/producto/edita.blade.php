@@ -46,6 +46,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>CODIGO </label>
+                                                        <input type="hidden" name="producto_id" value="{{ $producto->id }}">
                                                         <input type="text" class="form-control" name="codigo"
                                                             id="codigo" value="{{ $producto->codigo }}" required>
                                                     </div>
@@ -101,7 +102,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>P/COMPRA </label>
                                                         <input type="number" class="form-control" name="precio_compra"
@@ -109,7 +110,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-5">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>CATEGORIAS </label>
                                                         <input type="hidden" value="" id="categorias_valores"
@@ -246,19 +247,65 @@
 
                                         </div>
 
-                                        <div class="row">
+                                        <div class="row" id="bloqueAjaxListadoImg">
 
-                                            <div class="col-lg-6 col-md-12">
+                                            @foreach ($imagenes_producto as $ip)
+
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h4 class="card-title">Imagen</h4>
+                                                            <img src="{{ asset('imagenesProductos')."/".$ip->imagen }}" alt="" height="200" >
+                                                            <br />
+                                                            <button type="button" class="btn waves-effect waves-light btn-danger" onclick="elimina_imagen({{ $ip->id }}, {{ $ip->producto_id }})"> <i class="fas fa-trash"></i> Eliminar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            @endforeach
+
+                                        </div>
+
+                                        <div class="row">
+                                        
+                                            <div class="col-md-3">
                                                 <div class="card">
                                                     <div class="card-body">
-                                                        <h4 class="card-title">Imagen</h4>
-                                                        <input type="file" id="input-file-now" class="dropify"
-                                                            name="foto" />
+                                                        <h4 class="card-title">Imagen 1</h4>
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
                                                     </div>
                                                 </div>
                                             </div>
-
+                                        
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Imagen 2</h4>
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Imagen 3</h4>
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">Imagen 4</h4>
+                                                        <input type="file" id="input-file-now" class="dropify" name="fotos[]" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -269,8 +316,7 @@
                                         class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button"
-                                        class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
                                 </div>
                             </div>
 
@@ -280,56 +326,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-outline-primary">
-                    <div class="card-header" onclick="muestra_formulario_importacion()">
-                        <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
-                    </div>
-                    <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
-                        <form action="/Producto/importa_excel" method="post" enctype="multipart/form-data">
-                            <div class="row">
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>SELECCIONE ARCHIVO EXCEL</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">ARCHIVO</span>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="inputGroupFile01">
-                                                <label class="custom-file-label"
-                                                    for="inputGroupFile01">Seleccione...</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="submit"
-                                        class="btn waves-effect waves-light btn-block btn-success">Importar</button>
-                                </div>
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="button"
-                                        class="btn waves-effect waves-light btn-block btn-warning">Descargar
-                                        Formato</button>
-                                </div>
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="button" class="btn waves-effect waves-light btn-block btn-primary">Ver
-                                        Formato</button>
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         <!-- Row -->
     </div>
     <!-- Column -->
@@ -347,6 +344,8 @@
 
 $(document).ready(function() {
 
+    // console.log($("#categorias").val());
+    $("#categorias_valores").val($("#categorias").val());
     $('.dropify').dropify();
     $("#categorias").select2();
     $("#categorias").change(function(){
@@ -373,6 +372,36 @@ $(document).ready(function() {
         });
     }
 });       
+
+function elimina_imagen(imagen_id, producto_id)
+{
+    Swal.fire({
+        title: 'Quieres borrar la imagen?',
+        text: "Luego no podras recuperarlo!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, estoy seguro!',
+        cancelButtonText: "Cancelar",
+    }).then((result) => {
+        if (result.value) {
+
+            $.ajax({
+                type:'GET',
+                url:"{{ url('Producto/elimina_imagen') }}/"+imagen_id+"/"+producto_id,
+                success:function(data){
+                    $("#bloqueAjaxListadoImg").load('{{ url('Producto/ajaxMuestraImgProducto') }}/'+producto_id);        
+                    Swal.fire(
+                        'Excelente!',
+                        'La imagen fue eliminada',
+                        'success'
+                    );
+                }
+            });
+        }
+    })
+}
 
 function muestra_formulario_importacion()
 {
