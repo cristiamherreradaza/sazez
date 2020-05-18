@@ -94,7 +94,7 @@ class ProductoController extends Controller
             $borraCaracteristicas = Caracteristica::where('producto_id', $producto_id)->delete();
             $borraCategorias      = CategoriasProducto::where('producto_id', $producto_id)->delete();
             $borraPrecios         = Precio::where('producto_id', $producto_id)->delete();
-            $borraImagenes        = ImagenesProducto::where('producto_id', $producto_id)->delete();
+            // $borraImagenes        = ImagenesProducto::where('producto_id', $producto_id)->delete();
         } else {
             $producto_id = $nuevoProducto->id;
         }

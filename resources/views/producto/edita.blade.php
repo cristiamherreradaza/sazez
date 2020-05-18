@@ -198,14 +198,14 @@
                                                     <label>CARACTERISTICAS </label>
                                                     
                                                     @foreach ($caracteristicas_producto as $cp)
-                                                        <div class="input-group">
+                                                        <div class="input-group removeclass{{ $cp->id }}">
                                                             <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="{{ $cp->descripcion }}">
                                                         
                                                             <div class="input-group-append">
-                                                                <button class="btn btn-danger" type="button" onclick="education_fields();"><i class="fa fa-minus"></i></button>
+                                                                <button class="btn btn-danger" type="button" onclick="remove_education_fields({{ $cp->id }});"><i class="fa fa-minus"></i></button>
                                                             </div>
-                                                        </div>    
-                                                    <br>
+                                                          
+                                                        </div>
                                                     @endforeach
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="">
