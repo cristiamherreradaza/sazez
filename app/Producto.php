@@ -68,4 +68,23 @@ class Producto extends Model
         return $this->hasMany('App\ImagenesProducto');
     }
 
+    public function combos_productos()
+    {
+        return $this->hasMany('App\CombosProducto');
+    }
+
+    public function pedidos_productos()
+    {
+        return $this->hasMany('App\PedidosProducto');
+    }
+
+    public function cotizaciones_productos()
+    {
+        return $this->hasMany('App\CotizacionesProducto');
+    }
+
+    public function ventas_productos()
+    {
+        return $this->hasMany('App\VentasProducto');
+    }
 }
