@@ -21,6 +21,7 @@ class CreateCombosProductosTable extends Migration
             $table->foreign('combo_id')->references('id')->on('combos');
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('productos');
+            $table->decimal('precio', 15, 2)->nullable()->default(0);
             $table->string('estado', 30)->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();
