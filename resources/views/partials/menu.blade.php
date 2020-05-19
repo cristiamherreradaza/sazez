@@ -36,6 +36,14 @@
                     </ul>
                 </li>
                 <li>
+                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                            class="hide-menu">COMBOS</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ url('Combo/nuevo') }}">Nuevo</a></li>
+                        <li><a href="{{ url('Combo/listado') }}">Listado</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span
                             class="hide-menu">CONFIGURACIONES</span></a>
                     <ul aria-expanded="false" class="collapse">
@@ -44,6 +52,14 @@
                         <li><a href="{{ url('Escala/listado') }}">Escalas</a></li>
                         <li><a href="{{ url('Marca/listado') }}">Marcas</a></li>
                         <li><a href="{{ url('User/listado') }}">Usuarios</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                            class="hide-menu">PEDIDOS</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ url('Pedido/nuevo') }}">Nuevo</a></li>
+                        <li><a href="{{ url('Pedido/listado') }}">Listado</a></li>
                     </ul>
                 </li>
             </ul>

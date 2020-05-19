@@ -3,14 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pedido extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
+        'almacene_solicitante_id',
+        'solicitante_id',
         'almacene_id',
-        'encargado_id',
         'numero',
         'fecha',
         'estado',

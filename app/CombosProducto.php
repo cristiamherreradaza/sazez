@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CombosProducto extends Model
 {
@@ -12,6 +13,7 @@ class CombosProducto extends Model
         'user_id',
         'combo_id',
         'producto_id',
+        'precio',
         'estado',
         'deleted_at',
     ];

@@ -75,6 +75,18 @@ Route::post('Categoria/guardar', 'CategoriaController@guardar');
 Route::post('Categoria/actualizar', 'CategoriaController@actualizar');
 Route::get('Categoria/eliminar/{id}', 'CategoriaController@eliminar');
 
+//COMBOS
+Route::get('Combo/nuevo', 'ComboController@nuevo');
+Route::post('Combo/guarda', 'ComboController@guarda');
+Route::get('Combo/ajax_listado_producto', 'ComboController@ajax_listado_producto');
+Route::get('Combo/editar/{id}', 'ComboController@editar');
+Route::get('Combo/lista_combo_productos/{id}', 'ComboController@lista_combo_productos');
+Route::post('Combo/agregar_combo_producto', 'ComboController@agregar_combo_producto');
+//Route::post('Combo/eliminar_combo_producto', 'ComboController@eliminar_combo_producto');
+Route::get('Combo/elimina_producto/{combo_id}/{producto_id}', 'ComboController@elimina_producto');
+Route::get('Combo/listado', 'ComboController@listado');
+Route::get('Combo/eliminar/{id}', 'ComboController@eliminar');
+
 // ESCALAS
 Route::get('Escala/listado', 'EscalaController@listado');
 Route::post('Escala/guardar', 'EscalaController@guardar');
@@ -86,6 +98,18 @@ Route::get('Marca/listado', 'MarcaController@listado');
 Route::post('Marca/guardar', 'MarcaController@guardar');
 Route::post('Marca/actualizar', 'MarcaController@actualizar');
 Route::get('Marca/eliminar/{id}', 'MarcaController@eliminar');
+
+// PEDIDOS
+Route::get('Pedido/nuevo', 'PedidoController@nuevo');
+Route::get('Pedido/pedido_productos/{id}', 'PedidoController@pedido_productos');
+Route::get('Pedido/ajax_listado_producto', 'PedidoController@ajax_listado_producto');
+Route::post('Pedido/agregar_pedido_producto', 'PedidoController@agregar_pedido_producto');
+Route::get('Pedido/lista_pedido_productos/{id}', 'PedidoController@lista_pedido_productos');
+Route::post('Pedido/actualiza_cantidad', 'PedidoController@actualiza_cantidad');
+Route::get('Pedido/elimina_producto/{pedido_id}/{producto_id}', 'PedidoController@elimina_producto');
+Route::post('Pedido/guarda', 'PedidoController@guarda');
+Route::get('Pedido/eliminar/{id}', 'PedidoController@eliminar');
+Route::get('Pedido/listado', 'PedidoController@listado');
 
 // USUARIOS
 Route::get('User/listado', 'UserController@listado');
