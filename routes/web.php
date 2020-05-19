@@ -56,6 +56,9 @@ Route::get('Producto/importaExcel', 'ProductoController@importaExcel');
 Route::get('Producto/elimina_imagen/{imagen_id}/{producto_id}', 'ProductoController@elimina_imagen');
 Route::get('Producto/ajaxMuestraImgProducto/{producto_id}', 'ProductoController@ajaxMuestraImgProducto');
 
+// PAQUETES
+Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
+
 Route::get('User/listado', 'UserController@listado');
 Route::get('User/ajax_listado', 'UserController@ajax_listado');
 Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
