@@ -112,7 +112,7 @@ class ComboController extends Controller
     public function listado()
     {
         $combos = Combo::get();
-        return view('combo.listado')->with(compact('combos'));                            
+        return view('combo.listado')->with(compact('combos'));
     }
 
     public function eliminar($id)

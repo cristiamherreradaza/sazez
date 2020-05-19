@@ -102,6 +102,14 @@ Route::get('Marca/eliminar/{id}', 'MarcaController@eliminar');
 // PEDIDOS
 Route::get('Pedido/nuevo', 'PedidoController@nuevo');
 Route::get('Pedido/pedido_productos/{id}', 'PedidoController@pedido_productos');
+Route::get('Pedido/ajax_listado_producto', 'PedidoController@ajax_listado_producto');
+Route::post('Pedido/agregar_pedido_producto', 'PedidoController@agregar_pedido_producto');
+Route::get('Pedido/lista_pedido_productos/{id}', 'PedidoController@lista_pedido_productos');
+Route::post('Pedido/actualiza_cantidad', 'PedidoController@actualiza_cantidad');
+Route::get('Pedido/elimina_producto/{pedido_id}/{producto_id}', 'PedidoController@elimina_producto');
+Route::post('Pedido/guarda', 'PedidoController@guarda');
+Route::get('Pedido/eliminar/{id}', 'PedidoController@eliminar');
+Route::get('Pedido/listado', 'PedidoController@listado');
 
 // USUARIOS
 Route::get('User/listado', 'UserController@listado');
