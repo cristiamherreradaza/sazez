@@ -48,7 +48,7 @@
             t.row.add([
                 col1,
                 col2,
-                '<input type="text">',
+                '<input type="text" class="form-control">',
                 '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
             ]).draw(false);
 
