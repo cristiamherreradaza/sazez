@@ -124,4 +124,11 @@ class ComboController extends Controller
         CombosProducto::where('combo_id', $id)->delete();
         return redirect('Combo/listado');
     }
+
+    public function actualiza_precio(Request $request)
+    {
+        $combo_producto = CombosProducto::find($request->id);
+        $combo_producto->precio = $request->precio;
+        $combo_producto->save();
+    }
 }

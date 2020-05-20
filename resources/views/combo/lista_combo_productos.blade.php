@@ -19,7 +19,7 @@
                         <tr>
                             <td>{{ $producto->producto->nombre }}</td>
                             <td>{{ $producto->producto->nombre_venta }}</td>
-                            <td>{{ $producto->producto->marca_id }}</td>
+                            <td><input style="text-align: center;" size="8" min="0" pattern="^[0-9]+" onchange="calcula( {{ $producto->id }} )" type="number" id="precio-{{ $producto->id }}" name="precio-{{ $producto->id }}" value="{{ $producto->precio }}"></td>
                             <td>
                                 <button type="button" class="btn btn-danger" onclick="eliminar_combo_producto('{{ $producto->combo_id }}', '{{ $producto->producto_id }}')"><i class="fas fa-trash"></i></button>
                             </td>

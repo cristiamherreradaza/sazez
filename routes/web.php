@@ -92,6 +92,7 @@ Route::post('Combo/agregar_combo_producto', 'ComboController@agregar_combo_produ
 Route::get('Combo/elimina_producto/{combo_id}/{producto_id}', 'ComboController@elimina_producto');
 Route::get('Combo/listado', 'ComboController@listado');
 Route::get('Combo/eliminar/{id}', 'ComboController@eliminar');
+Route::post('Combo/actualiza_precio', 'ComboController@actualiza_precio');
 
 // ESCALAS
 Route::get('Escala/listado', 'EscalaController@listado');
