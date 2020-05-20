@@ -111,6 +111,11 @@ Route::post('Pedido/guarda', 'PedidoController@guarda');
 Route::get('Pedido/eliminar/{id}', 'PedidoController@eliminar');
 Route::get('Pedido/listado', 'PedidoController@listado');
 
+// ENTREGAS
+Route::get('Entrega/entrega/{id}', 'EntregaController@entrega');
+Route::post('Entrega/store', 'EntregaController@store');
+Route::get('Pedido/pedido_productos/{id}', 'PedidoController@pedido_productos');
+
 // USUARIOS
 Route::get('User/listado', 'UserController@listado');
 Route::post('User/guardar', 'UserController@guardar');
