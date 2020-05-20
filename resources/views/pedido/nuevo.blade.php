@@ -100,26 +100,18 @@
                         <table id="tablaPedido" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>#</th>
+                                    <th style="width: 5%">ID</th>
+                                    <th>Codigo</th>
                                     <th>Nombre</th>
-                                    <th>Opciones</th>
-                                    <th>Eliminar</th>
+                                    <th>Marca</th>
+                                    <th>Tipo</th>
+                                    <th>Modelo</th>
+                                    <th>Colores</th>
+                                    <th style="width: 5%">Cantidad</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {{-- <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <button type="button" class="btn btn-warning" title="Editar marca"
-                                            onclick="editar()"><i
-                                                class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger" title="Eliminar marca"
-                                            onclick="eliminar()"><i
-                                                class="fas fa-trash"></i></button>
-                                    </td> --}}
-                                    
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -160,13 +152,14 @@
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 4) {
+        if (termino_busqueda.length > 3) {
             // console.log(termino_busqueda);
             $.ajax({
                 url: "{{ url('Pedido/ajaxBuscaProducto') }}",
                 data: {termino: termino_busqueda},
                 type: 'POST',
                 success: function(data) {
+                    $("#listadoProductosAjax").show('slow');
                     $("#listadoProductosAjax").html(data);
                 }
             });
