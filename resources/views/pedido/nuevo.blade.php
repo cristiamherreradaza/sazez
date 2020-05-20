@@ -23,25 +23,25 @@
         <form action="{{ url('Pedido/guarda') }}" method="POST">
             @csrf
             <div class="row">
-            <input type="hidden" name="id_pedido" id="id_pedido" value="{{ $pedido->id }}">
+                <input type="hidden" name="id_pedido" id="id_pedido">
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">Numero</label>
-                        <input type="text" name="numero_pedido" id="numero_pedido" class="form-control" value="{{ $pedido->numero }}" readonly>
-                    </div>                    
+                        <input type="text" name="numero_pedido" id="numero_pedido" class="form-control" readonly>
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">Fecha</label>
-                        <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ $pedido->fecha }}" readonly>
-                    </div>                    
+                        <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" readonly>
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label class="control-label">Almacen a solicitar</label>
                         <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
                             @foreach($almacenes as $almacen)
-                                <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
+                            <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
                             @endforeach
                         </select>
                     </div>
@@ -49,46 +49,85 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">&nbsp;</label>
-                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success"  onclick="guardar_pedido()">CONFIRMAR</button>
-                    </div>                    
+                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success"
+                            onclick="guardar_pedido()">CONFIRMAR</button>
+                    </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">&nbsp;</label>
-                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger"  onclick="eliminar_pedido()">DESCARTAR</button>
-                    </div>                    
+                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
+                            onclick="eliminar_pedido()">DESCARTAR</button>
+                    </div>
                 </div>
             </div>
         </form>
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card card-outline-primary">                                
                 <div class="card-header">
-                    <h4 class="mb-0 text-white">PRODUCTOS DISPONIBLES</h4>
+                    <h4 class="mb-0 text-white">BUSCADOR DE PRODUCTOS</h4>
                 </div>
-                <br />  
-                <div class="table-responsive m-t-40">
-                    <table id="tabla_productos" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Nombre de venta</th>
-                                <th>Marca</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                <div class="card-body">
+                    <div class="row">
+                        <input type="hidden" name="id_pedido" id="id_pedido">
+                        <div class="col-md-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">Nombre producto</span>
+                                </div>
+                                <input type="text" class="form-control" id="termino" name="termino" aria-describedby="basic-addon3">
+                            </div>
+                            <div id="listadoProductosAjax">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6" id="productos_en_pedido">
-            <!-- Contenido del datatable productos_combo -->
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-outline-warning">
+                <div class="card-header">
+                    <h4 class="mb-0 text-white">PRODUCTOS PARA PEDIDO</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive m-t-40">
+                        <table id="tablaPedido" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Opciones</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{-- <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" title="Editar marca"
+                                            onclick="editar()"><i
+                                                class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger" title="Eliminar marca"
+                                            onclick="eliminar()"><i
+                                                class="fas fa-trash"></i></button>
+                                    </td> --}}
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </div>
 
 @stop
@@ -101,6 +140,7 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
+    var t = $('#tablaPedido').DataTable();
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -108,41 +148,39 @@
         }
     });
 
-    // DataTable ajax de Productos
-    var table = $('#tabla_productos').DataTable( {
-        "iDisplayLength": 10,
-        "processing": true,
-        // "scrollX": true,
-        "serverSide": true,
-        "ajax": "{{ url('Pedido/ajax_listado_producto') }}",
-        "columns": [
-            {data: 'nombre'},
-            {data: 'nombre_venta'},
-            {data: 'marca_id'},
-            {data: 'action'},
-        ],
-    } );
+    $(document).ready(function () {
+         $('#tablaPedido tbody').on('click', '.btnElimina', function () {
+            console.log('entro');
+            t.row($(this).parents('tr'))
+                .remove()
+                .draw();
+        });
+    });
 
-    function guardar_pedido()
-    {
-        var id_pedido = $("#id_pedido").val();
-        var numero_pedido = $("#numero_pedido").val();
-        var fecha = $("#fecha_pedido").val();
-        var almacen_a_pedir = $("#almacen_a_pedir").val();
 
-        if(numero_pedido.length>0 && fecha.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Su pedido fue realizado correctamente.',
-                'success'
-            )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar todos los campos.',
-                'error'
-            )
+    $(document).on('keyup', '#termino', function(e) {
+        termino_busqueda = $('#termino').val();
+        if (termino_busqueda.length > 4) {
+            // console.log(termino_busqueda);
+            $.ajax({
+                url: "{{ url('Pedido/ajaxBuscaProducto') }}",
+                data: {termino: termino_busqueda},
+                type: 'POST',
+                success: function(data) {
+                    $("#listadoProductosAjax").html(data);
+                }
+            });
         }
+
+    });
+
+    function adicionaPedido(item)
+    {
+        /*var item = $("#item_"+item).closest("tr").find('td').each(function(){
+            console.log(this.text);
+        });*/
+        var item = $("#item_"+item).closest("tr").find('td').text();
+        console.log(item);
     }
 
     function eliminar_pedido()
@@ -170,80 +208,5 @@
         })
     }
 
-    function adicionar_producto_pedido(producto_id)
-    {
-        var pedido_id = $("#id_pedido").val();
-        var producto_id = producto_id;
-        $.ajax({
-            url: "{{ url('Pedido/agregar_pedido_producto') }}",
-            method: "POST",
-            data: {
-                pedido_id : pedido_id,
-                producto_id : producto_id
-            },
-            cache: false,
-            success: function(data)
-            {
-                $("#productos_en_pedido").load("{{ url('Pedido/lista_pedido_productos') }}/"+pedido_id);
-            }
-        })
-    }
-
-    function eliminar_pedido_producto(pedido_id, producto_id)
-    {
-        Swal.fire({
-            title: 'Quieres retirar el producto del pedido?',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, estoy seguro!',
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    type:'GET',
-                    url:"{{ url('Pedido/elimina_producto') }}/"+pedido_id+"/"+producto_id,
-                    success:function(data){
-                        $("#productos_en_pedido").load("{{ url('Pedido/lista_pedido_productos') }}/"+pedido_id);        
-                        Swal.fire(
-                            'Excelente!',
-                            'El producto fue retirado del pedido',
-                            'success'
-                        );
-                    }
-                });
-            }
-        })
-    }
-
-    $(document).ready(function(){
-        var id = $("#id_pedido").val();
-        $("#productos_en_pedido").load("{{ url('Pedido/lista_pedido_productos') }}/"+id);
-    }); 
-
-    function checkCampos(numero) {
-        if(numero.length <= 0){
-            return 0;
-        }else{
-            return numero;
-        }
-    }
-
-    function calcula(id)
-    {
-        var identificador = id;
-        var cantidad = $("#cantidad-"+id).val();
-        cantidad = checkCampos(cantidad);
-        
-        $.ajax({
-            type:'POST',
-            url:"{{ url('Pedido/actualiza_cantidad') }}",
-            data: {
-                id : identificador,
-                cantidad : cantidad
-            }
-        });
-    }
 </script>
 @endsection

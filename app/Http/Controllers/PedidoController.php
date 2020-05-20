@@ -2,39 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Pedido;
 use DataTables;
 use App\Almacene;
-use App\Pedido;
-use App\PedidosProducto;
 use App\Producto;
+use App\PedidosProducto;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PedidoController extends Controller
 {
     public function nuevo()
     {
-        $length = 6;
-        //$charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        $charset = "0123456789";
-        $numero="";
-        for($i=0;$i<$length;$i++){
-            $rand = rand() % strlen($charset);
-            $numero .= substr($charset, $rand, 1);
-        }
-
-        $pedido = new Pedido();
-        $pedido->almacene_solicitante_id = Auth::user()->almacen_id;
-        $pedido->solicitante_id = Auth::user()->id;
-        $pedido->almacene_id = 1;
-        $pedido->numero = $numero;
-        $pedido->fecha = date('Y-m-d');
-        $pedido->save();
-
-        //$pedido = Pedido::where('numero', 12)->get();
-        //dd($pedido->id);
-
-        return redirect('Pedido/pedido_productos/'.$pedido->id);
+        $almacenes = Almacene::get();
+        return view('Pedido.nuevo')->with(compact('almacenes'));
     }   
 
     public function pedido_productos($id)
@@ -46,12 +28,23 @@ class PedidoController extends Controller
 
     public function ajax_listado_producto()
     {
-        $lista_productos = Producto::select('id', 'nombre', 'nombre_venta', 'marca_id');
-        return Datatables::of($lista_productos)
-            ->addColumn('action', function ($lista_productos) {
-                return '<button onclick="adicionar_producto_pedido('.$lista_productos->id.')" class="btn btn-info"><i class="fas fa-plus"></i></a>';
+        $productos = DB::table('productos')
+            ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
+            ->leftJoin('marcas', 'productos.marca_id', '=', 'marcas.id')
+            ->select(
+                'productos.id',
+                'productos.codigo',
+                'productos.nombre as nombre',
+                'productos.nombre_venta',
+                'tipos.nombre as tipo',
+                'marcas.nombre as marca',
+                'productos.colores'
+            );
+
+        return Datatables::of($productos)
+            ->addColumn('action', function ($productos) {
+                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
             })
-            ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
     }
 
@@ -111,6 +104,12 @@ class PedidoController extends Controller
         $pedidos = Pedido::get();
         $almacenes = Almacene::get();
         return view('pedido.listado')->with(compact('pedidos', 'almacenes'));
+    }
+
+    public function ajaxBuscaProducto(Request $request)
+    {
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")->limit(8)->get();
+        return view('pedido.ajaxBuscaProducto')->with(compact('productos'));
     }
 
 }
