@@ -12,6 +12,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        // se adiciono al administrador     
         User::insert([
             'name'=>'Administrador',
             'rol'=>'Administrador',

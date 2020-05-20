@@ -12,6 +12,7 @@ class EscalasTableSeeder extends Seeder
      */
     public function run()
     {
+        // se aidciona la escala tienda
         Escala::insert([
             'user_id' => 1,
             'nombre' => 'Tienda',

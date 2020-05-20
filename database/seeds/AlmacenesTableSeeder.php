@@ -12,6 +12,7 @@ class AlmacenesTableSeeder extends Seeder
      */
     public function run()
     {
+        // se adiciona el almacen central
         Almacene::insert([
             'user_id' => 1,
             'nombre' => 'Almacen Central',
