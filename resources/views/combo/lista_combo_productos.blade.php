@@ -19,7 +19,7 @@
                         <tr>
                             <td>{{ $producto->producto->nombre }}</td>
                             <td>{{ $producto->producto->nombre_venta }}</td>
-                            <td>{{ $producto->precio }}</td>
+                            <td>{{ $producto->producto->marca_id }}</td>
                             <td>
                                 <button type="button" class="btn btn-danger" onclick="eliminar_combo_producto('{{ $producto->combo_id }}', '{{ $producto->producto_id }}')"><i class="fas fa-trash"></i></button>
                             </td>

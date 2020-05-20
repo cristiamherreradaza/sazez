@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +24,9 @@ class User extends Authenticatable
         'rol',
         'email',
         'password',
+        'celulares',
+        'nit',
+        'razon_social',
         'provider',
         'provider_id',
         'image',
@@ -49,7 +54,7 @@ class User extends Authenticatable
 
     public function almacen()
     {
-        return $this->belongsTo('App\Almacene');
+        return $this->belongsTo('App\Almacene', 'almacen_id');
     }
 
     public function combos()

@@ -75,6 +75,12 @@ Route::post('Categoria/guardar', 'CategoriaController@guardar');
 Route::post('Categoria/actualizar', 'CategoriaController@actualizar');
 Route::get('Categoria/eliminar/{id}', 'CategoriaController@eliminar');
 
+//CLIENTES
+Route::get('Cliente/listado', 'ClienteController@listado');
+Route::post('Cliente/guardar', 'ClienteController@guardar');
+Route::post('Cliente/actualizar', 'ClienteController@actualizar');
+Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
+
 //COMBOS
 Route::get('Combo/nuevo', 'ComboController@nuevo');
 Route::post('Combo/guarda', 'ComboController@guarda');

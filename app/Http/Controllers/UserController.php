@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Turno;
-use DataTables;
-use App\Asignatura;
-use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use DataTables;
+use App\Almacene;
+use App\Asignatura;
+use App\NotasPropuesta;
+use App\Turno;
+use App\User;
 
 class UserController extends Controller
 {
     public function listado()
     {
-        $usuarios = User::get();
-        return view('usuario.listado')->with(compact('usuarios'));
+        $usuarios = User::where('rol', '!=', 'Cliente')->get();
+        $almacenes = Almacene::get();
+        return view('usuario.listado')->with(compact('usuarios', 'almacenes'));
     }
 
     public function guardar(Request $request)
@@ -25,8 +27,12 @@ class UserController extends Controller
         {
             $usuario = new User();
             $usuario->name = $request->nombre_usuario;
-            $usuario->rol = $request->rol_usuario;
             $usuario->email = $request->email_usuario;
+            $usuario->celulares = $request->celular_usuario;
+            $usuario->nit = $request->nit_usuario;
+            $usuario->razon_social = $request->razon_social_usuario;
+            $usuario->rol = $request->rol_usuario;
+            $usuario->almacen_id = $request->almacen_usuario;
             $usuario->password = Hash::make($request->password_usuario);
             $usuario->save();
         }
@@ -39,8 +45,12 @@ class UserController extends Controller
         {
             $usuario = User::find($request->id);
             $usuario->name = $request->nombre;
-            $usuario->rol = $request->rol;
             $usuario->email = $request->email;
+            $usuario->celulares = $request->celular;
+            $usuario->nit = $request->nit;
+            $usuario->razon_social = $request->razon_social;
+            $usuario->rol = $request->rol;
+            $usuario->almacen_id = $request->almacen;
             $usuario->password = Hash::make($request->password);
             $usuario->save();
         }
