@@ -3,22 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CotizacionesProducto extends Model
+class PaquetesProducto extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
         'user_id',
-        'cotizacione_id',
+        'paquete_id',
         'producto_id',
-        'combo_id',
         'precio_venta',
-        'cantidad',
-        'fecha',
         'estado',
-        'deleted_at',
     ];
 
     public function user()
@@ -26,18 +21,13 @@ class CotizacionesProducto extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function cotizacione()
+    public function paquete()
     {
-        return $this->belongsTo('App\Cotizacione');
+        return $this->belongsTo('App\Paquete');
     }
-    
+
     public function producto()
     {
         return $this->belongsTo('App\Producto');
-    }
-
-    public function combo()
-    {
-        return $this->belongsTo('App\Combo');
     }
 }

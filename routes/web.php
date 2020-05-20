@@ -56,6 +56,9 @@ Route::get('Producto/importaExcel', 'ProductoController@importaExcel');
 Route::get('Producto/elimina_imagen/{imagen_id}/{producto_id}', 'ProductoController@elimina_imagen');
 Route::get('Producto/ajaxMuestraImgProducto/{producto_id}', 'ProductoController@ajaxMuestraImgProducto');
 
+// PAQUETES
+Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
+
 Route::get('User/listado', 'UserController@listado');
 Route::get('User/ajax_listado', 'UserController@ajax_listado');
 Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
@@ -111,6 +114,7 @@ Route::get('Pedido/nuevo', 'PedidoController@nuevo');
 Route::get('Pedido/pedido_productos/{id}', 'PedidoController@pedido_productos');
 Route::get('Pedido/ajax_listado_producto', 'PedidoController@ajax_listado_producto');
 Route::post('Pedido/agregar_pedido_producto', 'PedidoController@agregar_pedido_producto');
+Route::post('Pedido/ajaxBuscaProducto', 'PedidoController@ajaxBuscaProducto');
 Route::get('Pedido/lista_pedido_productos/{id}', 'PedidoController@lista_pedido_productos');
 Route::post('Pedido/actualiza_cantidad', 'PedidoController@actualiza_cantidad');
 Route::get('Pedido/elimina_producto/{pedido_id}/{producto_id}', 'PedidoController@elimina_producto');
