@@ -52,6 +52,7 @@ class ComboController extends Controller
     public function lista_combo_productos($id)
     {
         $productos_combo = CombosProducto::where('combo_id', $id)->get();
+        //dd($productos_combo);
         //$productos_combo = CombosProducto::find($id);
         //$productos_combo = CombosProducto::where('combo_id', $id)->with('precio')->get();
         // $productos_combo = CombosProducto::with(['producto' => function ($query) use ($id) {
@@ -62,6 +63,7 @@ class ComboController extends Controller
         //     echo $prod->producto->precio->precio;
         // }
         return view('combo.lista_combo_productos')->with(compact('productos_combo'));
+        //{{ $producto_combo->producto->marca->nombre }}
     }
 
     public function editar($id)
@@ -121,5 +123,12 @@ class ComboController extends Controller
         $combo->delete();
         CombosProducto::where('combo_id', $id)->delete();
         return redirect('Combo/listado');
+    }
+
+    public function actualiza_precio(Request $request)
+    {
+        $combo_producto = CombosProducto::find($request->id);
+        $combo_producto->precio = $request->precio;
+        $combo_producto->save();
     }
 }

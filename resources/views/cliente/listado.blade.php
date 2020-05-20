@@ -10,8 +10,8 @@
 <div class="card card-outline-info">
     <div class="card-header">
         <h4 class="mb-0 text-white">
-            USUARIOS &nbsp;&nbsp;
-            <button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_usuario()"><i class="fas fa-plus"></i> &nbsp; NUEVO USUARIO</button>
+            CLIENTES &nbsp;&nbsp;
+            <button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_cliente()"><i class="fas fa-plus"></i> &nbsp; NUEVO CLIENTE</button>
         </h4>
     </div>
     <div class="card-body" id="lista">
@@ -23,29 +23,23 @@
                         <th>Nombre</th>
                         <th>Correo Electronico</th>
                         <th>Celular</th>
-                        <th>Rol</th>
-                        <th>Almacen</th>
+                        <th>Razón Social</th>
+                        <th>Nit</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($usuarios as $key => $usuario)
+                    @foreach($clientes as $key => $cliente)
                         <tr>
                             <td>{{ ($key+1) }}</td>
-                            <td>{{ $usuario->name }}</td>
-                            <td>{{ $usuario->email }}</td>
-                            <td>{{ $usuario->celulares }}</td>
-                            <td>{{ $usuario->rol }}</td>
+                            <td>{{ $cliente->name }}</td>
+                            <td>{{ $cliente->email }}</td>
+                            <td>{{ $cliente->celulares }}</td>
+                            <td>{{ $cliente->razon_social }}</td>
+                            <td>{{ $cliente->nit }}</td>
                             <td>
-                                @if($usuario->almacen_id)
-                                    {{ $usuario->almacen->nombre }}
-                                @else
-                                    {{ $usuario->almacen_id }}
-                                @endif
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->celulares }}', '{{ $usuario->nit }}', '{{ $usuario->razon_social }}', '{{ $usuario->rol }}', '{{ $usuario->almacen_id }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar usuario"  onclick="eliminar('{{ $usuario->id }}', '{{ $usuario->name }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar cliente"  onclick="editar('{{ $cliente->id }}', '{{ $cliente->name }}', '{{ $cliente->email }}', '{{ $cliente->celulares }}', '{{ $cliente->nit }}', '{{ $cliente->razon_social }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar cliente"  onclick="eliminar('{{ $cliente->id }}', '{{ $cliente->name }}')"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -61,10 +55,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">NUEVO USUARIO</h4>
+                <h4 class="modal-title" id="myModalLabel">NUEVO CLIENTE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('User/guardar') }}" method="POST">
+            <form action="{{ url('Cliente/guardar') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -106,30 +100,6 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Rol</label>
-                                <select name="rol_usuario" id="rol_usuario" class="form-control">
-                                    <option value="Cliente" selected> Cliente </option>
-                                    <option value="Distribuidor"> Distribuidor </option>
-                                    <option value="Almacenero"> Almacenero </option>
-                                    <option value="Administrador"> Administrador </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Almacen</label>
-                                <select name="almacen_usuario" id="almacen_usuario" class="form-control">
-                                    <option value="" selected></option>
-                                    @foreach($almacenes as $almacen)
-                                        <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label class="control-label">Contraseña</label>
                                 <input name="password_usuario" type="password" id="password_usuario" class="form-control" required>
                             </div>
@@ -143,7 +113,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_usuario()">GUARDAR USUARIO</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_usuario()">GUARDAR CLIENTE</button>
                 </div>
             </form>
         </div>
@@ -156,10 +126,10 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">EDITAR USUARIO</h4>
+                <h4 class="modal-title" id="myModalLabel">EDITAR CLIENTE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('User/actualizar') }}" method="POST">
+            <form action="{{ url('Cliente/actualizar') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">
@@ -202,30 +172,6 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Rol</label>
-                                <select name="rol" id="rol" class="form-control">
-                                    <option value="Cliente"> Cliente </option>
-                                    <option value="Distribuidor"> Distribuidor </option>
-                                    <option value="Almacenero"> Almacenero </option>
-                                    <option value="Administrador"> Administrador </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Almacen</label>
-                                <select name="almacen" id="almacen" class="form-control">
-                                    <option value="" selected></option>
-                                    @foreach($almacenes as $almacen)
-                                        <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label class="control-label">Contraseña</label>
                                 <input name="password" type="password" id="password" class="form-control" required>
                             </div>
@@ -239,7 +185,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_usuario()">ACTUALIZAR USUARIO</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_usuario()">ACTUALIZAR CLIENTE</button>
                 </div>
             </form>
         </div>
@@ -309,7 +255,7 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
-    function nuevo_usuario()
+    function nuevo_cliente()
     {
         $("#modal_usuarios").modal('show');
     }
@@ -317,16 +263,15 @@
     function guardar_usuario()
     {
         var nombre_usuario = $("#nombre_usuario").val();
-        var rol_usuario = $("#rol_usuario").val();
         var email_usuario = $("#email_usuario").val();
         var password_usuario = $("#password_usuario").val();
         var confirm_password_usuario = $("#confirm_password_usuario").val();
         var almacen_usuario = $("#almacen_usuario").val();
 
-        if(nombre_usuario.length>0 && rol_usuario.length>0 && email_usuario.length>0 && password_usuario.length>0 && confirm_password_usuario.length>0 && password_usuario == confirm_password_usuario){
+        if(nombre_usuario.length>0 && email_usuario.length>0 && password_usuario.length>0 && confirm_password_usuario.length>0 && password_usuario == confirm_password_usuario){
             Swal.fire(
                 'Excelente!',
-                'Una nuevo usuario fue registrado.',
+                'Una nuevo cliente fue registrado.',
                 'success'
             )
         }else{
@@ -339,7 +284,7 @@
         
     }
 
-    function editar(id, nombre, email, celular, nit, razon_social, rol, almacen)
+    function editar(id, nombre, email, celular, nit, razon_social)
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
@@ -347,8 +292,6 @@
         $("#celular").val(celular);
         $("#nit").val(nit);
         $("#razon_social").val(razon_social);
-        $("#rol").val(rol);
-        $("#almacen").val(almacen);
         $("#editar_usuarios").modal('show');
     }
 
@@ -356,14 +299,13 @@
     {
         var id = $("#id").val();
         var nombre = $("#nombre").val();
-        var rol = $("#rol").val();
         var email = $("#email").val();
         var password = $("#password").val();
         var confirm_password = $("#confirm_password").val();
-        if(nombre.length>0 && rol.length>0 && email.length>0 && password.length>0 && confirm_password.length>0 && password==confirm_password){
+        if(nombre.length>0 && email.length>0 && password.length>0 && confirm_password.length>0 && password==confirm_password){
             Swal.fire(
                 'Excelente!',
-                'Usuario actualizado correctamente.',
+                'Cliente actualizado correctamente.',
                 'success'
             )
         }else{
@@ -391,10 +333,10 @@
             if (result.value) {
                 Swal.fire(
                     'Excelente!',
-                    'El usuario fue eliminado',
+                    'El cliente fue eliminado',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('User/eliminar') }}/"+id;
+                    window.location.href = "{{ url('Cliente/eliminar') }}/"+id;
                 });
             }
         })

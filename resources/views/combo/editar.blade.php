@@ -195,7 +195,29 @@
     }); 
 
 
+    function checkCampos(numero) {
+        if(numero.length <= 0){
+            return 0;
+        }else{
+            return numero;
+        }
+    }
 
+    function calcula(id)
+    {
+        var identificador = id;
+        var precio = $("#precio-"+id).val();
+        precio = checkCampos(precio);
+        
+        $.ajax({
+            type:'POST',
+            url:"{{ url('Combo/actualiza_precio') }}",
+            data: {
+                id : identificador,
+                precio : precio
+            }
+        });
+    }
 
 
 

@@ -78,6 +78,12 @@ Route::post('Categoria/guardar', 'CategoriaController@guardar');
 Route::post('Categoria/actualizar', 'CategoriaController@actualizar');
 Route::get('Categoria/eliminar/{id}', 'CategoriaController@eliminar');
 
+//CLIENTES
+Route::get('Cliente/listado', 'ClienteController@listado');
+Route::post('Cliente/guardar', 'ClienteController@guardar');
+Route::post('Cliente/actualizar', 'ClienteController@actualizar');
+Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
+
 //COMBOS
 Route::get('Combo/nuevo', 'ComboController@nuevo');
 Route::post('Combo/guarda', 'ComboController@guarda');
@@ -89,6 +95,7 @@ Route::post('Combo/agregar_combo_producto', 'ComboController@agregar_combo_produ
 Route::get('Combo/elimina_producto/{combo_id}/{producto_id}', 'ComboController@elimina_producto');
 Route::get('Combo/listado', 'ComboController@listado');
 Route::get('Combo/eliminar/{id}', 'ComboController@eliminar');
+Route::post('Combo/actualiza_precio', 'ComboController@actualiza_precio');
 
 // ESCALAS
 Route::get('Escala/listado', 'EscalaController@listado');
