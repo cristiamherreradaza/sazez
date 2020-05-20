@@ -150,7 +150,7 @@
 
     $(document).ready(function () {
          $('#tablaPedido tbody').on('click', '.btnElimina', function () {
-            console.log('entro');
+            // console.log('entro');
             t.row($(this).parents('tr'))
                 .remove()
                 .draw();
