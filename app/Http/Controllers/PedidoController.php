@@ -82,7 +82,7 @@ class PedidoController extends Controller
     public function guarda(Request $request)
     {
         $pedido                          = new Pedido();
-        $pedido->almacene_solicitante_id = 1;
+        $pedido->almacene_solicitante_id = Auth::user()->almacen_id;;
         $pedido->solicitante_id          = Auth::user()->id;
         $pedido->almacene_id             = $request->almacen_a_pedir;
         $pedido->fecha                   = $request->fecha_pedido;
