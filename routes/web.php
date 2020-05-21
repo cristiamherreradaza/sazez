@@ -127,6 +127,10 @@ Route::get('Entrega/entrega/{id}', 'EntregaController@entrega');
 Route::post('Entrega/store', 'EntregaController@store');
 Route::get('Pedido/pedido_productos/{id}', 'PedidoController@pedido_productos');
 
+Route::get('Entrega/excel/{id}', 'EntregaController@excel');
+
+Route::get('Entrega/envio', 'EntregaController@envio');
+Route::post('Entrega/ajax_importar', 'EntregaController@ajax_importar');
 // USUARIOS
 Route::get('User/listado', 'UserController@listado');
 Route::post('User/guardar', 'UserController@guardar');

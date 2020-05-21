@@ -63,6 +63,14 @@
                         <li><a href="{{ url('Pedido/listado') }}">Listado</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                            class="hide-menu">ENVIOS</span></a>
+                    <ul aria-expanded="false" class="collapse">
+                        <li><a href="{{ url('Entrega/envio') }}">Subir Excel</a></li>
+                        {{-- <li><a href="{{ url('Pedido/listado') }}">Listado</a></li> --}}
+                    </ul>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

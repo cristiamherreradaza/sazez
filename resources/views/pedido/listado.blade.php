@@ -12,6 +12,7 @@
         <h4 class="mb-0 text-white">
             PEDIDOS 
         </h4>
+        
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
@@ -42,6 +43,7 @@
                                 <button type="button" class="btn btn-warning" title="Editar pedido"  onclick="editar('{{ $pedido->id }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar pedido"  onclick="eliminar('{{ $pedido->id }}')"><i class="fas fa-trash"></i></button>
                                 <button type="button" class="btn btn-dark" title="Entregar pedido"  onclick="entrega('{{ $pedido->id }}')"><i class="fas fa-reply"></i></button>
+                                <button type="button" class="btn btn-success" title="Entregar pedido"  onclick="excel('{{ $pedido->id }}')"><i class="fas fa-file-excel"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -146,5 +148,10 @@
     {
         window.location.href = "{{ url('Entrega/entrega') }}/"+id;
     }
+    function excel(id)
+    {
+        window.location.href = "{{ url('Entrega/excel') }}/"+id;
+    }
 </script>
+
 @endsection
