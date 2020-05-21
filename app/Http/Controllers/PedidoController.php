@@ -81,13 +81,25 @@ class PedidoController extends Controller
 
     public function guarda(Request $request)
     {
-        $pedido = Pedido::find($request->id_pedido);
-        $pedido->almacene_solicitante_id = Auth::user()->almacen_id;
-        $pedido->solicitante_id = Auth::user()->id;
-        $pedido->almacene_id = $request->almacen_a_pedir;
-        $pedido->numero = $request->numero_pedido;
-        $pedido->fecha = $request->fecha;
+        $pedido                          = new Pedido();
+        $pedido->almacene_solicitante_id = 1;
+        $pedido->solicitante_id          = Auth::user()->id;
+        $pedido->almacene_id             = $request->almacen_a_pedir;
+        $pedido->fecha                   = $request->fecha_pedido;
         $pedido->save();
+        $pedido_id = $pedido->id;
+
+        $llaves = array_keys($request->item);
+        foreach ($llaves as $key => $ll) 
+        {
+            $productosPedido              = new PedidosProducto();
+            $productosPedido->pedido_id   = $pedido_id;
+            $productosPedido->user_id     = Auth::user()->id;
+            $productosPedido->producto_id = $ll;
+            $productosPedido->cantidad    = $request->item[$ll];
+            $productosPedido->save();
+        }
+        // dd($request->all());
         return redirect('Pedido/listado');
     }
 

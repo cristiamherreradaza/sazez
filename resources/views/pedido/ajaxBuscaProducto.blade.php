@@ -34,14 +34,17 @@
     $(document).ready(function () {
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona', function () {
             $("#listadoProductosAjax").hide('slow');
+            $("#termino").val("");
+            $("#termino").focus();
+
             var currentRow = $(this).closest("tr");
 
-            var id = currentRow.find("td:eq(0)").text();
-            var codigo = currentRow.find("td:eq(1)").text();
-            var nombre = currentRow.find("td:eq(2)").text();
-            var marca = currentRow.find("td:eq(3)").text();
-            var tipo = currentRow.find("td:eq(4)").text();
-            var modelo = currentRow.find("td:eq(5)").text();
+            var id      = currentRow.find("td:eq(0)").text();
+            var codigo  = currentRow.find("td:eq(1)").text();
+            var nombre  = currentRow.find("td:eq(2)").text();
+            var marca   = currentRow.find("td:eq(3)").text();
+            var tipo    = currentRow.find("td:eq(4)").text();
+            var modelo  = currentRow.find("td:eq(5)").text();
             var colores = currentRow.find("td:eq(6)").text();
 
             t.row.add([
@@ -52,7 +55,7 @@
                 tipo,
                 modelo,
                 colores,
-                '<input type="text" class="form-control">',
+                `<input type="number" class="form-control" value="1" min="1" name="item[`+id+`]">`,
                 '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
             ]).draw(false);
 
@@ -60,4 +63,5 @@
         });
 
     });
-</script>
+    </script>
+    {{-- <input type="hidden" name="item[`+id+`][]" value="`+id+`"> --}}

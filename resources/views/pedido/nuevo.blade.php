@@ -14,74 +14,50 @@
 
 
 <div class="card card-outline-info">
-    <div class="card-header">
-        <h4 class="mb-0 text-white">
-            PEDIDO NUEVO
-        </h4>        
-    </div>
-    <div class="card-body">
-        <form action="{{ url('Pedido/guarda') }}" method="POST">
-            @csrf
-            <div class="row">
-                <input type="hidden" name="id_pedido" id="id_pedido">
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">Numero</label>
-                        <input type="text" name="numero_pedido" id="numero_pedido" class="form-control" readonly>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">Fecha</label>
-                        <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" readonly>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label class="control-label">Almacen a solicitar</label>
-                        <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
-                            @foreach($almacenes as $almacen)
-                            <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">&nbsp;</label>
-                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success"
-                            onclick="guardar_pedido()">CONFIRMAR</button>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">&nbsp;</label>
-                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
-                            onclick="eliminar_pedido()">DESCARTAR</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-
+    <form action="{{ url('Pedido/guarda') }}" method="POST">
+        @csrf
+    
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-outline-primary">                                
+            <div class="card card-outline-info">                                
                 <div class="card-header">
-                    <h4 class="mb-0 text-white">BUSCADOR DE PRODUCTOS</h4>
+                    <h4 class="mb-0 text-white">NUEVO PEDIDO</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <input type="hidden" name="id_pedido" id="id_pedido">
-                        <div class="col-md-12">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon3">Nombre producto</span>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Fecha</label>
+                                <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ date("Y-m-d") }}" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Almacen a solicitar</label>
+                                <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
+                                    @foreach($almacenes as $almacen)
+                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Buscar Producto</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="termino" name="termino">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="ti-search"></i></span>
+                                    </div>
                                 </div>
-                                <input type="text" class="form-control" id="termino" name="termino" aria-describedby="basic-addon3">
                             </div>
-                            <div id="listadoProductosAjax">
-                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="listadoProductosAjax"></div>
                         </div>
                     </div>
                 </div>
@@ -97,29 +73,35 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive m-t-40">
-                        <table id="tablaPedido" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th style="width: 5%">ID</th>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
-                                    <th>Marca</th>
-                                    <th>Tipo</th>
-                                    <th>Modelo</th>
-                                    <th>Colores</th>
-                                    <th style="width: 5%">Cantidad</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                        
+                            <table id="tablaPedido" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">ID</th>
+                                        <th>Codigo</th>
+                                        <th>Nombre</th>
+                                        <th>Marca</th>
+                                        <th>Tipo</th>
+                                        <th>Modelo</th>
+                                        <th>Colores</th>
+                                        <th style="width: 5%">Cantidad</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
+                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                            </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    </form>
 </div>
 
 @stop
