@@ -63,11 +63,7 @@
                     `<input type="number" class="form-control" value="1" min="1" name="item[` + id + `]">`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
-            }else{
-                // console.log('ya esta');
             }
-            // console.log(itemsPedidoArray);
-            // console.log(buscaItem);
         });
 
     });

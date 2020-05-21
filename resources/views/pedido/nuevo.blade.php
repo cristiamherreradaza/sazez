@@ -125,15 +125,12 @@
 
     $(document).ready(function () {
          $('#tablaPedido tbody').on('click', '.btnElimina', function () {
-            // console.log('entro');
             t.row($(this).parents('tr'))
                 .remove()
                 .draw();
-            // itemsPedidoArray.pop();
             let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
             let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
             itemsPedidoArray.splice(pos, 1);
-            // console.log(itemsPedidoArray);
         });
     });
 
@@ -141,7 +138,6 @@
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
-            // console.log(termino_busqueda);
             $.ajax({
                 url: "{{ url('Pedido/ajaxBuscaProducto') }}",
                 data: {termino: termino_busqueda},
