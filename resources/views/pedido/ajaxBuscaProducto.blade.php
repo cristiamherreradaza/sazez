@@ -33,6 +33,7 @@
 <script>
     $(document).ready(function () {
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona', function () {
+
             $("#listadoProductosAjax").hide('slow');
             $("#termino").val("");
             $("#termino").focus();
@@ -47,19 +48,26 @@
             var modelo  = currentRow.find("td:eq(5)").text();
             var colores = currentRow.find("td:eq(6)").text();
 
-            t.row.add([
-                id,
-                codigo,
-                nombre,
-                marca,
-                tipo,
-                modelo,
-                colores,
-                `<input type="number" class="form-control" value="1" min="1" name="item[`+id+`]">`,
-                '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
-            ]).draw(false);
-
-            // alert(data);
+            let buscaItem = itemsPedidoArray.lastIndexOf(id);
+            if(buscaItem < 0)
+            {
+                itemsPedidoArray.push(id);
+                t.row.add([
+                    id,
+                    codigo,
+                    nombre,
+                    marca,
+                    tipo,
+                    modelo,
+                    colores,
+                    `<input type="number" class="form-control" value="1" min="1" name="item[` + id + `]">`,
+                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
+                ]).draw(false);
+            }else{
+                // console.log('ya esta');
+            }
+            // console.log(itemsPedidoArray);
+            // console.log(buscaItem);
         });
 
     });

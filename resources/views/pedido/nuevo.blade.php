@@ -115,6 +115,7 @@
 
 <script>
     var t = $('#tablaPedido').DataTable();
+    var itemsPedidoArray = [];
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -128,6 +129,11 @@
             t.row($(this).parents('tr'))
                 .remove()
                 .draw();
+            // itemsPedidoArray.pop();
+            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
+            let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
+            itemsPedidoArray.splice(pos, 1);
+            // console.log(itemsPedidoArray);
         });
     });
 
