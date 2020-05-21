@@ -16,7 +16,6 @@ class UsersTableSeeder extends Seeder
         User::insert([
             'name'=>'Administrador',
             'rol'=>'Administrador',
-            'almacen_id'=> 1,
             'email'=>'admin@sazez.net',
             'password'=> bcrypt('123456789'),
         ]);
