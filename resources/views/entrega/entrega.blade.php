@@ -68,6 +68,10 @@
                                 <th>N°</th>
                                 <th>Codigo</th>
                                 <th>Nombre</th>
+                                <th>Marca</th>
+                                <th>Tipo</th>
+                                <th>Modelo</th>
+                                <th>Colores</th>
                                 <th>Cantidad</th>
                             </tr>
                         </thead>
@@ -79,7 +83,11 @@
                                 <tr>
                                     <td>{{ $n++ }}</td>
                                     <td>{{ $prod->codigo }}</td>
-                                    <td>{{ $prod->nombre_venta }}</td>
+                                    <td>{{ $prod->nombre }}</td>
+                                    <td>{{ $prod->nombre_marca }}</td>
+                                    <td>{{ $prod->nombre_tipo }}</td>
+                                    <td>{{ $prod->modelo }}</td>
+                                    <td>{{ $prod->colores }}</td>
                                     @php
                                          $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
                                                                 FROM movimientos

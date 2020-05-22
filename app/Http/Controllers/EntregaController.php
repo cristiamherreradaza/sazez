@@ -31,7 +31,9 @@ class EntregaController extends Controller
         $productos = DB::table('pedidos_productos')
                 ->where('pedidos_productos.pedido_id', '=', $id)
                 ->join('productos', 'pedidos_productos.producto_id', '=', 'productos.id')
-                ->select('pedidos_productos.*', 'productos.codigo', 'productos.nombre_venta')
+                ->join('marcas', 'productos.marca_id', '=', 'marcas.id')
+                ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+                ->select('pedidos_productos.*', 'productos.codigo', 'productos.nombre', 'marcas.nombre as nombre_marca', 'tipos.nombre as nombre_tipo', 'productos.modelo', 'productos.colores')
                 ->get();
         // dd($productos);
         return view('Entrega.entrega')->with(compact('pedidos', 'entregas', 'productos'));
@@ -73,6 +75,11 @@ class EntregaController extends Controller
             $ingreso->ingreso = $cantidad1;
             $ingreso->save();
         }
+
+        $pedidos = Pedido::find($pedido_id);
+        $pedidos->estado = 'Entregado';
+        $pedidos->save();
+
     return redirect('Pedido/listado');
     }
 
@@ -90,6 +97,45 @@ class EntregaController extends Controller
     public function ajax_importar(Request $request)
     {
         // $file = $request->file('file');
+        // Excel::import(new MovimientosImport, $file);
+        $validation = Validator::make($request->all(), [
+            'select_file' => 'required|mimes:xlsx|max:2048'
+        ]);
+        if($validation->passes())
+        {
+            $file = $request->file('select_file');
+            Excel::import(new MovimientosImport, $file);
+            return response()->json([
+                'message' => 'Importacion realizada con exito',
+                'sw' => 1
+            ]);
+        }
+        else
+        {
+            switch ($validation->errors()->first()) {
+                case "The select file field is required.":
+                    $mensaje = "Es necesario agregar un archivo Excel.";
+                    break;
+                case "The select file must be a file of type: xlsx.":
+                    $mensaje = "El archivo debe ser de tipo: Excel.";
+                    break;
+                default:
+                    $mensaje = "Fallo al importar el archivo seleccionado.";
+                    break;
+            }
+            return response()->json([
+                //0
+                'message' => $mensaje,
+                'sw' => 0
+            ]);
+        }
+    }
+
+    public function importar_envio(Request $request)
+    {
+        $pedido = $request->all('pedido_id');
+        $pedido_id = $pedido['pedido_id'];
+        // dd($pedido_id);
         // Excel::import(new MovimientosImport, $file);
         $validation = Validator::make($request->all(), [
             'select_file' => 'required|mimes:xlsx|max:2048'
