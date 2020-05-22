@@ -32,4 +32,9 @@ class CombosProducto extends Model
     {
         return $this->belongsTo('App\Producto');
     }
+
+    public function precios()
+    {
+        return $this->hasManyThrough('App\Precio', 'App\Producto');
+    }
 }

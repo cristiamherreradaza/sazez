@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function listado()
     {
-        $usuarios = User::where('rol', '!=', 'Cliente')->get();
+        $usuarios = User::get();
         $almacenes = Almacene::get();
         return view('usuario.listado')->with(compact('usuarios', 'almacenes'));
     }
@@ -46,12 +46,22 @@ class UserController extends Controller
             $usuario = User::find($request->id);
             $usuario->name = $request->nombre;
             $usuario->email = $request->email;
-            $usuario->celulares = $request->celular;
-            $usuario->nit = $request->nit;
-            $usuario->razon_social = $request->razon_social;
-            $usuario->rol = $request->rol;
-            $usuario->almacen_id = $request->almacen;
             $usuario->password = Hash::make($request->password);
+            if($request->celular){
+                $usuario->celulares = $request->celular;
+            }
+            if($request->razon_social){
+                $usuario->razon_social = $request->razon_social;
+            }
+            if($request->nit){
+                $usuario->nit = $request->nit;
+            }
+            if($request->rol){
+                $usuario->rol = $request->rol;
+            }
+            if($request->almacen){
+                $usuario->almacen_id = $request->almacen;
+            }
             $usuario->save();
         }
         return redirect('User/listado');
@@ -62,6 +72,11 @@ class UserController extends Controller
         $usuario = User::find($request->id);
         $usuario->delete();
         return redirect('User/listado');
+    }
+
+    public function perfil()
+    {
+        return view('usuario.perfil');
     }
 
     public function asignar()

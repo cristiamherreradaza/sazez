@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Combo;
 use App\CombosProducto;
 use App\Producto;
+use App\Precio;
 use App\Marca;
 use DataTables;
 
@@ -52,17 +53,8 @@ class ComboController extends Controller
     public function lista_combo_productos($id)
     {
         $productos_combo = CombosProducto::where('combo_id', $id)->get();
-        //dd($productos_combo);
-        //$productos_combo = CombosProducto::find($id);
-        //$productos_combo = CombosProducto::where('combo_id', $id)->with('precio')->get();
-        // $productos_combo = CombosProducto::with(['producto' => function ($query) use ($id) {
-        //     $query->where('combo_id', 'like', $id);
-        // }])->get();
-        //dd($productos_combo);
-        // foreach($productos_combo as $prod){
-        //     echo $prod->producto->precio->precio;
-        // }
-        return view('combo.lista_combo_productos')->with(compact('productos_combo'));
+        $precios = Precio::get();
+        return view('combo.lista_combo_productos')->with(compact('productos_combo', 'precios'));
         //{{ $producto_combo->producto->marca->nombre }}
     }
 

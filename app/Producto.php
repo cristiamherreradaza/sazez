@@ -55,7 +55,7 @@ class Producto extends Model
 
     public function precio()
     {
-        return $this->hasMany('App\Precio');
+        return $this->hasMany('App\Precio', 'producto_id');
     }
 
     public function categorias()

@@ -172,7 +172,8 @@ class LoginController extends Controller
         Auth::login($user, true);
         
         // Redirecciona al home
-        return redirect($this->redirectTo);
+        //return redirect($this->redirectTo);
+        return redirect('Cliente/inicio');
     }
 
 }

@@ -13,6 +13,11 @@ use App\User;
 
 class ClienteController extends Controller
 {
+    public function inicio()
+    {
+        return view('cliente.inicio');
+    }
+    
     public function listado()
     {
         $clientes = User::where('rol', 'Cliente')->get();

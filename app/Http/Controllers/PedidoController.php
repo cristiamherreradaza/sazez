@@ -89,6 +89,7 @@ class PedidoController extends Controller
         $pedido->save();
         $pedido_id = $pedido->id;
 
+        //arraykeys guarda ids de prod
         $llaves = array_keys($request->item);
         foreach ($llaves as $key => $ll) 
         {
