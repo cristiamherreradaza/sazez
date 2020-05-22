@@ -136,6 +136,8 @@ Route::get('Entrega/excel/{id}', 'EntregaController@excel');
 Route::get('Entrega/envio', 'EntregaController@envio');
 Route::post('Entrega/ajax_importar', 'EntregaController@ajax_importar');
 Route::post('Entrega/importar_envio', 'EntregaController@importar_envio');
+Route::get('Entrega/ver_pedido/{id}', 'EntregaController@ver_pedido');
+
 // USUARIOS
 Route::get('User/listado', 'UserController@listado');
 Route::post('User/guardar', 'UserController@guardar');

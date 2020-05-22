@@ -113,6 +113,11 @@ $(document).ready(function() {
         // $("#direccion").val(direccion);
         $("#entrega_excel").modal('show');
     }
+
+    function ver_pedido(id)
+    {
+        window.location.href = "{{ url('Entrega/ver_pedido') }}/"+id;
+    }
 </script>
 <script>
 // Script de importacion de excel
