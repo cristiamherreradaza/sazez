@@ -11,6 +11,10 @@ use App\Almacene;
 use App\PedidosProducto;
 use App\Movimiento;
 use DB;
+use App\Exports\PedidosProductosExport;
+use App\Imports\MovimientosImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Validator;
 
 class EntregaController extends Controller
 {
@@ -70,5 +74,53 @@ class EntregaController extends Controller
             $ingreso->save();
         }
     return redirect('Pedido/listado');
+    }
+
+    public function excel($id)
+    {
+        return Excel::download(new PedidosProductosExport($id), date('Y-m-d').'-Pedidos.xlsx');
+    }
+
+    public function envio()
+    {
+        $almacenes = Almacene::get();
+        return view('envio.envio')->with(compact('almacenes'));
+    }  
+
+    public function ajax_importar(Request $request)
+    {
+        // $file = $request->file('file');
+        // Excel::import(new MovimientosImport, $file);
+        $validation = Validator::make($request->all(), [
+            'select_file' => 'required|mimes:xlsx|max:2048'
+        ]);
+        if($validation->passes())
+        {
+            $file = $request->file('select_file');
+            Excel::import(new MovimientosImport, $file);
+            return response()->json([
+                'message' => 'Importacion realizada con exito',
+                'sw' => 1
+            ]);
+        }
+        else
+        {
+            switch ($validation->errors()->first()) {
+                case "The select file field is required.":
+                    $mensaje = "Es necesario agregar un archivo Excel.";
+                    break;
+                case "The select file must be a file of type: xlsx.":
+                    $mensaje = "El archivo debe ser de tipo: Excel.";
+                    break;
+                default:
+                    $mensaje = "Fallo al importar el archivo seleccionado.";
+                    break;
+            }
+            return response()->json([
+                //0
+                'message' => $mensaje,
+                'sw' => 0
+            ]);
+        }
     }
 }
