@@ -206,6 +206,7 @@
                                                             </div>
                                                           
                                                         </div>
+                                                        <br />
                                                     @endforeach
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="">

@@ -16,14 +16,14 @@ class PedidoController extends Controller
     public function nuevo()
     {
         $almacenes = Almacene::get();
-        return view('Pedido.nuevo')->with(compact('almacenes'));
+        return view('pedido.nuevo')->with(compact('almacenes'));
     }   
 
     public function pedido_productos($id)
     {
         $pedido = Pedido::find($id);
         $almacenes = Almacene::get();
-        return view('Pedido.nuevo')->with(compact('pedido', 'almacenes'));
+        return view('pedido.nuevo')->with(compact('pedido', 'almacenes'));
     }
 
     public function ajax_listado_producto()

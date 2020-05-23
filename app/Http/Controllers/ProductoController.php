@@ -262,4 +262,9 @@ class ProductoController extends Controller
         $imagenes_producto = ImagenesProducto::where('producto_id', $producto_id)->get();
         return view('producto.ajaxMuestraImgProducto')->with(compact('imagenes_producto'));
     }
+
+    public function panelControl(Request $request)
+    {
+        return view('producto.panelControl');
+    }
 }

@@ -55,6 +55,7 @@ Route::get('Producto/edita/{producto_id}', 'ProductoController@edita');
 Route::get('Producto/importaExcel', 'ProductoController@importaExcel');
 Route::get('Producto/elimina_imagen/{imagen_id}/{producto_id}', 'ProductoController@elimina_imagen');
 Route::get('Producto/ajaxMuestraImgProducto/{producto_id}', 'ProductoController@ajaxMuestraImgProducto');
+Route::get('Producto/panelControl', 'ProductoController@panelControl');
 
 // PAQUETES
 Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
