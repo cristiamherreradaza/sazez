@@ -82,13 +82,14 @@ class PedidoController extends Controller
     public function guarda(Request $request)
     {
         $pedido                          = new Pedido();
-        $pedido->almacene_solicitante_id = Auth::user()->almacen_id;;
+        $pedido->almacene_solicitante_id = Auth::user()->almacen_id;
         $pedido->solicitante_id          = Auth::user()->id;
         $pedido->almacene_id             = $request->almacen_a_pedir;
         $pedido->fecha                   = $request->fecha_pedido;
         $pedido->save();
         $pedido_id = $pedido->id;
 
+        //arraykeys guarda ids de prod
         $llaves = array_keys($request->item);
         foreach ($llaves as $key => $ll) 
         {
@@ -111,17 +112,48 @@ class PedidoController extends Controller
         return redirect('Pedido/listado');
     }
 
-    public function listado()
-    {
-        $pedidos = Pedido::get();
-        $almacenes = Almacene::get();
-        return view('pedido.listado')->with(compact('pedidos', 'almacenes'));
-    }
 
     public function ajaxBuscaProducto(Request $request)
     {
         $productos = Producto::where('nombre', 'like', "%$request->termino%")->limit(8)->get();
         return view('pedido.ajaxBuscaProducto')->with(compact('productos'));
+    }
+
+    public function listado()
+    {
+        // dd($productos);
+        return view('pedido.listado');
+    }
+
+    public function ajax_listado()
+    {
+        // $lista_personal = Producto::all();
+        $pedidos = DB::table('pedidos')
+            ->leftJoin('almacenes', 'pedidos.almacene_solicitante_id', '=', 'almacenes.id')
+            ->select(
+                'pedidos.id',
+                'pedidos.numero', 
+                'almacenes.nombre', 
+                'pedidos.solicitante_id', 
+                'pedidos.fecha', 
+                'pedidos.estado'
+            );
+
+         return Datatables::of($pedidos)
+                ->addColumn('action', function ($pedidos) {
+                    if ($pedidos->estado == 'Entregado') {
+                        return '<button onclick="ver_pedido(' . $pedidos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                    } else {
+                        return '<button type="button" class="btn btn-warning" title="Editar pedido"  onclick="editar(' . $pedidos->id . ')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar pedido"  onclick="eliminar(' .  $pedidos->id . ')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-dark" title="Entregar pedido"  onclick="entrega(' .  $pedidos->id . ')"><i class="fas fa-reply"></i></button>
+                                <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>
+                                <button type="button" class="btn btn-secondary" title="Entregar pedido por Excel"  onclick="entrega_excel(' .  $pedidos->id . ')"><i class="fas fa-shipping-fast"></i></button>';
+                    }
+                    
+                })
+                ->make(true); 
+        
     }
 
 }

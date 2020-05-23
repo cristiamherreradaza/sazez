@@ -281,31 +281,47 @@
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item hidden-sm-down">
                             <form class="app-search">
-                                <input type="text" class="form-control" placeholder="Search for..."> <a class="srh-btn"><i class="ti-search"></i></a> </form>
+                                <input type="text" class="form-control" placeholder="Search for...">
+                                <a class="srh-btn"><i class="ti-search"></i></a> 
+                            </form>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ asset('assets/images/users/1.jpg') }}" alt="user" class="profile-pic" /></a>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @if(auth()->user()->image)
+                                    <img src="{{ auth()->user()->image }}" alt="user" class="profile-pic" >
+                                @else
+                                    <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="profile-pic" />
+                                @endif
+                            </a>
                             <div class="dropdown-menu dropdown-menu-right animated flipInY">
                                 <ul class="dropdown-user">
                                     <li>
                                         <div class="dw-user-box">
-                                            <div class="u-img"><img src="{{ asset('assets/images/users/1.jpg') }}" alt="user"></div>
+                                            <div class="u-img">
+                                                @if(auth()->user()->image)
+                                                    <img src="{{ auth()->user()->image }}" alt="user">
+                                                @else
+                                                    <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user">
+                                                @endif
+                                            </div>
                                             <div class="u-text">
-                                                <h4>Steave Jobs</h4>
-                                                <p class="text-muted">varun@gmail.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+                                                <h4>{{ auth()->user()->name }}</h4>
+                                                <p class="text-muted">{{ auth()->user()->email }}</p>
+                                                <a href="{{ url('User/perfil') }}" class="btn btn-rounded btn-danger btn-sm">Ver Perfil</a>
+                                            </div>
                                         </div>
                                     </li>
-                                    <li role="separator" class="divider"></li>
+                                    <!-- <li role="separator" class="divider"></li>
                                     <li><a href="#"><i class="ti-user"></i> My Profile</a></li>
                                     <li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
                                     <li><a href="#"><i class="ti-email"></i> Inbox</a></li>
                                     <li role="separator" class="divider"></li>
                                     <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
-                                    <li role="separator" class="divider"></li>
+                                    <li role="separator" class="divider"></li> -->
                                     <li><a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('CERRAR SESION') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -315,10 +331,10 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
+                        <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="flag-icon flag-icon-us"></i></a>
                             <div class="dropdown-menu  dropdown-menu-right animated bounceInDown"> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-in"></i> India</a> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-fr"></i> French</a> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-cn"></i> China</a> <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-de"></i> Dutch</a> </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </nav>
@@ -420,7 +436,7 @@
             <!-- footer -->
             <!-- ============================================================== -->
             <footer class="footer">
-                © 2019 Monster Admin by wrappixel.com
+                © {{ date('Y') }} sazez.net
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->

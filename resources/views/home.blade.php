@@ -7,7 +7,13 @@
             <div class="card">
                 <div class="card-header">Dashboard</div>
                 <!-- <p class="text-right">{{ auth()->user()->name }}</p> -->
-                <!-- <img src="{{ auth()->user()->image }}" alt=""> -->
+                <!-- @if(auth()->user()->image)
+                    <img src="{{ auth()->user()->image }}" alt="">
+                @else
+                    <p class="text-right">No tiene imagen</p>
+                @endif -->
+                
+                
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
@@ -15,7 +21,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    Bienvenido!
                 </div>
             </div>
         </div>

@@ -54,7 +54,7 @@
         <div class="col-md-12">
             <div class="card card-outline-primary">                                
                 <div class="card-header">
-                    <h4 class="mb-0 text-white">PRODUCTOS</h4>
+                    <h4 class="mb-0 text-white">PRODUCTOS ENTREGADOS</h4>
                 </div>
                 <br /> 
                 <form action="{{ url('Entrega/store') }}" method="POST">
@@ -88,34 +88,13 @@
                                     <td>{{ $prod->nombre_tipo }}</td>
                                     <td>{{ $prod->modelo }}</td>
                                     <td>{{ $prod->colores }}</td>
-                                    @php
-                                         $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
-                                                                FROM movimientos
-                                                                WHERE producto_id = '$prod->producto_id'
-                                                                AND almacene_id = 1
-                                                                GROUP BY producto_id");
-                                         $cantidad_disponible = $total[0]->total;
-                                    @endphp
-                                    @php
-                                        if ($prod->cantidad <= $cantidad_disponible) {
-                                    @endphp
-                                    <td><input type="text" class="form-control col-sm-2" style="text-align: center; color: green;" onchange="calcula( {{ $prod->id }} )" id="cantidad_{{ $prod->id }}" name="cantidad_{{ $prod->id }}" data-disponible="{{ $cantidad_disponible }}" value="{{ $prod->cantidad }}"> &nbsp;&nbsp;({{ $cantidad_disponible }})</td>
-                                    @php
-                                        } else {
-                                    @endphp
-                                    <td><input type="text" class="form-control col-sm-2" style="text-align: center; color: red;" onchange="calcula( {{ $prod->id }} )" id="cantidad_{{ $prod->id }}" name="cantidad_{{ $prod->id }}" data-disponible="{{ $cantidad_disponible }}" value="{{ $prod->cantidad }}"> &nbsp;&nbsp;({{ $cantidad_disponible }})</td>
-                                    @php
-                                        }
-                                    @endphp
+                                    <td>{{ $prod->ingreso }}</td>
                                 </tr>
                             @endforeach
                             
                         </tbody>
 
                     </table>
-                    <div class="modal-footer">
-                            <button type="submit" onclick="enviar()" class="btn waves-effect waves-light btn-block btn-success">ENTREGAR PRODUCTOS</button>
-                    </div>
                 </div>
                 </form> 
             </div>

@@ -1,12 +1,10 @@
 @extends('layouts.app')
 
 @section('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
 <link rel="stylesheet" href="{{ asset('assets/plugins/dropify/dist/css/dropify.min.css') }}">
-@endsection
-
-@section('metadatos')
-<meta name="csrf-token" content="{{ csrf_token() }}" />
 @endsection
 
 @section('content')
@@ -42,68 +40,63 @@
 </div>
 <!-- fin modal editar almacen -->
 
-<div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
-<div class="row">
-    <!-- Column -->
-
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">LISTADO DE PEDIDOS </h4>
-                {{-- <div class="table-responsive m-t-40"> --}}
-                <table id="tabla-usuarios" class="table table-bordered table-striped no-wrap">
-                    <thead>
+<div class="card card-outline-info">
+    <div class="card-header">
+        <h4 class="mb-0 text-white">
+            PEDIDOS 
+        </h4>
+        
+    </div>
+    <div class="card-body" id="lista">
+        <div class="table-responsive m-t-40">
+            <table id="myTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Almacen a Solicitar</th>
+                        <th>Fecha</th>
+                        <th>Numero</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pedidos as $key => $pedido)
                         <tr>
-                            <th>N&uacute;mero de Pedido</th>
-                            <th>Almacen Solicitante</th>
-                            <th>Persona Solicitante</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th>Opciones</th>
+                            <td>{{ ($key+1) }}</td>
+                            <td>
+                                @foreach($almacenes as $almacen)
+                                    @if($pedido->almacene_id == $almacen->id)
+                                        {{ $almacen->nombre }}
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>{{ $pedido->fecha }}</td>
+                            <td>{{ $pedido->numero }}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning" title="Editar pedido"  onclick="editar('{{ $pedido->id }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar pedido"  onclick="eliminar('{{ $pedido->id }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-dark" title="Entregar pedido"  onclick="entrega('{{ $pedido->id }}')"><i class="fas fa-reply"></i></button>
+                                <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel('{{ $pedido->id }}')"><i class="fas fa-file-excel"></i></button>
+                                <button type="button" class="btn btn-secondary" title="Entregar pedido por Excel"  onclick="entrega_excel('{{ $pedido->id }}')"><i class="fas fa-shipping-fast"></i></button>
+
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                {{-- </div> --}}
-            </div>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
-    <!-- Column -->
 </div>
+
 @stop
+
 @section('js')
-<script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/dropify/dist/js/dropify.min.js') }}"></script>
 <!-- Sweet-Alert  -->
 <script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
-<script>
-
-$(document).ready(function() {
-
-    // DataTable
-    var table = $('#tabla-usuarios').DataTable( {
-        "iDisplayLength": 10,
-        "processing": true,
-        // "scrollX": true,
-        "serverSide": true,
-        "ajax": "{{ url('Pedido/ajax_listado') }}",
-        "columns": [
-            {data: 'numero', name: 'numero'},
-            {data: 'nombre', name: 'nombre'},
-            {data: 'solicitante_id', name: 'solicitante_id'},
-            {data: 'fecha', name: 'fecha'},
-            {data: 'estado', name: 'estado'},
-            {data: 'action'},
-        ]
-    } );
-
-} );
-
-</script>
 <script>
     function entrega_excel(id)
     {
@@ -112,11 +105,6 @@ $(document).ready(function() {
         // $("#telefonos").val(telefonos);
         // $("#direccion").val(direccion);
         $("#entrega_excel").modal('show');
-    }
-
-    function ver_pedido(id)
-    {
-        window.location.href = "{{ url('Entrega/ver_pedido') }}/"+id;
     }
 </script>
 <script>
@@ -156,6 +144,60 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+    $(function () {
+        $('#myTable').DataTable();
+        // responsive table
+        $('#config-table').DataTable({
+            responsive: true
+        });
+        var table = $('#example').DataTable({
+            "columnDefs": [{
+                "visible": false,
+                "targets": 2
+            }],
+            "order": [
+                [2, 'asc']
+            ],
+            "displayLength": 25,
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({
+                    page: 'current'
+                }).nodes();
+                var last = null;
+                api.column(2, {
+                    page: 'current'
+                }).data().each(function (group, i) {
+                    if (last !== group) {
+                        $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
+                        last = group;
+                    }
+                });
+            }
+        });
+        // Order by the grouping
+        $('#example tbody').on('click', 'tr.group', function () {
+            var currentOrder = table.order()[0];
+            if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
+                table.order([2, 'desc']).draw();
+            } else {
+                table.order([2, 'asc']).draw();
+            }
+        });
+
+        $('#example23').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+        $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
+    });
+
+</script>
+
+
 <script>
     function editar(id, nombre)
     {
@@ -237,4 +279,5 @@ $(document).ready(function() {
         })
     });
 </script>
+
 @endsection
