@@ -50,11 +50,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // PRODUCTOS
     Route::post('Producto/guarda', 'ProductoController@guarda');
     Route::post('Producto/guardaEdicion', 'ProductoController@guardaEdicion');
+    Route::post('Producto/importaExcel', 'ProductoController@importaExcel');
     Route::get('Producto/nuevo', 'ProductoController@nuevo');
     Route::get('Producto/listado', 'ProductoController@listado');
     Route::get('Producto/ajax_listado', 'ProductoController@ajax_listado');
     Route::get('Producto/edita/{producto_id}', 'ProductoController@edita');
-    Route::get('Producto/importaExcel', 'ProductoController@importaExcel');
     Route::get('Producto/elimina_imagen/{imagen_id}/{producto_id}', 'ProductoController@elimina_imagen');
     Route::get('Producto/ajaxMuestraImgProducto/{producto_id}', 'ProductoController@ajaxMuestraImgProducto');
 

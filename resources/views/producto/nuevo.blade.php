@@ -302,7 +302,8 @@
                         <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
                     </div>
                     <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
-                        <form action="/Producto/importa_excel" method="post" enctype="multipart/form-data">
+                        <form action="/Producto/importaExcel" method="POST" enctype="multipart/form-data">
+                            @csrf
                             <div class="row">
                             
                                 <div class="col-md-6">
@@ -313,7 +314,7 @@
                                                 <span class="input-group-text">ARCHIVO</span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                                <input type="file" name="excel" class="custom-file-input" id="inputGroupFile01" required>
                                                 <label class="custom-file-label" for="inputGroupFile01">Seleccione...</label>
                                             </div>
                                         </div>

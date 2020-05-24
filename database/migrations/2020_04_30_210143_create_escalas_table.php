@@ -18,6 +18,8 @@ class CreateEscalasTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('nombre', 80)->nullable();
+            $table->integer('minimo')->unsigned()->nullable()->default(1);
+            $table->integer('maximo')->unsigned()->nullable()->default(1);
             $table->string('estado', 30)->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

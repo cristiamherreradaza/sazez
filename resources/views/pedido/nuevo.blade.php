@@ -73,29 +73,27 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive m-t-40">
-                        
-                            <table id="tablaPedido" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 5%">ID</th>
-                                        <th>Codigo</th>
-                                        <th>Nombre</th>
-                                        <th>Marca</th>
-                                        <th>Tipo</th>
-                                        <th>Modelo</th>
-                                        <th>Colores</th>
-                                        <th style="width: 5%">Cantidad</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                            <div class="form-group">
-                                <label class="control-label">&nbsp;</label>
-                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
-                            </div>
-                        
+                        <table id="tablaPedido" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">ID</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Marca</th>
+                                    <th>Tipo</th>
+                                    <th>Modelo</th>
+                                    <th>Colores</th>
+                                    <th style="width: 5%">Cantidad</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                        </div>
                     </div>
                 </div>
             </div>

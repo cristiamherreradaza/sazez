@@ -16,6 +16,8 @@ class EscalasTableSeeder extends Seeder
         Escala::insert([
             'user_id' => 1,
             'nombre' => 'Tienda',
+            'minimo' => '1',
+            'maximo' => '12',
         ]);
     }
 }
