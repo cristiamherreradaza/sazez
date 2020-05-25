@@ -115,7 +115,10 @@ class PedidoController extends Controller
 
     public function ajaxBuscaProducto(Request $request)
     {
-        $productos = Producto::where('nombre', 'like', "%$request->termino%")->limit(8)->get();
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                            ->orWhere('codigo', 'like', "%$request->termino%")
+                            ->limit(8)
+                            ->get();
         return view('pedido.ajaxBuscaProducto')->with(compact('productos'));
     }
 
