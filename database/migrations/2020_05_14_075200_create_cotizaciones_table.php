@@ -19,8 +19,6 @@ class CreateCotizacionesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('almacene_id');
             $table->foreign('almacene_id')->references('id')->on('almacenes');
-            $table->unsignedBigInteger('combo_id');
-            $table->foreign('combo_id')->references('id')->on('combos');
             $table->unsignedBigInteger('cliente_id');
             $table->foreign('cliente_id')->references('id')->on('users');
             $table->integer('numero')->nullable();

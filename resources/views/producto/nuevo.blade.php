@@ -339,7 +339,6 @@
                             
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>SELECCIONE ARCHIVO EXCEL</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">ARCHIVO</span>
@@ -353,11 +352,9 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <label>&nbsp;</label>
                                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Importar archivo excel</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <label>&nbsp;</label>
                                     <a href="{{ asset('excels/formato_productos_vacio.xlsx') }}" target="_blank" rel="noopener noreferrer">
                                         <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Descargar formato excel</button>
                                     </a>
