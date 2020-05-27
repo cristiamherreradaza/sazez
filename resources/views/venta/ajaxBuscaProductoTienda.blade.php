@@ -66,9 +66,9 @@
                     tipo,
                     modelo,
                     colores,
-                    `<input type="number" class="form-control precio" name="precio_`+id+`" id="precio_`+id+`" value="`+precio+`" step="any" min="1" onchange="">`,
-                    `<input type="number" class="form-control" name="cantidad_`+id+`" id="cantidad_`+id+`" value="1" min="1">`,
-                    `<input type="number" class="form-control" name="subtotal_`+id+`" id="subtotal_`+id+`" value="`+precio+`" readonly>`,
+                    `<input type="number" class="form-control precio" name="precio_`+id+`" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" onchange="">`,
+                    `<input type="number" class="form-control cantidad" name="cantidad_`+id+`" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
+                    `<input type="number" class="form-control subtotal" name="subtotal_`+id+`" id="subtotal_`+id+`" value="`+precio+`">`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
             }

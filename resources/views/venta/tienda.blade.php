@@ -90,7 +90,21 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                             </tbody>
+                            <tfoot>
+                                <th style="width: 5%"></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th style="width: 10%"></th>
+                                    <th style="width: 5%"></th>
+                                    <th style="width: 10%"></th>
+                                    <th></th>
+                            </tfoot>
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
@@ -114,7 +128,11 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
-    var t = $('#tablaPedido').DataTable();
+    var t = $('#tablaPedido').DataTable({
+        paging: false,
+        searching: false,
+        ordering:  false
+    });
     var itemsPedidoArray = [];
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -134,15 +152,29 @@
         });
     });
 
-    $(".precio").change(function(){
-        alert("Cambio");
+    $(document).on('keyup change', '.precio', function(e){
+        let precio = Number($(this).val());
+        let id = $(this).data("id");
+        let cantidad = Number($("#cantidad_"+id).val());
+        let subtotal = precio*cantidad;
+        $("#subtotal_"+id).val(subtotal);
     });
 
-    $(document).on('change', '.precio', function(e){
-        let precio = $(this).val();
-        console.log(precio);
+    $(document).on('keyup change', '.cantidad', function(e){
         // alert("cambio");
+        let cantidad = Number($(this).val());
+        let id = $(this).data("id");
+        let precio = Number($("#precio_"+id).val());
+        let subtotal = precio*cantidad;
+        console.log(precio);
+        $("#subtotal_"+id).val(subtotal);
     });
+
+    function sumaSubTotales()
+    {
+        
+
+    }
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
