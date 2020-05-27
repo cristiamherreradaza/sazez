@@ -54,20 +54,20 @@ class VentaController extends Controller
 
     public function adicionaItem(Request $request)
     {
-        // dd($request->all());
-        if($request->cotizacion_id == null)
+        if($request->session()->has('cotizacion_id'))
         {
+            $cotizacion_id = $request->session()->get('cotizacion_id');
+        }else{
             $cotizacion              = new Cotizacione();
             $cotizacion->user_id     = Auth::user()->id;
             $cotizacion->almacene_id = Auth::user()->almacen_id;
             $cotizacion->cliente_id  = $request->cliente_id;
-            // $cotizacion->cliente_id  = $request->cliente_id;
             $cotizacion->fecha       = $request->fecha;
             $cotizacion->save();
             $cotizacion_id = $cotizacion->id;
-        }else{
-            $cotizacion_id = $request->cotizacione_id;
         }
+
+        $request->session()->put('cotizacion_id', $cotizacion_id);
 
         $productosCotizacion                 = new CotizacionesProducto();
         $productosCotizacion->user_id        = Auth::user()->id;
@@ -75,8 +75,11 @@ class VentaController extends Controller
         $productosCotizacion->producto_id    = $request->producto_id;
         $productosCotizacion->save();
 
+        // borramos datos de la session
+        // $request->session()->forget('key');
+        // $request->session()->flush();
+
         $productosCotizacion = CotizacionesProducto::where('cotizacione_id', $cotizacion_id)->get();
-        // dd($productosCotizacion);
         return view('venta.ajaxProductosCotizacion')->with(compact('productosCotizacion'));
 
     }

@@ -25,12 +25,11 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Cliente</label>
                                 <input type="hidden" name="cotizacione_id" id="cotizacione_id" value="">
-                                <select class="select2 form-control" style="width: 100%" name="cliente_id">
+                                <select class="select2 form-control" style="width: 100%" name="cliente_id" id="cliente_id">
                                     @foreach($clientes as $c)
                                         <option value="{{ $c->id }}"> {{ $c->name }} </option>
                                     @endforeach
@@ -144,8 +143,10 @@
             },
             type: 'POST',
             success: function(data) {
-                console.log(JSON.parse(data));
+                
+                // console.log(JSON.parse(data));
                 // $("#listadoProductosAjax").show('slow');
+                // $("#cotizacione_id").val();
                 $("#ajaxProductosCotizacion").html(data);
             }
         });
@@ -168,7 +169,7 @@
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 3) {
+        if (termino_busqueda.length > 2) {
             $.ajax({
                 url: "{{ url('Venta/ajaxBuscaProducto') }}",
                 data: {termino: termino_busqueda},
@@ -191,12 +192,8 @@
                             `<button type="button" class="btnSelecciona btn btn-success" title="Adiciona Item"
                                 onclick="adicionaItemCotizacion('`+producto_id+`')"><i class="fas fa-plus"></i></button>`,
                          ] ).draw();
-                        //  tpe.clear().draw();
-                        // console.log(data.arrayProductos[item].id);
                     }
-                    // console.log(data.arrayProductos[0]);
                     $("#listadoProductosAjax").show('slow');
-                    // $("#listadoProductosAjax").html(data.arrayProductos);
                 }
             });
             $("#listadoProductosAjax").show('slow');
