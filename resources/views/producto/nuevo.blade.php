@@ -333,7 +333,7 @@
                         <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
                     </div>
                     <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
-                        <form action="/Producto/importaExcel" method="POST" enctype="multipart/form-data">
+                        <form action="/Producto/importaExcel" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                             
@@ -352,7 +352,16 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Importar archivo excel</button>
+                                    <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
+                                        class="btn waves-effect waves-light btn-block btn-success">Importar archivo
+                                        excel</button>
+                                    <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
+                                        disabled style="display: none;">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        &nbsp;&nbsp;Estamos trabajando, ten pasciencia ;-)
+                                    </button>
+
                                 </div>
                                 <div class="col-md-3">
                                     <a href="{{ asset('excels/formato_productos_vacio.xlsx') }}" target="_blank" rel="noopener noreferrer">
@@ -407,6 +416,11 @@
 
 <script>
 var room = 1;
+
+function enviaExcel(){
+    $("#btnEnviaExcel").hide();
+    $("#btnTrabajandoExcel").show();
+}
 
 $(document).ready(function() {
 

@@ -14,10 +14,18 @@ class UsersTableSeeder extends Seeder
     {
         // se adiciono al administrador     
         User::insert([
+          [
             'name'=>'Administrador',
             'rol'=>'Administrador',
             'email'=>'admin@sazez.net',
-            'password'=> bcrypt('123456789'),
+            'password'=> bcrypt('123456789')
+          ],
+          [
+            'name'=>'Publico General',
+            'rol'=>'Cliente',
+            'email'=>'cliente@cliente.net',
+            'password'=> bcrypt('123456789')
+          ],
         ]);
     }
 }

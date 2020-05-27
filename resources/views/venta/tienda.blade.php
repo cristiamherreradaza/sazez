@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-<link href="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
+
 
 <div class="card card-outline-info">
     <form action="{{ url('Pedido/guarda') }}" method="POST">
@@ -83,8 +83,9 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
-                                    <th style="width: 5%">Precio</th>
+                                    <th style="width: 10%">Precio</th>
                                     <th style="width: 5%">Cantidad</th>
+                                    <th style="width: 10%">Total</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -133,12 +134,21 @@
         });
     });
 
+    $(".precio").change(function(){
+        alert("Cambio");
+    });
+
+    $(document).on('change', '.precio', function(e){
+        let precio = $(this).val();
+        console.log(precio);
+        // alert("cambio");
+    });
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
-                url: "{{ url('Pedido/ajaxBuscaProducto') }}",
+                url: "{{ url('Venta/ajaxBuscaProductoTienda') }}",
                 data: {termino: termino_busqueda},
                 type: 'POST',
                 success: function(data) {
@@ -186,14 +196,3 @@
 
 </script>
 @endsection
-<script src="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js') }}" type="text/javascript"></script>
-<script>
-    $("input[name='tch2']").TouchSpin({
-        min: -1000000000,
-        max: 1000000000,
-        stepinterval: 50,
-        maxboostedstep: 10000000,
-        prefix: '$'
-    });
-    $("input[name='tch3']").TouchSpin();
-</script>

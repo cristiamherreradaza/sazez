@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Almacene;
 use App\Producto;
 use App\Cotizacione;
 use Illuminate\Http\Request;
@@ -82,6 +83,21 @@ class VentaController extends Controller
         $productosCotizacion = CotizacionesProducto::where('cotizacione_id', $cotizacion_id)->get();
         return view('venta.ajaxProductosCotizacion')->with(compact('productosCotizacion'));
 
+    }
+
+    public function tienda()
+    {
+        $almacenes = Almacene::get();
+        return view('venta.tienda')->with(compact('almacenes'));
+    }
+
+    public function ajaxBuscaProductoTienda(Request $request)
+    {
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                            ->orWhere('codigo', 'like', "%$request->termino%")
+                            ->limit(8)
+                            ->get();
+        return view('venta.ajaxBuscaProductoTienda')->with(compact('productos'));
     }
 
 }
