@@ -140,10 +140,9 @@ $(document).ready(function() {
                     data.message,
                     'success'
                     )
-                    //.then(function() {
-                    //     location.reload();
-                    //     $('#select_file').val('');
-                    // });
+                    .then(function() {
+                        window.location.href = "{{ url('Pedido/listado') }}";
+                    });
                 }else{
                     Swal.fire(
                     'Oops...',

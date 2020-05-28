@@ -37,7 +37,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th style="width: 5%">ID</th>
+                        <td></td>
                         <th>Codigo</th>
                         <th>Nombre</th>
                         <th>Marca</th>
@@ -56,9 +56,32 @@
 </div>
 
 <script>
-    $(document).ready(function (){
-            var table = $('#example').DataTable();
+    $(document).ready(function() {
+    // Setup - add a text input to each footer cell
+    $('#example tfoot th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<input type="text" placeholder=" '+title+'" />' );
+    } );
+ 
+    // DataTable
+        var table = $('#example').DataTable({
+            initComplete: function () {
+                // Apply the search
+                this.api().columns().every( function () {
+                    var that = this;
+     
+                    $( 'input', this.footer() ).on( 'keyup change clear', function () {
+                        if ( that.search() !== this.value ) {
+                            that
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                } );
+            }
         });
+     
+    } );
 
     function selecciona_todo(){
         // alert('si');

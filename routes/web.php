@@ -165,6 +165,7 @@ Route::get('Cliente/inicio', 'ClienteController@inicio');
 
 
 
+
 Route::get('Tienda/inicio', 'TiendaController@inicio');
 Route::get('Tienda/ver/{id}', 'TiendaController@ver');
 
