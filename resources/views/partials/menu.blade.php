@@ -57,6 +57,7 @@
                         <li><a href="{{ url('Categoria/listado') }}">Categorias</a></li>
                         <li><a href="{{ url('Cliente/listado') }}">Clientes</a></li>
                         <li><a href="{{ url('Escala/listado') }}">Escalas</a></li>
+                        <li><a href="{{ url('Escala/grupo_escala') }}">Grupo Escalas</a></li>
                         <li><a href="{{ url('Marca/listado') }}">Marcas</a></li>
                         <li><a href="{{ url('User/listado') }}">Usuarios</a></li>
                     </ul>
