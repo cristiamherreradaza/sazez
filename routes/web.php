@@ -148,7 +148,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('User/perfil', 'UserController@perfil');
 
     //VENTAS
+    Route::post('Venta/ajaxBuscaProducto', 'VentaController@ajaxBuscaProducto');
+    Route::post('Venta/ajaxBuscaProductoTienda', 'VentaController@ajaxBuscaProductoTienda');
+    Route::post('Venta/adicionaItem', 'VentaController@adicionaItem');
     Route::get('Venta/nuevo', 'VentaController@nuevo');
+    Route::get('Venta/tienda', 'VentaController@tienda');
+
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');

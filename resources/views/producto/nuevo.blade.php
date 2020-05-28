@@ -8,7 +8,36 @@
     <link href="{{ asset('assets/plugins/dropify/dist/css/dropify.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/plugins/select2/dist/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/plugins/multiselect/css/multi-select.css') }}" rel="stylesheet" type="text/css" />
-        <link href="../assets/plugins/dropzone-master/dist/dropzone.css" rel="stylesheet" type="text/css" />
+    <style>
+    
+        /* these styles are for the demo, but are not required for the plugin */
+        .zoom {
+            display: inline-block;
+            position: relative;
+            cursor: zoom-in;
+        }
+    
+        /* magnifying glass icon */
+        .zoom:after {
+            content: '';
+            display: block;
+            width: 33px;
+            height: 33px;
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: url(icon.png);
+        }
+    
+        .zoom img {
+            display: block;
+        }
+    
+        .zoom img::selection {
+            background-color: transparent;
+        }
+    
+    </style>
 @endsection
 
 @section('content')
@@ -284,7 +313,9 @@
                                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
+                                    <a href="{{ url('Pedido/listado') }}">
+                                        <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
+                                    </a>
                                 </div>
                             </div>
 
@@ -302,38 +333,68 @@
                         <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
                     </div>
                     <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
-                        <form action="/Producto/importaExcel" method="POST" enctype="multipart/form-data">
+                        <form action="/Producto/importaExcel" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                             
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>SELECCIONE ARCHIVO EXCEL</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">ARCHIVO</span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" name="excel" class="custom-file-input" id="inputGroupFile01" required>
+                                                <input type="file" name="excel" class="custom-file-input" id="inputGroupFile01" accept=".xlsx" required>
                                                 <label class="custom-file-label" for="inputGroupFile01">Seleccione...</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Importar</button>
+                                <div class="col-md-3">
+                                    <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
+                                        class="btn waves-effect waves-light btn-block btn-success">Importar archivo
+                                        excel</button>
+                                    <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
+                                        disabled style="display: none;">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        &nbsp;&nbsp;Estamos trabajando, ten pasciencia ;-)
+                                    </button>
+
                                 </div>
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Descargar Formato</button>
+                                <div class="col-md-3">
+                                    <a href="{{ asset('excels/formato_productos_vacio.xlsx') }}" target="_blank" rel="noopener noreferrer">
+                                        <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Descargar formato excel</button>
+                                    </a>
                                 </div>
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="button" class="btn waves-effect waves-light btn-block btn-primary">Ver Formato</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <span style="background-color: #ea6274; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    Colocar NT en caso de no tener informacion
                                 </div>
-                                
+                                <div class="col-md-3">
+                                    <span
+                                        style="background-color: #67ff67; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    Solo introducir numeros
+                                </div>
+                                <div class="col-md-3">
+                                    <span
+                                        style="background-color: #8065a9; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    Colocar 0 si no tienen el dato
+                                </div>
+                                <div class="col-md-3">
+                                    <span
+                                        style="background-color: #62adea; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    No dejar celdas vacias ni cambiar el orden
+                                </div>
+                                <div class="col-md-12">
+                                    {{-- <img src="{{ asset('assets/images/muestra_excel_productos.png') }}" class="img-thumbnail" alt=""> --}}
+                                    <span class='zoom' id='ex1'>
+                                        <img src='{{ asset('assets/images/muestra_excel_productos.png') }}' class="img-thumbnail" alt='Daisy on the Ohoopee' />
+                                    </span>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -351,12 +412,20 @@
 <script src="{{ asset('assets/plugins/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
 <script type="text/javascript" src="{{ asset('assets/plugins/multiselect/js/jquery.multi-select.js') }}"></script>
 <script src="{{ asset('assets/plugins/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('js/jquery.zoom.js') }}"></script>
 
 <script>
 var room = 1;
 
+function enviaExcel(){
+    $("#btnEnviaExcel").hide();
+    $("#btnTrabajandoExcel").show();
+}
+
 $(document).ready(function() {
 
+$('#ex1').zoom();
+    
     $('.dropify').dropify();
     $("#categorias").select2();
     $("#categorias").change(function(){

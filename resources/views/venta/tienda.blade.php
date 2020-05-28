@@ -11,7 +11,7 @@
 @endsection
 
 @section('content')
-<link href="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
+
 
 <div class="card card-outline-info">
     <form action="{{ url('Pedido/guarda') }}" method="POST">
@@ -83,13 +83,28 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
-                                    <th style="width: 5%">Precio</th>
+                                    <th style="width: 10%">Precio</th>
                                     <th style="width: 5%">Cantidad</th>
+                                    <th style="width: 10%">Total</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+
                             </tbody>
+                            <tfoot>
+                                <th style="width: 5%"></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th style="width: 10%"></th>
+                                    <th style="width: 5%"></th>
+                                    <th style="width: 10%"></th>
+                                    <th></th>
+                            </tfoot>
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
@@ -113,7 +128,11 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
-    var t = $('#tablaPedido').DataTable();
+    var t = $('#tablaPedido').DataTable({
+        paging: false,
+        searching: false,
+        ordering:  false
+    });
     var itemsPedidoArray = [];
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -133,12 +152,35 @@
         });
     });
 
+    $(document).on('keyup change', '.precio', function(e){
+        let precio = Number($(this).val());
+        let id = $(this).data("id");
+        let cantidad = Number($("#cantidad_"+id).val());
+        let subtotal = precio*cantidad;
+        $("#subtotal_"+id).val(subtotal);
+    });
+
+    $(document).on('keyup change', '.cantidad', function(e){
+        // alert("cambio");
+        let cantidad = Number($(this).val());
+        let id = $(this).data("id");
+        let precio = Number($("#precio_"+id).val());
+        let subtotal = precio*cantidad;
+        console.log(precio);
+        $("#subtotal_"+id).val(subtotal);
+    });
+
+    function sumaSubTotales()
+    {
+        
+
+    }
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
-                url: "{{ url('Pedido/ajaxBuscaProducto') }}",
+                url: "{{ url('Venta/ajaxBuscaProductoTienda') }}",
                 data: {termino: termino_busqueda},
                 type: 'POST',
                 success: function(data) {
@@ -186,14 +228,3 @@
 
 </script>
 @endsection
-<script src="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js') }}" type="text/javascript"></script>
-<script>
-    $("input[name='tch2']").TouchSpin({
-        min: -1000000000,
-        max: 1000000000,
-        stepinterval: 50,
-        maxboostedstep: 10000000,
-        prefix: '$'
-    });
-    $("input[name='tch3']").TouchSpin();
-</script>
