@@ -14,6 +14,7 @@ use App\Movimiento;
 use App\Caracteristica;
 use App\ImagenesProducto;
 use App\CategoriasProducto;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Imports\ProductosImport;
 use Illuminate\Support\Facades\DB;
@@ -64,6 +65,17 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
+        // generamos el codigo
+        $marcaProducto = Marca::find($request->marca_id);
+        $tipoProducto = Categoria::find($request->tipo_id);
+        $nombreProducto = $request->nombre;
+
+        $siglaMarca = $this->extraeCodigo($marcaProducto->nombre);
+        $siglaTipo = $this->extraeCodigo($tipoProducto->nombre);
+        $siglaNombre = $this->extraeCodigo($nombreProducto);
+        $codigoGenerado = $siglaMarca.'-'.$siglaTipo.'-'.$siglaNombre;
+        // fin generacion codigo
+
         if ($request->producto_id) {
             $nuevoProducto = Producto::find($request->producto_id);
 
@@ -74,7 +86,7 @@ class ProductoController extends Controller
         $nuevoProducto->user_id        = Auth::user()->id;
         $nuevoProducto->marca_id       = $request->marca_id;
         $nuevoProducto->tipo_id        = $request->tipo_id;
-        $nuevoProducto->codigo         = $request->codigo;
+        $nuevoProducto->codigo         = $codigoGenerado;
         $nuevoProducto->nombre         = $request->nombre;
         $nuevoProducto->nombre_venta   = $request->nombre_venta;
         $nuevoProducto->modelo         = $request->modelo;
@@ -88,9 +100,11 @@ class ProductoController extends Controller
         $nuevoProducto->url_referencia = $request->url_referencia;
         $nuevoProducto->video          = $request->video;
         $nuevoProducto->save();
+        $producto_id = $nuevoProducto->id;
 
-        // $sigla_marca = $this->extraeCodigo();
-        $marcaProducto = Marca::find($request->marca_id);
+        $cambia_codigo = Producto::find($producto_id);
+        $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
+        $cambia_codigo->save();
 
         if ($request->producto_id) {
             $producto_id          = $request->producto_id;
