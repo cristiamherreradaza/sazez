@@ -14,7 +14,7 @@
 
 
 <div class="card card-outline-info">
-    <form action="{{ url('Pedido/guarda') }}" method="POST">
+    <form action="{{ url('Venta/guardaVenta') }}" method="POST">
         @csrf
     
     <div class="row">
@@ -25,22 +25,22 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3">
 
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Fecha</label>
-                                <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ date("Y-m-d") }}" required>
+                                <label class="control-label">Cliente</label>
+                                <select name="cliente_id" id="cliente_id" class="form-control">
+                                    @foreach($clientes as $c)
+                                    <option value="{{ $c->id }}"> {{ $c->name }} </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Almacen a solicitar</label>
-                                <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
-                                    @foreach($almacenes as $almacen)
-                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                    @endforeach
-                                </select>
+                                <label class="control-label">Fecha</label>
+                                <input type="date" name="fecha" id="fecha" class="form-control" value="{{ date("Y-m-d") }}" required>
                             </div>
                         </div>
 
@@ -84,9 +84,10 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
+                                    <th>Stock</th>
                                     <th style="width: 10%">Precio</th>
                                     <th style="width: 5%">Cantidad</th>
-                                    <th style="width: 10%">Total</th>
+                                    <th class="text-center" style="width: 10%">Total</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -95,21 +96,22 @@
                             </tbody>
                             <tfoot>
                                 <th style="width: 5%"></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th style="width: 10%"></th>
-                                    <th style="width: 5%" class="text-right"><h2>TOTAL</h2></th>
-                                    <th style="width: 10%" class="text-right"><h2><span id="resultadoSubTotales"></span></h2></th>
-                                    <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="text-right"><h2>TOTAL</h2></th>
+                                <th class="text-right"><h2><span id="resultadoSubTotales"></span></h2></th>
+                                <th></th>
                             </tfoot>
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR VENTA</button>
                         </div>
                     </div>
                 </div>

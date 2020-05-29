@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Venta;
 use App\Almacene;
 use App\Producto;
 use App\Movimiento;
 use App\Cotizacione;
+use App\VentasProducto;
 use Illuminate\Http\Request;
 use App\CotizacionesProducto;
 use Illuminate\Support\Facades\DB;
@@ -92,7 +94,9 @@ class VentaController extends Controller
     public function tienda()
     {
         $almacenes = Almacene::get();
-        return view('venta.tienda')->with(compact('almacenes'));
+        $clientes = User::where('rol', 'Cliente')
+                    ->get();
+        return view('venta.tienda')->with(compact('almacenes', 'clientes'));
     }
 
     public function ajaxBuscaProductoTienda(Request $request)
@@ -102,6 +106,30 @@ class VentaController extends Controller
                             ->limit(8)
                             ->get();
         return view('venta.ajaxBuscaProductoTienda')->with(compact('productos'));
+    }
+
+    public function guardaVenta(Request $request)
+    {
+        // dd($request->all());
+        $venta              = new Venta();
+        $venta->user_id     = Auth::user()->id;
+        $venta->almacene_id = Auth::user()->almacen_id;
+        $venta->cliente_id  = $request->cliente_id;
+        $venta->fecha       = $request->fecha;
+        $venta->save();
+        $venta_id = $venta->id;
+
+        $llaves = array_keys($request->precio);
+        foreach ($llaves as $key => $ll) {
+            $productos              = new VentasProducto();
+            $productos->user_id     = Auth::user()->id;
+            $productos->producto_id = $ll;
+            $productos->venta_id     = $venta_id;
+            $productos->precio_venta = $request->precio[$ll];
+            $productos->cantidad     = $request->cantidad[$ll];
+            $productos->fecha        = $request->fecha;
+            $productos->save();
+        }
     }
 
 }

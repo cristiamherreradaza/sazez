@@ -82,9 +82,10 @@
                     tipo,
                     modelo,
                     colores,
-                    `<input type="number" class="form-control text-right precio" name="precio_`+id+`" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" onchange="">`,
-                    `<input type="number" class="form-control text-right cantidad" name="cantidad_`+id+`" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
-                    `<input type="number" class="form-control text-right subtotal" name="subtotal_`+id+`" id="subtotal_`+id+`" value="`+precio+`">`,
+                    stock,
+                    `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" onchange="">`,
+                    `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
+                    `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any">`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
                 sumaSubTotales();
