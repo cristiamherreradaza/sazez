@@ -17,11 +17,19 @@
             @foreach ($productos as $key => $p)
             @php
                 $precioProducto = App\Precio::where('producto_id', $p->id)->where('escala_id', 1)->first();
+                $promo = App\CombosProducto::where('producto_id', $p->id)->get();
             @endphp
                 <tr class="item_{{ $p->id }}">
                     <td>{{ $p->id }}</td>
                     <td>{{ $p->codigo }}</td>
-                    <td>{{ $p->nombre }}</td>
+                    <td>
+                        {{ $p->nombre }}
+                        @forelse ($promo as $key => $pr)
+                            <button type="button" class="btn waves-effect waves-light btn-xs btn-warning btnPromo_{{ $pr->combo_id }}" onclick="muestraPromo({{ $pr->combo_id }})">promo {{ ++$key }}</button>   
+                        @empty
+                            
+                        @endforelse
+                    </td>
                     <td>{{ $p->marca->nombre }}</td>
                     <td>{{ $p->tipo->nombre }}</td>
                     <td>{{ $p->modelo }}</td>
@@ -37,6 +45,7 @@
 </div>
 <script>
     $(document).ready(function () {
+    
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona', function () {
 
             $("#listadoProductosAjax").hide('slow');
@@ -71,6 +80,7 @@
                     `<input type="number" class="form-control subtotal" name="subtotal_`+id+`" id="subtotal_`+id+`" value="`+precio+`">`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
+                sumaSubTotales();
             }
         });
 

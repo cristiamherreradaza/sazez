@@ -21,11 +21,12 @@
         <div class="col-md-12">
             <div class="card card-outline-info">                                
                 <div class="card-header">
-                    <h4 class="mb-0 text-white">NUEVO PEDIDO</h4>
+                    <h4 class="mb-0 text-white">NUEVA VENTA</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3">
+
                             <div class="form-group">
                                 <label class="control-label">Fecha</label>
                                 <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ date("Y-m-d") }}" required>
@@ -67,9 +68,9 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-outline-warning">
+            <div class="card card-outline-inverse">
                 <div class="card-header">
-                    <h4 class="mb-0 text-white">PRODUCTOS PARA PEDIDO</h4>
+                    <h4 class="mb-0 text-white">PRODUCTOS</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive m-t-40">
@@ -101,8 +102,8 @@
                                     <th></th>
                                     <th></th>
                                     <th style="width: 10%"></th>
-                                    <th style="width: 5%"></th>
-                                    <th style="width: 10%"></th>
+                                    <th style="width: 5%" class="text-right">TOTAL</th>
+                                    <th style="width: 10%"><span id="resultadoSubTotales"></span></th>
                                     <th></th>
                             </tfoot>
                         </table>
@@ -142,15 +143,23 @@
     });
 
     $(document).ready(function () {
-         $('#tablaPedido tbody').on('click', '.btnElimina', function () {
+        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
             t.row($(this).parents('tr'))
                 .remove()
                 .draw();
             let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
             let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
             itemsPedidoArray.splice(pos, 1);
+            sumaSubTotales();
         });
+
     });
+
+    function muestraPromo(promo_id)
+    {
+        console.log(promo_id);
+
+    }
 
     $(document).on('keyup change', '.precio', function(e){
         let precio = Number($(this).val());
@@ -158,6 +167,7 @@
         let cantidad = Number($("#cantidad_"+id).val());
         let subtotal = precio*cantidad;
         $("#subtotal_"+id).val(subtotal);
+        sumaSubTotales();
     });
 
     $(document).on('keyup change', '.cantidad', function(e){
@@ -168,12 +178,18 @@
         let subtotal = precio*cantidad;
         console.log(precio);
         $("#subtotal_"+id).val(subtotal);
+        sumaSubTotales();
     });
 
     function sumaSubTotales()
     {
+        let sum = 0;
+        $('.subtotal').each(function(){
+            sum += parseFloat(this.value);
+        });
         
-
+        $("#resultadoSubTotales").text(sum);
+        // console.log(sum);
     }
 
     $(document).on('keyup', '#termino', function(e) {

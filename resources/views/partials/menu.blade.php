@@ -34,7 +34,7 @@
             <ul id="sidebarnav">
                 <li class="nav-small-cap">PERSONAL</li>
                 <li>
-                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-cube"></i><span
                             class="hide-menu">PRODUCTOS</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="{{ url('Producto/nuevo') }}">Nuevo</a></li>
@@ -42,27 +42,27 @@
                     </ul>
                 </li>
                 <li>
-                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-email"></i><span
-                            class="hide-menu">COMBOS</span></a>
+                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-star-circle"></i><span
+                            class="hide-menu">PROMOS</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="{{ url('Combo/nuevo') }}">Nuevo</a></li>
                         <li><a href="{{ url('Combo/listado') }}">Listado</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-puzzle"></i><span
                             class="hide-menu">CONFIGURACIONES</span></a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="{{ url('Almacen/listado') }}">Almacenes</a></li>
-                        <li><a href="{{ url('Categoria/listado') }}">Categorias</a></li>
-                        <li><a href="{{ url('Cliente/listado') }}">Clientes</a></li>
-                        <li><a href="{{ url('Escala/listado') }}">Escalas</a></li>
-                        <li><a href="{{ url('Marca/listado') }}">Marcas</a></li>
-                        <li><a href="{{ url('User/listado') }}">Usuarios</a></li>
+                        <li><a href="{{ url('Almacen/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Almacenes</a></li>
+                        <li><a href="{{ url('Categoria/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Categorias</a></li>
+                        <li><a href="{{ url('Cliente/listado') }}"><i class="mdi mdi-account-multiple"></i> Clientes</a></li>
+                        <li><a href="{{ url('Escala/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Escalas</a></li>
+                        <li><a href="{{ url('Marca/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Marcas</a></li>
+                        <li><a href="{{ url('User/listado') }}"><i class="mdi mdi-account-multiple"></i> Usuarios</a></li>
                     </ul>
                 </li>
                 <li>
-                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
                             class="hide-menu">PEDIDOS</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="{{ url('Pedido/nuevo') }}">Nuevo</a></li>
@@ -70,7 +70,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-email"></i><span
+                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-arrow-expand-all"></i><span
                             class="hide-menu">ENVIOS</span></a>
                     <ul aria-expanded="false" class="collapse">
                         <li><a href="{{ url('Entrega/envio') }}">Subir Excel</a></li>
