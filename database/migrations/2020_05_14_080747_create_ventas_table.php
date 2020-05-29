@@ -27,6 +27,8 @@ class CreateVentasTable extends Migration
             $table->foreign('combo_id')->references('id')->on('combos');
             $table->integer('numero')->nullable();
             $table->date('fecha')->nullable();
+            $table->decimal('precio_venta', 15, 2)->default(0);
+            $table->decimal('precio_cobrado', 15, 2)->default(0);
             $table->string('estado', 30)->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

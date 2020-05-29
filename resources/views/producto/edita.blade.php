@@ -139,11 +139,9 @@
                                             <div class="col-md-12">
                                                 <div class="form-group row">
                                                         @foreach ($precios as $p)
-                                                            @if (($p->escala_id==$e->id))
                                                             <div class="col-md-4">
                                                                 <label>{{ $e->nombre }}</label>
                                                                 <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any" value="{{ ($p->escala_id==$e->id)?$p->precio:0 }}">
-                                                                
                                                             </div>
                                                             <div class="col-md-4">
                                                         <label>Minimo</label>
@@ -153,7 +151,6 @@
                                                         <label>Maximo</label>
                                                         <input type="text" class="form-control" value="{{ $e->maximo }}" readonly>
                                                     </div>
-                                                            @endif
                                                         @endforeach
                                                         <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
                                                 </div>
@@ -214,7 +211,7 @@
                                                             <div class="input-group-append">
                                                                 <button class="btn btn-danger" type="button" onclick="remove_education_fields({{ $cp->id }});"><i class="fa fa-minus"></i></button>
                                                             </div>
-                                                          
+                                                        
                                                         </div>
                                                         <br />
                                                     @endforeach
