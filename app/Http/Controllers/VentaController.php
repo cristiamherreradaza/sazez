@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Almacene;
 use App\Producto;
+use App\Movimiento;
 use App\Cotizacione;
 use Illuminate\Http\Request;
 use App\CotizacionesProducto;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class VentaController extends Controller
 {
     public function nuevo()
     {
+        // dd($cantidadTotal->total);
         $almacen_id = Auth::user()->almacen_id;
         $clientes = User::where('rol', 'Cliente')
                     ->get();

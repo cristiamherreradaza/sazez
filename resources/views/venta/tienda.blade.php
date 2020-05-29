@@ -102,8 +102,8 @@
                                     <th></th>
                                     <th></th>
                                     <th style="width: 10%"></th>
-                                    <th style="width: 5%" class="text-right">TOTAL</th>
-                                    <th style="width: 10%"><span id="resultadoSubTotales"></span></th>
+                                    <th style="width: 5%" class="text-right"><h2>TOTAL</h2></th>
+                                    <th style="width: 10%" class="text-right"><h2><span id="resultadoSubTotales"></span></h2></th>
                                     <th></th>
                             </tfoot>
                         </table>
