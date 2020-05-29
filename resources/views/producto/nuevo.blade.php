@@ -69,21 +69,15 @@
                                     <div class="tab-pane active" id="principal" role="tabpanel">
                                         <div class="p-3">
                                             <div class="row">
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label>CODIGO </label>
-                                                        <input type="text" class="form-control" name="codigo" id="codigo" required>
-                                                    </div>
-                                                </div>
                                         
-                                                <div class="col-md-2">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>NOMBRE </label>
                                                         <input type="text" class="form-control" name="nombre" id="nombre" required>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-4">
+                                                <div class="col-md-5">
                                                     <div class="form-group">
                                                         <label>NOMBRE COMERCIAL</label>
                                                         <input type="text" class="form-control" name="nombre_venta" id="nombre_venta">
@@ -171,10 +165,18 @@
                                             @foreach ($escalas as $key => $e)
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
-                                                        <label class="col-sm-6 text-right col-form-label">{{ $e->nombre }}</label>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-4">
+                                                            <label>{{ $e->nombre }}</label>
                                                             <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any" value="0">
                                                             <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Minimo</label>
+                                                            <input type="text" class="form-control" value="{{ $e->minimo }}" readonly>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label>Maximo</label>
+                                                            <input type="text" class="form-control" value="{{ $e->maximo }}" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -313,7 +315,7 @@
                                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="{{ url('Pedido/listado') }}">
+                                    <a href="{{ url('Producto/listado') }}">
                                         <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
                                     </a>
                                 </div>

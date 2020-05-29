@@ -37,8 +37,8 @@
                     <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-cube"></i><span
                             class="hide-menu">PRODUCTOS</span></a>
                     <ul aria-expanded="false" class="collapse">
-                        <li><a href="{{ url('Producto/nuevo') }}">Nuevo</a></li>
-                        <li><a href="{{ url('Producto/listado') }}">Listado</a></li>
+                        <li><a href="{{ url('Producto/nuevo') }}"><i class="mdi mdi-plus-circle-outline"></i> Nuevo</a></li>
+                        <li><a href="{{ url('Producto/listado') }}"><i class="mdi mdi-format-list-bulleted"></i> Listado</a></li>
                     </ul>
                 </li>
                 <li>

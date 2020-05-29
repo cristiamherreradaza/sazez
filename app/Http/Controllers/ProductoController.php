@@ -89,6 +89,9 @@ class ProductoController extends Controller
         $nuevoProducto->video          = $request->video;
         $nuevoProducto->save();
 
+        // $sigla_marca = $this->extraeCodigo();
+        $marcaProducto = Marca::find($request->marca_id);
+
         if ($request->producto_id) {
             $producto_id          = $request->producto_id;
             $borraCaracteristicas = Caracteristica::where('producto_id', $producto_id)->delete();
@@ -172,30 +175,6 @@ class ProductoController extends Controller
         return redirect('Producto/listado');
     }
 
-    public function guardaEdicion(Request $request)
-    {
-        $producto = Producto::find($request->producto_id);
-        $producto->user_id        = Auth::user()->id;
-        $producto->marca_id       = $request->marca_id;
-        $producto->tipo_id        = $request->tipo_id;
-        $producto->codigo         = $request->codigo;
-        $producto->nombre         = $request->nombre;
-        $producto->nombre_venta   = $request->nombre_venta;
-        $producto->modelo         = $request->modelo;
-        $producto->precio_compra  = $request->precio_compra;
-        $producto->largo          = $request->largo;
-        $producto->ancho          = $request->ancho;
-        $producto->alto           = $request->alto;
-        $producto->peso           = $request->peso;
-        $producto->colores        = $request->colores;
-        $producto->descripcion    = $request->descripcion;
-        $producto->url_referencia = $request->url_referencia;
-        $producto->video          = $request->video;
-        $producto->save();
-
-        return redirect('Producto/listado');
-    }
-
     public function edita(Request $request, $producto_id)
     {
         $producto = Producto::find($producto_id);
@@ -262,5 +241,13 @@ class ProductoController extends Controller
     public function panelControl(Request $request)
     {
         return view('producto.panelControl');
+    }
+
+    function extraeCodigo($texto)
+    {
+        $palabra = explode(" ", $texto);
+        $primeras = Str::substr($palabra[0], 0, 3);
+        $sigla = str_replace(" ", "", $primeras);
+        return $sigla;
     }
 }

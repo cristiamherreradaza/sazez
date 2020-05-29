@@ -21,6 +21,8 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
+                        <th>Cantidad Minima</th>
+                        <th>Cantidad Maxima</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -29,6 +31,8 @@
                         <tr>
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $escala->nombre }}</td>
+                            <td>{{ $escala->minimo }}</td>
+                            <td>{{ $escala->maximo }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar escala"  onclick="editar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar escala"  onclick="eliminar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-trash"></i></button>
@@ -58,6 +62,20 @@
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
                                 <input name="nombre_escala" type="text" id="nombre_escala" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Cantidad Minima</label>
+                                <input name="minimo" type="number" id="minimo" class="form-control" min="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Cantidad Maxima</label>
+                                <input name="maximo" type="number" id="maximo" class="form-control" min="1" required>
                             </div>
                         </div>
                     </div>
@@ -108,7 +126,11 @@
 <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
 <script>
     $(function () {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
         // responsive table
         $('#config-table').DataTable({
             responsive: true

@@ -83,7 +83,6 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
-                                    <th style="width: 5%">Precio</th>
                                     <th style="width: 5%">Cantidad</th>
                                     <th></th>
                                 </tr>
@@ -113,7 +112,15 @@
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
-    var t = $('#tablaPedido').DataTable();
+    var t = $('#tablaPedido').DataTable({
+        paging: false,
+        searching: false,
+        ordering: false,
+        info:false,
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        }
+    });
     var itemsPedidoArray = [];
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -123,7 +130,7 @@
     });
 
     $(document).ready(function () {
-         $('#tablaPedido tbody').on('click', '.btnElimina', function () {
+        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
             t.row($(this).parents('tr'))
                 .remove()
                 .draw();
@@ -186,14 +193,3 @@
 
 </script>
 @endsection
-<script src="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.js') }}" type="text/javascript"></script>
-<script>
-    $("input[name='tch2']").TouchSpin({
-        min: -1000000000,
-        max: 1000000000,
-        stepinterval: 50,
-        maxboostedstep: 10000000,
-        prefix: '$'
-    });
-    $("input[name='tch3']").TouchSpin();
-</script>

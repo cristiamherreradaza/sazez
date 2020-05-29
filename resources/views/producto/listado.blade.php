@@ -39,6 +39,12 @@
 <script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
 <script>
+$.ajaxSetup({
+    // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
 
 $(document).ready(function() {
     //  console.log('testOne');     para debug, ayuda a ver hasta donde se ejecuta la funcion
@@ -50,19 +56,22 @@ $(document).ready(function() {
 
     // DataTable
     var table = $('#tabla-usuarios').DataTable( {
-        "iDisplayLength": 10,
-        "processing": true,
+        iDisplayLength: 10,
+        processing: true,
         // "scrollX": true,
-        "serverSide": true,
-        "ajax": "{{ url('Producto/ajax_listado') }}",
-        "columns": [
+        serverSide: true,
+        ajax: "{{ url('Producto/ajax_listado') }}",
+        columns: [
             {data: 'codigo', name: 'codigo'},
             {data: 'nombre', name: 'nombre'},
             {data: 'tipo', name: 'tipos.nombre'},
             {data: 'marca', name: 'marcas.nombre'},
             {data: 'colores', name: 'colores'},
             {data: 'action'},
-        ]
+        ],
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        },
     } );
 
     // Apply the search
