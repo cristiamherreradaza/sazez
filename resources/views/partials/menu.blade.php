@@ -57,6 +57,7 @@
                         <li><a href="{{ url('Categoria/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Categorias</a></li>
                         <li><a href="{{ url('Cliente/listado') }}"><i class="mdi mdi-account-multiple"></i> Clientes</a></li>
                         <li><a href="{{ url('Escala/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Escalas</a></li>
+                        <li><a href="{{ url('Escala/grupo_escala') }}"><i class="mdi mdi-clipboard-outline"></i> Grupo Escalas</a></li>
                         <li><a href="{{ url('Marca/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Marcas</a></li>
                         <li><a href="{{ url('User/listado') }}"><i class="mdi mdi-account-multiple"></i> Usuarios</a></li>
                     </ul>

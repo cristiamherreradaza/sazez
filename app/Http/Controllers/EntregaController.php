@@ -148,8 +148,15 @@ class EntregaController extends Controller
         ]);
         if($validation->passes())
         {
+            session(['pedido_id' => $pedido_id]);
             $file = $request->file('select_file');
             Excel::import(new MovimientosImport, $file);
+            session()->forget('pedido_id');
+            //ACTUALIZAMOS EL PEDIDO A ENTREGADO
+            $pedidos = Pedido::find($pedido_id);
+            $pedidos->estado = 'Entregado';
+            $pedidos->save();
+        
             return response()->json([
                 'message' => 'Importacion realizada con exito',
                 'sw' => 1

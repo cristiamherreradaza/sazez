@@ -106,6 +106,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Escala/actualizar', 'EscalaController@actualizar');
     Route::get('Escala/eliminar/{id}', 'EscalaController@eliminar');
 
+    Route::get('Escala/grupo_escala', 'EscalaController@grupo_escala');
+    Route::get('Escala/ajax_producto', 'EscalaController@ajax_producto');
+    Route::post('Escala/guarda_multiple', 'EscalaController@guarda_multiple');
+
+
     // MARCAS
     Route::get('Marca/listado', 'MarcaController@listado');
     Route::post('Marca/guardar', 'MarcaController@guardar');
@@ -157,3 +162,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');
+
+
+
+
+Route::get('Tienda/inicio', 'TiendaController@inicio');
+Route::get('Tienda/ver/{id}', 'TiendaController@ver');
+
