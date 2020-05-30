@@ -60,12 +60,12 @@
                     tipo,
                     modelo,
                     colores,
+                    `<input type="number" class="form-control" value="1" min="1" name="itemprecio[` + id + `]">`,
                     `<input type="number" class="form-control" value="1" min="1" name="item[` + id + `]">`,
-                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
+                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
             }
         });
 
     });
-    </script>
-    {{-- <input type="hidden" name="item[`+id+`][]" value="`+id+`"> --}}
+</script>

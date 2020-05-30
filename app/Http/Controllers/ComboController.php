@@ -10,6 +10,7 @@ use App\Producto;
 use App\Precio;
 use App\Marca;
 use DataTables;
+use App\Movimiento;
 
 class ComboController extends Controller
 {
@@ -18,36 +19,74 @@ class ComboController extends Controller
         return view('combo.nuevo');
     }
     
-    public function ajax_listado_producto()
+    public function ajaxBuscaProducto(Request $request)
     {
-        $lista_productos = Producto::select('id', 'nombre', 'nombre_venta', 'marca_id');
-        return Datatables::of($lista_productos)
-            ->addColumn('action', function ($lista_productos) {
-                return '<button onclick="adicionar_producto_combo('.$lista_productos->id.')" class="btn btn-info"><i class="fas fa-plus"></i></a>';
-            })
-            ->editColumn('id', 'ID: {{$id}}')
-            ->make(true);
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                            ->orWhere('codigo', 'like', "%$request->termino%")
+                            ->limit(8)
+                            ->get();
+        return view('combo.ajaxBuscaProducto')->with(compact('productos'));
     }
 
     public function guarda(Request $request)
     {
+        // Creacion del Combo
         $combo = new Combo();
         $combo->user_id = Auth::user()->id;
         $combo->nombre = $request->nombre_combo;
         $combo->fecha_inicio = $request->fecha_inicio;
         $combo->fecha_final = $request->fecha_final;
         $combo->save();
+        $combo_id = $combo->id;
 
-        // Guardamos y enviamos a la variable el nuevo combo creado
-        $nuevo_combo = Combo::where('nombre', $request->nombre_combo)
-                            ->where('fecha_inicio', $request->fecha_inicio)
-                            ->where('fecha_final', $request->fecha_final)
-                            ->first();
+        // En la variable llaves se asigna todos los productos que se encuentran en el combo
+        $llaves = array_keys($request->item);
+        foreach ($llaves as $key => $ll) 
+        {
+            // Creación de ComboProducto
+            $productosCombo = new CombosProducto();
+            $productosCombo->user_id = Auth::user()->id;
+            $productosCombo->combo_id = $combo_id;
+            $productosCombo->producto_id = $ll;
+            $productosCombo->precio = $request->itemprecio[$ll];
+            $productosCombo->cantidad = $request->item[$ll];
+            $productosCombo->save();
+        }
+        return redirect('Combo/listado');
+    }
 
-        //productos existentes en combo
-        //$productos_combo = CombosProducto::where('combo_id', $nuevo_combo->id)->get();
+    public function editar($id)
+    {
+        $combo = Combo::find($id);
+        $productos_combo = CombosProducto::where('combo_id', $id)->get();
+        return view('combo.editar')->with(compact('combo', 'productos_combo'));
+    }
 
-        return redirect('Combo/editar/'.$nuevo_combo->id);
+    public function actualiza(Request $request)
+    {
+        $combo = Combo::find($request->id);        
+        $combo->user_id = Auth::user()->id;
+        $combo->nombre = $request->nombre_combo;
+        $combo->fecha_inicio = $request->fecha_inicio;
+        $combo->fecha_final = $request->fecha_final;
+        $combo->save();
+        $combo_id = $combo->id;
+        //Eliminamos los productos del combo
+        CombosProducto::where('combo_id', $combo_id)->delete(); 
+        //Volvemos a introducirlos
+        $llaves = array_keys($request->item);
+        foreach ($llaves as $key => $ll) 
+        {
+            // Creación de ComboProducto
+            $productosCombo = new CombosProducto();
+            $productosCombo->user_id = Auth::user()->id;
+            $productosCombo->combo_id = $combo_id;
+            $productosCombo->producto_id = $ll;
+            $productosCombo->precio = $request->itemprecio[$ll];
+            $productosCombo->cantidad = $request->item[$ll];
+            $productosCombo->save();
+        }
+        return redirect('Combo/listado');
     }
 
     public function lista_combo_productos($id)
@@ -58,12 +97,6 @@ class ComboController extends Controller
         //{{ $producto_combo->producto->marca->nombre }}
     }
 
-    public function editar($id)
-    {
-        $nuevo_combo = Combo::find($id);
-        $productos_combo = CombosProducto::where('combo_id', $id)->get();
-        return view('combo.editar')->with(compact('nuevo_combo', 'productos_combo'));
-    }
 
     // public function agregar_producto($combo_id, $producto_id)
     // {

@@ -100,7 +100,6 @@ class PedidoController extends Controller
             $productosPedido->cantidad    = $request->item[$ll];
             $productosPedido->save();
         }
-        // dd($request->all());
         return redirect('Pedido/listado');
     }
 
