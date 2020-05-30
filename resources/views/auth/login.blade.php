@@ -23,7 +23,7 @@
         <div class="form-group text-center mt-3">
             <div class="col-xs-12">
                 <button type="submit" class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light">
-                    {{ __('Confirmar') }}
+                    {{ __('Ingresar') }}
                 </button>
             </div>
         </div>
@@ -39,11 +39,11 @@
             </div>
         </div>
 
-        <div class="form-group mb-0">
+        {{-- <div class="form-group mb-0">
             <div class="col-sm-12 text-center">
                 <p>No tienes una cuenta? <a href="register.html" class="text-info ml-1"><b>Registrate</b></a></p>
             </div>
-        </div>
+        </div> --}}
     </form>
 </div>
 @endsection
