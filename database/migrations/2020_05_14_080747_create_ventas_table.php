@@ -23,8 +23,6 @@ class CreateVentasTable extends Migration
             $table->foreign('cotizacione_id')->references('id')->on('cotizaciones');
             $table->unsignedBigInteger('cliente_id');
             $table->foreign('cliente_id')->references('id')->on('users');
-            $table->unsignedBigInteger('combo_id')->nullable();
-            $table->foreign('combo_id')->references('id')->on('combos');
             $table->integer('numero')->nullable();
             $table->date('fecha')->nullable();
             $table->string('estado', 30)->nullable();

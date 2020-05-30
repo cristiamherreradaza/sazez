@@ -17,7 +17,7 @@ class CreateVentasProductosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('cotizacione_id');
+            $table->unsignedBigInteger('cotizacione_id')->nullable();
             $table->foreign('cotizacione_id')->references('id')->on('cotizaciones');
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('productos');
@@ -26,7 +26,8 @@ class CreateVentasProductosTable extends Migration
             $table->unsignedBigInteger('venta_id');
             $table->foreign('venta_id')->references('id')->on('ventas');
             $table->decimal('precio_venta', 15, 2)->default(0);
-            $table->integer('cantidad')->nullable();
+            $table->decimal('precio_cobrado', 15, 2)->default(0);
+            $table->decimal('cantidad', 15, 2)->default(0);
             $table->date('fecha')->nullable();
             $table->string('estado', 30)->nullable();
             $table->datetime('deleted_at')->nullable();

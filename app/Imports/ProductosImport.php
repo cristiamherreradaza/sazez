@@ -78,7 +78,7 @@ class ProductosImport implements ToModel, WithStartRow
 
         $sigla_nombre = $this->extraeCodigo($row[1]);
 
-        $codigoGenerado = $sigla_marca.'-'.$sigla_categoria.'-'.$sigla_nombre;
+        $codigoGenerado = $sigla_marca.'-'.$sigla_tipo.'-'.$sigla_nombre;
 
         $producto                  = new Producto();
         $producto->user_id         = Auth::user()->id;

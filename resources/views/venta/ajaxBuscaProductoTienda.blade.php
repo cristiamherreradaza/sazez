@@ -9,8 +9,9 @@
                 <th>Tipo</th>
                 <th>Modelo</th>
                 <th>Colores</th>
-                <th>Precio</th>
-                <th class="text-nowrap">Action</th>
+                <th class="text-right">Stock</th>
+                <th class="text-right">Precio</th>
+                <th class="text-nowrap"></th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +19,10 @@
             @php
                 $precioProducto = App\Precio::where('producto_id', $p->id)->where('escala_id', 1)->first();
                 $promo = App\CombosProducto::where('producto_id', $p->id)->get();
+                $cantidadTotal = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                ->where('producto_id', $p->id)
+                ->where('almacene_id', auth()->user()->almacen_id)
+                ->first();
             @endphp
                 <tr class="item_{{ $p->id }}">
                     <td>{{ $p->id }}</td>
@@ -34,7 +39,8 @@
                     <td>{{ $p->tipo->nombre }}</td>
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
-                    <td><b>{{ $precioProducto->precio }}</b></td>
+                    <td><h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3></td>
+                    <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
                     <td>
                         <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
                     </td>
@@ -61,7 +67,8 @@
             var tipo    = currentRow.find("td:eq(4)").text();
             var modelo  = currentRow.find("td:eq(5)").text();
             var colores = currentRow.find("td:eq(6)").text();
-            var precio  = currentRow.find("td:eq(7)").text();
+            var stock   = currentRow.find("td:eq(7)").text();
+            var precio  = currentRow.find("td:eq(8)").text();
 
             let buscaItem = itemsPedidoArray.lastIndexOf(id);
             if(buscaItem < 0)
@@ -75,9 +82,10 @@
                     tipo,
                     modelo,
                     colores,
-                    `<input type="number" class="form-control precio" name="precio_`+id+`" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" onchange="">`,
-                    `<input type="number" class="form-control cantidad" name="cantidad_`+id+`" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
-                    `<input type="number" class="form-control subtotal" name="subtotal_`+id+`" id="subtotal_`+id+`" value="`+precio+`">`,
+                    stock,
+                    `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" onchange="">`,
+                    `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
+                    `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any">`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
                 sumaSubTotales();

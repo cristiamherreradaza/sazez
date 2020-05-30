@@ -138,14 +138,21 @@
                                             @foreach ($escalas as $key => $e)
                                             <div class="col-md-12">
                                                 <div class="form-group row">
-                                                    <label
-                                                        class="col-sm-6 text-right col-form-label">{{ $e->nombre }}</label>
-                                                    <div class="col-md-6">
                                                         @foreach ($precios as $p)
-                                                            <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any" value="{{ ($p->escala_id==$e->id)?$p->precio:0 }}">
+                                                            <div class="col-md-4">
+                                                                <label>{{ $e->nombre }}</label>
+                                                                <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any" value="{{ ($p->escala_id==$e->id)?$p->precio:0 }}">
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                        <label>Minimo</label>
+                                                        <input type="text" class="form-control" value="{{ $e->minimo }}" readonly>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label>Maximo</label>
+                                                        <input type="text" class="form-control" value="{{ $e->maximo }}" readonly>
+                                                    </div>
                                                         @endforeach
                                                         <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
-                                                    </div>
                                                 </div>
                                             </div>
                                             @endforeach
@@ -204,7 +211,7 @@
                                                             <div class="input-group-append">
                                                                 <button class="btn btn-danger" type="button" onclick="remove_education_fields({{ $cp->id }});"><i class="fa fa-minus"></i></button>
                                                             </div>
-                                                          
+                                                        
                                                         </div>
                                                         <br />
                                                     @endforeach
@@ -235,14 +242,14 @@
                                                 <div class="form-group">
                                                     <label>URL ARTICULO </label>
                                                     <input type="text" class="form-control" name="url_referencia"
-                                                        id="url_referencia">
+                                                        id="url_referencia" value="{{ $producto->url_referencia }}">
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6 nopadding">
                                                 <div class="form-group">
                                                     <label>URL VIDEO </label>
-                                                    <input type="text" class="form-control" name="video" id="video">
+                                                    <input type="text" class="form-control" name="video" id="video" value="{{ $producto->video }}">
                                                 </div>
                                             </div>
 
