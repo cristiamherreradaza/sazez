@@ -49,8 +49,8 @@
         <!-- Row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-outline-info">
-                    <div class="card-header">
+                <div class="card card-border-info">
+                    <div class="card-header bg-info">
                         <h4 class="mb-0 text-white">PRODUCTO NUEVO</h4>
                     </div>
                     <form action="/Producto/guarda" method="post" enctype="multipart/form-data">

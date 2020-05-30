@@ -1,82 +1,158 @@
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
-        <!-- User profile -->
-        <div class="user-profile">
-            <!-- User profile image -->
-            <div class="profile-img">
-                @if(auth()->user()->image)
-                    <img src="{{ auth()->user()->image }}" alt="user">
-                @else
-                    <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user">
-                @endif
-            </div>
-            <!-- User profile text-->
-            <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">{{ auth()->user()->name }}<span class="caret"></span></a>
-                <div class="dropdown-menu animated flipInY">
-                    <a href="{{ url('User/perfil') }}" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
-                    <!-- <a href="#" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
-                    <a href="#" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
-                    <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i class="ti-settings"></i> Account Setting</a> -->
-                    <div class="dropdown-divider"></div> 
-                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        {{ __('Cerrar Sesión') }}
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- End User profile text-->
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
-                <li class="nav-small-cap">PERSONAL</li>
+                <!-- User Profile-->
                 <li>
-                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-cube"></i><span
-                            class="hide-menu">PRODUCTOS</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a href="{{ url('Producto/nuevo') }}"><i class="mdi mdi-plus-circle-outline"></i> Nuevo</a></li>
-                        <li><a href="{{ url('Producto/listado') }}"><i class="mdi mdi-format-list-bulleted"></i> Listado</a></li>
+                    <!-- User profile -->
+                    <div class="user-profile text-center position-relative pt-4 mt-1">
+                        <!-- User profile image -->
+                        <div class="profile-img m-auto"> <img src="../assets/images/users/1.jpg" alt="user"
+                                class="w-100 rounded-circle" /> </div>
+                        <!-- User profile text-->
+                        <div class="profile-text py-1"> <a href="#" class="dropdown-toggle link u-dropdown"
+                                data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Markarn
+                                Doe <span class="caret"></span></a>
+                            <div class="dropdown-menu animated flipInY">
+                                <a href="#" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
+                                <a href="#" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
+                                <a href="#" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
+                                <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i
+                                        class="ti-settings"></i> Account Setting</a>
+                                <div class="dropdown-divider"></div> <a href="login.html" class="dropdown-item"><i
+                                        class="fa fa-power-off"></i> Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End User profile text-->
+                </li>
+                <!-- User Profile-->
+                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span
+                        class="hide-menu">ADMINISTRACION</span></li>
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="package" class="feather-icon"></i><span class="hide-menu"> PRODUCTOS </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Producto/nuevo') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Producto/listado') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                <li>
-                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-star-circle"></i><span
-                            class="hide-menu">PROMOS</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a href="{{ url('Combo/nuevo') }}">Nuevo</a></li>
-                        <li><a href="{{ url('Combo/listado') }}">Listado</a></li>
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="star" class="feather-icon"></i><span class="hide-menu"> PROMOS </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Combo/nuevo') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Combo/listado') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                <li>
-                    <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-puzzle"></i><span
-                            class="hide-menu">CONFIGURACIONES</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a href="{{ url('Almacen/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Almacenes</a></li>
-                        <li><a href="{{ url('Categoria/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Categorias</a></li>
-                        <li><a href="{{ url('Cliente/listado') }}"><i class="mdi mdi-account-multiple"></i> Clientes</a></li>
-                        <li><a href="{{ url('Escala/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Escalas</a></li>
-                        <li><a href="{{ url('Escala/grupo_escala') }}"><i class="mdi mdi-clipboard-outline"></i> Grupo Escalas</a></li>
-                        <li><a href="{{ url('Marca/listado') }}"><i class="mdi mdi-clipboard-outline"></i> Marcas</a></li>
-                        <li><a href="{{ url('User/listado') }}"><i class="mdi mdi-account-multiple"></i> Usuarios</a></li>
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> PEDIDOS </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Pedido/nuevo') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Pedido/listado') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                <li>
-                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span
-                            class="hide-menu">PEDIDOS</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a href="{{ url('Pedido/nuevo') }}">Nuevo</a></li>
-                        <li><a href="{{ url('Pedido/listado') }}">Listado</a></li>
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="share" class="feather-icon"></i><span class="hide-menu"> ENVIOS </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Entrega/nuevo') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Pedidos/listado') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
-                <li>
-                    <a class="has-arrow " href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-arrow-expand-all"></i><span
-                            class="hide-menu">ENVIOS</span></a>
-                    <ul aria-expanded="false" class="collapse">
-                        <li><a href="{{ url('Entrega/envio') }}">Subir Excel</a></li>
-                        {{-- <li><a href="{{ url('Pedido/listado') }}">Listado</a></li> --}}
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="settings" class="feather-icon"></i><span class="hide-menu"> CONFIGURACIONES </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Almacen/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Almacenes </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Categoria/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Categorias </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Cliente/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Clientes </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Escala/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Escalas </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Escala/grupo_escala') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Escalas Grupales </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Marca/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Marcas </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('User/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Usuarios </span>
+                            </a>
+                        </li>
                     </ul>
+                </li>
+                
+                <li class="nav-devider"></li>
+                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
+                </li>
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="../../../Documentation/document.html" aria-expanded="false">
+                        <i data-feather="codepen" class="feather-icon"></i><span class="hide-menu">Tutoriales</span>
+                    </a>
                 </li>
             </ul>
         </nav>
@@ -90,7 +166,7 @@
         <!-- item-->
         <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
         <!-- item-->
-        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Cerrar Sesión"><i class="mdi mdi-power"></i></a>
+        <a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
     </div>
     <!-- End Bottom points-->
 </aside>
