@@ -73,7 +73,6 @@ class VentaController extends Controller
             $cotizacion_id = $cotizacion->id;
         }
 
-        //registra un dato en la session
         $request->session()->put('cotizacion_id', $cotizacion_id);
 
         $productosCotizacion                 = new CotizacionesProducto();
@@ -83,7 +82,7 @@ class VentaController extends Controller
         $productosCotizacion->save();
 
         // borramos datos de la session
-        // $request->session()->forget('cotizacion_id');
+        // $request->session()->forget('key');
         // $request->session()->flush();
 
         $productosCotizacion = CotizacionesProducto::where('cotizacione_id', $cotizacion_id)->get();

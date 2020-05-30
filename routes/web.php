@@ -87,12 +87,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
 
 
-    //COMBOS
-    Route::get('Combo/nuevo', 'ComboController@nuevo');
-    Route::post('Combo/guarda', 'ComboController@guarda');
-    Route::get('Combo/ajax_listado_producto', 'ComboController@ajax_listado_producto');
-    Route::get('Combo/editar/{id}', 'ComboController@editar');
-    Route::get('Combo/lista_combo_productos/{id}', 'ComboController@lista_combo_productos');
+    //PROMOS
+    Route::get('Combo/nuevo', 'ComboController@nuevo');//va
+    Route::post('Combo/guarda', 'ComboController@guarda');//va
+    Route::post('Combo/ajaxBuscaProducto', 'ComboController@ajaxBuscaProducto');//va
+    Route::get('Combo/editar/{id}', 'ComboController@editar');//va
+    Route::post('Combo/actualiza', 'ComboController@actualiza');
     Route::post('Combo/agregar_combo_producto', 'ComboController@agregar_combo_producto');
     //Route::post('Combo/eliminar_combo_producto', 'ComboController@eliminar_combo_producto');
     Route::get('Combo/elimina_producto/{combo_id}/{producto_id}', 'ComboController@elimina_producto');
@@ -170,3 +170,4 @@ Route::get('Cliente/inicio', 'ClienteController@inicio');
 Route::get('Tienda/inicio', 'TiendaController@inicio');
 Route::get('Tienda/ver/{id}', 'TiendaController@ver');
 
+Route::get('Prueba/sumas', 'ComboController@sumas');

@@ -22,6 +22,7 @@ class CreateCombosProductosTable extends Migration
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('productos');
             $table->decimal('precio', 15, 2)->nullable()->default(0);
+            $table->integer('cantidad')->nullable()->default(1);
             $table->string('estado', 30)->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();
