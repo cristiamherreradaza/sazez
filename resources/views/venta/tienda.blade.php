@@ -63,7 +63,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9">
             <div class="card border-dark">
                 <div class="card-header bg-dark">
                     <h4 class="mb-0 text-white">PRODUCTOS</h4>
@@ -94,26 +94,34 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="card border-primary">
                 <div class="card-header bg-primary">
                     <h4 class="mb-0 text-white">DETALLE</h4>
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">TOTAL</div>
+                        <div class="col-md-9 text-right"><span id="resultadoSubTotales">0</span></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">EFECTIVO</div>
+                        <div class="col text-right"><input type="number" name="efectivo" class="form-control text-right" step="any" value="0" style="width: 120px;"></div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table">
                             <tbody>
                                 <tr>
                                     <th><h2>TOTAL</h2></th>
-                                    <th><h2><span id="resultadoSubTotales"></span></h2></th>
+                                    <th class="text-right"><h2><span id="resultadoSubTotales">0</span></h2></th>
                                 </tr>
                                 <tr>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
+                                    <td>EFECTIVO</td>
+                                    <td class="text-right"></td>
                                 </tr>
                                 <tr>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
+                                    <td>CAMBIO</td>
+                                    <td><input type="number" name="efectivo" class="form-control text-right" step="any" value="0" style="width: 120px;" readonly></td>
                                 </tr>
                             </tbody>
                         </table>
