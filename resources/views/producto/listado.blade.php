@@ -43,7 +43,6 @@
 @section('js')
     <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
-    {{-- <script src="{{ asset('dist/js/pages/datatable/datatable-basic.init.js') }}"></script> --}}
 <script>
 $.ajaxSetup({
     // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
