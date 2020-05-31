@@ -14,6 +14,9 @@
     <title>@yield('title')</title>
 	<link rel="canonical" href="https://www.wrappixel.com/templates/monsteradmin/" />
     <!-- Custom CSS -->
+    @section('css')
+    @show
+    <link href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -21,9 +24,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    @section('css')
         
-    @show
 </head>
 
 <body class="fix-header card-no-border fix-sidebar">
@@ -523,6 +524,10 @@
     <!--Custom JavaScript -->
     <script src="{{ asset('dist/js/feather.min.js') }}"></script>
     <script src="{{ asset('dist/js/custom.min.js') }}"></script>
+
+    {{-- sweet alert --}}
+    <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/extra-libs/sweetalert2/sweet-alert.init.js') }}"></script>
 
     @section('js')
         
