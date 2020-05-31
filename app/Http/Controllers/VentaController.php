@@ -120,15 +120,26 @@ class VentaController extends Controller
 
         $llaves = array_keys($request->precio);
         foreach ($llaves as $key => $ll) {
-            $productos              = new VentasProducto();
-            $productos->user_id     = Auth::user()->id;
-            $productos->producto_id = $ll;
-            $productos->venta_id     = $venta_id;
-            $productos->precio_venta = $request->precio[$ll];
-            $productos->cantidad     = $request->cantidad[$ll];
-            $productos->fecha        = $request->fecha;
+            $productos                 = new VentasProducto();
+            $productos->user_id        = Auth::user()->id;
+            $productos->producto_id    = $ll;
+            $productos->venta_id       = $venta_id;
+            $productos->precio_venta   = $request->precio_venta[$ll];
+            $productos->precio_cobrado = $request->precio[$ll];
+            $productos->cantidad       = $request->cantidad[$ll];
+            $productos->fecha          = $request->fecha;
             $productos->save();
+
+            $movimiento               = new Movimiento();
+            $movimiento->user_id      = Auth::user()->id;
+            $movimiento->almacene_id  = Auth::user()->almacen_id;
+            $movimiento->producto_id  = $ll;
+            $movimiento->precio_venta = $request->precio[$ll];
+            $movimiento->salida       = $request->cantidad[$ll];
+            $movimiento->save();
+
         }
+
     }
 
 }

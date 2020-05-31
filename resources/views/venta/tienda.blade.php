@@ -6,6 +6,7 @@
 
 @section('css')
     <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('content')
@@ -25,7 +26,8 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Cliente</label>
-                                <select name="cliente_id" id="cliente_id" class="form-control">
+                                
+                                <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select" style="width: 100%; height:36px;">
                                     @foreach($clientes as $c)
                                     <option value="{{ $c->id }}"> {{ $c->name }} </option>
                                     @endforeach
@@ -100,28 +102,27 @@
                     <h4 class="mb-0 text-white">DETALLE</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">TOTAL</div>
-                        <div class="col-md-9 text-right"><span id="resultadoSubTotales">0</span></div>
-                    </div>
-                    <div class="row">
-                        <div class="col">EFECTIVO</div>
-                        <div class="col text-right"><input type="number" name="efectivo" class="form-control text-right" step="any" value="0" style="width: 120px;"></div>
-                    </div>
+                    
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table table-striped">
                             <tbody>
                                 <tr>
-                                    <th><h2>TOTAL</h2></th>
-                                    <th class="text-right"><h2><span id="resultadoSubTotales">0</span></h2></th>
+                                    <td>TOTAL</td>
+                                    <td><input type="text" class="form-control text-right" name="totalCompra" id="resultadoSubTotales" style="width: 120px;" readonly>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>EFECTIVO</td>
-                                    <td class="text-right"></td>
+                                    <td><input type="number" name="efectivo" id="efectivo" class="form-control text-right text-right" step="any" value="0" style="width: 120px;"></td>
                                 </tr>
                                 <tr>
                                     <td>CAMBIO</td>
-                                    <td><input type="number" name="efectivo" class="form-control text-right" step="any" value="0" style="width: 120px;" readonly></td>
+                                    <td><input type="number" name="cambioVenta" id="cambioVenta" class="form-control text-right text-right" step="any" value="0" style="width: 120px;" readonly></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <h6 class="text-info" id="montoLiteral"></h6>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -141,7 +142,9 @@
 @section('js')
     <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
-
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+    <script src="{{ asset('js/NumeroALetras.js') }}"></script>
 <script>
     var t = $('#tablaPedido').DataTable({
         paging: false,
@@ -158,6 +161,9 @@
     });
 
     $(document).ready(function () {
+
+        $(".select2").select2();
+
         $('#tablaPedido tbody').on('click', '.btnElimina', function () {
             t.row($(this).parents('tr'))
                 .remove()
@@ -166,6 +172,19 @@
             let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
             itemsPedidoArray.splice(pos, 1);
             sumaSubTotales();
+        });
+
+        $(document).on('keyup change', '#efectivo', function () {
+            // alert("cambio");
+            let totalVenta = Number($("#resultadoSubTotales").val());
+            // console.log(totalVenta);
+            let efectivo = Number($("#efectivo").val());
+            let cambio = efectivo - totalVenta; 
+            if (cambio > 0) {
+                $("#cambioVenta").val(cambio);
+            }else{
+                $("#cambioVenta").val(0);
+            }
         });
 
     });
@@ -202,10 +221,17 @@
         $('.subtotal').each(function(){
             sum += parseFloat(this.value);
         });
-        sumaVisible = sum.toLocaleString('en', {useGrouping:true});
+        // sumaVisible = sum.toLocaleString('en', {useGrouping:true});
         
-        $("#resultadoSubTotales").text(sumaVisible);
-        // console.log(sumaVisible);
+        $("#resultadoSubTotales").val(sum);
+        valorLiteral = numeroALetras(sum, {
+          plural: 'Bolivianos',
+          singular: 'Bolivianos',
+          centPlural: 'Centavos',
+          centSingular: 'Centavo'
+          });
+        $("#montoLiteral").html(valorLiteral);
+        // console.log(valor);
     }
 
     $(document).on('keyup', '#termino', function(e) {
