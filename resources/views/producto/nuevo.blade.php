@@ -45,14 +45,14 @@
     <!-- Column -->
     <div class="col-md-12">
         <!-- Row -->
+        <form action="/Producto/guarda" class="needs-validation" method="post" enctype="multipart/form-data" novalidate>
+            @csrf
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-border-info">
+                <div class="card border-info">
                     <div class="card-header bg-info">
                         <h4 class="mb-0 text-white">PRODUCTO NUEVO</h4>
                     </div>
-                    <form action="/Producto/guarda" method="post" enctype="multipart/form-data" novalidate>
-                        @csrf
                         <div class="card-body">
 
                             <div class="row">
@@ -85,14 +85,11 @@
                                     <div class="tab-content" id="v-pills-tabContent">
                                         <div class="tab-pane fade active show" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
 
-                                            <div class="row">
+                                            <div class="form-row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label>NOMBRE </label>
-                                                        <input type="text" class="form-control" name="nombre" id="nombre" required>
-                                                        <div class="valid-tooltip">
-                                                            Looks good!
-                                                        </div>
+                                                        <label for="nombre">NOMBRE<span class="text-danger">*</span> </label>
+                                                        <input type="text" class="form-control" name="nombre" id="validationTooltip01" autofocus required>
                                                     </div>
                                                 </div>
                                             
@@ -136,22 +133,22 @@
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-1">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>CANTIDAD </label>
+                                                        <label>CANTIDAD<span class="text-danger">*</span> </label>
                                                         <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" required>
                                                     </div>
                                                 </div>
                                             
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>P/COMPRA </label>
+                                                        <label>P/COMPRA<span class="text-danger">*</span></label>
                                                         <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any"
                                                             required>
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>ALMACEN </label>
                                                         <select name="almacene_id" class="form-control">
@@ -164,7 +161,7 @@
                                             
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>CATEGORIAS </label>
+                                                        <label>CATEGORIAS<span class="text-danger">*</span></label>
                                                         <input type="hidden" value="" id="categorias_valores" name="categorias_valores">
                                                         <select class="select2 form-control block" multiple="multiple" name="categorias" id="categorias" style="width: 100%"
                                                             multiple="multiple" data-placeholder="Choose" required>
@@ -348,11 +345,12 @@
                             </div>
 
                         </div>
-                    </form>
+                    
 
                 </div>
             </div>
         </div>
+        </form>
 
         <div class="row">
             <div class="col-lg-12">
@@ -450,9 +448,27 @@ function enviaExcel(){
     $("#btnTrabajandoExcel").show();
 }
 
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+            form.addEventListener('submit', function(event) {
+                if (form.checkValidity() === false) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    }, false);
+})();
+
 $(document).ready(function() {
 
-// $('#ex1').zoom();
+    $('#ex1').zoom();
     
     $("#categorias").select2();
     $("#categorias").change(function(){
@@ -464,7 +480,7 @@ $(document).ready(function() {
         tinymce.init({
             selector: "textarea#mymce",
             theme: "modern",
-            height: 300,
+            height: 150,
             plugins: [
                 "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
                 "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",

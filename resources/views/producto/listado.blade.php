@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@section('css')
+    <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+@endsection
+
 @section('metadatos')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @endsection
@@ -8,13 +12,13 @@
 <div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
 <div class="row">
     <!-- Column -->
-
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">LISTADO DEL PRODUCTOS </h4>
                 {{-- <div class="table-responsive m-t-40"> --}}
-                <table id="tabla-usuarios" class="table table-bordered table-striped no-wrap">
+                <div class="table-responsive">
+                <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
                     <thead>
                         <tr>
                             <th>COD</th>
@@ -28,6 +32,7 @@
                     <tbody>
                     </tbody>
                 </table>
+                </div>
                 {{-- </div> --}}
             </div>
         </div>
@@ -36,8 +41,9 @@
 </div>
 @stop
 @section('js')
-<script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
+    <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+    {{-- <script src="{{ asset('dist/js/pages/datatable/datatable-basic.init.js') }}"></script> --}}
 <script>
 $.ajaxSetup({
     // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
