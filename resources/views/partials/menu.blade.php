@@ -49,6 +49,24 @@
                     </ul>
                 </li>
 
+                <li class="sidebar-item">
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="shopping-cart" class="feather-icon"></i><span class="hide-menu"> VENTAS </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Venta/tienda') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Venta/listado') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-item"> 
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i data-feather="star" class="feather-icon"></i><span class="hide-menu"> PROMOS </span>
@@ -166,7 +184,7 @@
         <!-- item-->
         <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
         <!-- item-->
-        <a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
     </div>
     <!-- End Bottom points-->
 </aside>

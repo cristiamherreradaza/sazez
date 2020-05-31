@@ -63,7 +63,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-10">
             <div class="card border-dark">
                 <div class="card-header bg-dark">
                     <h4 class="mb-0 text-white">PRODUCTOS</h4>
@@ -73,46 +73,58 @@
                         <table id="tablaPedido" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th style="width: 5%">ID</th>
                                     <th>Codigo</th>
                                     <th>Nombre</th>
                                     <th>Marca</th>
                                     <th>Tipo</th>
-                                    <th>Modelo</th>
-                                    <th>Colores</th>
                                     <th>Stock</th>
-                                    <th style="width: 10%">Precio</th>
-                                    <th style="width: 5%">Cantidad</th>
-                                    <th class="text-center" style="width: 10%">Total</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th class="w-10 text-center">Total</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
 
                             </tbody>
-                            <tfoot>
-                                <th style="width: 5%"></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th class="text-right"><h2>TOTAL</h2></th>
-                                <th class="text-right"><h2><span id="resultadoSubTotales"></span></h2></th>
-                                <th></th>
-                            </tfoot>
+                            
                         </table>
-                        <div class="form-group">
-                            <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR VENTA</button>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-md-2">
+            <div class="card border-primary">
+                <div class="card-header bg-primary">
+                    <h4 class="mb-0 text-white">DETALLE</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th><h2>TOTAL</h2></th>
+                                    <th><h2><span id="resultadoSubTotales"></span></h2></th>
+                                </tr>
+                                <tr>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                </tr>
+                                <tr>
+                                    <td>Larry</td>
+                                    <td>the Bird</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success">REGISTRAR VENTA</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
+
     </div>
     </form>
 
@@ -126,7 +138,8 @@
     var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
-        ordering:  false
+        ordering:  false,
+        info: false
     });
     var itemsPedidoArray = [];
     $.ajaxSetup({
@@ -181,9 +194,10 @@
         $('.subtotal').each(function(){
             sum += parseFloat(this.value);
         });
+        sumaVisible = sum.toLocaleString('en', {useGrouping:true});
         
-        $("#resultadoSubTotales").text(sum);
-        // console.log(sum);
+        $("#resultadoSubTotales").text(sumaVisible);
+        // console.log(sumaVisible);
     }
 
     $(document).on('keyup', '#termino', function(e) {
