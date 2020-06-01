@@ -23,47 +23,41 @@ class UserController extends Controller
 
     public function guardar(Request $request)
     {
-        if($request->password_usuario == $request->confirm_password_usuario)
-        {
-            $usuario = new User();
-            $usuario->name = $request->nombre_usuario;
-            $usuario->email = $request->email_usuario;
-            $usuario->celulares = $request->celular_usuario;
-            $usuario->nit = $request->nit_usuario;
-            $usuario->razon_social = $request->razon_social_usuario;
-            $usuario->rol = $request->rol_usuario;
-            $usuario->almacen_id = $request->almacen_usuario;
-            $usuario->password = Hash::make($request->password_usuario);
-            $usuario->save();
-        }
+        $usuario = new User();
+        $usuario->name = $request->nombre_usuario;
+        $usuario->email = $request->email_usuario;
+        $usuario->celulares = $request->celular_usuario;
+        $usuario->nit = $request->nit_usuario;
+        $usuario->razon_social = $request->razon_social_usuario;
+        $usuario->rol = $request->rol_usuario;
+        $usuario->almacen_id = $request->almacen_usuario;
+        $usuario->password = Hash::make($request->password_usuario);
+        $usuario->save();
         return redirect('User/listado');
     }
 
     public function actualizar(Request $request)
     {
-        if($request->password == $request->confirm_password)
-        {
-            $usuario = User::find($request->id);
-            $usuario->name = $request->nombre;
-            $usuario->email = $request->email;
-            $usuario->password = Hash::make($request->password);
-            if($request->celular){
-                $usuario->celulares = $request->celular;
-            }
-            if($request->razon_social){
-                $usuario->razon_social = $request->razon_social;
-            }
-            if($request->nit){
-                $usuario->nit = $request->nit;
-            }
-            if($request->rol){
-                $usuario->rol = $request->rol;
-            }
-            if($request->almacen){
-                $usuario->almacen_id = $request->almacen;
-            }
-            $usuario->save();
+        $usuario = User::find($request->id);
+        $usuario->name = $request->nombre;
+        $usuario->email = $request->email;
+        $usuario->password = Hash::make($request->password);
+        if($request->celular){
+            $usuario->celulares = $request->celular;
         }
+        if($request->razon_social){
+            $usuario->razon_social = $request->razon_social;
+        }
+        if($request->nit){
+            $usuario->nit = $request->nit;
+        }
+        if($request->rol){
+            $usuario->rol = $request->rol;
+        }
+        if($request->almacen){
+            $usuario->almacen_id = $request->almacen;
+        }
+        $usuario->save();
         return redirect('User/listado');
     }
 

@@ -1,14 +1,12 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
-<div class="card card-outline-info">
-    <div class="card-header">
+<div class="card border-info">
+    <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
             ESCALAS &nbsp;&nbsp;
             <button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nueva_marca()"><i class="fas fa-plus"></i> &nbsp; NUEVA ESCALA</button>
@@ -34,7 +32,7 @@
                             <td>{{ $escala->minimo }}</td>
                             <td>{{ $escala->maximo }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar escala"  onclick="editar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar escala"  onclick="editar('{{ $escala->id }}', '{{ $escala->nombre }}', '{{ $escala->minimo }}', '{{ $escala->maximo }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar escala"  onclick="eliminar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -61,6 +59,9 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="nombre_escala" type="text" id="nombre_escala" class="form-control" required>
                             </div>
                         </div>
@@ -69,12 +70,18 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad Minima</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="minimo" type="number" id="minimo" class="form-control" min="1" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad Maxima</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="maximo" type="number" id="maximo" class="form-control" min="1" required>
                             </div>
                         </div>
@@ -105,7 +112,30 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="nombre" type="text" id="nombre" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Cantidad Minima</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="minimo_escala" type="number" id="minimo_escala" class="form-control" min="1" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Cantidad Maxima</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="maximo_escala" type="number" id="maximo_escala" class="form-control" min="1" required>
                             </div>
                         </div>
                     </div>
@@ -122,8 +152,8 @@
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
     $(function () {
         $('#myTable').DataTable({
@@ -131,59 +161,9 @@
                 url: '{{ asset('datatableEs.json') }}'
             },
         });
-        // responsive table
-        $('#config-table').DataTable({
-            responsive: true
-        });
-        var table = $('#example').DataTable({
-            "columnDefs": [{
-                "visible": false,
-                "targets": 2
-            }],
-            "order": [
-                [2, 'asc']
-            ],
-            "displayLength": 25,
-            "drawCallback": function (settings) {
-                var api = this.api();
-                var rows = api.rows({
-                    page: 'current'
-                }).nodes();
-                var last = null;
-                api.column(2, {
-                    page: 'current'
-                }).data().each(function (group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                        last = group;
-                    }
-                });
-            }
-        });
-        // Order by the grouping
-        $('#example tbody').on('click', 'tr.group', function () {
-            var currentOrder = table.order()[0];
-            if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                table.order([2, 'desc']).draw();
-            } else {
-                table.order([2, 'asc']).draw();
-            }
-        });
-
-        $('#example23').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-        $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
     });
 
 </script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
 <script>
     function nueva_marca()
     {
@@ -199,20 +179,15 @@
                 'Una nueva escala fue registrada.',
                 'success'
             )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar el campo Nombre',
-                'error'
-            )
         }
-        
     }
 
-    function editar(id, nombre)
+    function editar(id, nombre, minimo, maximo)
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
+        $("#minimo_escala").val(minimo);
+        $("#maximo_escala").val(maximo);
         $("#editar_escalas").modal('show');
     }
 
@@ -226,14 +201,7 @@
                 'Escala actualizada correctamente.',
                 'success'
             )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar el campo Nombre',
-                'error'
-            )
         }
-        
     }
 
     function eliminar(id, nombre)

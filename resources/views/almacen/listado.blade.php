@@ -59,6 +59,9 @@
                             <div class="col-md-7">
                                 <div class="form-group">
                                     <label class="control-label">Nombre</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
                                     <input name="nombre_almacen" type="text" id="nombre_almacen" class="form-control" required>
                                 </div>
                             </div>
@@ -73,6 +76,9 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="control-label">Dirección</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
                                     <input name="direccion_almacen" type="text" id="direccion_almacen" class="form-control" required>
                                 </div>
                             </div>
@@ -103,6 +109,9 @@
                         <div class="col-md-7">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="nombre" type="text" id="nombre" class="form-control" required>
                             </div>
                         </div>
@@ -117,6 +126,9 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Dirección</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="direccion" type="text" id="direccion" class="form-control" required>
                             </div>
                         </div>
@@ -143,52 +155,6 @@
                 url: '{{ asset('datatableEs.json') }}'
             },
         });
-        // responsive table
-        $('#config-table').DataTable({
-            responsive: true
-        });
-        var table = $('#example').DataTable({
-            "columnDefs": [{
-                "visible": false,
-                "targets": 2
-            }],
-            "order": [
-                [2, 'asc']
-            ],
-            "displayLength": 25,
-            "drawCallback": function (settings) {
-                var api = this.api();
-                var rows = api.rows({
-                    page: 'current'
-                }).nodes();
-                var last = null;
-                api.column(2, {
-                    page: 'current'
-                }).data().each(function (group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                        last = group;
-                    }
-                });
-            }
-        });
-        // Order by the grouping
-        $('#example tbody').on('click', 'tr.group', function () {
-            var currentOrder = table.order()[0];
-            if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                table.order([2, 'desc']).draw();
-            } else {
-                table.order([2, 'asc']).draw();
-            }
-        });
-
-        $('#example23').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-        $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
     });
 
 </script>
@@ -209,12 +175,6 @@
                 'Excelente!',
                 'Un nuevo almacen fue registrado.',
                 'success'
-            )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar los campos Nombre y Direccion',
-                'error'
             )
         }
     }
@@ -239,12 +199,6 @@
                 'Excelente!',
                 'Almacen actualizado correctamente.',
                 'success'
-            )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar los campos Nombre y Direccion',
-                'error'
             )
         }
     }
