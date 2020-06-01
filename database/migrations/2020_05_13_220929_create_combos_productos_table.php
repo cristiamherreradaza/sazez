@@ -15,7 +15,7 @@ class CreateCombosProductosTable extends Migration
     {
         Schema::create('combos_productos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('combo_id');
             $table->foreign('combo_id')->references('id')->on('combos');

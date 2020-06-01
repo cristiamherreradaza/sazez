@@ -14,9 +14,24 @@ class AlmacenesTableSeeder extends Seeder
     {
         // se adiciona el almacen central
         Almacene::insert([
-            'user_id' => 1,
-            'nombre' => 'Almacen Central',
-            'direccion' => 'Calle Uno',
+            [
+                'nombre' => 'Almacen Central',
+                'direccion' => 'Calle Uno',
+            ],
+            [
+                'nombre' => 'El Prado',
+                'direccion' => 'Calle Uno',
+            ],
+            [
+                'nombre' => 'Villa Fatima',
+                'direccion' => 'Calle Uno',
+            ],
+            [
+                'nombre' => 'Buenos Aires',
+                'direccion' => 'Calle Uno',
+            ],
         ]);
+
+        
     }
 }
