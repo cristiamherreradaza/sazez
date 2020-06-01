@@ -32,34 +32,34 @@ class ClienteController extends Controller
 
     public function guardar(Request $request)
     {
-        if($request->password_usuario == $request->confirm_password_usuario)
-        {
-            $usuario = new User();
-            $usuario->name = $request->nombre_usuario;
-            $usuario->email = $request->email_usuario;
-            $usuario->celulares = $request->celular_usuario;
-            $usuario->nit = $request->nit_usuario;
-            $usuario->rol = 'Cliente';
-            $usuario->razon_social = $request->razon_social_usuario;
-            $usuario->password = Hash::make($request->password_usuario);
-            $usuario->save();
-        }
+        $usuario = new User();
+        $usuario->name = $request->nombre_usuario;
+        $usuario->email = $request->email_usuario;
+        $usuario->celulares = $request->celular_usuario;
+        $usuario->nit = $request->nit_usuario;
+        $usuario->rol = 'Cliente';
+        $usuario->razon_social = $request->razon_social_usuario;
+        $usuario->password = Hash::make($request->password_usuario);
+        $usuario->save();
         return redirect('Cliente/listado');
     }
 
     public function actualizar(Request $request)
     {
-        if($request->password == $request->confirm_password)
-        {
-            $usuario = User::find($request->id);
-            $usuario->name = $request->nombre;
-            $usuario->email = $request->email;
+        $usuario = User::find($request->id);
+        $usuario->name = $request->nombre;
+        $usuario->email = $request->email;
+        $usuario->password = Hash::make($request->password);
+        if($request->celular){
             $usuario->celulares = $request->celular;
-            $usuario->nit = $request->nit;
-            $usuario->razon_social = $request->razon_social;
-            $usuario->password = Hash::make($request->password);
-            $usuario->save();
         }
+        if($request->razon_social){
+            $usuario->razon_social = $request->razon_social;
+        }
+        if($request->nit){
+            $usuario->nit = $request->nit;
+        }
+        $usuario->save();
         return redirect('Cliente/listado');
     }
 

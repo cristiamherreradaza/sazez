@@ -36,6 +36,8 @@ class EscalaController extends Controller
         $escala = Escala::find($request->id);
         $escala->user_id = Auth::user()->id;
         $escala->nombre = $request->nombre;
+        $escala->minimo = $request->minimo_escala;
+        $escala->maximo = $request->maximo_escala;
         $escala->save();
         return redirect('Escala/listado');
     }
