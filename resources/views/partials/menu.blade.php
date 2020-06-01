@@ -9,21 +9,16 @@
                     <!-- User profile -->
                     <div class="user-profile text-center position-relative pt-4 mt-1">
                         <!-- User profile image -->
-                        <div class="profile-img m-auto"> <img src="../assets/images/users/1.jpg" alt="user"
-                                class="w-100 rounded-circle" /> </div>
+                        <div class="profile-img m-auto">
+                            @if(auth()->user()->image)
+                                <img src="{{ auth()->user()->image }}" alt="user" class="w-100 rounded-circle">
+                            @else
+                                <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="w-100 rounded-circle">
+                            @endif
+                        </div>
                         <!-- User profile text-->
-                        <div class="profile-text py-1"> <a href="#" class="dropdown-toggle link u-dropdown"
-                                data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Markarn
-                                Doe <span class="caret"></span></a>
-                            <div class="dropdown-menu animated flipInY">
-                                <a href="#" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
-                                <a href="#" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
-                                <a href="#" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
-                                <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i
-                                        class="ti-settings"></i> Account Setting</a>
-                                <div class="dropdown-divider"></div> <a href="login.html" class="dropdown-item"><i
-                                        class="fa fa-power-off"></i> Logout</a>
-                            </div>
+                        <div class="profile-text py-1 text-white">
+                            {{ auth()->user()->name }}  
                         </div>
                     </div>
                     <!-- End User profile text-->
@@ -184,7 +179,7 @@
         <!-- item-->
         <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
         <!-- item-->
-        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Cerrar Sesión"><i class="mdi mdi-power"></i></a>
     </div>
     <!-- End Bottom points-->
 </aside>
