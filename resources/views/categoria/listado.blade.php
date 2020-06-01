@@ -48,7 +48,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVA CATEGORIA</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Categoria/guardar') }}" method="POST">
+            <form action="{{ url('Categoria/guardar') }}" class="needs-validation" method="POST" novalidate>
                 @csrf
                 <div class="modal-body">
                     <div class="row">
