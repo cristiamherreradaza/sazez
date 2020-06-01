@@ -534,6 +534,28 @@
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('assets/extra-libs/sweetalert2/sweet-alert.init.js') }}"></script>
 
+    <script>
+        // funcion para la validacion del formulario
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+        // fin funcion para la validacion del formulario
+    </script>
+
     @section('js')
         
     @show

@@ -5,22 +5,19 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+    <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
 <link href="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
 
-<div class="card card-outline-info">
     <form action="{{ url('Pedido/guarda') }}" method="POST">
         @csrf
     
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-outline-info">                                
-                <div class="card-header">
+            <div class="card border-info">                                
+                <div class="card-header bg-info">
                     <h4 class="mb-0 text-white">NUEVO PEDIDO</h4>
                 </div>
                 <div class="card-body">
@@ -67,8 +64,8 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-outline-warning">
-                <div class="card-header">
+            <div class="card border-dark">
+                <div class="card-header bg-dark">
                     <h4 class="mb-0 text-white">PRODUCTOS PARA PEDIDO</h4>
                 </div>
                 <div class="card-body">
@@ -100,16 +97,12 @@
         </div>
     </div>
     </form>
-</div>
 
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 
 <script>
     var t = $('#tablaPedido').DataTable({
