@@ -464,6 +464,7 @@ function enviaExcel(){
     $("#btnTrabajandoExcel").show();
 }
 
+// funcion para la validacion del formulario
 (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -481,6 +482,7 @@ function enviaExcel(){
         });
     }, false);
 })();
+// fin funcion para la validacion del formulario
 
 $(document).ready(function() {
 

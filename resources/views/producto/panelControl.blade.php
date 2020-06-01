@@ -5,266 +5,326 @@
 @endsection
 
 @section('css')
-    <!-- chartist CSS -->
-    <link href="{{ asset('assets/plugins/chartist-js/dist/chartist.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/plugins/chartist-js/dist/chartist-init.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/plugins/css-chart/css-chart.css') }}" rel="stylesheet">
+
 @endsection
 
 @section('content')
-<div class="row">
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Ventas Diarias</h4>
-                <div class="text-right">
-                    <h2 class="font-light mb-0"><i class="ti-arrow-up text-success"></i> $120</h2>
-                    <span class="text-muted">Ingresos</span>
-                </div>
-                <span class="text-success">80%</span>
-                <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 80%; height: 6px;"
-                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Ventas Semanales</h4>
-                <div class="text-right">
-                    <h2 class="font-light mb-0"><i class="ti-arrow-up text-info"></i> $5,000</h2>
-                    <span class="text-muted">Ingresos</span>
-                </div>
-                <span class="text-info">30%</span>
-                <div class="progress">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 30%; height: 6px;"
-                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Ventas Mensuales</h4>
-                <div class="text-right">
-                    <h2 class="font-light mb-0"><i class="ti-arrow-up text-purple"></i> $8,000</h2>
-                    <span class="text-muted">Ingresos</span>
-                </div>
-                <span class="text-purple">60%</span>
-                <div class="progress">
-                    <div class="progress-bar bg-purple" role="progressbar" style="width: 60%; height: 6px;"
-                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-    <!-- Column -->
-    <div class="col-lg-3 col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Ventas Anuales</h4>
-                <div class="text-right">
-                    <h2 class="font-light mb-0"><i class="ti-arrow-down text-danger"></i> $12,000</h2>
-                    <span class="text-muted">Ingresos</span>
-                </div>
-                <span class="text-danger">80%</span>
-                <div class="progress">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 80%; height: 6px;"
-                        aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Column -->
-</div>
 
 <!-- Row -->
 <div class="row">
-    <!-- Column -->
-    <div class="col-lg-12">
-        <div class="card">
+    <div class="col-lg-3 col-md-6">
+        <div class="card bg-info">
             <div class="card-body">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="d-flex flex-wrap">
-                            <div>
-                                <h3>Revenue Statistics</h3>
-                                <h6 class="card-subtitle">January 2019</h6>
-                            </div>
-                            <div class="ml-auto ">
-                                <ul class="list-inline">
-                                    <li>
-                                        <h6 class="text-muted"><i class="fa fa-circle mr-1 text-success"></i>Product A
-                                        </h6>
-                                    </li>
-                                    <li>
-                                        <h6 class="text-muted"><i class="fa fa-circle mr-1 text-info"></i>Product B</h6>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="d-flex no-block align-items-center">
+                    <div class="text-white">
+                        <h2 class="text-white">120</h2>
+                        <h6 class="text-white">Ventas Diarias</h6>
                     </div>
-                    <div class="col-12">
-                        <div class="total-revenue4" style="height: 350px;"></div>
+                    <div class="ml-auto">
+                        <span class="text-white display-6"><i class="ti-notepad"></i></span>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-4 mt-3 text-center">
-                        <h1 class="mb-0 font-light">$54578</h1>
-                        <h6 class="text-muted">Total Revenue</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card bg-cyan">
+            <div class="card-body">
+                <div class="d-flex no-block align-items-center">
+                    <div class="text-white">
+                        <h2 class="text-white">150</h2>
+                        <h6 class="text-white">Ventas Semanales</h6>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-4 mt-3 text-center">
-                        <h1 class="mb-0 font-light">$43451</h1>
-                        <h6 class="text-muted">Online Revenue</h6>
+                    <div class="ml-auto">
+                        <span class="text-white display-6"><i class="ti-clipboard"></i></span>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-4 mt-3 text-center">
-                        <h1 class="mb-0 font-light">$44578</h1>
-                        <h6 class="text-muted">Product A</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card bg-success">
+            <div class="card-body">
+                <div class="d-flex no-block align-items-center">
+                    <div class="text-white">
+                        <h2 class="text-white">450</h2>
+                        <h6 class="text-white">Ventas Mensuales</h6>
                     </div>
-                    <div class="col-lg-3 col-md-6 mb-4 mt-3 text-center">
-                        <h1 class="mb-0 font-light">$12578</h1>
-                        <h6 class="text-muted">Product B</h6>
+                    <div class="ml-auto">
+                        <span class="text-white display-6"><i class="ti-wallet"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card bg-orange">
+            <div class="card-body">
+                <div class="d-flex no-block align-items-center">
+                    <div class="text-white">
+                        <h2 class="text-white">100</h2>
+                        <h6 class="text-white">Ventas Anuales</h6>
+                    </div>
+                    <div class="ml-auto">
+                        <span class="text-white display-6"><i class="ti-stats-down"></i></span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- End Row -->
+
 <!-- Row -->
-<!-- Row -->
+<div class="col-lg-12">
+    <div class="card">
+        <div class="card-body analytics-info">
+            <h4 class="card-title">Bsic Bar Chart</h4>
+            <div id="basic-bar" style="height:400px;"></div>
+        </div>
+    </div>
+</div>
+<!-- end Row -->
+
+{{-- row  --}}
 <div class="row">
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-12 col-xl-6">
         <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Ventas of the Month</h4>
-                <div id="Ventas-donute" style="width:100%; height:300px;"></div>
-                <div class="round-overlap mt-3"><i class="mdi mdi-cart"></i></div>
-                <ul class="list-inline mt-4 text-center">
-                    <li><i class="fa fa-circle text-purple"></i> Item A</li>
-                    <li><i class="fa fa-circle text-success"></i> Item B</li>
-                    <li><i class="fa fa-circle text-info"></i> Item C</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-12">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Ventas Prediction</h4>
-                        <div class="d-flex flex-row">
-                            <div class="align-self-center">
-                                <span class="display-6">$3528</span>
-                                <h6 class="text-muted">(150-165 Ventas)</h6>
-                            </div>
-                            <div class="ml-auto">
-                                <div id="gauge-chart" style=" width:150px; height:150px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Ventas Difference</h4>
-                        <div class="d-flex flex-row">
-                            <div class="align-self-center">
-                                <span class="display-6">$4316</span>
-                                <h6 class="text-muted">(150-165 Ventas)</h6>
-                            </div>
-                            <div class="ml-auto">
-                                <div class="ct-chart" style="width:120px; height: 120px;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex flex-row">
-                    <div class=""><img src="../assets/images/users/1.jpg" alt="user" class="img-circle" width="100">
-                    </div>
-                    <div class="pl-3">
-                        <h3 class="font-medium">Daniel Kristeen</h3>
-                        <h6>UIUX Designer</h6>
-                        <button class="btn btn-success"><i class="ti-plus"></i> Follow</button>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col border-right">
-                        <h2 class="font-light">14</h2>
-                        <h6>Photos</h6>
-                    </div>
-                    <div class="col border-right">
-                        <h2 class="font-light">54</h2>
-                        <h6>Videos</h6>
-                    </div>
-                    <div class="col">
-                        <h2 class="font-light">145</h2>
-                        <h6>Tasks</h6>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <hr>
-            </div>
-            <div class="card-body">
-                <p class="text-center aboutscroll">
-                    Lorem ipsum dolor sit ametetur adipisicing elit, sed do eiusmod tempor incididunt adipisicing elit,
-                    sed do eiusmod tempor incididunLorem ipsum dolor sit ametetur adipisicing elit, sed do eiusmod
-                    tempor incididuntt
-                </p>
-                <ul class="list-icons d-flex flex-item text-center pt-2">
-                    <li class="col"><a href="javascript:void(0)" data-toggle="tooltip" title=""
-                            data-original-title="Website"><i class="fa fa-globe font-20"></i></a></li>
-                    <li class="col"><a href="javascript:void(0)" data-toggle="tooltip" title=""
-                            data-original-title="twitter"><i class="fab fa-twitter font-20"></i></a></li>
-                    <li class="col"><a href="javascript:void(0)" data-toggle="tooltip" title=""
-                            data-original-title="Facebook"><i class="fab fa-facebook-square font-20"></i></a></li>
-                    <li class="col"><a href="javascript:void(0)" data-toggle="tooltip" title=""
-                            data-original-title="Youtube"><i class="fab fa-youtube font-20"></i></a></li>
-                    <li class="col"><a href="javascript:void(0)" data-toggle="tooltip" title=""
-                            data-original-title="Linkd-in"><i class="fab fa-linkedin font-20"></i></a></li>
-                </ul>
+            <div class="card-body analytics-info">
+                <h4 class="card-title">Nested Pie Chart</h4>
+                <div id="nested-pie" style="height:400px;"></div>
             </div>
         </div>
     </div>
 </div>
-<!-- Row -->
+{{-- end row  --}}
+
 @stop
 
 @section('js')
 <!-- chartist chart -->
-<script src="{{ asset('assets/plugins/chartist-js/dist/chartist.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/chartist-plugin-tooltip-master/dist/chartist-plugin-tooltip.min.js') }}"></script>
-<!-- Chart JS -->
-<script src="{{ asset('assets/plugins/echarts/echarts-all.js') }}"></script>
-<script src="{{ asset('assets/plugins/toast-master/js/jquery.toast.js') }}"></script>
-<!-- Chart JS -->
-<script src="{{ asset('js/dashboard1.js') }}"></script>
-<script src="{{ asset('js/toastr.js') }}"></script>
-<script>
-    $.toast({
-        heading: 'Welcome to Monster admin',
-        text: 'Use the predefined ones, or specify a custom position object.',
-        position: 'top-right',
-        loaderBg: '#ff6849',
-        icon: 'info',
-        hideAfter: 3000,
-        stack: 6
-    });
-</script>
+<script src="{{ asset('assets/libs/echarts/dist/echarts-en.min.js') }}"></script>
+{{-- <script src="{{ asset('dist/js/pages/echarts/line/line-charts.js') }}"></script> --}}
+<Script>
+    $(function() {
+    
+  // ------------------------------
+    // Basic bar chart
+    // ------------------------------
+    // based on prepared DOM, initialize echarts instance
+        var myChart = echarts.init(document.getElementById('basic-bar'));
+
+        // specify chart configuration item and data
+        var option = {
+                // Setup grid
+                grid: {
+                    left: '1%',
+                    right: '2%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+
+                // Add Tooltip
+                tooltip : {
+                    trigger: 'axis'
+                },
+
+                legend: {
+                    data:['Site A','Site B']
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                color: ["#009efb", "#7460ee"],
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : ['Jan','Feb','Mar','Apr','May','Jun','July','Aug','Sept','Oct','Nov','Dec']
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'Site A',
+                        type:'bar',
+                        data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: 'Max'},
+                                {type : 'min', name: 'Min'}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: 'Average'}
+                            ]
+                        }
+                    },
+                    {
+                        name:'Site B',
+                        type:'bar',
+                        data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+                        markPoint : {
+                            data : [
+                                {name : 'The highest year', value : 182.2, xAxis: 7, yAxis: 183, symbolSize:18},
+                                {name : 'Year minimum', value : 2.3, xAxis: 11, yAxis: 3}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name : 'Average'}
+                            ]
+                        }
+                    }
+                ]
+            };
+        // use configuration item and data specified to show chart
+        myChart.setOption(option);
+
+
+
+        var nestedChart = echarts.init(document.getElementById('nested-pie'));
+        var option = {
+            
+           tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+
+                // Add legend
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data: ['Italy','Spain','Austria','Germany','Poland','Denmark','Hungary','Portugal','France','Netherlands']
+                },
+
+                // Add custom colors
+                color: ['#ffbc34', '#7460ee', '#212529', '#f62d51', '#009efb'],
+
+                // Display toolbox
+                toolbox: {
+                    show: true,
+                    orient: 'vertical',
+                    feature: {
+                        mark: {
+                            show: true,
+                            title: {
+                                mark: 'Markline switch',
+                                markUndo: 'Undo markline',
+                                markClear: 'Clear markline'
+                            }
+                        },
+                        dataView: {
+                            show: true,
+                            readOnly: false,
+                            title: 'View data',
+                            lang: ['View chart data', 'Close', 'Update']
+                        },
+                        magicType: {
+                            show: true,
+                            title: {
+                                pie: 'Switch to pies',
+                                funnel: 'Switch to funnel',
+                            },
+                            type: ['pie', 'funnel']
+                        },
+                        restore: {
+                            show: true,
+                            title: 'Restore'
+                        },
+                        saveAsImage: {
+                            show: true,
+                            title: 'Same as image',
+                            lang: ['Save']
+                        }
+                    }
+                },
+
+                // Enable drag recalculate
+                calculable: false,
+
+                // Add series
+                series: [
+
+                    // Inner
+                    {
+                        name: 'Countries',
+                        type: 'pie',
+                        selectedMode: 'single',
+                        radius: [0, '40%'],
+
+                        // for funnel
+                        x: '15%',
+                        y: '7.5%',
+                        width: '40%',
+                        height: '85%',
+                        funnelAlign: 'right',
+                        max: 1548,
+
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    position: 'inner'
+                                },
+                                labelLine: {
+                                    show: false
+                                }
+                            },
+                            emphasis: {
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
+
+                        data: [
+                            {value: 535, name: 'Italy'},
+                            {value: 679, name: 'Spain'},
+                            {value: 1548, name: 'Austria'}
+                        ]
+                    },
+
+                    // Outer
+                    {
+                        name: 'Countries',
+                        type: 'pie',
+                        radius: ['60%', '85%'],
+
+                        // for funnel
+                        x: '55%',
+                        y: '7.5%',
+                        width: '35%',
+                        height: '85%',
+                        funnelAlign: 'left',
+                        max: 1048,
+
+                        data: [
+                            {value: 535, name: 'Italy'},
+                            {value: 310, name: 'Germany'},
+                            {value: 234, name: 'Poland'},
+                            {value: 135, name: 'Denmark'},
+                            {value: 948, name: 'Hungary'},
+                            {value: 251, name: 'Portugal'},
+                            {value: 147, name: 'France'},
+                            {value: 202, name: 'Netherlands'}
+                        ]
+                    }
+                ]
+        };    
+        nestedChart.setOption(option);
+       
+        });
+       
+</Script> 
 @endsection
