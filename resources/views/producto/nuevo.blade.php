@@ -88,7 +88,12 @@
                                             <div class="form-row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <label for="nombre">NOMBRE<span class="text-danger">*</span> </label>
+                                                        <label for="nombre">
+                                                            NOMBRE 
+                                                            <span class="text-danger">
+                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                            </span>
+                                                        </label>
                                                         <input type="text" class="form-control" name="nombre" id="validationTooltip01" autofocus required>
                                                     </div>
                                                 </div>
@@ -135,14 +140,23 @@
                                             
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>CANTIDAD<span class="text-danger">*</span> </label>
+                                                        <label>
+                                                            CANTIDAD 
+                                                            <span class="text-danger">
+                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                            </span>
+                                                        </label>
                                                         <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" required>
                                                     </div>
                                                 </div>
                                             
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>P/COMPRA<span class="text-danger">*</span></label>
+                                                        <label>P/COMPRA
+                                                            <span class="text-danger">
+                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                            </span>
+                                                        </label>
                                                         <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any"
                                                             required>
                                                     </div>
@@ -161,7 +175,11 @@
                                             
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>CATEGORIAS<span class="text-danger">*</span></label>
+                                                        <label>CATEGORIAS
+                                                            <span class="text-danger">
+                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                            </span>
+                                                        </label>
                                                         <input type="hidden" value="" id="categorias_valores" name="categorias_valores">
                                                         <select class="select2 form-control block" multiple="multiple" name="categorias" id="categorias" style="width: 100%"
                                                             multiple="multiple" data-placeholder="Choose" required>
@@ -183,17 +201,15 @@
                                                     <div class="form-group row">
                                                         <div class="col-md-4">
                                                             <label>{{ $e->nombre }}</label>
-                                                            <input type="number" class="form-control" name="precio_venta[]" id="precio_venta" min="0" step="any"
-                                                                value="0">
-                                                            <input type="hidden" class="form-control" name="escalas[]" id="escala" value="{{ $e->id }}">
+                                                            <input type="number" class="form-control" name="precio_venta[{{ $e->id }}]" id="precio_venta" min="0" step="any" value="0">
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label>Minimo</label>
-                                                            <input type="text" class="form-control" value="{{ $e->minimo }}" readonly>
+                                                            <input type="text" class="form-control" name="minimo" value="{{ $e->minimo }}" readonly>
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label>Maximo</label>
-                                                            <input type="text" class="form-control" value="{{ $e->maximo }}" readonly>
+                                                            <input type="text" class="form-control" name="maximo" value="{{ $e->maximo }}" readonly>
                                                         </div>
                                                     </div>
                                                 </div>

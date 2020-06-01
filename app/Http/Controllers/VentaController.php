@@ -133,9 +133,11 @@ class VentaController extends Controller
             $movimiento               = new Movimiento();
             $movimiento->user_id      = Auth::user()->id;
             $movimiento->almacene_id  = Auth::user()->almacen_id;
+            $movimiento->venta_id     = $venta_id;
             $movimiento->producto_id  = $ll;
             $movimiento->precio_venta = $request->precio[$ll];
             $movimiento->salida       = $request->cantidad[$ll];
+            $movimiento->estado       = 'Venta';
             $movimiento->save();
 
         }

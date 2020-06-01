@@ -65,9 +65,11 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
+        // $llaves = array_keys($request->precio_venta);
+        // dd($llaves);
         // generamos el codigo
-        $marcaProducto = Marca::find($request->marca_id);
-        $tipoProducto = Categoria::find($request->tipo_id);
+        $marcaProducto  = Marca::find($request->marca_id);
+        $tipoProducto   = Tipo::find($request->tipo_id);
         $nombreProducto = $request->nombre;
 
         $siglaMarca = $this->extraeCodigo($marcaProducto->nombre);
@@ -100,20 +102,24 @@ class ProductoController extends Controller
         $nuevoProducto->url_referencia = $request->url_referencia;
         $nuevoProducto->video          = $request->video;
         $nuevoProducto->save();
-        $producto_id = $nuevoProducto->id;
+        // $producto_id = $nuevoProducto->id;
 
-        $cambia_codigo = Producto::find($producto_id);
-        $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
-        $cambia_codigo->save();
-
-        if ($request->producto_id) {
+        if ($request->has('producto_id')) {
             $producto_id          = $request->producto_id;
             $borraCaracteristicas = Caracteristica::where('producto_id', $producto_id)->delete();
             $borraCategorias      = CategoriasProducto::where('producto_id', $producto_id)->delete();
             $borraPrecios         = Precio::where('producto_id', $producto_id)->delete();
+
+            $cambia_codigo = Producto::find($producto_id);
+            $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
+            $cambia_codigo->save();
+
             // $borraImagenes        = ImagenesProducto::where('producto_id', $producto_id)->delete();
         } else {
             $producto_id = $nuevoProducto->id;
+            $cambia_codigo = Producto::find($producto_id);
+            $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
+            $cambia_codigo->save();
         }
 
         if ($request->caracteristica[0] != null) 
@@ -147,13 +153,13 @@ class ProductoController extends Controller
 
         if ($request->has('precio_venta')) 
         {
-            foreach ($request->precio_venta as $key => $pv) {
-                // echo $request->escalas[$key] . ' ' . $pv . '<br />';
+            $llaves = array_keys($request->precio_venta);
+            foreach ($llaves as $key => $ll) {
                 $nuevoPrecio              = new Precio();
                 $nuevoPrecio->user_id     = Auth::user()->id;
                 $nuevoPrecio->producto_id = $producto_id;
-                $nuevoPrecio->escala_id   = $request->escalas[$key];
-                $nuevoPrecio->precio      = $pv;
+                $nuevoPrecio->escala_id   = $ll;
+                $nuevoPrecio->precio      = $request->precio_venta[$ll];
                 $nuevoPrecio->save();
             }
 
