@@ -14,7 +14,7 @@ class AddVentaIdToMovimientosTable extends Migration
     public function up()
     {
         Schema::table('movimientos', function (Blueprint $table) {
-            $table->unsignedBigInteger('venta_id')->nullable();
+            $table->unsignedBigInteger('venta_id')->nullable()->after('pedido_id');
             $table->foreign('venta_id')->references('id')->on('ventas');
         });
     }

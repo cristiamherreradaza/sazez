@@ -144,4 +144,31 @@ class VentaController extends Controller
 
     }
 
+    public function listado()
+    {
+        return view('venta.listado');
+    }
+
+    public function ajax_listado()
+    {
+        $almacen = Auth::user()->almacen_id;
+        $productos = DB::table('ventas')
+            ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacene.id')
+            ->leftJoin('clientes', 'ventas.cliente_id', '=', 'clientes.id')
+            ->select(
+                'ventas.id', 
+                'productos.nombre as nombre', 
+                'productos.nombre_venta', 
+                'tipos.nombre as tipo', 
+                'marcas.nombre as marca', 
+                'productos.colores'
+            );
+
+        return Datatables::of($productos)
+            ->addColumn('action', function ($productos) {
+                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+            })
+            ->make(true);    
+    }
+
 }

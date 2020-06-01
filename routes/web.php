@@ -160,6 +160,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Venta/adicionaItem', 'VentaController@adicionaItem');
     Route::get('Venta/nuevo', 'VentaController@nuevo');
     Route::get('Venta/tienda', 'VentaController@tienda');
+    Route::get('Venta/listado', 'VentaController@listado');
+    Route::get('Venta/ajax_listado', 'VentaController@ajax_listado');
 
 });
 
