@@ -15,7 +15,7 @@ class CreateEscalasTable extends Migration
     {
         Schema::create('escalas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('nombre', 80)->nullable();
             $table->integer('minimo')->unsigned()->nullable()->default(1);

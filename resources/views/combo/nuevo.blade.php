@@ -5,109 +5,112 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css') }}" />
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('content')
-<div class="card card-outline-info">
-    <form action="{{ url('Combo/guarda') }}" method="POST">
-        @csrf
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-outline-info">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">NUEVO COMBO</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Nombre</label>
-                                    <input type="text" name="nombre_combo" id="nombre_combo" class="form-control" required>
-                                </div>                    
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">Fecha Inicio</label>
-                                    <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" required>
-                                </div>                    
-                            </div>
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">Fecha Final</label>
-                                    <input type="date" name="fecha_final" id="fecha_final" class="form-control" required>
-                                </div>                    
-                            </div>
-                            <div class="col-md-5">
-                                <div class="form-group">
-                                    <label class="control-label">Buscar producto</label>
-                                    <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="termino" name="termino">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text"><i class="ti-search"></i></span>
-                                        </div>
-                                    </div>
-                                </div>                    
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div id="listadoProductosAjax"></div>
-                            </div>
-                        </div>
-                    </div>
+<form action="{{ url('Combo/guarda') }}" method="POST" >
+    @csrf
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-info">
+                <div class="card-header bg-info">
+                    <h4 class="mb-0 text-white">NUEVO COMBO</h4>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-outline-primary">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">PRODUCTOS EN COMBO</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive m-t-40">
-                            <table id="tablaPedido" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 5%">ID</th>
-                                        <th>Codigo</th>
-                                        <th>Nombre</th>
-                                        <th>Marca</th>
-                                        <th>Tipo</th>
-                                        <th>Modelo</th>
-                                        <th>Colores</th>
-                                        <th style="width: 8%">Precio</th>
-                                        <th style="width: 5%">Cantidad</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR COMBO</button>
-                            </div>
+                                <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="text" name="nombre_combo" id="nombre_combo" class="form-control" required>
+                            </div>                    
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Fecha Inicio</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" required>
+                            </div>                    
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Fecha Final</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="date" name="fecha_final" id="fecha_final" class="form-control" required>
+                            </div>                    
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label">Buscar producto</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="termino" name="termino">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="ti-search"></i></span>
+                                    </div>
+                                </div>
+                            </div>                    
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="listadoProductosAjax"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
-</div>
-
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary">
+                    <h4 class="mb-0 text-white">PRODUCTOS EN COMBO</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive m-t-40">
+                        <table id="tablaPedido" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">ID</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Marca</th>
+                                    <th>Tipo</th>
+                                    <th>Modelo</th>
+                                    <th>Colores</th>
+                                    <th style="width: 8%">Precio</th>
+                                    <th style="width: 5%">Cantidad</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="form-group">
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR COMBO</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script src="{{ asset('js/NumeroALetras.js') }}"></script>
 <script>
      var t = $('#tablaPedido').DataTable({
         paging: false,

@@ -1,14 +1,12 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
-<div class="card card-outline-info">
-    <div class="card-header">
+<div class="card border-info">
+    <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
             COMBOS 
         </h4>
@@ -32,7 +30,6 @@
                             <td>{{ $combo->nombre }}</td>
                             <td>{{ $combo->fecha_inicio }}</td>
                             <td>{{ $combo->fecha_final }}</td>
-                            <td>{{ $combo->nombre }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar combo"  onclick="editar('{{ $combo->id }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar combo"  onclick="eliminar('{{ $combo->id }}', '{{ $combo->nombre }}')"><i class="fas fa-trash"></i></button>
@@ -48,11 +45,15 @@
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
     $(function () {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
         // responsive table
         $('#config-table').DataTable({
             responsive: true
@@ -102,10 +103,6 @@
     });
 
 </script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
 <script>
     function editar(id, nombre)
     {

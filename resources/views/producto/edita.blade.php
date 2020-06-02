@@ -150,24 +150,7 @@
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-8">
-                                                    <div class="form-group">
-                                                        <label>CATEGORIAS
-                                                            <span class="text-danger">
-                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                            </span>
-                                                        </label>
-                                                        <input type="hidden" value="" id="categorias_valores" name="categorias_valores">
-                                                        <select class="select2 mb-2 select2-multiple" name="categorias" id="categorias" style="width: 100%" multiple="multiple" data-placeholder="Choose" required>
-                                                            @foreach ($categorias as $c)
-                                                                @foreach ($categorias_productos as $cp)
-                                                                    <option value="{{ $c->id }}" {{ ($cp->categoria_id == $c->id)?"selected":"" }}>{{ $c->nombre }}</option>
-                                                                @endforeach
-                                                            @endforeach
-                                                        </select>
-
-                                                    </div>
-                                                </div>
+                                                `
                                             
                                             </div>
                                         </div>

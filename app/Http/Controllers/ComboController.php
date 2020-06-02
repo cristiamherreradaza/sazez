@@ -156,4 +156,12 @@ class ComboController extends Controller
         $combo_producto->precio = $request->precio;
         $combo_producto->save();
     }
+
+    public function ajaxMuestraPromo(Request $request)
+    {
+        $datosCombo = Combo::find($request->combo_id);
+        $itemsCombo = CombosProducto::where('combo_id', $request->combo_id)->get();
+        // dd($itemsCombo);
+        return view('combo.ajaxMuestraPromo')->with(compact('datosCombo', 'itemsCombo'));
+    }
 }

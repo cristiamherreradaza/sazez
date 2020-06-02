@@ -36,7 +36,6 @@ class ProductoController extends Controller
 
     public function listado()
     {
-        // dd($productos);
         return view('producto.listado');
     }
 

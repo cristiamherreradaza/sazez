@@ -406,30 +406,35 @@
                                 <!-- User profile and search -->
                                 <!-- ============================================================== -->
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href=""
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
-                                            src="../assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31"></a>
+                                    <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @if(auth()->user()->image)
+                                            <img src="{{ auth()->user()->image }}" alt="user" class="rounded-circle" width="31">
+                                        @else
+                                            <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="rounded-circle" width="31"/>
+                                        @endif
+                                    </a>
                                     <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                         <div class="d-flex no-block align-items-center p-3 mb-2 border-bottom">
-                                            <div class=""><img src="../assets/images/users/1.jpg" alt="user" class="rounded" width="80">
+                                            <div class="">
+                                                @if(auth()->user()->image)
+                                                    <img src="{{ auth()->user()->image }}" alt="user" class="rounded" width="80">
+                                                @else
+                                                    <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="rounded" width="80">
+                                                @endif
                                             </div>
                                             <div class="ml-2">
-                                                <h4 class="mb-0">Steave Jobs</h4>
-                                                <p class=" mb-0">varun@gmail.com</p>
-                                                <a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a>
+                                                <h4 class="mb-0">{{ auth()->user()->name }}</h4>
+                                                <p class=" mb-0">{{ auth()->user()->email }}</p>
+                                                <a href="{{ url('User/perfil') }}" class="btn btn-rounded btn-danger btn-sm">Ver Perfil</a>
                                             </div>
                                         </div>
-                                        <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user mr-1 ml-1"></i> My
-                                            Profile</a>
-                                        <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet mr-1 ml-1"></i> My
-                                            Balance</a>
-                                        <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email mr-1 ml-1"></i> Inbox</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings mr-1 ml-1"></i> Account
-                                            Setting</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-power-off mr-1 ml-1"></i>
-                                            Logout</a>
+                                        <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <i class="fa fa-power-off mr-1 ml-1"></i>
+                                            {{ __('CERRAR SESION') }}
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                            @csrf
+                                        </form>
                                     </div>
                                 </li>
                                 <!-- ============================================================== -->
@@ -528,6 +533,28 @@
     {{-- sweet alert --}}
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('assets/extra-libs/sweetalert2/sweet-alert.init.js') }}"></script>
+
+    <script>
+        // funcion para la validacion del formulario
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+        // fin funcion para la validacion del formulario
+    </script>
 
     @section('js')
         

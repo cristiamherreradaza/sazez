@@ -1,14 +1,12 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
-<div class="card card-outline-info">
-    <div class="card-header">
+<div class="card border-info">
+    <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
             USUARIOS &nbsp;&nbsp;
             <button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_usuario()"><i class="fas fa-plus"></i> &nbsp; NUEVO USUARIO</button>
@@ -71,12 +69,18 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="nombre_usuario" type="text" id="nombre_usuario" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="email_usuario" type="email" id="email_usuario" class="form-control" required>
                             </div>
                         </div>
@@ -128,16 +132,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Contraseña</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="password_usuario" type="password" id="password_usuario" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Confirmar Contraseña</label>
-                                <input name="confirm_password_usuario" type="password" id="confirm_password_usuario" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -167,12 +168,18 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="nombre" type="text" id="nombre" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="email" type="email" id="email" class="form-control" required>
                             </div>
                         </div>
@@ -224,16 +231,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Contraseña</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
                                 <input name="password" type="password" id="password" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Confirmar Contraseña</label>
-                                <input name="confirm_password" type="password" id="confirm_password" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -250,64 +254,18 @@
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
     $(function () {
-        $('#myTable').DataTable();
-        // responsive table
-        $('#config-table').DataTable({
-            responsive: true
+        $('#myTable').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
         });
-        var table = $('#example').DataTable({
-            "columnDefs": [{
-                "visible": false,
-                "targets": 2
-            }],
-            "order": [
-                [2, 'asc']
-            ],
-            "displayLength": 25,
-            "drawCallback": function (settings) {
-                var api = this.api();
-                var rows = api.rows({
-                    page: 'current'
-                }).nodes();
-                var last = null;
-                api.column(2, {
-                    page: 'current'
-                }).data().each(function (group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                        last = group;
-                    }
-                });
-            }
-        });
-        // Order by the grouping
-        $('#example tbody').on('click', 'tr.group', function () {
-            var currentOrder = table.order()[0];
-            if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                table.order([2, 'desc']).draw();
-            } else {
-                table.order([2, 'asc']).draw();
-            }
-        });
-
-        $('#example23').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-        $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
     });
 
 </script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
 <script>
     function nuevo_usuario()
     {
@@ -320,23 +278,15 @@
         var rol_usuario = $("#rol_usuario").val();
         var email_usuario = $("#email_usuario").val();
         var password_usuario = $("#password_usuario").val();
-        var confirm_password_usuario = $("#confirm_password_usuario").val();
         var almacen_usuario = $("#almacen_usuario").val();
 
-        if(nombre_usuario.length>0 && rol_usuario.length>0 && email_usuario.length>0 && password_usuario.length>0 && confirm_password_usuario.length>0 && password_usuario == confirm_password_usuario){
+        if(nombre_usuario.length>0 && rol_usuario.length>0 && email_usuario.length>0 && password_usuario.length>0){
             Swal.fire(
                 'Excelente!',
                 'Una nuevo usuario fue registrado.',
                 'success'
             )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar los campos: <br>- Nombre <br>- Correo Electrónico <br>- Contraseña <br>- Confirmar Contraseña <br>Y que las contraseñas coincidan',
-                'error'
-            )
         }
-        
     }
 
     function editar(id, nombre, email, celular, nit, razon_social, rol, almacen)
@@ -359,21 +309,13 @@
         var rol = $("#rol").val();
         var email = $("#email").val();
         var password = $("#password").val();
-        var confirm_password = $("#confirm_password").val();
-        if(nombre.length>0 && rol.length>0 && email.length>0 && password.length>0 && confirm_password.length>0 && password==confirm_password){
+        if(nombre.length>0 && rol.length>0 && email.length>0 && password.length>0){
             Swal.fire(
                 'Excelente!',
                 'Usuario actualizado correctamente.',
                 'success'
             )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar los campos: <br>- Nombre <br>- Correo Electrónico <br>- Contraseña <br>- Confirmar Contraseña <br>Y que las contraseñas coincidan',
-                'error'
-            )
         }
-        
     }
 
     function eliminar(id, nombre)

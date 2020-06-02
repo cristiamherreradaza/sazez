@@ -57,6 +57,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/edita/{producto_id}', 'ProductoController@edita');
     Route::get('Producto/elimina_imagen/{imagen_id}/{producto_id}', 'ProductoController@elimina_imagen');
     Route::get('Producto/ajaxMuestraImgProducto/{producto_id}', 'ProductoController@ajaxMuestraImgProducto');
+    Route::get('Producto/panelControl', 'ProductoController@panelControl');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
@@ -94,6 +95,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Combo/editar/{id}', 'ComboController@editar');//va
     Route::post('Combo/actualiza', 'ComboController@actualiza');
     Route::post('Combo/agregar_combo_producto', 'ComboController@agregar_combo_producto');
+    Route::post('Combo/ajaxMuestraPromo', 'ComboController@ajaxMuestraPromo');
     //Route::post('Combo/eliminar_combo_producto', 'ComboController@eliminar_combo_producto');
     Route::get('Combo/elimina_producto/{combo_id}/{producto_id}', 'ComboController@elimina_producto');
     Route::get('Combo/listado', 'ComboController@listado');
@@ -159,6 +161,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Venta/adicionaItem', 'VentaController@adicionaItem');
     Route::get('Venta/nuevo', 'VentaController@nuevo');
     Route::get('Venta/tienda', 'VentaController@tienda');
+    Route::get('Venta/listado', 'VentaController@listado');
+    Route::get('Venta/ajax_listado', 'VentaController@ajax_listado');
 
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');

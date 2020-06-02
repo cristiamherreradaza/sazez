@@ -30,7 +30,7 @@
                     <td>
                         {{ $p->nombre }}
                         @forelse ($promo as $key => $pr)
-                            <button type="button" class="btn waves-effect waves-light btn-xs btn-warning btnPromo_{{ $pr->combo_id }}" onclick="muestraPromo({{ $pr->combo_id }})">promo {{ ++$key }}</button>   
+                            <small id="name13" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pr->combo_id }})">Promo {{ ++$key }}</small>
                         @empty
                             
                         @endforelse
@@ -43,6 +43,7 @@
                     <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
                     <td>
                         <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btnSelecciona btn text-white btn-warning" title="Adiciona Item"><i class="fas fa-plus"></i></button>
                     </td>
                 </tr>    
             @endforeach
@@ -91,4 +92,5 @@
         });
 
     });
+
 </script>

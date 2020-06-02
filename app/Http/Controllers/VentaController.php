@@ -7,6 +7,7 @@ use App\Venta;
 use App\Almacene;
 use App\Producto;
 use App\Movimiento;
+use DataTables;
 use App\Cotizacione;
 use App\VentasProducto;
 use Illuminate\Http\Request;
@@ -115,6 +116,7 @@ class VentaController extends Controller
         $venta->almacene_id = Auth::user()->almacen_id;
         $venta->cliente_id  = $request->cliente_id;
         $venta->fecha       = $request->fecha;
+        $venta->total       = $request->totalCompra;
         $venta->save();
         $venta_id = $venta->id;
 
@@ -139,9 +141,35 @@ class VentaController extends Controller
             $movimiento->salida       = $request->cantidad[$ll];
             $movimiento->estado       = 'Venta';
             $movimiento->save();
-
         }
+        return redirect('Venta/listado');
 
+    }
+
+    public function listado()
+    {
+        return view('venta.listado');
+    }
+
+    public function ajax_listado()
+    {
+        $almacen = Auth::user()->almacen_id;
+        $ventas = DB::table('ventas')
+            ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
+            ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
+            ->select(
+                'ventas.id', 
+                'almacenes.nombre as almacene', 
+                'users.name as user', 
+                'ventas.total',
+                'ventas.fecha'
+            );
+
+        return Datatables::of($ventas)
+            ->addColumn('action', function ($ventas) {
+                return '<button onclick="edita_producto(' . $ventas->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $ventas->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+            })
+            ->make(true);    
     }
 
 }
