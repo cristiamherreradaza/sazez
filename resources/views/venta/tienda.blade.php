@@ -11,6 +11,23 @@
 
 @section('content')
 
+{{-- modal promo --}}
+<div id="danger-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-danger">
+                <h4 class="modal-title text-white" id="danger-header-modalLabel">DATOS DE LA PROMOCION</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body" id="muestraAjaxPromo">
+                
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{-- fin modal promo --}}
+
 <form action="{{ url('Venta/guardaVenta') }}" method="POST">
     @csrf
 
@@ -290,6 +307,23 @@
                 });
             }
         })
+    }
+
+    function muestraPromo(promoId)
+    {
+        console.log(promoId);
+        $.ajax({
+            url: "{{ url('Combo/ajaxMuestraPromo') }}",
+            data: {combo_id: promoId},
+            type: 'POST',
+            success: function(data) {
+                // $("#listadoProductosAjax").show('slow');
+                $("#muestraAjaxPromo").html(data);
+            }
+        });
+
+        $("#danger-header-modal").modal("show");
+    // alert(promoId);
     }
 
 </script>

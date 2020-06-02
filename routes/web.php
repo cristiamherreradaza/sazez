@@ -95,6 +95,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Combo/editar/{id}', 'ComboController@editar');//va
     Route::post('Combo/actualiza', 'ComboController@actualiza');
     Route::post('Combo/agregar_combo_producto', 'ComboController@agregar_combo_producto');
+    Route::post('Combo/ajaxMuestraPromo', 'ComboController@ajaxMuestraPromo');
     //Route::post('Combo/eliminar_combo_producto', 'ComboController@eliminar_combo_producto');
     Route::get('Combo/elimina_producto/{combo_id}/{producto_id}', 'ComboController@elimina_producto');
     Route::get('Combo/listado', 'ComboController@listado');

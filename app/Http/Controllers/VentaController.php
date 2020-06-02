@@ -141,8 +141,8 @@ class VentaController extends Controller
             $movimiento->salida       = $request->cantidad[$ll];
             $movimiento->estado       = 'Venta';
             $movimiento->save();
-
         }
+        return redirect('Venta/listado');
 
     }
 
