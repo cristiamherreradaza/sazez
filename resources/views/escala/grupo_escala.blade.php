@@ -5,17 +5,17 @@
 @endsection
 
 @section('css')
-  <link rel='stylesheet' href='https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css'>
+{{--   <link rel='stylesheet' href='https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.css'>
 <link rel='stylesheet' href='https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/css/dataTables.checkboxes.css'>
-<link rel='stylesheet' href='https://www.gyrocode.com/wp/wp-content/cache/minify/7db04.css'>
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+<link rel='stylesheet' href='https://www.gyrocode.com/wp/wp-content/cache/minify/7db04.css'> --}}
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
 
 
 <div class="card card-outline-info">
-    <form action="{{ url('Escala/guarda_multiple') }}" method="POST">
+    <form action="{{ url('Escala/guarda_multiple') }}" class="needs-validation" method="POST">
         @csrf
     
     @if (Session('success'))
@@ -26,7 +26,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card card-outline-info">                                
-                <div class="card-header">
+                <div class="card-header bg-info">
                     <h4 class="mb-0 text-white">GRUPO DE ESCALAS</h4>
                 </div>
                 <div class="card-body">
@@ -34,8 +34,12 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Tipos</label>
-                                <select name="tipo_id" id="tipo_id" class="form-control">
+                                <label class="control-label">Tipos
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                </label>
+                                <select name="tipo_id" id="tipo_id" class="form-control" autofocus required>
                                     <option value=""> Seleccionar </option>
                                     @foreach($tipos as $tip)
                                     <option value="{{ $tip->id }}"> {{ $tip->nombre }} </option>
@@ -46,8 +50,12 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Escalas</label>
-                                <select name="escala_id" id="escala_id" class="form-control">
+                                <label class="control-label">Escalas
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                </label>
+                                <select name="escala_id" id="escala_id" class="form-control" autofocus required>
                                     <option value=""> Seleccionar </option>
                                     @foreach($escalas as $esca)
                                     <option value="{{ $esca->id }}"> {{ $esca->nombre }} </option>
@@ -58,8 +66,12 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Precio Bs.</label>
-                                <input type="integer" name="precio" id="precio" class="form-control" required>
+                                <label class="control-label">Precio Bs.
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                </label>
+                                <input type="number" name="precio" id="precio" class="form-control" size="10" min="1" max="100000" pattern="^[0-9]+" step="any" autofocus required>
                             </div>
                         </div>
                     </div>
@@ -84,14 +96,14 @@
 @stop
 
 @section('js')
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
+
+{{-- <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js'></script>
 <script src='https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js'></script>
 <script src='https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.11/js/dataTables.checkboxes.min.js'></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
+ --}}
 <script>
 
     $('#tipo_id').on('change', function(e){
@@ -148,22 +160,4 @@
         });
     }
 </script>
-
-<script>
-     $(".tst3").click(function(){
-           $.toast({
-            heading: 'Welcome to Monster admin',
-            text: 'Use the predefined ones, or specify a custom position object.',
-            position: 'top-right',
-            loaderBg:'#ff6849',
-            icon: 'success',
-            hideAfter: 3500, 
-            stack: 6
-          });
-
-     });
-</script>
-
-
-
 @endsection

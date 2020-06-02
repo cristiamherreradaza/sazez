@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assets/plugins/dropify/dist/css/dropify.min.css') }}">
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('metadatos')
@@ -18,15 +18,12 @@
                 <h4 class="modal-title" id="myModalLabel">Importar Envio</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <div class="row">
+            {{-- <div class="row">
                 <div class="col-lg-12 col-md-6">
                     <div class="card">
-                        <form method="post" enctype="multipart/form-data" id="upload_form" class="upload_form float-left">
+                        <form method="post" enctype="multipart/form-data" id="upload_form" class="upload_form float-left dropzone">
                             <div class="card-body">
                                 @csrf
-                                
-                                {{-- <button type="submit" class="btn btn-rounded btn-success float-lg-right">Importar</button> --}}
-                                {{-- <h4 class="card-title">Importar Envio</h4> --}}
                                 <label for="input-file-disable-remove">Seleccione un archivo en formato EXCEL.</label>
                                 <input type="file" name="select_file" id="select_file" class="dropify" data-show-remove="true" />
                                 <input type="hidden" name="pedido_id" id="pedido_id">
@@ -34,9 +31,62 @@
                                 <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
                             </div>
                         </form>
+
+                    </div>
+                </div>
+            </div> --}}
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Seleccione un archivo en formato EXCEL.</h4>
+                            <form method="post" enctype="multipart/form-data" id="upload_form" class="upload_form">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">ARCHIVO</span>
+                                                </div>
+                                                <div class="custom-file">
+                                                    <input type="file" name="select_file" id="select_file" class="custom-file-input"  accept=".xlsx" required>
+                                                    <input type="hidden" name="pedido_id" id="pedido_id">
+                                                    <label class="custom-file-label" for="inputGroupFile01">Seleccione...</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 m-auto">
+                                        <div class="form-group">
+                                            <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="row">
+
+                                    <div class="col-md-10">
+                                        <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
+                                            class="btn waves-effect waves-light btn-block btn-success">Importar archivo
+                                            excel</button>
+                                        <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
+                                            disabled style="display: none;">
+                                            <span class="spinner-border spinner-border-sm" role="status"
+                                                aria-hidden="true"></span>
+                                            &nbsp;&nbsp;Estamos trabajando, ten pasciencia ;-)
+                                        </button>
+
+                                    </div>
+                                </div> --}}
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -73,15 +123,10 @@
 </div>
 @stop
 @section('js')
-<script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
-<script src="{{ asset('assets/plugins/dropify/dist/js/dropify.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script>
-
 $(document).ready(function() {
 
     // DataTable
@@ -98,7 +143,10 @@ $(document).ready(function() {
             {data: 'fecha', name: 'fecha'},
             {data: 'estado', name: 'estado'},
             {data: 'action'},
-        ]
+        ],
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        },
     } );
 
 } );
@@ -108,9 +156,6 @@ $(document).ready(function() {
     function entrega_excel(id)
     {
         $("#pedido_id").val(id);
-        // $("#nombre").val(nombre);
-        // $("#telefonos").val(telefonos);
-        // $("#direccion").val(direccion);
         $("#entrega_excel").modal('show');
     }
 
@@ -193,47 +238,5 @@ $(document).ready(function() {
     {
         window.location.href = "{{ url('Entrega/excel') }}/"+id;
     }
-</script>
-<script>
-    $(document).ready(function() {
-        // Basic
-        $('.dropify').dropify();
-
-        // Translated
-        $('.dropify-fr').dropify({
-            messages: {
-                default: 'Glissez-déposez un fichier ici ou cliquez',
-                replace: 'Glissez-déposez un fichier ou cliquez pour reemplazar',
-                remove: 'Supprimer',
-                error: 'Désolé, le fichier trop volumineux'
-            }
-        });
-
-        // Used events
-        var drEvent = $('#input-file-events').dropify();
-
-        drEvent.on('dropify.beforeClear', function(event, element) {
-            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
-        });
-
-        drEvent.on('dropify.afterClear', function(event, element) {
-            alert('File deleted');
-        });
-
-        drEvent.on('dropify.errors', function(event, element) {
-            console.log('Has Errors');
-        });
-
-        var drDestroy = $('#input-file-to-destroy').dropify();
-        drDestroy = drDestroy.data('dropify')
-        $('#toggleDropify').on('click', function(e) {
-            e.preventDefault();
-            if (drDestroy.isDropified()) {
-                drDestroy.destroy();
-            } else {
-                drDestroy.init();
-            }
-        })
-    });
 </script>
 @endsection

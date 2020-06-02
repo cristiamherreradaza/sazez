@@ -1,11 +1,11 @@
 
 <div class="card card-outline-warning">
-    <div class="card-header">
-        <h4 class="mb-0 text-white">PRODUCTOS PARA PEDIDO</h4>
+    <div class="card-header bg-warning">
+        <h4 class="mb-0 text-white">PRODUCTOS</h4>
     </div>
     <div class="card-body">
         <div class="table-responsive m-t-40">
-            <table id="example" class="display">
+            <table id="config-table" class="table table-bordered table-striped">
                 <div class="button-group">
                     <button type="button" onclick="selecciona_todo()" class="btn waves-effect waves-light btn-success">Seleccionar Todo</button>
                     <button type="button" onclick="quitar_todo()" class="btn waves-effect waves-light btn-secondary">Quitar Todo</button>
@@ -13,7 +13,7 @@
                 <br>
                 <thead>
                     <tr>
-                        <th style="width: 5%">ID</th>
+                        <td style="width: 5%">ID</td>
                         <th>Codigo</th>
                         <th>Nombre</th>
                         <th>Marca</th>
@@ -54,34 +54,46 @@
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
-    // Setup - add a text input to each footer cell
-    $('#example tfoot th').each( function () {
+      // Setup - add a text input to each footer cell
+      $("#config-table thead th").each(function() {
         var title = $(this).text();
-        $(this).html( '<input type="text" placeholder=" '+title+'" />' );
-    } );
- 
-    // DataTable
-        var table = $('#example').DataTable({
-            initComplete: function () {
-                // Apply the search
-                this.api().columns().every( function () {
-                    var that = this;
-     
-                    $( 'input', this.footer() ).on( 'keyup change clear', function () {
-                        if ( that.search() !== this.value ) {
-                            that
-                                .search( this.value )
-                                .draw();
-                        }
-                    } );
-                } );
-            }
+        $(this).html('<input type="text" placeholder=" ' + title + '" />');
+      });
+
+      // DataTable
+      var table = $("#config-table").DataTable({
+        responsive: true,
+            "order": [
+                [0, 'asc']
+            ],
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+      });
+
+      // Apply the search
+      table.columns().every(function(index) {
+        var that = this;
+
+        $("input", this.header()).on("keyup change clear", function() {
+          if (that.search() !== this.value) {
+            that.search(this.value).draw();
+            table
+              .rows()
+              .$("tr", { filter: "applied" })
+              .each(function() {
+                console.log(table.row(this).data());
+              });
+          }
         });
-     
-    } );
+      });
+    });
+</script>
+
+<script>
+   
 
     function selecciona_todo(){
         // alert('si');

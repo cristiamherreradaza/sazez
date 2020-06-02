@@ -150,6 +150,7 @@ class EntregaController extends Controller
         {
             session(['pedido_id' => $pedido_id]);
             $file = $request->file('select_file');
+            // dd($file);
             Excel::import(new MovimientosImport, $file);
             session()->forget('pedido_id');
             //ACTUALIZAMOS EL PEDIDO A ENTREGADO

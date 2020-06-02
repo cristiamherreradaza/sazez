@@ -160,6 +160,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Venta/nuevo', 'VentaController@nuevo');
     Route::get('Venta/tienda', 'VentaController@tienda');
 
+    // ENVIO
+    Route::get('Envio/nuevo', 'EnvioController@nuevo');
+    // Route::get('Pedido/pedido_productos/{id}', 'PedidoController@pedido_productos');
+    // Route::get('Pedido/ajax_listado_producto', 'PedidoController@ajax_listado_producto');
+    // Route::post('Pedido/agregar_pedido_producto', 'PedidoController@agregar_pedido_producto');
+    // Route::post('Pedido/ajaxBuscaProducto', 'PedidoController@ajaxBuscaProducto');
+    // Route::get('Pedido/lista_pedido_productos/{id}', 'PedidoController@lista_pedido_productos');
+    // Route::post('Pedido/actualiza_cantidad', 'PedidoController@actualiza_cantidad');
+    // Route::get('Pedido/elimina_producto/{pedido_id}/{producto_id}', 'PedidoController@elimina_producto');
+    // Route::post('Pedido/guarda', 'PedidoController@guarda');
+    // Route::get('Pedido/eliminar/{id}', 'PedidoController@eliminar');
+
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');

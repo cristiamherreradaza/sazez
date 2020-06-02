@@ -74,12 +74,25 @@ class EscalaController extends Controller
         $nro = sizeof($request->producto_id);
 
         for ($i=0; $i < $nro; $i++) {
-            $precios = new Precio();
-            $precios->user_id = Auth::user()->id;
-            $precios->producto_id = $request->producto_id[$i];
-            $precios->escala_id = $escala_id;
-            $precios->precio = $precio;
-            $precios->save(); 
+
+            $escala = Precio::where('producto_id', $request->producto_id[$i])
+                                        ->where('escala_id', $escala_id)
+                                        ->first();
+            if (!empty($escala)) {
+                $precios = Precio::find($escala->id);
+                $precios->user_id = Auth::user()->id;
+                $precios->producto_id = $request->producto_id[$i];
+                $precios->escala_id = $escala_id;
+                $precios->precio = $precio;
+                $precios->save(); 
+            } else {
+                $precioss = new Precio();
+                $precioss->user_id = Auth::user()->id;
+                $precioss->producto_id = $request->producto_id[$i];
+                $precioss->escala_id = $escala_id;
+                $precioss->precio = $precio;
+                $precioss->save(); 
+            }
         }
 
         Session::flash('success','Se guardo correctamente!');

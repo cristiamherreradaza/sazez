@@ -109,7 +109,7 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="{{ url('Entrega/nuevo') }}" class="sidebar-link">
+                            <a href="{{ url('Envio/nuevo') }}" class="sidebar-link">
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
                             </a>
                         </li>

@@ -22,8 +22,8 @@ class MovimientosImport implements ToModel
         // return new Movimiento([
         //     // 'name'  => $row[0],
         // ]);
+        
         if( is_numeric($row[7]) ){
-
             $producto = Producto::where('codigo', $row[1])
                                         ->where('nombre', $row[2])
                                         ->where('modelo', $row[5])
