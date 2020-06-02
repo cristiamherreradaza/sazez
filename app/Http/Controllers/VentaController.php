@@ -7,6 +7,7 @@ use App\Venta;
 use App\Almacene;
 use App\Producto;
 use App\Movimiento;
+use DataTables;
 use App\Cotizacione;
 use App\VentasProducto;
 use Illuminate\Http\Request;
@@ -115,6 +116,7 @@ class VentaController extends Controller
         $venta->almacene_id = Auth::user()->almacen_id;
         $venta->cliente_id  = $request->cliente_id;
         $venta->fecha       = $request->fecha;
+        $venta->total       = $request->totalCompra;
         $venta->save();
         $venta_id = $venta->id;
 
@@ -152,21 +154,20 @@ class VentaController extends Controller
     public function ajax_listado()
     {
         $almacen = Auth::user()->almacen_id;
-        $productos = DB::table('ventas')
-            ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacene.id')
-            ->leftJoin('clientes', 'ventas.cliente_id', '=', 'clientes.id')
+        $ventas = DB::table('ventas')
+            ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
+            ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
             ->select(
                 'ventas.id', 
-                'productos.nombre as nombre', 
-                'productos.nombre_venta', 
-                'tipos.nombre as tipo', 
-                'marcas.nombre as marca', 
-                'productos.colores'
+                'almacenes.nombre as almacene', 
+                'users.name as user', 
+                'ventas.total',
+                'ventas.fecha'
             );
 
-        return Datatables::of($productos)
-            ->addColumn('action', function ($productos) {
-                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+        return Datatables::of($ventas)
+            ->addColumn('action', function ($ventas) {
+                return '<button onclick="edita_producto(' . $ventas->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $ventas->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
             })
             ->make(true);    
     }
