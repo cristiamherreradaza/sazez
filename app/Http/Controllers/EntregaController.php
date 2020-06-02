@@ -67,6 +67,7 @@ class EntregaController extends Controller
                 $salida->almacene_id = 1;
                 $salida->pedido_id = $pedido_id;
                 $salida->salida = $cantidad;
+                $salida->estado = 'Pedido';
                 $salida->save();
 
 
@@ -77,6 +78,7 @@ class EntregaController extends Controller
                 $ingreso->almacene_id = $almacene_id;
                 $ingreso->pedido_id = $pedido_id;
                 $ingreso->ingreso = $cantidad;
+                $ingreso->estado = 'Pedido';
                 $ingreso->save();
             }
         }

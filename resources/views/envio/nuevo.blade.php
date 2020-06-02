@@ -5,23 +5,20 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+    <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
 <link href="{{ asset('assets/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
 
-<div class="card card-outline-info">
-    <form action="{{ url('Pedido/guarda') }}" method="POST">
+    <form action="{{ url('Envio/guarda') }}" method="POST">
         @csrf
     
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-outline-info">                                
-                <div class="card-header">
-                    <h4 class="mb-0 text-white">NUEVO ENVIO</h4>
+            <div class="card border-info">                                
+                <div class="card-header bg-info">
+                    <h4 class="mb-0 text-white">ENVIO DE PRODUCTOS</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -34,7 +31,7 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Almacen a solicitar</label>
+                                <label class="control-label">Almacen a Enviar</label>
                                 <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
                                     @foreach($almacenes as $almacen)
                                     <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
@@ -67,9 +64,9 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card card-outline-warning">
-                <div class="card-header">
-                    <h4 class="mb-0 text-white">PRODUCTOS PARA PEDIDO</h4>
+            <div class="card border-dark">
+                <div class="card-header bg-dark">
+                    <h4 class="mb-0 text-white">PRODUCTOS PARA ENVIO</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive m-t-40">
@@ -92,7 +89,7 @@
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">ENVIAR</button>
                         </div>
                     </div>
                 </div>
@@ -100,17 +97,94 @@
         </div>
     </div>
     </form>
-</div>
+
+    <div class="row">
+            <div class="col-lg-12">
+                <div class="card border-primary">
+                    <div class="card-header bg-primary" onclick="muestra_formulario_importacion()">
+                        <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
+                    </div>
+                    <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
+                        <form action="/Producto/importaExcel" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                            
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">ARCHIVO</span>
+                                            </div>
+                                            <div class="custom-file">
+                                                <input type="file" name="excel" class="custom-file-input" id="inputGroupFile01" accept=".xlsx" required>
+                                                <label class="custom-file-label" for="inputGroupFile01">Seleccione...</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
+                                        class="btn waves-effect waves-light btn-block btn-success">Importar archivo
+                                        excel</button>
+                                    <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
+                                        disabled style="display: none;">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        &nbsp;&nbsp;Estamos trabajando, ten pasciencia ;-)
+                                    </button>
+
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="{{ asset('excels/formato_productos_vacio.xlsx') }}" target="_blank" rel="noopener noreferrer">
+                                        <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Descargar formato excel</button>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <span style="background-color: #ea6274; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    Colocar NT en caso de no tener informacion
+                                </div>
+                                <div class="col-md-3">
+                                    <span
+                                        style="background-color: #67ff67; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    Solo introducir numeros
+                                </div>
+                                <div class="col-md-3">
+                                    <span
+                                        style="background-color: #8065a9; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    Colocar 0 si no tienen el dato
+                                </div>
+                                <div class="col-md-3">
+                                    <span
+                                        style="background-color: #62adea; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                    No dejar celdas vacias ni cambiar el orden
+                                </div>
+                                <div class="col-md-12">
+                                    {{-- <img src="{{ asset('assets/images/muestra_excel_productos.png') }}" class="img-thumbnail" alt=""> --}}
+                                    <span class='zoom' id='ex1'>
+                                        <img src='{{ asset('assets/images/muestra_excel_envio.png') }}' class="img-thumbnail" alt='Daisy on the Ohoopee' />
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script>
+    function muestra_formulario_importacion()
+{
+    $("#bloque_formulario_importacion").toggle('slow');
+}
+</script>
 <script>
     var t = $('#tablaPedido').DataTable({
         paging: false,
@@ -145,7 +219,7 @@
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
-                url: "{{ url('Pedido/ajaxBuscaProducto') }}",
+                url: "{{ url('Envio/ajaxBuscaProductos') }}",
                 data: {termino: termino_busqueda},
                 type: 'POST',
                 success: function(data) {
@@ -185,7 +259,7 @@
                     'El Pedido fue eliminado',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Pedido/eliminar') }}/"+id;
+                    window.location.href = "{{ url('Envio/eliminar') }}/"+id;
                 });
             }
         })

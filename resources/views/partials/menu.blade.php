@@ -115,7 +115,7 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a href="{{ url('Pedidos/listado') }}" class="sidebar-link">
+                            <a href="{{ url('Envio/listado') }}" class="sidebar-link">
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
                             </a>
                         </li>

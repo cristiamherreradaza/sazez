@@ -50,6 +50,7 @@ class MovimientosImport implements ToModel
                     $salida->almacene_id = 1;
                     $salida->pedido_id = $pedido_id;
                     $salida->salida = $row[7];
+                    $salida->estado = 'Pedido';
                     $salida->save();
 
                     //aqui ingresamos al alamacen solicitante el producto   
@@ -59,6 +60,7 @@ class MovimientosImport implements ToModel
                     $entrada->almacene_id = $almacen->id;
                     $entrada->pedido_id = $pedido_id;
                     $entrada->ingreso = $row[7];
+                    $entrada->estado = 'Pedido';
                     $entrada->save();
                 }
                 
@@ -72,6 +74,7 @@ class MovimientosImport implements ToModel
                     $salida->almacene_id = 1;
                     // $salida->pedido_id = $pedido_id;
                     $salida->salida = $row[7];
+                    $salida->estado = 'Envio';
                     $salida->save();
 
                     //aqui ingresamos al alamacen solicitante el producto   
@@ -81,6 +84,7 @@ class MovimientosImport implements ToModel
                     $entrada->almacene_id = $almacen->id;
                     // $entrada->pedido_id = $pedido_id;
                     $entrada->ingreso = $row[7];
+                    $entrada->estado = 'Envio';
                     $entrada->save();
                 }
             }
