@@ -61,22 +61,22 @@
                                         <a class="nav-link active show" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
                                             aria-controls="v-pills-home" aria-selected="true">
                                             <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-agenda"></i> Principal</span>
+                                            <span class="d-none d-lg-block"><i class="ti-agenda"></i> Datos Principales</span>
                                         </a>
                                         <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
                                             aria-controls="v-pills-profile" aria-selected="false">
                                             <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-money"></i> Precios</span>
+                                            <span class="d-none d-lg-block"><i class="ti-money"></i> Lista de Precios</span>
                                         </a>
                                         <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
                                             aria-controls="v-pills-settings" aria-selected="false">
                                             <i class="mdi mdi-settings-outline d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-ruler-pencil"></i> Detalles</span>
+                                            <span class="d-none d-lg-block"><i class="ti-ruler-pencil"></i> Caracteristicas y Detalles</span>
                                         </a>
                                         <a class="nav-link" id="v-pills-multimedia-tab" data-toggle="pill" href="#v-pills-multimedia" role="tab"
                                             aria-controls="v-pills-multimedia" aria-selected="false">
                                             <i class="mdi mdi-multimedia-outline d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-image"></i> Multimedia</span>
+                                            <span class="d-none d-lg-block"><i class="ti-image"></i> Multimedia y Enlaces</span>
                                         </a>
                                     </div>
                                 </div> <!-- end col-->

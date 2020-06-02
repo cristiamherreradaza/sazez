@@ -64,9 +64,6 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
-        // $llaves = array_keys($request->precio_venta);
-        // dd($llaves);
-        // generamos el codigo
         $marcaProducto  = Marca::find($request->marca_id);
         $tipoProducto   = Tipo::find($request->tipo_id);
         $nombreProducto = $request->nombre;
@@ -121,7 +118,7 @@ class ProductoController extends Controller
             $cambia_codigo->save();
         }
 
-        if ($request->caracteristica[0] != null) 
+        if ($request->has('caracteristica') != null) 
         {
             foreach ($request->caracteristica as $key => $c) 
             {
@@ -164,7 +161,7 @@ class ProductoController extends Controller
 
         }
 
-        if ($request->fotos[0] != null) 
+        if ($request->has('fotos')) 
         {
             foreach ($request->fotos as $key => $f) 
             {
