@@ -80,7 +80,7 @@
                 <h4 class="modal-title" id="myModalLabel">EDITAR CATEGORIA</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Categoria/actualizar') }}" method="POST">
+            <form action="{{ url('Categoria/actualizar') }}" class="needs-validation" method="POST" novalidate>
                 @csrf
                 <div class="modal-body">        
                         <input type="hidden" name="id" id="id" value="">

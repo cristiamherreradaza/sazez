@@ -47,6 +47,11 @@
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Movimiento/ingreso') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Ingreso </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
 

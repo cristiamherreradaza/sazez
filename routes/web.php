@@ -87,6 +87,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cliente/actualizar', 'ClienteController@actualizar');
     Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
 
+    //MOVIMIENTOS INGRESOS
+    Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');
+    Route::post('Movimiento/ajaxBuscaProducto', 'MovimientoController@ajaxBuscaProducto');
+    Route::post('Movimiento/guarda', 'MovimientoController@guarda');
 
     //PROMOS
     Route::get('Combo/nuevo', 'ComboController@nuevo');//va
