@@ -107,7 +107,7 @@
                             <th>N°</th>
                             <th>Almacen Enviado</th>
                             <th>Personal </th>
-                            <th>Fecha</th>
+                            <th>Fecha y Hora de Envio</th>
                             <th>Estado</th>
                             <th>Opciones</th>
                         </tr>
@@ -137,9 +137,9 @@ $(document).ready(function() {
         "serverSide": true,
         "ajax": "{{ url('Envio/ajax_listados') }}",
         "columns": [
-            {data: 'numero', name: 'numero'},
+            {data: 'id', name: 'id'},
             {data: 'nombre', name: 'nombre'},
-            {data: 'solicitante_id', name: 'solicitante_id'},
+            {data: 'name', name: 'name'},
             {data: 'fecha', name: 'fecha'},
             {data: 'estado', name: 'estado'},
             {data: 'action'},
@@ -161,7 +161,7 @@ $(document).ready(function() {
 
     function ver_pedido(id)
     {
-        window.location.href = "{{ url('Entrega/ver_pedido') }}/"+id;
+        window.location.href = "{{ url('Envio/ver_pedido') }}/"+id;
     }
 </script>
 <script>

@@ -80,6 +80,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
+                                    <th>Stock</th>
                                     <th style="width: 5%">Cantidad</th>
                                     <th></th>
                                 </tr>
@@ -105,7 +106,8 @@
                         <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
                     </div>
                     <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
-                        <form action="/Producto/importaExcel" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
+                        <form method="post" enctype="multipart/form-data" id="upload_form" class="upload_form">
+                                @csrf
                             @csrf
                             <div class="row">
                             
@@ -116,7 +118,7 @@
                                                 <span class="input-group-text">ARCHIVO</span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" name="excel" class="custom-file-input" id="inputGroupFile01" accept=".xlsx" required>
+                                                <input type="file" name="select_file" id="select_file" class="custom-file-input"  accept=".xlsx" required>
                                                 <label class="custom-file-label" for="inputGroupFile01">Seleccione...</label>
                                             </div>
                                         </div>
@@ -124,9 +126,10 @@
                                 </div>
 
                                 <div class="col-md-3">
-                                    <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
+                                    <input type="submit" name="upload" id="upload" class="btn btn-success waves-light btn-block float-lg-right" value="Importar archivo excel">
+                                   {{--  <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
                                         class="btn waves-effect waves-light btn-block btn-success">Importar archivo
-                                        excel</button>
+                                        excel</button> --}}
                                     <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
                                         disabled style="display: none;">
                                         <span class="spinner-border spinner-border-sm" role="status"
@@ -136,7 +139,7 @@
 
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="{{ asset('excels/formato_productos_vacio.xlsx') }}" target="_blank" rel="noopener noreferrer">
+                                    <a href="{{ asset('excels/prototipo_pedidos.xlsx') }}" rel="noopener noreferrer">
                                         <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Descargar formato excel</button>
                                     </a>
                                 </div>
@@ -164,7 +167,7 @@
                                 <div class="col-md-12">
                                     {{-- <img src="{{ asset('assets/images/muestra_excel_productos.png') }}" class="img-thumbnail" alt=""> --}}
                                     <span class='zoom' id='ex1'>
-                                        <img src='{{ asset('assets/images/muestra_excel_envio.png') }}' class="img-thumbnail" alt='Daisy on the Ohoopee' />
+                                        <img src='{{ asset('assets/images/muestra_excel_envios.png') }}' class="img-thumbnail" alt='Daisy on the Ohoopee' />
                                     </span>
                                 </div>
                             </div>
@@ -179,6 +182,42 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script>
+// Script de importacion de excel
+$(document).ready(function() {
+    $('.upload_form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: "{{ url('Entrega/ajax_importar') }}",
+            method: "POST",
+            data: new FormData(this),
+            dataType: 'JSON',
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data)
+            {
+                if(data.sw == 1){
+                    Swal.fire(
+                    'Hecho',
+                    data.message,
+                    'success'
+                    )
+                    .then(function() {
+                        window.location.href = "{{ url('Envio/listado') }}";
+                    });
+                }else{
+                    Swal.fire(
+                    'Oops...',
+                    data.message,
+                    'error'
+                    )
+                }
+            }
+        })
+    });
+});
+</script>
 <script>
     function muestra_formulario_importacion()
 {

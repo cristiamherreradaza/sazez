@@ -41,8 +41,15 @@ class EntregaController extends Controller
 
     public function store(Request $request)
     {
-        // $todo = $request->all();
-        // dd($todo);
+        $hoy = date("Y-m-d H:i:s");
+        $num = DB::select("SELECT MAX(numero) as nro
+                                FROM movimientos");
+        if (!empty($num)) {
+            $numero = $num[0]->nro + 1;
+        } else {
+            $numero = 1;
+        }
+
         $pedido_id = $request->input("pedido_id");
         $almacene_id = $request->input("almacene_id");
         $pedido = DB::table('pedidos_productos')
@@ -67,6 +74,8 @@ class EntregaController extends Controller
                 $salida->almacene_id = 1;
                 $salida->pedido_id = $pedido_id;
                 $salida->salida = $cantidad;
+                $salida->fecha = $hoy;
+                $salida->numero = $numero;
                 $salida->estado = 'Pedido';
                 $salida->save();
 
@@ -78,6 +87,8 @@ class EntregaController extends Controller
                 $ingreso->almacene_id = $almacene_id;
                 $ingreso->pedido_id = $pedido_id;
                 $ingreso->ingreso = $cantidad;
+                $ingreso->fecha = $hoy;
+                $ingreso->numero = $numero;
                 $ingreso->estado = 'Pedido';
                 $ingreso->save();
             }
@@ -199,6 +210,7 @@ class EntregaController extends Controller
         $productos = DB::table('movimientos')
                 ->where('movimientos.pedido_id', '=', $id)
                 ->where('movimientos.almacene_id', '=', $pedidos[0]->almacene_solicitante_id)
+                ->where('movimientos.ingreso', '>', 0)
                 ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
                 ->join('marcas', 'productos.marca_id', '=', 'marcas.id')
                 ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')

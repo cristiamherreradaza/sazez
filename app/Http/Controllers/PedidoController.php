@@ -43,7 +43,7 @@ class PedidoController extends Controller
 
         return Datatables::of($productos)
             ->addColumn('action', function ($productos) {
-                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                return '<button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
             })
             ->make(true);
     }

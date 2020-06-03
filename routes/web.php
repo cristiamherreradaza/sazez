@@ -170,6 +170,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Envio/guarda', 'EnvioController@guarda');
     Route::get('Envio/listado', 'EnvioController@listado');
     Route::get('Envio/ajax_listados', 'EnvioController@ajax_listados');
+    Route::get('Envio/ver_pedido/{id}', 'EnvioController@ver_pedido');
 
 });
 

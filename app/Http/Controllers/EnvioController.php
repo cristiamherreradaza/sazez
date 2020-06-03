@@ -33,6 +33,15 @@ class EnvioController extends Controller
     public function guarda(Request $request)
     {
         //arraykeys guarda ids de prod
+        $hoy = date("Y-m-d H:i:s");
+        $num = DB::select("SELECT MAX(numero) as nro
+                                FROM movimientos");
+        if (!empty($num)) {
+            $numero = $num[0]->nro + 1;
+        } else {
+            $numero = 1;
+        }
+
         $llaves = array_keys($request->item);
         foreach ($llaves as $key => $ll) 
         {
@@ -42,6 +51,8 @@ class EnvioController extends Controller
             $salida->producto_id = $ll;
             $salida->almacene_id = 1;
             $salida->salida = $request->item[$ll];
+            $salida->fecha = $hoy;
+            $salida->numero = $numero;
             $salida->estado = 'Envio';
             $salida->save();
 
@@ -51,6 +62,8 @@ class EnvioController extends Controller
             $ingreso->producto_id = $ll;
             $ingreso->almacene_id = $request->almacen_a_pedir;
             $ingreso->ingreso = $request->item[$ll];
+            $ingreso->fecha = $hoy;
+            $ingreso->numero = $numero;
             $ingreso->estado = 'Envio';
             $ingreso->save();
 
@@ -75,25 +88,44 @@ class EnvioController extends Controller
     public function ajax_listados()
     {
         // $lista_personal = Producto::all();
-        $pedidos = DB::table('pedidos')
-            ->leftJoin('almacenes', 'pedidos.almacene_solicitante_id', '=', 'almacenes.id')
-            ->select(
-                'pedidos.id',
-                'pedidos.numero', 
-                'almacenes.nombre', 
-                'pedidos.solicitante_id', 
-                'pedidos.fecha', 
-                'pedidos.estado'
-            );
+        $productos = DB::table('movimientos')
+                ->where('movimientos.estado', '=', 'Envio')
+                ->where('movimientos.ingreso', '>', 0)
+                ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+                ->select('movimientos.id', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado'
+                );
 
-         return Datatables::of($pedidos)
-                ->addColumn('action', function ($pedidos) {
-                    return '<button type="button" class="btn btn-warning" title="Editar pedido"  onclick="editar(' . $pedidos->id . ')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar pedido"  onclick="eliminar(' .  $pedidos->id . ')"><i class="fas fa-trash"></i></button>
-                                <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>
-                                <button onclick="ver_pedido(' . $pedidos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+         return Datatables::of($productos)
+                ->addColumn('action', function ($productos) {
+                    return '<button onclick="ver_pedido(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
                 })
                 ->make(true); 
         
+    }
+
+    public function ver_pedido($id)
+    {
+        $movimientos = Movimiento::find($id);
+        $numero = $movimientos->numero;
+        $datos = DB::table('movimientos')
+                ->where('movimientos.id', '=', $movimientos->id)
+                ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+                ->select('almacenes.nombre', 'users.name', 'movimientos.numero', 'movimientos.fecha')
+                ->get();
+        // dd($datos);
+        // $entrega = Pedido::find($id);
+
+        $productos = DB::table('movimientos')
+                ->where('movimientos.numero', '=', $numero)
+                ->where('movimientos.ingreso', '>', 0)
+                ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
+                ->join('marcas', 'productos.marca_id', '=', 'marcas.id')
+                ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+                ->select('movimientos.*', 'productos.codigo', 'productos.nombre', 'marcas.nombre as nombre_marca', 'tipos.nombre as nombre_tipo', 'productos.modelo', 'productos.colores')
+                ->get();
+        // dd($productos);
+        return view('envio.ver_pedido')->with(compact('datos', 'productos'));
     }
 }
