@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<form action="{{ url('Combo/guarda') }}" method="POST" >
+<form action="{{ url('Combo/guarda') }}" class="needs-validation" method="POST" novalidate>
     @csrf
     <div class="row">
         <div class="col-md-12">
@@ -86,13 +86,22 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
-                                    <th style="width: 8%">Precio</th>
+                                    <th>Precio estandar</th>
+                                    <th style="width: 8%">Precio ofertado</th>
                                     <th style="width: 5%">Cantidad</th>
+                                    <th class="w-10 text-center">Importe</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="10" class="text-right">TOTAL</th>
+                                    <th colspan="2"><input type="text" class="form-control text-right" name="totalCompra"
+                                            id="resultadoSubTotales" style="width: 120px;" readonly></th>
+                                </tr>
+                            </tfoot>
                         </table>
                         <div class="form-group">
                             <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR COMBO</button>
@@ -137,9 +146,48 @@
             let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
             let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
             itemsPedidoArray.splice(pos, 1);
+            sumaSubTotales();
         });
     });
 
+    $(document).on('keyup change', '.precio', function(e){
+        let precio = Number($(this).val());
+        let id = $(this).data("id");
+        let cantidad = Number($("#cantidad_"+id).val());
+        let subtotal = precio*cantidad;
+        $("#subtotal_"+id).val(subtotal);
+        sumaSubTotales();
+    });
+
+    $(document).on('keyup change', '.cantidad', function(e){
+        // alert("cambio");
+        let cantidad = Number($(this).val());
+        let id = $(this).data("id");
+        let precio = Number($("#precio_"+id).val());
+        let subtotal = precio*cantidad;
+        console.log(precio);
+        $("#subtotal_"+id).val(subtotal);
+        sumaSubTotales();
+    });
+
+    function sumaSubTotales()
+    {
+        let sum = 0;
+        $('.subtotal').each(function(){
+            sum += parseFloat(this.value);
+        });
+        // sumaVisible = sum.toLocaleString('en', {useGrouping:true});
+        
+        $("#resultadoSubTotales").val(sum);
+        valorLiteral = numeroALetras(sum, {
+            plural: 'Bolivianos',
+            singular: 'Bolivianos',
+            centPlural: 'Centavos',
+            centSingular: 'Centavo'
+        });
+        $("#montoLiteral").html(valorLiteral);
+        // console.log(valor);
+    }
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();

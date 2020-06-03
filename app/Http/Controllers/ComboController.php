@@ -40,7 +40,7 @@ class ComboController extends Controller
         $combo_id = $combo->id;
 
         // En la variable llaves se asigna todos los productos que se encuentran en el combo
-        $llaves = array_keys($request->item);
+        $llaves = array_keys($request->precio);
         foreach ($llaves as $key => $ll) 
         {
             // Creación de ComboProducto
@@ -48,8 +48,8 @@ class ComboController extends Controller
             $productosCombo->user_id = Auth::user()->id;
             $productosCombo->combo_id = $combo_id;
             $productosCombo->producto_id = $ll;
-            $productosCombo->precio = $request->itemprecio[$ll];
-            $productosCombo->cantidad = $request->item[$ll];
+            $productosCombo->precio = $request->precio[$ll];
+            $productosCombo->cantidad = $request->cantidad[$ll];
             $productosCombo->save();
         }
         return redirect('Combo/listado');
@@ -74,7 +74,7 @@ class ComboController extends Controller
         //Eliminamos los productos del combo
         CombosProducto::where('combo_id', $combo_id)->delete(); 
         //Volvemos a introducirlos
-        $llaves = array_keys($request->item);
+        $llaves = array_keys($request->precio);
         foreach ($llaves as $key => $ll) 
         {
             // Creación de ComboProducto
@@ -82,8 +82,8 @@ class ComboController extends Controller
             $productosCombo->user_id = Auth::user()->id;
             $productosCombo->combo_id = $combo_id;
             $productosCombo->producto_id = $ll;
-            $productosCombo->precio = $request->itemprecio[$ll];
-            $productosCombo->cantidad = $request->item[$ll];
+            $productosCombo->precio = $request->precio[$ll];
+            $productosCombo->cantidad = $request->cantidad[$ll];
             $productosCombo->save();
         }
         return redirect('Combo/listado');

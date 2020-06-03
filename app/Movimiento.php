@@ -13,6 +13,8 @@ class Movimiento extends Model
         'user_id',
         'producto_id',
         'almacene_id',
+        'pedido_id',
+        'venta_id',
         'precio_compra',
         'precio_venta',
         'ingreso',

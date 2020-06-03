@@ -52,7 +52,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVA ESCALA</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Escala/guardar') }}" method="POST">
+            <form action="{{ url('Escala/guardar') }}" class="needs-validation" method="POST" novalidate>
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -104,7 +104,7 @@
                 <h4 class="modal-title" id="myModalLabel">EDITAR ESCALA</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Escala/actualizar') }}" method="POST">
+            <form action="{{ url('Escala/actualizar') }}" class="needs-validation" method="POST" novalidate>
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">

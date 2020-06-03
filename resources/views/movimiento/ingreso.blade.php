@@ -5,59 +5,45 @@
 @endsection
 
 @section('css')
-<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
+    <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css') }}" rel="stylesheet" />
 @endsection
 
 @section('content')
-<form action="{{ url('Combo/actualiza') }}" class="needs-validation" method="POST" novalidate>
+<form action="{{ url('Movimiento/guarda') }}" method="POST">
     @csrf
     <div class="row">
         <div class="col-md-12">
-            <div class="card border-info">
+            <div class="card border-info">                                
                 <div class="card-header bg-info">
-                    <h4 class="mb-0 text-white">EDITAR COMBO</h4>
+                    <h4 class="mb-0 text-white">NUEVO INGRESO</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <input type="hidden" name="id" id="id" value="{{ $combo->id }}">
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Nombre</label>
+                                <label class="control-label">Almacen</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="text" name="nombre_combo" id="nombre_combo" class="form-control" value="{{ $combo->nombre }}" required>
-                            </div>                    
+                                <select name="almacen" id="almacen" class="form-control">
+                                    @foreach($almacenes as $almacen)
+                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-2">
+
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Fecha Inicio</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" value="{{ $combo->fecha_inicio }}" required>
-                            </div>                    
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Fecha Final</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input type="date" name="fecha_final" id="fecha_final" class="form-control" value="{{ $combo->fecha_final }}" required>
-                            </div>                    
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group">
-                                <label class="control-label">Buscar producto</label>
+                                <label class="control-label">Buscar Producto</label>
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" id="termino" name="termino">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="ti-search"></i></span>
                                     </div>
                                 </div>
-                            </div>                    
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -69,11 +55,12 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-12">
-            <div class="card border-primary">
-                <div class="card-header bg-primary">
-                    <h4 class="mb-0 text-white">PRODUCTOS EN COMBO</h4>
+            <div class="card border-dark">
+                <div class="card-header bg-dark">
+                    <h4 class="mb-0 text-white">PRODUCTOS A INGRESAR</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive m-t-40">
@@ -87,47 +74,18 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
-                                    <th>Precio estandar</th>
-                                    <th style="width: 8%">Precio ofertado</th>
+                                    <th>Cantidad por Caja</th>
                                     <th style="width: 5%">Cantidad</th>
-                                    <th class="w-10 text-center">Importe</th>
+                                    <th>Total Cantidad</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <!-- aqui tienen que estar los productos existentes en combo -->
-                            @foreach($productos_combo as $producto)
-                                <tr class="item_{{ $producto->producto_id }}">
-                                    <td>{{ $producto->producto_id }}</td>
-                                    <td>{{ $producto->producto->codigo }}</td>
-                                    <td>{{ $producto->producto->nombre }}</td>
-                                    <td>{{ $producto->producto->marca->nombre }}</td>
-                                    <td>{{ $producto->producto->tipo->nombre }}</td>
-                                    <td>{{ $producto->producto->modelo }}</td>
-                                    <td>{{ $producto->producto->colores }}</td>
-                                    @php
-                                        $precio = App\Precio::where('producto_id', $producto->producto_id)
-                                                    ->where('escala_id', 1)
-                                                    ->first();
-                                    @endphp
-                                    <td>{{ $precio->precio }}</td>
-                                    <td><input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="{{ $producto->precio }}" data-id="`+id+`" step="any" min="1"></td>
-                                    <td><input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="{{ $producto->cantidad }}" data-id="`+id+`" min="1"></td>
-                                    <td><input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="{{ ($producto->precio*$producto->cantidad) }}" step="any" style="width: 120px;" readonly></td>
-                                    <td><button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash"></i></button></td>
-                                </tr>
-                            @endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="10" class="text-right">TOTAL</th>
-                                    <th colspan="2"><input type="text" class="form-control text-right" name="totalCompra"
-                                            id="resultadoSubTotales" style="width: 120px;" value="0" readonly></th>
-                                </tr>
-                            </tfoot>
                         </table>
                         <div class="form-group">
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR COMBO</button>
+                            <label class="control-label">&nbsp;</label>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
                         </div>
                     </div>
                 </div>
@@ -140,11 +98,9 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
-<script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
-<script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script src="{{ asset('js/NumeroALetras.js') }}"></script>
 <script>
-     var t = $('#tablaPedido').DataTable({
+    var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
         ordering: false,
@@ -169,12 +125,14 @@
             let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
             let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
             itemsPedidoArray.splice(pos, 1);
-            sumaSubTotales();
         });
     });
 
     $(document).on('keyup change', '.precio', function(e){
         let precio = Number($(this).val());
+        if(precio == 0){
+            precio = 1;
+        }
         let id = $(this).data("id");
         let cantidad = Number($("#cantidad_"+id).val());
         let subtotal = precio*cantidad;
@@ -187,8 +145,10 @@
         let cantidad = Number($(this).val());
         let id = $(this).data("id");
         let precio = Number($("#precio_"+id).val());
+        if(precio == 0){
+            precio = 1;
+        }
         let subtotal = precio*cantidad;
-        console.log(precio);
         $("#subtotal_"+id).val(subtotal);
         sumaSubTotales();
     });
@@ -212,11 +172,12 @@
         // console.log(valor);
     }
 
+
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
-                url: "{{ url('Combo/ajaxBuscaProducto') }}",
+                url: "{{ url('Movimiento/ajaxBuscaProducto') }}",
                 data: {termino: termino_busqueda},
                 type: 'POST',
                 success: function(data) {
@@ -256,10 +217,11 @@
                     'El Pedido fue eliminado',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Combo/eliminar') }}/"+id;
+                    window.location.href = "{{ url('Pedido/eliminar') }}/"+id;
                 });
             }
         })
     }
+
 </script>
 @endsection

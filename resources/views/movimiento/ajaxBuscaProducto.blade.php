@@ -54,7 +54,6 @@
             var tipo    = currentRow.find("td:eq(4)").text();
             var modelo  = currentRow.find("td:eq(5)").text();
             var colores = currentRow.find("td:eq(6)").text();
-            var precio  = currentRow.find("td:eq(7)").text();
 
             let buscaItem = itemsPedidoArray.lastIndexOf(id);
             if(buscaItem < 0)
@@ -68,10 +67,9 @@
                     tipo,
                     modelo,
                     colores,
-                    precio,
-                    `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1">`,
+                    `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="0" data-id="`+id+`" step="any" min="0">`,
                     `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
-                    `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
+                    `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="1" step="any" readonly>`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
                 sumaSubTotales();
