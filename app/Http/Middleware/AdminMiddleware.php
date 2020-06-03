@@ -17,7 +17,7 @@ class AdminMiddleware
     {
         if(auth()->user()->rol != 'Administrador'){
             if(auth()->user()->rol != 'Distribuidor'){
-                if(auth()->user()->rol != 'Almacenero'){
+                if(auth()->user()->rol != 'Tienda'){
                     return redirect('/');
                 }
             }
