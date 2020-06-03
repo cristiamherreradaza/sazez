@@ -65,7 +65,7 @@
             </div>
     </div>
     <div class="row">
-        <div class="col-md-11 m-auto">
+        <div class="col-md-12 m-auto">
             <div class="card card-outline-primary">                                
                 <div class="card-header bg-secondary">
                     <h4 class="mb-0 text-white">PRODUCTOS</h4>
@@ -75,7 +75,7 @@
                     <input type="text" class="form-control" id="pedido_id" name="pedido_id" value="{{ $pedidos[0]->id }}" hidden>
                     <input type="text" class="form-control" id="almacene_id" name="almacene_id" value="{{ $pedidos[0]->almacene_solicitante_id }}" hidden>
                     <br>
-                    <div class="table-responsive m-t-40">
+                    <div class="table-responsive m-t-40 col-md-11 m-auto">
                         <table id="config-table" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -86,6 +86,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
+                                    <th>Cantidad Solicitada</th>
                                     <th>Cantidad</th>
                                 </tr>
                             </thead>
@@ -102,7 +103,7 @@
                                         <td>{{ $prod->nombre_tipo }}</td>
                                         <td>{{ $prod->modelo }}</td>
                                         <td>{{ $prod->colores }}</td>
-                                        
+                                        <td style="text-align:center;">{{ $prod->cantidad }}</td>
                                         @php
                                              $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
                                                                     FROM movimientos
@@ -114,7 +115,7 @@
                                         @php
                                             if ($prod->cantidad <= $cantidad_disponible) {
                                         @endphp
-                                        {{-- <td><input type="text" class="form-control col-sm-2 col-md-8" style="text-align: center; color: green;" onchange="calcula( {{ $prod->id }} )" id="cantidad_{{ $prod->id }}" name="cantidad_{{ $prod->id }}" data-disponible="{{ $cantidad_disponible }}" value="{{ $prod->cantidad }}"> <label class="col-md-4"> &nbsp;&nbsp;({{ $cantidad_disponible }}) </label></td> --}}
+                                        
                                         <td>
                                             <div class="form-group">
                                                 <div class="input-group">
@@ -129,7 +130,6 @@
                                         @php
                                             } else {
                                         @endphp
-                                       {{--  <td><input type="text" class="form-control col-sm-2" style="text-align: center; color: red;" onchange="calcula( {{ $prod->id }} )" id="cantidad_{{ $prod->id }}" name="cantidad_{{ $prod->id }}" data-disponible="{{ $cantidad_disponible }}" value="{{ $prod->cantidad }}"> &nbsp;&nbsp;({{ $cantidad_disponible }})</td> --}}
                                         <td>
                                             <div class="form-group">
                                                 <div class="input-group">

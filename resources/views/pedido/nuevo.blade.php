@@ -80,6 +80,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
+                                    <th>Stock</th>
                                     <th style="width: 5%">Cantidad</th>
                                     <th></th>
                                 </tr>
@@ -136,10 +137,11 @@
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
+        almacen_id = $('#almacen_a_pedir').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
                 url: "{{ url('Pedido/ajaxBuscaProducto') }}",
-                data: {termino: termino_busqueda},
+                data: {termino: termino_busqueda, almacen : almacen_id},
                 type: 'POST',
                 success: function(data) {
                     $("#listadoProductosAjax").show('slow');

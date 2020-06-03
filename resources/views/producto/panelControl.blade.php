@@ -96,6 +96,92 @@
             </div>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-md-flex no-block">
+                    <div>
+                        <h4 class="card-title">Sales Overview</h4>
+                        <h6 class="card-subtitle">Check the monthly sales </h6>
+                    </div>
+                    <div class="ml-auto">
+                        <select class="custom-select">
+                            <option selected="">March</option>
+                            <option value="1">February</option>
+                            <option value="2">May</option>
+                            <option value="3">April</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover no-wrap">
+                    <thead>
+                        <tr>
+                            <th class="text-center border-0">#</th>
+                            <th class="border-0">NAME</th>
+                            <th class="border-0">STATUS</th>
+                            <th class="border-0">DATE</th>
+                            <th class="border-0">PRICE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="text-center">1</td>
+                            <td class="txt-oflo">Elite admin</td>
+                            <td><span class="badge badge-success py-1">SALE</span> </td>
+                            <td class="txt-oflo">April 18, 2020</td>
+                            <td><span class="text-success">$24</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">2</td>
+                            <td class="txt-oflo">Real Homes WP Theme</td>
+                            <td><span class="badge badge-info py-1">EXTENDED</span></td>
+                            <td class="txt-oflo">April 19, 2020</td>
+                            <td><span class="text-info">$1250</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">3</td>
+                            <td class="txt-oflo">Ample Admin</td>
+                            <td><span class="badge badge-info py-1">EXTENDED</span></td>
+                            <td class="txt-oflo">April 19, 2020</td>
+                            <td><span class="text-info">$1250</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">4</td>
+                            <td class="txt-oflo">Medical Pro WP Theme</td>
+                            <td><span class="badge badge-danger py-1">TAX</span></td>
+                            <td class="txt-oflo">April 20, 2020</td>
+                            <td><span class="text-danger">-$24</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">5</td>
+                            <td class="txt-oflo">Hosting press html</td>
+                            <td><span class="badge badge-warning py-1">SALE</span></td>
+                            <td class="txt-oflo">April 21, 2020</td>
+                            <td><span class="text-success">$24</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">6</td>
+                            <td class="txt-oflo">Digital Agency PSD</td>
+                            <td><span class="badge badge-success py-1">SALE</span> </td>
+                            <td class="txt-oflo">April 23, 2020</td>
+                            <td><span class="text-danger">-$14</span></td>
+                        </tr>
+                        <tr>
+                            <td class="text-center">7</td>
+                            <td class="txt-oflo">Elite admin</td>
+                            <td><span class="badge badge-success py-1">SALE</span> </td>
+                            <td class="txt-oflo">April 18, 2020</td>
+                            <td><span class="text-success">$24</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {{-- end row  --}}
 

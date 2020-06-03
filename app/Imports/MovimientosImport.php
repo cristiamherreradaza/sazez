@@ -22,6 +22,14 @@ class MovimientosImport implements ToModel
         // return new Movimiento([
         //     // 'name'  => $row[0],
         // ]);
+        $hoy = date("Y-m-d H:i:s");
+        $num = DB::select("SELECT MAX(numero) as nro
+                                FROM movimientos");
+        if (!empty($num)) {
+            $numero = $num[0]->nro + 1;
+        } else {
+            $numero = 1;
+        }
         
         if( is_numeric($row[7]) ){
             $producto = Producto::where('codigo', $row[1])
@@ -50,6 +58,8 @@ class MovimientosImport implements ToModel
                     $salida->almacene_id = 1;
                     $salida->pedido_id = $pedido_id;
                     $salida->salida = $row[7];
+                    $salida->fecha = $hoy;
+                    $salida->numero = $numero;
                     $salida->estado = 'Pedido';
                     $salida->save();
 
@@ -60,6 +70,8 @@ class MovimientosImport implements ToModel
                     $entrada->almacene_id = $almacen->id;
                     $entrada->pedido_id = $pedido_id;
                     $entrada->ingreso = $row[7];
+                    $entrada->fecha = $hoy;
+                    $entrada->numero = $numero;
                     $entrada->estado = 'Pedido';
                     $entrada->save();
                 }
@@ -74,6 +86,8 @@ class MovimientosImport implements ToModel
                     $salida->almacene_id = 1;
                     // $salida->pedido_id = $pedido_id;
                     $salida->salida = $row[7];
+                    $salida->fecha = $hoy;
+                    $salida->numero = $numero;
                     $salida->estado = 'Envio';
                     $salida->save();
 
@@ -84,6 +98,8 @@ class MovimientosImport implements ToModel
                     $entrada->almacene_id = $almacen->id;
                     // $entrada->pedido_id = $pedido_id;
                     $entrada->ingreso = $row[7];
+                    $entrada->fecha = $hoy;
+                    $entrada->numero = $numero;
                     $entrada->estado = 'Envio';
                     $entrada->save();
                 }

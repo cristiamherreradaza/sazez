@@ -174,13 +174,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Envio/guarda', 'EnvioController@guarda');
     Route::get('Envio/listado', 'EnvioController@listado');
     Route::get('Envio/ajax_listados', 'EnvioController@ajax_listados');
+    
+    //MOVIMIENTOS   
+    Route::get('Movimiento/registraDatos', 'MovimientoController@registraDatos');
+    Route::get('Envio/ver_pedido/{id}', 'EnvioController@ver_pedido');
 
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');
-
-
-
 
 Route::get('Tienda/inicio', 'TiendaController@inicio');
 Route::get('Tienda/ver/{id}', 'TiendaController@ver');
