@@ -25,12 +25,17 @@
                 ->first();
             @endphp
                 <tr class="item_{{ $p->id }}">
-                    <td>{{ $p->id }}</td>
-                    <td>{{ $p->codigo }}</td>
+                    <td>
+                        {{ $p->id }}
+                    </td>
+                    <td>
+                        {{ $p->codigo }}
+                        <small id="tags_promos" class="badge badge-default badge-warning form-text text-white" onclick="muestraPromo(1)">Ver</small>
+                    </td>
                     <td>
                         {{ $p->nombre }}
                         @forelse ($promo as $key => $pr)
-                            <small id="name13" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pr->combo_id }})">Promo {{ ++$key }}</small>
+                            <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pr->combo_id }})">P {{ ++$key }}</small>
                         @empty
                             
                         @endforelse
@@ -42,8 +47,7 @@
                     <td><h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3></td>
                     <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
                     <td>
-                        <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
-                        <button type="button" class="btnSelecciona btn text-white btn-warning" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btnSelecciona btn btn-success" title="Adiciona Item"><i class="fas fa-plus"></i></button>
                     </td>
                 </tr>    
             @endforeach
@@ -62,8 +66,9 @@
             var currentRow = $(this).closest("tr");
 
             var id      = currentRow.find("td:eq(0)").text();
-            var codigo  = currentRow.find("td:eq(1)").text();
-            var nombre  = currentRow.find("td:eq(2)").text();
+            var codigo  = currentRow.find("td:eq(1)").html();
+            // var nombre  = currentRow.find("td:eq(2)").text();
+            var nombre  = currentRow.find("td:eq(2)").html();
             var marca   = currentRow.find("td:eq(3)").text();
             var tipo    = currentRow.find("td:eq(4)").text();
             var modelo  = currentRow.find("td:eq(5)").text();

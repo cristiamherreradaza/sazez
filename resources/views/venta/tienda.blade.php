@@ -175,7 +175,10 @@
         paging: false,
         searching: false,
         ordering:  false,
-        info: false
+        info: false,
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        },
     });
     var itemsPedidoArray = [];
     $.ajaxSetup({
@@ -324,6 +327,11 @@
 
         $("#danger-header-modal").modal("show");
     // alert(promoId);
+    }
+
+    function muestraExistencias()
+    {
+
     }
 
 </script>
