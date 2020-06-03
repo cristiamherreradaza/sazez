@@ -88,17 +88,16 @@ class EnvioController extends Controller
     public function ajax_listados()
     {
         // $lista_personal = Producto::all();
-        $productos = DB::table('movimientos')
-                ->where('movimientos.estado', '=', 'Envio')
+        $productos = Movimiento::where('movimientos.estado', '=', 'Envio')
                 ->where('movimientos.ingreso', '>', 0)
                 ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
                 ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                ->select('movimientos.id', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado'
+                ->distinct()->select('movimientos.numero', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado'
                 );
 
          return Datatables::of($productos)
                 ->addColumn('action', function ($productos) {
-                    return '<button onclick="ver_pedido(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                    return '<button onclick="ver_pedido(' . $productos->numero . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
                 })
                 ->make(true); 
         
@@ -106,19 +105,16 @@ class EnvioController extends Controller
 
     public function ver_pedido($id)
     {
-        $movimientos = Movimiento::find($id);
-        $numero = $movimientos->numero;
         $datos = DB::table('movimientos')
-                ->where('movimientos.id', '=', $movimientos->id)
+                ->where('movimientos.numero', '=', $id)
                 ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
                 ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                ->select('almacenes.nombre', 'users.name', 'movimientos.numero', 'movimientos.fecha')
+                ->distinct()->select('movimientos.numero', 'almacenes.nombre', 'users.name', 'movimientos.fecha')
                 ->get();
         // dd($datos);
         // $entrega = Pedido::find($id);
 
-        $productos = DB::table('movimientos')
-                ->where('movimientos.numero', '=', $numero)
+        $productos = Movimiento::where('movimientos.numero', '=', $id)
                 ->where('movimientos.ingreso', '>', 0)
                 ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
                 ->join('marcas', 'productos.marca_id', '=', 'marcas.id')

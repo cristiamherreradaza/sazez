@@ -14,7 +14,7 @@ class MovimientoController extends Controller
     public function registraDatos()
     {
         // dd($productos[0]->id);
-        for ($i=0; $i < 2000 ; $i++) { 
+        for ($i=0; $i < 1000 ; $i++) { 
             $productos = DB::select('select id from productos order by rand() limit 1', [1]);
             $almacenes = DB::select('select id from almacenes order by rand() limit 1', [1]);
             $movimientos = new Movimiento();

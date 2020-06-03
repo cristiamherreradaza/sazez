@@ -137,7 +137,7 @@ $(document).ready(function() {
         "serverSide": true,
         "ajax": "{{ url('Envio/ajax_listados') }}",
         "columns": [
-            {data: 'id', name: 'id'},
+            {data: 'numero', name: 'numero'},
             {data: 'nombre', name: 'nombre'},
             {data: 'name', name: 'name'},
             {data: 'fecha', name: 'fecha'},

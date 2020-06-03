@@ -131,8 +131,7 @@ class PedidoController extends Controller
     public function ajax_listado()
     {
         // $lista_personal = Producto::all();
-        $pedidos = DB::table('pedidos')
-            ->leftJoin('almacenes', 'pedidos.almacene_solicitante_id', '=', 'almacenes.id')
+        $pedidos = Pedido::leftJoin('almacenes', 'pedidos.almacene_solicitante_id', '=', 'almacenes.id')
             ->select(
                 'pedidos.id',
                 'pedidos.numero', 
