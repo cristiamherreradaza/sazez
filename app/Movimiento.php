@@ -17,8 +17,6 @@ class Movimiento extends Model
         'precio_venta',
         'ingreso',
         'salida',
-        'fecha',
-        'numero',
         'estado',
         'deleted_at',
     ];
