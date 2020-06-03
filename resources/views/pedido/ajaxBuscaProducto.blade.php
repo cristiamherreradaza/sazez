@@ -9,6 +9,7 @@
                 <th>Tipo</th>
                 <th>Modelo</th>
                 <th>Colores</th>
+                <th>Stock</th>
                 <th class="text-nowrap">Action</th>
             </tr>
         </thead>
@@ -22,6 +23,15 @@
                     <td>{{ $p->tipo->nombre }}</td>
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
+                    @php
+                        $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
+                                                                    FROM movimientos
+                                                                    WHERE producto_id = '$p->id'
+                                                                    AND almacene_id = '$almacen_id'
+                                                                    GROUP BY producto_id");
+                        $cantidad_disponible = $total[0]->total;
+                    @endphp
+                    <td>{{ $cantidad_disponible }}</td>
                     <td>
                         <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
                     </td>
@@ -47,6 +57,7 @@
             var tipo    = currentRow.find("td:eq(4)").text();
             var modelo  = currentRow.find("td:eq(5)").text();
             var colores = currentRow.find("td:eq(6)").text();
+            var stock   = currentRow.find("td:eq(7)").text();
 
             let buscaItem = itemsPedidoArray.lastIndexOf(id);
             if(buscaItem < 0)
@@ -60,6 +71,7 @@
                     tipo,
                     modelo,
                     colores,
+                    stock,
                     `<input type="number" class="form-control" value="1" min="1" name="item[` + id + `]">`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
                 ]).draw(false);
