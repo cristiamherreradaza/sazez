@@ -11,7 +11,7 @@
 @section('content')
 <div class="card border-info">
     <div class="card-header bg-info">
-        <h4 class="mb-0 text-white">PRODUCTOS ENTREGADOS</h4>
+        <h4 class="mb-0 text-white">PRODUCTOS ENVIADOS</h4>
     </div>  
     <div class="row">
         <div class="col-12">
@@ -22,7 +22,7 @@
                         <div class="form-group row">
                             <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Almacen:</label>
                             <div class="col-md-6">
-                                <p class="form-control-static"> {{ $pedidos[0]->nombre }} </p>
+                                <p class="form-control-static"> {{ $datos[0]->nombre }} </p>
                             </div>
                         </div>
                     </div>
@@ -31,7 +31,7 @@
                         <div class="form-group row">
                             <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Encargado de Almacen:</label>
                             <div class="col-md-6">
-                                <p class="form-control-static"> {{ $pedidos[0]->solicitante_id }} </p>
+                                <p class="form-control-static"> {{ $datos[0]->name }} </p>
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                         <div class="form-group row">
                             <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Numero de Pedido:</label>
                             <div class="col-md-6">
-                                <p class="form-control-static"> {{ $pedidos[0]->numero }} </p>
+                                <p class="form-control-static"> {{ $datos[0]->numero }} </p>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                         <div class="form-group row">
                             <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Fecha de Entrega:</label>
                             <div class="col-md-6">
-                                <p class="form-control-static"> {{ $pedidos[0]->fecha }} </p>
+                                <p class="form-control-static"> {{ $datos[0]->fecha }} </p>
                             </div>
                         </div>
                     </div>
@@ -72,8 +72,6 @@
                 </div>
                 <form action="{{ url('Entrega/store') }}" method="POST">
                 @csrf
-                    <input type="text" class="form-control" id="pedido_id" name="pedido_id" value="{{ $pedidos[0]->id }}" hidden>
-                    <input type="text" class="form-control" id="almacene_id" name="almacene_id" value="{{ $pedidos[0]->almacene_solicitante_id }}" hidden>
                     <br>
                     <div class="table-responsive m-t-40 col-md-11 m-auto">
                         <table id="config-table" class="table table-bordered table-striped">

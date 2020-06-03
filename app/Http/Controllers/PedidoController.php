@@ -43,7 +43,7 @@ class PedidoController extends Controller
 
         return Datatables::of($productos)
             ->addColumn('action', function ($productos) {
-                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                return '<button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
             })
             ->make(true);
     }
@@ -114,11 +114,12 @@ class PedidoController extends Controller
 
     public function ajaxBuscaProducto(Request $request)
     {
+        $almacen_id = $request->almacen;
         $productos = Producto::where('nombre', 'like', "%$request->termino%")
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-        return view('pedido.ajaxBuscaProducto')->with(compact('productos'));
+        return view('pedido.ajaxBuscaProducto')->with(compact('productos', 'almacen_id'));
     }
 
     public function listado()
