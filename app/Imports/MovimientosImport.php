@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Movimiento;
 use App\Producto;
 use App\Almacene;
+use App\Pedido;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToModel;
 use DB;
@@ -51,11 +52,14 @@ class MovimientosImport implements ToModel
 
                 $cantidad_disponible = $total[0]->total;
                 if ($row[7] <= $cantidad_disponible) {
+
+                    $pedido = Pedido::find($pedido_id);
+
                     //aqui sacamos del alamacen central el producto                        
                     $salida = new Movimiento();
                     $salida->user_id = Auth::user()->id;
                     $salida->producto_id = $producto->id;
-                    $salida->almacene_id = 1;
+                    $salida->almacene_id = $pedido->almacene_id;
                     $salida->pedido_id = $pedido_id;
                     $salida->salida = $row[7];
                     $salida->fecha = $hoy;
@@ -83,7 +87,7 @@ class MovimientosImport implements ToModel
                     $salida = new Movimiento();
                     $salida->user_id = Auth::user()->id;
                     $salida->producto_id = $producto->id;
-                    $salida->almacene_id = 1;
+                    $salida->almacene_id = Auth::user()->almacene_id;
                     // $salida->pedido_id = $pedido_id;
                     $salida->salida = $row[7];
                     $salida->fecha = $hoy;

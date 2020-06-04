@@ -201,10 +201,10 @@ $(document).ready(function() {
 });
 </script>
 <script>
-    function editar(id, nombre)
+    function editar(id)
     {
         $("#id").val(id);
-        window.location.href = "{{ url('Pedido/pedido_productos') }}/"+id;
+        window.location.href = "{{ url('Pedido/editar') }}/"+id;
     }
 
     function eliminar(id)

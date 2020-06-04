@@ -81,10 +81,19 @@ class PedidoController extends Controller
 
     public function guarda(Request $request)
     {
+        $num = DB::select("SELECT MAX(numero) as nro
+                                FROM pedidos");
+        if (!empty($num)) {
+            $numero = $num[0]->nro + 1;
+        } else {
+            $numero = 1;
+        }
+
         $pedido                          = new Pedido();
         $pedido->almacene_solicitante_id = Auth::user()->almacen_id;
         $pedido->solicitante_id          = Auth::user()->id;
         $pedido->almacene_id             = $request->almacen_a_pedir;
+        $pedido->numero                  = $numero;
         $pedido->fecha                   = $request->fecha_pedido;
         $pedido->save();
         $pedido_id = $pedido->id;
@@ -101,6 +110,13 @@ class PedidoController extends Controller
             $productosPedido->save();
         }
         return redirect('Pedido/listado');
+    }
+
+    public function editar($id)
+    {
+        $pedido = Pedido::find($id);
+        $almacenes = Almacene::get();
+        return view('pedido.editar')->with(compact('pedido', 'almacenes'));
     }
 
     public function eliminar($id)

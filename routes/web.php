@@ -135,9 +135,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Pedido/guarda', 'PedidoController@guarda');
     Route::get('Pedido/eliminar/{id}', 'PedidoController@eliminar');
 
-
     Route::get('Pedido/listado', 'PedidoController@listado');
     Route::get('Pedido/ajax_listado', 'PedidoController@ajax_listado');
+    Route::get('Pedido/editar/{id}', 'PedidoController@editar');
 
     // ENTREGAS
     Route::get('Entrega/entrega/{id}', 'EntregaController@entrega');
@@ -150,6 +150,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Entrega/ajax_importar', 'EntregaController@ajax_importar');
     Route::post('Entrega/importar_envio', 'EntregaController@importar_envio');
     Route::get('Entrega/ver_pedido/{id}', 'EntregaController@ver_pedido');
+
+    //TIPOS
+    Route::get('Tipo/listado', 'TipoController@listado');
+    Route::post('Tipo/guardar', 'TipoController@guardar');
+    Route::post('Tipo/actualizar', 'TipoController@actualizar');
+    Route::get('Tipo/eliminar/{id}', 'TipoController@eliminar');
 
     // USUARIOS
     Route::get('User/listado', 'UserController@listado');
