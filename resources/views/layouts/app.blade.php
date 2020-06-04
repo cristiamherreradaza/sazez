@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/favicon.png') }}">
     @yield('metadatos')
     <title>@yield('title')</title>
 	<link rel="canonical" href="https://www.wrappixel.com/templates/monsteradmin/" />
@@ -53,12 +53,12 @@
                             <!-- ============================================================== -->
                             <!-- Logo -->
                             <!-- ============================================================== -->
-                            <a class="navbar-brand" href="index.html">
+                            <a class="navbar-brand" href="{{ url('home') }}">
                                 <!-- Logo icon -->
                                 <b class="logo-icon">
                                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                                     <!-- Dark Logo icon -->
-                                    <img src="../assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                                    <img src="{{ asset('assets/images/logo-icon.png') }}" alt="homepage" class="dark-logo" />
                                     <!-- Light Logo icon -->
                                     <img src="{{ asset('assets/images/icon_inicio.png') }}" alt="homepage" class="light-logo" />
                                 </b>
@@ -66,7 +66,7 @@
                                 <!-- Logo text -->
                                 <span class="logo-text">
                                     <!-- dark Logo text -->
-                                    <img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo" />
+                                    <img src="{{ asset('assets/images/logo-text.png') }}" alt="homepage" class="dark-logo" />
                                     <!-- Light Logo text -->
                                     <img src="{{ asset('assets/images/titulo_inicio.png') }}" class="light-logo" alt="homepage" />
                                 </span>
@@ -190,7 +190,7 @@
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
-                                                                src="../assets/images/users/1.jpg" alt="user"
+                                                                src="{{ asset('assets/images/users/1.jpg') }}" alt="user"
                                                                 class="rounded-circle w-100"> <span
                                                                 class="profile-status rounded-circle online"></span> </span>
                                                         <div class="w-75 d-inline-block v-middle pl-2">
@@ -204,7 +204,7 @@
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
-                                                                src="../assets/images/users/2.jpg" alt="user"
+                                                                src="{{ asset('assets/images/users/2.jpg') }}" alt="user"
                                                                 class="rounded-circle w-100"> <span
                                                                 class="profile-status rounded-circle busy"></span> </span>
                                                         <div class="w-75 d-inline-block v-middle pl-2">
@@ -218,7 +218,7 @@
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
-                                                                src="../assets/images/users/3.jpg" alt="user"
+                                                                src="{{ asset('assets/images/users/3.jpg') }}" alt="user"
                                                                 class="rounded-circle w-100"> <span
                                                                 class="profile-status rounded-circle away"></span> </span>
                                                         <div class="w-75 d-inline-block v-middle pl-2">
@@ -232,7 +232,7 @@
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
-                                                                src="../assets/images/users/4.jpg" alt="user"
+                                                                src="{{ asset('assets/images/users/4.jpg') }}" alt="user"
                                                                 class="rounded-circle w-100"> <span
                                                                 class="profile-status rounded-circle offline"></span> </span>
                                                         <div class="w-75 d-inline-block v-middle pl-2">
@@ -270,15 +270,15 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         <div class="carousel-item active">
                                                             <div class="container p-0"> <img class="d-block img-fluid"
-                                                                    src="../assets/images/big/img1.jpg" alt="First slide"></div>
+                                                                    src="{{ asset('assets/images/big/img1.jpg') }}" alt="First slide"></div>
                                                         </div>
                                                         <div class="carousel-item">
                                                             <div class="container p-0"><img class="d-block img-fluid"
-                                                                    src="../assets/images/big/img2.jpg" alt="Second slide"></div>
+                                                                    src="{{ asset('assets/images/big/img2.jpg') }}" alt="Second slide"></div>
                                                         </div>
                                                         <div class="carousel-item">
                                                             <div class="container p-0"><img class="d-block img-fluid"
-                                                                    src="../assets/images/big/img3.jpg" alt="Third slide"></div>
+                                                                    src="{{ asset('assets/images/big/img3.jpg') }}" alt="Third slide"></div>
                                                         </div>
                                                     </div>
                                                     <a class="carousel-control-prev" href="#carouselExampleControls" role="button"

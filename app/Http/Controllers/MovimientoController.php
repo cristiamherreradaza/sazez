@@ -54,6 +54,7 @@ class MovimientoController extends Controller
 
     public function guarda(Request $request)
     {
+        $fecha = date("Y-m-d H:i:s");
         $llaves = array_keys($request->precio);
         foreach ($llaves as $key => $ll) 
         {
@@ -63,6 +64,7 @@ class MovimientoController extends Controller
             $ingreso->producto_id = $ll;
             $ingreso->almacene_id = $request->almacen;
             $ingreso->ingreso = $request->subtotal[$ll];
+            $ingreso->fecha = $fecha;
             $ingreso->save();
         }
         return redirect('Producto/listado');
