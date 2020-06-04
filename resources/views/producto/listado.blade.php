@@ -100,6 +100,11 @@ function edita_producto(producto_id)
     window.location.href = "{{ url('Producto/edita') }}/" + producto_id;
 }
 
+function muestra_producto(producto_id)
+{
+    window.location.href = "{{ url('Producto/muestra') }}/" + producto_id;
+}
+
 </script>
 
 <script type="text/javascript">

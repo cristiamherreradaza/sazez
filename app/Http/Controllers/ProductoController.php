@@ -57,7 +57,7 @@ class ProductoController extends Controller
 
         return Datatables::of($productos)
             ->addColumn('action', function ($productos) {
-                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="muestra_producto(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
             })
             ->make(true);    
     }
@@ -265,5 +265,14 @@ class ProductoController extends Controller
         $primeras = Str::substr($palabra[0], 0, 3);
         $sigla = str_replace(" ", "", $primeras);
         return $sigla;
+    }
+
+    public function muestra($id)
+    {
+        $producto = Producto::find($id);
+        $categorias = Categoria::get();
+        $almacenes = Almacene::get();
+        $categorias_productos = CategoriasProducto::where('producto_id', $id)->get();
+        return view('producto.muestra')->with(compact('producto', 'categorias', 'categorias_productos', 'almacenes'));
     }
 }
