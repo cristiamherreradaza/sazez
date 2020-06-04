@@ -163,6 +163,11 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ url('Tipo/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Tipos </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url('User/listado') }}" class="sidebar-link">
                                 <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Usuarios </span>
                             </a>

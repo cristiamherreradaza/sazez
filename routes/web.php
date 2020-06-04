@@ -151,6 +151,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Entrega/importar_envio', 'EntregaController@importar_envio');
     Route::get('Entrega/ver_pedido/{id}', 'EntregaController@ver_pedido');
 
+    //TIPOS
+    Route::get('Tipo/listado', 'TipoController@listado');
+    Route::post('Tipo/guardar', 'TipoController@guardar');
+    Route::post('Tipo/actualizar', 'TipoController@actualizar');
+    Route::get('Tipo/eliminar/{id}', 'TipoController@eliminar');
+
     // USUARIOS
     Route::get('User/listado', 'UserController@listado');
     Route::post('User/guardar', 'UserController@guardar');
