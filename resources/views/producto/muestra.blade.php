@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('css')
-    <!-- <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet"> -->
 @endsection
 
 @section('content')
@@ -43,7 +42,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 col-xlg-9 col-md-7">
+        <div class="col-lg-6 col-xlg-7 col-md-5">
             <div class="card px-5 py-5">
                 <h1><strong>{{ $producto->nombre }}</strong></h1>
                 @php
@@ -59,11 +58,20 @@
                             {{ $categorias->categoria->nombre }}
                         @endforeach
                     </li>
-                    <li><span>Disponibilidad</span> : En Stock</li>
+                    <li><span>Marca</span> : {{ $producto->marca->nombre }}</li>
                 </ul>
                 <h2 class="mt-3"><strong>Descripción</strong></h2>
                 <p> {{ $producto->descripcion }} </p>
 
+            </div>
+        </div>
+        <div class="col-lg-2 col-xlg-2 col-md-2">
+            <div class="card text-white bg-white">
+                <div class="card-body">
+                    <div class="white-box text-center">
+                        <img src="{{ asset('assets/images/product/qr_sample.png') }}" class="img-responsive" style="height:250px; width:250px;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

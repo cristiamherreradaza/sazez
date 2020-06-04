@@ -96,6 +96,9 @@
                             </thead>
                             <tbody>
                             <!-- aqui tienen que estar los productos existentes en combo -->
+                            @php
+                                $total=0
+                            @endphp
                             @foreach($productos_combo as $producto)
                                 <tr class="item_{{ $producto->producto_id }}">
                                     <td>{{ $producto->producto_id }}</td>
@@ -115,6 +118,9 @@
                                     <td><input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="{{ $producto->cantidad }}" data-id="`+id+`" min="1"></td>
                                     <td><input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="{{ ($producto->precio*$producto->cantidad) }}" step="any" style="width: 120px;" readonly></td>
                                     <td><button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash"></i></button></td>
+                                    @php
+                                        $total += ($producto->precio*$producto->cantidad)
+                                    @endphp
                                 </tr>
                             @endforeach
                             </tbody>
@@ -122,7 +128,7 @@
                                 <tr>
                                     <th colspan="10" class="text-right">TOTAL</th>
                                     <th colspan="2"><input type="text" class="form-control text-right" name="totalCompra"
-                                            id="resultadoSubTotales" style="width: 120px;" value="0" readonly></th>
+                                            id="resultadoSubTotales" style="width: 120px;" value="{{ $total }}" readonly></th>
                                 </tr>
                             </tfoot>
                         </table>
