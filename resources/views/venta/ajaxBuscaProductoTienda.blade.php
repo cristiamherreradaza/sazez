@@ -25,9 +25,7 @@
                 ->first();
             @endphp
                 <tr class="item_{{ $p->id }}">
-                    <td>
-                        {{ $p->id }}
-                    </td>
+                    <td>{{ $p->id }}</td>
                     <td>
                         {{ $p->codigo }}
                         <small id="tags_promos" class="badge badge-default badge-warning form-text text-white" onclick="muestraPromo(1)">Ver</small>

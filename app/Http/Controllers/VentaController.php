@@ -124,7 +124,7 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-        // dd($request->all());
+        // dd($request->precio);
         $venta              = new Venta();
         $venta->user_id     = Auth::user()->id;
         $venta->almacene_id = Auth::user()->almacen_id;
