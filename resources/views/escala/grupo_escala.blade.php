@@ -15,7 +15,7 @@
 
 
 <div class="card card-outline-info">
-    <form action="{{ url('Escala/guarda_multiple') }}" class="needs-validation" method="POST">
+    <form action="{{ url('Escala/guarda_multiple') }}"  method="POST">
         @csrf
     
     @if (Session('success'))

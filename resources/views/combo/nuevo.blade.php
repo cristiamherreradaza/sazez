@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<form action="{{ url('Combo/guarda') }}" class="needs-validation" method="POST" novalidate>
+<form action="{{ url('Combo/guarda') }}"  method="POST" >
     @csrf
     <div class="row">
         <div class="col-md-12">

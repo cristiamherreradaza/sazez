@@ -1,8 +1,6 @@
 @extends('layouts.app')
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
 @endsection
 
 @section('content')
@@ -180,7 +178,7 @@
                     </div> -->
                     <div class="tab-pane active" id="settings" role="tabpanel">
                         <div class="card-body">
-                            <form action="{{ url('User/actualizar') }}" method="POST" class="form-horizontal form-material">
+                            <form action="{{ url('User/actualizar') }}" class="needs-validation form-horizontal form-material" method="POST" novalidate>
                             @csrf
                             <input type="hidden" name="id" id="id" value="{{ auth()->user()->id }}">
                                 <div class="form-group">
@@ -193,18 +191,6 @@
                                     <label for="example-email" class="col-md-12">Correo Electrónico</label>
                                     <div class="col-md-12">
                                         <input name="email" id="email" type="email" value="{{ auth()->user()->email }}" class="form-control form-control-line" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">Contraseña</label>
-                                    <div class="col-md-12">
-                                        <input name="password" id="password" type="password" class="form-control form-control-line" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-12">Confirmar Contraseña</label>
-                                    <div class="col-md-12">
-                                        <input name="confirm_password" id="confirm_password" type="password" class="form-control form-control-line" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -228,7 +214,8 @@
                                 <div class="form-group">
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-success" onclick="actualizar_usuario()">Actualizar Perfil</button>
-                                        <a href="{{ url('home') }}" class="btn btn-info" >Volver</a>
+                                        <button type="button" class="btn btn-info" onclick="contrasena()">Cambiar contrase&nacute;a</button>
+                                        <a href="{{ url('home') }}" class="btn btn-primary" >Volver</a>
                                     </div>
                                 </div>
                             </form>
@@ -243,6 +230,40 @@
     <!-- ============================================================== -->
     <!-- End PAge Content -->
     <!-- ============================================================== -->
+
+
+<!-- inicio modal cambiar contrasena -->
+<div id="password_usuarios" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">CAMBIAR CONTRASE&Ntilde;A</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('User/password') }}" class="needs-validation" method="POST" novalidate>
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="id_password" id="id_password" value="{{ auth()->user()->id }}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Contraseña</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="password" type="password" id="password" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_password()">ACTUALIZAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal cambiar contrasena -->
 </div>
 
 
@@ -251,150 +272,37 @@
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
 <script>
-    $(function () {
-        $('#myTable').DataTable();
-        // responsive table
-        $('#config-table').DataTable({
-            responsive: true
-        });
-        var table = $('#example').DataTable({
-            "columnDefs": [{
-                "visible": false,
-                "targets": 2
-            }],
-            "order": [
-                [2, 'asc']
-            ],
-            "displayLength": 25,
-            "drawCallback": function (settings) {
-                var api = this.api();
-                var rows = api.rows({
-                    page: 'current'
-                }).nodes();
-                var last = null;
-                api.column(2, {
-                    page: 'current'
-                }).data().each(function (group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                        last = group;
-                    }
-                });
-            }
-        });
-        // Order by the grouping
-        $('#example tbody').on('click', 'tr.group', function () {
-            var currentOrder = table.order()[0];
-            if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                table.order([2, 'desc']).draw();
-            } else {
-                table.order([2, 'asc']).draw();
-            }
-        });
-
-        $('#example23').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-        $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
-    });
-
-</script>
-<script>
-    function nuevo_usuario()
-    {
-        $("#modal_usuarios").modal('show');
-    }
-
-    function guardar_usuario()
-    {
-        var nombre_usuario = $("#nombre_usuario").val();
-        var rol_usuario = $("#rol_usuario").val();
-        var email_usuario = $("#email_usuario").val();
-        var password_usuario = $("#password_usuario").val();
-        var confirm_password_usuario = $("#confirm_password_usuario").val();
-        var almacen_usuario = $("#almacen_usuario").val();
-
-        if(nombre_usuario.length>0 && rol_usuario.length>0 && email_usuario.length>0 && password_usuario.length>0 && confirm_password_usuario.length>0 && password_usuario == confirm_password_usuario){
-            Swal.fire(
-                'Excelente!',
-                'Una nuevo usuario fue registrado.',
-                'success'
-            )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar los campos: <br>- Nombre <br>- Correo Electrónico <br>- Contraseña <br>- Confirmar Contraseña <br>Y que las contraseñas coincidan',
-                'error'
-            )
-        }
-        
-    }
-
-    function editar(id, nombre, email, celular, nit, razon_social, rol, almacen)
-    {
-        $("#id").val(id);
-        $("#nombre").val(nombre);
-        $("#email").val(email);
-        $("#celular").val(celular);
-        $("#nit").val(nit);
-        $("#razon_social").val(razon_social);
-        $("#rol").val(rol);
-        $("#almacen").val(almacen);
-        $("#editar_usuarios").modal('show');
-    }
-
     function actualizar_usuario()
     {
         var id = $("#id").val();
         var nombre = $("#nombre").val();
         var rol = $("#rol").val();
         var email = $("#email").val();
-        var password = $("#password").val();
-        var confirm_password = $("#confirm_password").val();
-        if(nombre.length>0 && rol.length>0 && email.length>0 && password.length>0 && confirm_password.length>0 && password==confirm_password){
+        if(nombre.length>0 && rol.length>0 && email.length>0){
             Swal.fire(
                 'Excelente!',
                 'Usuario actualizado correctamente.',
                 'success'
             )
-        }else{
-            Swal.fire(
-                'Oops...',
-                'Es necesario llenar los campos: <br>- Nombre <br>- Correo Electrónico <br>- Contraseña <br>- Confirmar Contraseña <br>Y que las contraseñas coincidan',
-                'error'
-            )
         }
-        
     }
 
-    function eliminar(id, nombre)
+    function contrasena()
     {
-        Swal.fire({
-            title: 'Quieres borrar ' + nombre + '?',
-            text: "Luego no podras recuperarlo!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, estoy seguro!',
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Excelente!',
-                    'El usuario fue eliminado',
-                    'success'
-                ).then(function() {
-                    window.location.href = "{{ url('User/eliminar') }}/"+id;
-                });
-            }
-        })
+        $("#password_usuarios").modal('show');
+    }
+
+    function actualizar_password()
+    {
+        var password = $("#password").val();
+        if(password.length>7){
+            Swal.fire(
+                'Excelente!',
+                'Contraseña cambiada.',
+                'success'
+            )
+        }
     }
 </script>
 @endsection

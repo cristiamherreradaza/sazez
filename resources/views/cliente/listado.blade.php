@@ -37,6 +37,7 @@
                             <td>{{ $cliente->nit }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar cliente"  onclick="editar('{{ $cliente->id }}', '{{ $cliente->name }}', '{{ $cliente->email }}', '{{ $cliente->celulares }}', '{{ $cliente->nit }}', '{{ $cliente->razon_social }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $cliente->id }})"><i class="fas fa-key"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar cliente"  onclick="eliminar('{{ $cliente->id }}', '{{ $cliente->name }}')"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -47,7 +48,6 @@
     </div>
 </div>
 
-
 <!-- inicio modal nuevo usuario -->
 <div id="modal_usuarios" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -56,7 +56,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVO CLIENTE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Cliente/guardar') }}" class="needs-validation" method="POST" novalidate>
+            <form action="{{ url('Cliente/guardar') }}"  method="POST" >
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -108,7 +108,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" required>
+                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
                             </div>
                         </div>
                         
@@ -131,7 +131,7 @@
                 <h4 class="modal-title" id="myModalLabel">EDITAR CLIENTE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Cliente/actualizar') }}" class="needs-validation" method="POST" novalidate>
+            <form action="{{ url('Cliente/actualizar') }}"  method="POST" >
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">
@@ -177,17 +177,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Contraseña</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="password" type="password" id="password" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_usuario()">ACTUALIZAR CLIENTE</button>
@@ -198,6 +187,38 @@
 </div>
 <!-- fin modal editar usuario -->
 
+<!-- inicio modal cambiar contrasena -->
+<div id="password_usuarios" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">CAMBIAR CONTRASE&Ntilde;A</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Cliente/password') }}" class="needs-validation" method="POST" novalidate>
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="id_password" id="id_password" value="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Contraseña</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="password" type="password" id="password" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_password()">ACTUALIZAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal cambiar contrasena -->
 @stop
 
 @section('js')
@@ -223,10 +244,9 @@
         var nombre_usuario = $("#nombre_usuario").val();
         var email_usuario = $("#email_usuario").val();
         var password_usuario = $("#password_usuario").val();
-        var confirm_password_usuario = $("#confirm_password_usuario").val();
         var almacen_usuario = $("#almacen_usuario").val();
 
-        if(nombre_usuario.length>0 && email_usuario.length>0 && password_usuario.length>0 && confirm_password_usuario.length>0 && password_usuario == confirm_password_usuario){
+        if(nombre_usuario.length>0 && email_usuario.length>0 && password_usuario.length>7){
             Swal.fire(
                 'Excelente!',
                 'Una nuevo cliente fue registrado.',
@@ -251,9 +271,7 @@
         var id = $("#id").val();
         var nombre = $("#nombre").val();
         var email = $("#email").val();
-        var password = $("#password").val();
-        var confirm_password = $("#confirm_password").val();
-        if(nombre.length>0 && email.length>0 && password.length>0 && confirm_password.length>0 && password==confirm_password){
+        if(nombre.length>0 && email.length>0){
             Swal.fire(
                 'Excelente!',
                 'Cliente actualizado correctamente.',
@@ -262,10 +280,28 @@
         }
     }
 
+    function contrasena(id)
+    {
+        $("#id_password").val(id);
+        $("#password_usuarios").modal('show');
+    }
+
+    function actualizar_password()
+    {
+        var password = $("#password").val();
+        if(password.length>7){
+            Swal.fire(
+                'Excelente!',
+                'Contraseña cambiada.',
+                'success'
+            )
+        }
+    }
+
     function eliminar(id, nombre)
     {
         Swal.fire({
-            title: 'Quieres borrar ' + nombre + '?',
+            title: 'Quieres borrar a ' + nombre + '?',
             text: "Luego no podras recuperarlo!",
             type: 'warning',
             showCancelButton: true,
