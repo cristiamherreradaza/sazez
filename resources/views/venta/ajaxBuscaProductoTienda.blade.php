@@ -40,8 +40,8 @@
                             
                         @endforelse
                     </td>
-                    <td>{{ $p->marca->nombre }}</td>
-                    <td>{{ $p->tipo->nombre }}</td>
+                    <td>{{ $p->marca }}</td>
+                    <td>{{ $p->tipo }}</td>
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
                     <td><h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3></td>

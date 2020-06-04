@@ -19,7 +19,7 @@ class VentaController extends Controller
 {
     public function nuevo()
     {
-        // dd($cantidadTotal->total);
+        // dd($productos);
         $almacen_id = Auth::user()->almacen_id;
         $clientes = User::where('rol', 'Cliente')
                     ->get();
@@ -101,10 +101,24 @@ class VentaController extends Controller
 
     public function ajaxBuscaProductoTienda(Request $request)
     {
-        $productos = Producto::where('nombre', 'like', "%$request->termino%")
-                            ->orWhere('codigo', 'like', "%$request->termino%")
-                            ->limit(8)
-                            ->get();
+        $almacen_id = Auth::user()->almacen_id;
+        $productos = Movimiento::select(
+                            'productos.id',
+                            'productos.codigo as codigo',
+                            'productos.nombre as nombre',
+                            'marcas.nombre as marca',
+                            'tipos.nombre as tipo',
+                            'productos.modelo as modelo',
+                            'productos.colores as colores'
+                        )
+                    ->where('movimientos.almacene_id', $almacen_id)
+                    ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
+                    ->leftJoin('marcas', 'productos.marca_id', '=', 'marcas.id')
+                    ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
+                    ->where('productos.nombre', 'like', "%$request->termino%")
+                    ->orWhere('productos.codigo', 'like', "%$request->termino%")
+                    ->limit(8)
+                    ->get();
         return view('venta.ajaxBuscaProductoTienda')->with(compact('productos'));
     }
 
