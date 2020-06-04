@@ -136,9 +136,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Pedido/guarda', 'PedidoController@guarda');
     Route::get('Pedido/eliminar/{id}', 'PedidoController@eliminar');
 
-
     Route::get('Pedido/listado', 'PedidoController@listado');
     Route::get('Pedido/ajax_listado', 'PedidoController@ajax_listado');
+    Route::get('Pedido/editar/{id}', 'PedidoController@editar');
 
     // ENTREGAS
     Route::get('Entrega/entrega/{id}', 'EntregaController@entrega');

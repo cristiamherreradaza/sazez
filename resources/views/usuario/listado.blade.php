@@ -63,7 +63,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVO USUARIO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('User/guardar') }}" class="needs-validation" method="POST" novalidate>
+            <form action="{{ url('User/guardar') }}"  method="POST" >
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -164,7 +164,7 @@
                 <h4 class="modal-title" id="myModalLabel">EDITAR USUARIO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('User/actualizar') }}" class="needs-validation" method="POST" novalidate>
+            <form action="{{ url('User/actualizar') }}"  method="POST" >
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">

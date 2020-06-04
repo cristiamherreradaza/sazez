@@ -45,7 +45,7 @@
     <!-- Column -->
     <div class="col-md-12">
         <!-- Row -->
-        <form action="/Producto/guarda" class="needs-validation" method="post" enctype="multipart/form-data" novalidate>
+        <form action="/Producto/guarda"  method="post" enctype="multipart/form-data" >
             @csrf
         <div class="row">
             <div class="col-lg-12">
