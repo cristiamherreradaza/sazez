@@ -41,22 +41,23 @@ class UserController extends Controller
         $usuario = User::find($request->id);
         $usuario->name = $request->nombre;
         $usuario->email = $request->email;
-        $usuario->password = Hash::make($request->password);
-        if($request->celular){
-            $usuario->celulares = $request->celular;
-        }
-        if($request->razon_social){
-            $usuario->razon_social = $request->razon_social;
-        }
-        if($request->nit){
-            $usuario->nit = $request->nit;
-        }
+        $usuario->celulares = $request->celular;
+        $usuario->razon_social = $request->razon_social;
+        $usuario->nit = $request->nit;
         if($request->rol){
             $usuario->rol = $request->rol;
         }
-        if($request->almacen){
+        if($request->rol){
             $usuario->almacen_id = $request->almacen;
         }
+        $usuario->save();
+        return redirect('User/listado');
+    }
+
+    public function password(Request $request)
+    {
+        $usuario = User::find($request->id_password);
+        $usuario->password = Hash::make($request->password);
         $usuario->save();
         return redirect('User/listado');
     }

@@ -86,6 +86,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cliente/guardar', 'ClienteController@guardar');
     Route::post('Cliente/actualizar', 'ClienteController@actualizar');
     Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
+    Route::post('Cliente/password', 'ClienteController@password');
 
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');
@@ -163,6 +164,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('User/actualizar', 'UserController@actualizar');
     Route::get('User/eliminar/{id}', 'UserController@eliminar');
     Route::get('User/perfil', 'UserController@perfil');
+    Route::post('User/password', 'UserController@password');
 
     //VENTAS
     Route::post('Venta/ajaxBuscaProducto', 'VentaController@ajaxBuscaProducto');

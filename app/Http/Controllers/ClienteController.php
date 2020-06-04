@@ -49,16 +49,17 @@ class ClienteController extends Controller
         $usuario = User::find($request->id);
         $usuario->name = $request->nombre;
         $usuario->email = $request->email;
+        $usuario->celulares = $request->celular;
+        $usuario->razon_social = $request->razon_social;
+        $usuario->nit = $request->nit;
+        $usuario->save();
+        return redirect('Cliente/listado');
+    }
+
+    public function password(Request $request)
+    {
+        $usuario = User::find($request->id_password);
         $usuario->password = Hash::make($request->password);
-        if($request->celular){
-            $usuario->celulares = $request->celular;
-        }
-        if($request->razon_social){
-            $usuario->razon_social = $request->razon_social;
-        }
-        if($request->nit){
-            $usuario->nit = $request->nit;
-        }
         $usuario->save();
         return redirect('Cliente/listado');
     }
