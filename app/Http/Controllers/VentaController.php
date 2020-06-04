@@ -117,8 +117,10 @@ class VentaController extends Controller
                     ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
                     ->where('productos.nombre', 'like', "%$request->termino%")
                     ->orWhere('productos.codigo', 'like', "%$request->termino%")
+                    ->groupBy('productos.id')
                     ->limit(8)
                     ->get();
+        // dd($productos);
         return view('venta.ajaxBuscaProductoTienda')->with(compact('productos'));
     }
 
