@@ -115,6 +115,13 @@ class EntregaController extends Controller
 
     public function ajax_importar(Request $request)
     {
+        $num = DB::select("SELECT MAX(numero) as nro
+                                FROM movimientos");
+        if (!empty($num)) {
+            $numero = $num[0]->nro + 1;
+        } else {
+            $numero = 1;
+        }
         // $file = $request->file('file');
         // Excel::import(new MovimientosImport, $file);
         $validation = Validator::make($request->all(), [
@@ -122,8 +129,10 @@ class EntregaController extends Controller
         ]);
         if($validation->passes())
         {
+            session(['numero' => $numero]);
             $file = $request->file('select_file');
             Excel::import(new MovimientosImport, $file);
+            session()->forget('numero');
             return response()->json([
                 'message' => 'Importacion realizada con exito',
                 'sw' => 1
@@ -152,6 +161,14 @@ class EntregaController extends Controller
 
     public function importar_envio(Request $request)
     {
+        $num = DB::select("SELECT MAX(numero) as nro
+                                FROM movimientos");
+        if (!empty($num)) {
+            $numero = $num[0]->nro + 1;
+        } else {
+            $numero = 1;
+        }
+
         $pedido = $request->all('pedido_id');
         $pedido_id = $pedido['pedido_id'];
         // dd($pedido_id);
@@ -162,10 +179,12 @@ class EntregaController extends Controller
         if($validation->passes())
         {
             session(['pedido_id' => $pedido_id]);
+            session(['numero' => $numero]);
             $file = $request->file('select_file');
             // dd($file);
             Excel::import(new MovimientosImport, $file);
             session()->forget('pedido_id');
+            session()->forget('numero');
             //ACTUALIZAMOS EL PEDIDO A ENTREGADO
             $pedidos = Pedido::find($pedido_id);
             $pedidos->estado = 'Entregado';

@@ -14,89 +14,90 @@
     <form action="{{ url('Pedido/guarda') }}" method="POST">
         @csrf
     
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card border-info">                                
-                <div class="card-header bg-info">
-                    <h4 class="mb-0 text-white">NUEVO PEDIDO</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Fecha</label>
-                                <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ date("Y-m-d") }}" required>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-info">                                
+                    <div class="card-header bg-info">
+                        <h4 class="mb-0 text-white">EDITAR PEDIDO</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha</label>
+                                    <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ $pedido->fecha }}" required>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Almacen a solicitar</label>
-                                <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
-                                    @foreach($almacenes as $almacen)
-                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                    @endforeach
-                                </select>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Almacen a solicitar</label>
+                                    <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
+                                        {{-- <option value="{{ $pedido->almacene_id }}"> {{ $pedido->almacen->nombre }} </option> --}}
+                                        @foreach($almacenes as $almacene)
+                                        <option value="{{ $almacene->id }}"> {{ $almacene->nombre }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Buscar Producto</label>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="termino" name="termino">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="ti-search"></i></span>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Buscar Producto</label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="termino" name="termino">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="ti-search"></i></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="listadoProductosAjax"></div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="listadoProductosAjax"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card border-dark">
-                <div class="card-header bg-dark">
-                    <h4 class="mb-0 text-white">PRODUCTOS PARA PEDIDO</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive m-t-40">
-                        <table id="tablaPedido" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th style="width: 5%">ID</th>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
-                                    <th>Marca</th>
-                                    <th>Tipo</th>
-                                    <th>Modelo</th>
-                                    <th>Colores</th>
-                                    <th>Stock</th>
-                                    <th style="width: 5%">Cantidad</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <div class="form-group">
-                            <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card border-dark">
+                    <div class="card-header bg-dark">
+                        <h4 class="mb-0 text-white">PRODUCTOS PARA PEDIDO</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive m-t-40">
+                            <table id="tablaPedido" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%">ID</th>
+                                        <th>Codigo</th>
+                                        <th>Nombre</th>
+                                        <th>Marca</th>
+                                        <th>Tipo</th>
+                                        <th>Modelo</th>
+                                        <th>Colores</th>
+                                        <th>Stock</th>
+                                        <th style="width: 5%">Cantidad</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
+                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </form>
 
 @stop

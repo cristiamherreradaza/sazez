@@ -24,13 +24,6 @@ class MovimientosImport implements ToModel
         //     // 'name'  => $row[0],
         // ]);
         $hoy = date("Y-m-d H:i:s");
-        $num = DB::select("SELECT MAX(numero) as nro
-                                FROM movimientos");
-        if (!empty($num)) {
-            $numero = $num[0]->nro + 1;
-        } else {
-            $numero = 1;
-        }
         
         if( is_numeric($row[7]) ){
             $producto = Producto::where('codigo', $row[1])
@@ -48,6 +41,7 @@ class MovimientosImport implements ToModel
                                                                 GROUP BY producto_id");
 
             $pedido_id = session('pedido_id');
+            $numero = session('numero');
             if (!empty($pedido_id)) {
 
                 $cantidad_disponible = $total[0]->total;
@@ -87,7 +81,7 @@ class MovimientosImport implements ToModel
                     $salida = new Movimiento();
                     $salida->user_id = Auth::user()->id;
                     $salida->producto_id = $producto->id;
-                    $salida->almacene_id = Auth::user()->almacene_id;
+                    $salida->almacene_id = 1;
                     // $salida->pedido_id = $pedido_id;
                     $salida->salida = $row[7];
                     $salida->fecha = $hoy;
