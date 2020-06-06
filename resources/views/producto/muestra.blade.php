@@ -26,21 +26,30 @@
 <div class="container-fluid mt-5">
     <div class="row justify-content-md-center">
         <div class="col-lg-4 col-xlg-3 col-md-5">
-            <div class="card text-white bg-white">
-                <div class="card-body">
-                    <div class="white-box text-center">
-                        @if(count($producto->imagenes) != 0)
-                            @foreach($producto->imagenes as $imagen)
-                                <img src="{{ asset('imagenesProductos/'.$imagen->imagen) }}" class="img-responsive" style="height:400px; width:350px;">
-                                @break
-                            @endforeach
-                        @else
-                            <img src="{{ asset('assets/images/product/disponible.png') }}" class="img-responsive" style="height:400px; width:350px;">
-                        @endif
-                        
-                    </div>
+            <!-- empiezo de carrusel -->
+            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">                    
+                    @for($i = 0; $i< count($producto->imagenes); $i++ )
+                        <li data-target="#carouselExampleIndicators2" data-slide-to="{{ $i }}" class="{{ $i==0 ? 'active' : '' }}"></li>
+                    @endfor
+                </ol>
+                <div class="carousel-inner my-4" role="listbox">
+                    @foreach($producto->imagenes as $key => $imagen)
+                        <div class="carousel-item{{ $key == 0 ? ' active' : '' }}">
+                            <img class="img-fluid" src="{{ asset('imagenesProductos/'.$imagen->imagen) }}">
+                        </div>
+                    @endforeach
                 </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
+            <!-- fin de carrusel -->
         </div>
         <div class="col-lg-6 col-xlg-7 col-md-5">
             <div class="card px-5 py-5">
