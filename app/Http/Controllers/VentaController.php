@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Combo;
 use App\Venta;
+use DataTables;
 use App\Almacene;
 use App\Producto;
 use App\Movimiento;
-use DataTables;
 use App\Cotizacione;
 use App\VentasProducto;
 use Illuminate\Http\Request;
@@ -97,6 +98,14 @@ class VentaController extends Controller
         $clientes = User::where('rol', 'Cliente')
                     ->get();
         return view('venta.tienda')->with(compact('almacenes', 'clientes'));
+    }
+
+    public function mayorista()
+    {
+        $almacenes = Almacene::get();
+        $clientes = User::where('rol', 'Cliente')
+                    ->get();
+        return view('venta.mayorista')->with(compact('almacenes', 'clientes'));
     }
 
     public function ajaxBuscaProductoTienda(Request $request)

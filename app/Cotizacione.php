@@ -19,7 +19,7 @@ class Cotizacione extends Model
         'estado',
         'deleted_at',
     ];
-
+//qui el demo
     public function user()
     {
         return $this->belongsTo('App\User');
