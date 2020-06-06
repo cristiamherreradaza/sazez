@@ -15,6 +15,8 @@
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
         "maatwebsite/excel": "^3.1",
+        "metadeck/blog": "^1.0",
+        "simplesoftwareio/simple-qrcode": "~2",
         "yajra/laravel-datatables-oracle": "^9.9"
     },
     "require-dev": {

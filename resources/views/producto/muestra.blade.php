@@ -68,8 +68,8 @@
         <div class="col-lg-2 col-xlg-2 col-md-2">
             <div class="card text-white bg-white">
                 <div class="card-body">
-                    <div class="white-box text-center">
-                        <img src="{{ asset('assets/images/product/qr_sample.png') }}" class="img-responsive" style="height:250px; width:250px;">
+                    <div class="white-box text-center ">
+                        <img src='data:image/png;base64, {{ base64_encode(QrCode::format("png")->color(34,82,162)->size(200)->generate("$producto->codigo")) }}' class="img-responsive">
                     </div>
                 </div>
             </div>
