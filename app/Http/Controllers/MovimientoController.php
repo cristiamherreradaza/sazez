@@ -69,4 +69,20 @@ class MovimientoController extends Controller
         }
         return redirect('Producto/listado');
     }
+
+    public function ajaxMuestraTotalesAlmacen(Request $request)
+    {
+        // echo "desde movimientos";
+        $producto_id = $request->producto_id;
+        $cantidadTotal = Movimiento::select(
+            DB::raw('SUM(movimientos.ingreso) - SUM(movimientos.salida) as total'),
+            'almacenes.nombre as almacen'
+        )
+        ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+        ->where('movimientos.producto_id', $producto_id)
+        ->groupBy('movimientos.almacene_id')
+        ->get();
+        return view('movimiento.ajaxMuestraTotalesAlmacen')->with(compact('cantidadTotal'));
+        // dd($cantidadTotal);
+    }
 }

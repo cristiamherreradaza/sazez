@@ -15,10 +15,24 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                $hoy = date('Y-m-d');
+                $promosArray = [];
+            @endphp
             @foreach ($productos as $key => $p)
             @php
-                $precioProducto = App\Precio::where('producto_id', $p->id)->where('escala_id', 1)->first();
                 $promo = App\CombosProducto::where('producto_id', $p->id)->get();
+                foreach ($promo as $contador => $pro) {
+                    $valida = App\Combo::where('id', $pro->combo_id)
+                            ->where('fecha_inicio', '<=', $hoy) 
+                            ->where('fecha_final', '>=', $hoy)
+                            ->first();
+                    if ($valida != null) {
+                        $promosArray[$contador] = $pro->combo_id;
+                    }
+                }
+
+                $precioProducto = App\Precio::where('producto_id', $p->id)->where('escala_id', 1)->first();
                 $cantidadTotal = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
                 ->where('producto_id', $p->id)
                 ->where('almacene_id', auth()->user()->almacen_id)
@@ -28,12 +42,15 @@
                     <td>{{ $p->id }}</td>
                     <td>
                         {{ $p->codigo }}
-                        <small id="tags_promos" class="badge badge-default badge-warning form-text text-white" onclick="muestraPromo(1)">Ver</small>
+                        <small id="tags_promos" class="badge badge-default badge-warning form-text text-white" onclick="muestraExistencias({{ $p->id }})">Ver</small>
                     </td>
                     <td>
                         {{ $p->nombre }}
-                        @forelse ($promo as $key => $pr)
-                            <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pr->combo_id }})">P {{ ++$key }}</small>
+                        @php
+                            $contadorPromos = 0;
+                        @endphp
+                        @forelse ($promosArray as $cpro => $pA)
+                            <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pA }})">P {{ ++$contadorPromos }}</small>
                         @empty
                             
                         @endforelse

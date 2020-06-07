@@ -176,7 +176,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Venta/tienda', 'VentaController@tienda');
     Route::get('Venta/listado', 'VentaController@listado');
     Route::get('Venta/ajax_listado', 'VentaController@ajax_listado');
-
+    Route::get('Venta/mayorista', 'VentaController@mayorista');
+    
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');
     Route::post('Envio/ajaxBuscaProductos', 'EnvioController@ajaxBuscaProductos');
@@ -187,6 +188,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //MOVIMIENTOS   
     Route::get('Movimiento/registraDatos', 'MovimientoController@registraDatos');
     Route::get('Envio/ver_pedido/{id}', 'EnvioController@ver_pedido');
+    Route::post('Movimiento/ajaxMuestraTotalesAlmacen', 'MovimientoController@ajaxMuestraTotalesAlmacen');
 
 });
 

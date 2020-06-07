@@ -37,7 +37,32 @@
                 <h4 class="modal-title text-white" id="warning-header-modalLabel">EXISTENCIAS DEL PRODUCTO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <div class="modal-body" id="ajaxMuestraTotalesAlmacenes">
+            <div class="modal-body">
+                <div class="table-responsive">
+                    XIA-ALC-PIL-7
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">ALMACEN</th>
+                                <th scope="col">EXISTENCIAS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td scope="col">Almacen Central</td>
+                                <td scope="col">20</td>
+                            </tr>
+                            <tr>
+                                <td scope="col">El Prado</td>
+                                <td scope="col">5</td>
+                            </tr>
+                            <tr>
+                                <td scope="col">Villa Fatima</td>
+                                <td scope="col">2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
         </div><!-- /.modal-content -->
@@ -102,32 +127,69 @@
 
     <div class="row">
         <div class="col-md-9">
-            <div class="card border-dark">
-                <div class="card-header bg-dark">
-                    <h4 class="mb-0 text-white">PRODUCTOS</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-dark">
+                        <div class="card-header bg-dark">
+                            <h4 class="mb-0 text-white">PRODUCTOS</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive m-t-40">
+                                <table id="tablaPedido" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Marca</th>
+                                            <th>Tipo</th>
+                                            <th>Stock</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th class="w-10 text-center">Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive m-t-40">
-                        <table id="tablaPedido" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
-                                    <th>Marca</th>
-                                    <th>Tipo</th>
-                                    <th>Stock</th>
-                                    <th>Precio</th>
-                                    <th>Cantidad</th>
-                                    <th class="w-10 text-center">Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-
-                        </table>
-
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger">
+                            <h4 class="mb-0 text-white">VENTAS AL POR MAYOR</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive m-t-40">
+                                <table id="tablaPedido" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Marca</th>
+                                            <th>Tipo</th>
+                                            <th>Stock</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th class="w-10 text-center">Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+            
+                                    </tbody>
+            
+                                </table>
+            
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -169,7 +231,7 @@
                         </table>
                     </div>
                     <div class="form-group">
-                        <button class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">REGISTRAR
+                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success">REGISTRAR
                             VENTA</button>
                     </div>
                 </div>
@@ -331,7 +393,7 @@
 
     function muestraPromo(promoId)
     {
-        // console.log(promoId);
+        console.log(promoId);
         $.ajax({
             url: "{{ url('Combo/ajaxMuestraPromo') }}",
             data: {combo_id: promoId},
@@ -346,31 +408,9 @@
     // alert(promoId);
     }
 
-    function muestraExistencias(productoId)
+    function muestraExistencias()
     {
-        $.ajax({
-            url: "{{ url('Movimiento/ajaxMuestraTotalesAlmacen') }}",
-            data: {producto_id: productoId},
-            type: 'POST',
-            success: function(data) {
-                $("#ajaxMuestraTotalesAlmacenes").html(data);
-            }
-        });
-
-        // $("#danger-header-modal").modal("show");
-
         $("#warning-header-modal").modal("show");
-        //ajaxMuestraTotalesAlmacenes
-    }
-
-    function validaItems()
-    {
-        // alert("entro");
-        if (itemsPedidoArray.length > 0) {
-            alert("bien carajo");
-        } else {
-            alert("llena carajo");
-        }
     }
 
 </script>
