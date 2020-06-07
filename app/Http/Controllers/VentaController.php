@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Combo;
 use App\Venta;
+use App\Precio;
 use DataTables;
 use App\Almacene;
 use App\Producto;

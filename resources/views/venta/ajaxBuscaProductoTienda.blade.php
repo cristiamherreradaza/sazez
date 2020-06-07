@@ -18,6 +18,7 @@
             @php
                 $hoy = date('Y-m-d');
                 $promosArray = [];
+                $arrayPreciosProductos = [];
             @endphp
             @foreach ($productos as $key => $p)
             @php
@@ -37,11 +38,26 @@
                 ->where('producto_id', $p->id)
                 ->where('almacene_id', auth()->user()->almacen_id)
                 ->first();
+
+                // dd($arrayPreciosProductos);
+                $preciosProductos = App\Precio::where('producto_id', $p->id)->get();
+                $contadorPrecios = 0;
+                foreach ($preciosProductos as $pep) {
+                    $arrayPreciosProductos[$contadorPrecios]["escala_id"] = $pep->escala->id;
+                    $arrayPreciosProductos[$contadorPrecios]["nombre"] = $pep->escala->nombre;
+                    $arrayPreciosProductos[$contadorPrecios]["minimo"] = $pep->escala->minimo;
+                    $arrayPreciosProductos[$contadorPrecios]["maximo"] = $pep->escala->maximo;
+                    $contadorPrecios++;
+                }
+                $arrayPreciosProductosJson = json_encode($arrayPreciosProductos);
+                // dd($arrayPreciosProductosJson);
+
             @endphp
-                <tr class="item_{{ $p->id }}">
+                <tr class="item_{{ $p->id }}">                    
                     <td>{{ $p->id }}</td>
                     <td>
                         {{ $p->codigo }}
+                        <input type="hidden" id="preciosEscalas_{{ $p->id }}" name="preciosEscalas_{{ $p->id }}" value="{{ $arrayPreciosProductosJson }}">
                         <small id="tags_promos" class="badge badge-default badge-warning form-text text-white" onclick="muestraExistencias({{ $p->id }})">Ver</small>
                     </td>
                     <td>
@@ -80,13 +96,15 @@
             $("#termino").focus();
 
             var currentRow = $(this).closest("tr");
-
+            
             // var tipoVenta = currentRow.find("td:eq(9)").data('venta');
             var tipoVenta = currentRow.find("td:eq(9)");
 
             console.log($(this).data('venta'));
 
             var id      = currentRow.find("td:eq(0)").text();
+            precios = $("#preciosEscalas_"+id).val();
+            console.log(JSON.parse(precios));
             var codigo  = currentRow.find("td:eq(1)").html();
             // var nombre  = currentRow.find("td:eq(2)").text();
             var nombre  = currentRow.find("td:eq(2)").html();
