@@ -62,7 +62,8 @@
                     <td><h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3></td>
                     <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
                     <td>
-                        <button type="button" class="btnSelecciona btn btn-success" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btnSelecciona btn btn-success" data-venta="tienda" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="btnSeleccionaMayor btn btn-danger" data-venta="mayor" title="Adiciona Item"><i class="fas fa-plus"></i></button>
                     </td>
                 </tr>    
             @endforeach
@@ -72,13 +73,18 @@
 <script>
     $(document).ready(function () {
     
-        $("#tablaProductosEncontrados").on('click', '.btnSelecciona', function () {
+        $("#tablaProductosEncontrados").on('click', '.btnSelecciona, .btnSeleccionaMayor', function () {
 
             $("#listadoProductosAjax").hide('slow');
             $("#termino").val("");
             $("#termino").focus();
 
             var currentRow = $(this).closest("tr");
+
+            // var tipoVenta = currentRow.find("td:eq(9)").data('venta');
+            var tipoVenta = currentRow.find("td:eq(9)");
+
+            console.log($(this).data('venta'));
 
             var id      = currentRow.find("td:eq(0)").text();
             var codigo  = currentRow.find("td:eq(1)").html();
