@@ -50,8 +50,8 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="card border-info">
-                <div class="card-header bg-info">
+            <div class="card border-dark">
+                <div class="card-header bg-dark">
                     <h4 class="mb-0 text-white">DATOS PARA LA VENTA</h4>
                 </div>
                 <div class="card-body">
@@ -102,32 +102,70 @@
 
     <div class="row">
         <div class="col-md-9">
-            <div class="card border-dark">
-                <div class="card-header bg-dark">
-                    <h4 class="mb-0 text-white">PRODUCTOS</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-info">
+                        <div class="card-header bg-info">
+                            <h4 class="mb-0 text-white">PRODUCTOS POR UNIDAD</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive m-t-40">
+                                <table id="tablaPedido" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Marca</th>
+                                            <th>Tipo</th>
+                                            <th>Stock</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th class="w-10 text-center">Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                    
+                                    </tbody>
+                    
+                                </table>
+                    
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="table-responsive m-t-40">
-                        <table id="tablaPedido" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
-                                    <th>Marca</th>
-                                    <th>Tipo</th>
-                                    <th>Stock</th>
-                                    <th>Precio</th>
-                                    <th>Cantidad</th>
-                                    <th class="w-10 text-center">Total</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
+            </div>
 
-                            </tbody>
-
-                        </table>
-
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-danger">
+                        <div class="card-header bg-danger">
+                            <h4 class="mb-0 text-white">VENTAS AL POR MAYOR</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive m-t-40">
+                                <table id="tablaPedidoMayor" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Marca</th>
+                                            <th>Tipo</th>
+                                            <th>Stock</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th class="w-10 text-center">Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+            
+                                    </tbody>
+            
+                                </table>
+            
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -188,6 +226,7 @@
 <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script src="{{ asset('js/NumeroALetras.js') }}"></script>
 <script>
+    // tabla de pedidos por unidad
     var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
@@ -197,6 +236,19 @@
             url: '{{ asset('datatableEs.json') }}'
         },
     });
+
+    // tabla de pedidos al por mayor
+    var tm = $('#tablaPedidoMayor').DataTable({
+        paging: false,
+        searching: false,
+        ordering:  false,
+        info: false,
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        },
+    });
+
+    // array para controlar la cantidad de items en pedido unitario
     var itemsPedidoArray = [];
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
