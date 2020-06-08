@@ -106,7 +106,7 @@ class LoginController extends Controller
         // Almacena en la variable los datos del usuario actual de Github
         $facebookUser = Socialite::driver('facebook')->user();
         
-        dd($facebookUser);
+        //dd($facebookUser);
         // Buscamos en la base de datos un registro que sea igual al del usuario de Github
         $user = User::where('provider_id', $facebookUser->getId())->first();
 
