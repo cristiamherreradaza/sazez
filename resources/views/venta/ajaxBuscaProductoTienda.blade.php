@@ -40,7 +40,9 @@
                 ->first();
 
                 // dd($arrayPreciosProductos);
-                $preciosProductos = App\Precio::where('producto_id', $p->id)->get();
+                $preciosProductos = App\Precio::where('producto_id', $p->id)
+                                    ->where('precio', '<>',0)
+                                    ->get();
                 $contadorPrecios = 0;
                 foreach ($preciosProductos as $pep) {
                     $arrayPreciosProductos[$contadorPrecios]["escala_id"] = $pep->escala->id;
@@ -90,52 +92,97 @@
 <script>
     $(document).ready(function () {
     
+        // ponemos el evento de hacer click en los botones del listado ajax
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona, .btnSeleccionaMayor', function () {
 
-            $("#listadoProductosAjax").hide('slow');
-            $("#termino").val("");
-            $("#termino").focus();
+            $("#listadoProductosAjax").hide('slow'); //ocultamos la tabla para buscar otro item
+            $("#termino").val(""); //limpiamos el input de busqueda
+            $("#termino").focus(); //posicionamos el foco en el input de busqueda
 
-            var currentRow = $(this).closest("tr");
-            
-            // var tipoVenta = currentRow.find("td:eq(9)").data('venta');
-            var tipoVenta = currentRow.find("td:eq(9)");
+            let currentRow = $(this).closest("tr"); //agarramos toda la fila de la tabla
+            let id      = currentRow.find("td:eq(0)").text();
+            let codigo  = currentRow.find("td:eq(1)").html();
+            let nombre  = currentRow.find("td:eq(2)").html();
+            let marca   = currentRow.find("td:eq(3)").text();
+            let tipo    = currentRow.find("td:eq(4)").text();
+            let modelo  = currentRow.find("td:eq(5)").text();
+            let colores = currentRow.find("td:eq(6)").text();
+            let stock   = currentRow.find("td:eq(7)").text();
+            let precio  = currentRow.find("td:eq(8)").text();
 
-            console.log($(this).data('venta'));
+            precios = $("#preciosEscalas_"+id).val(); //capturamos los precios del input
+            let tipoVenta = $(this).data('venta');
+            // preguntamos si la venta es al mayor o al menor
+            if(tipoVenta == 'tienda'){
 
-            var id      = currentRow.find("td:eq(0)").text();
-            precios = $("#preciosEscalas_"+id).val();
-            console.log(JSON.parse(precios));
-            var codigo  = currentRow.find("td:eq(1)").html();
-            // var nombre  = currentRow.find("td:eq(2)").text();
-            var nombre  = currentRow.find("td:eq(2)").html();
-            var marca   = currentRow.find("td:eq(3)").text();
-            var tipo    = currentRow.find("td:eq(4)").text();
-            var modelo  = currentRow.find("td:eq(5)").text();
-            var colores = currentRow.find("td:eq(6)").text();
-            var stock   = currentRow.find("td:eq(7)").text();
-            var precio  = currentRow.find("td:eq(8)").text();
+                let buscaItem = itemsPedidoArray.lastIndexOf(id);
+                if(buscaItem < 0)
+                {
+                    itemsPedidoArray.push(id);
+                    t.row.add([
+                        codigo,
+                        nombre,
+                        marca,
+                        tipo,
+                        stock,
+                        `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" style="width: 100px;">
+                        <input type="hidden" name="precio_venta[`+id+`]" value="`+precio+`">`,
+                        `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
+                        `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
+                        '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
+                    ]).draw(false);
+                    sumaSubTotales();
+                }                
 
-            let buscaItem = itemsPedidoArray.lastIndexOf(id);
-            if(buscaItem < 0)
-            {
-                itemsPedidoArray.push(id);
-                t.row.add([
-                    codigo,
-                    nombre,
-                    marca,
-                    tipo,
-                    stock,
-                    `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" style="width: 100px;">
-                    <input type="hidden" name="precio_venta[`+id+`]" value="`+precio+`">`,
-                    `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
-                    `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
-                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
-                ]).draw(false);
-                sumaSubTotales();
+            }else{
+
+                let buscaItem = itemsPedidoMayorArray.lastIndexOf(id);
+                if(buscaItem < 0)
+                {
+                    itemsPedidoMayorArray.push(id);
+                    tm.row.add([
+                        codigo,
+                        nombre,
+                        marca,
+                        stock,
+                        `<select class="form-control name="escala_id[`+id+`]" id="escala_`+id+`" onchange="cambiaPrecio(`+id+`)"></select>`,
+                        `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" style="width: 100px;">
+                        <input type="hidden" name="precio_venta[`+id+`]" value="`+precio+`">`,
+                        `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
+                        `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
+                        '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
+                    ]).draw(false);
+                    sumaSubTotales();
+                }                
+
             }
+            // console.log($(this).data('venta'));
+            // console.log(JSON.parse(precios));
+            adicionaItemUnidad(precios, id);
+            
         });
 
     });
+
+    function adicionaItemUnidad(precios, productoId)
+    {
+        let objetoPrecios = JSON.parse(precios);
+        // console.log(JSON.parse(precios));
+        for (let [key, value] of Object.entries(objetoPrecios)) {
+            // console.log(`${key}: ${value.nombre}`);
+            // console.log(productoId);
+            // console.log(`${key}: ${value.escala_id}`);
+            // $("#escala_"+value.escala_id).append(new Option(value.nombre, value.escala_id));
+            $('#escala_'+productoId).append(`<option value="`+value.escala_id+`" data-precio="`+value.precio+`">`+value.nombre+`</option>`);
+        }
+    }
+
+    function cambiaPrecio(productoId)
+    {
+        // alert(productoId);
+        let precio = $("#escala_"+productoId).find(':selected').data('precio');
+        $("#precio_"+productoId).val(precio);
+        // console.log
+    }
 
 </script>

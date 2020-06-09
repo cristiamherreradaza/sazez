@@ -150,8 +150,8 @@
                                             <th>Codigo</th>
                                             <th>Nombre</th>
                                             <th>Marca</th>
-                                            <th>Tipo</th>
                                             <th>Stock</th>
+                                            <th>Unidad</th>
                                             <th>Precio</th>
                                             <th>Cantidad</th>
                                             <th class="w-10 text-center">Total</th>
@@ -250,6 +250,8 @@
 
     // array para controlar la cantidad de items en pedido unitario
     var itemsPedidoArray = [];
+    var itemsPedidoMayorArray = [];
+
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
