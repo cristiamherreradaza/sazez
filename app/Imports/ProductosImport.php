@@ -29,54 +29,57 @@ class ProductosImport implements ToModel, WithStartRow
         // echo "<pre>";
         // print_r($row[0]);
         // echo "</pre>";
-        $busca_marca = Marca::where('nombre', 'like', "%$row[5]%")
+        $marcaExcel = trim($row[5]);
+        $busca_marca = Marca::where('nombre', 'like', "%$marcaExcel%")
                         ->first();
 
         if ($busca_marca == null) 
         {
             $marca          = new Marca();
             $marca->user_id = Auth::user()->id;
-            $marca->nombre  = $row[5];
+            $marca->nombre  = $marcaExcel;
             $marca->save();
             $marca_id = $marca->id;
-            $sigla_marca = $this->extraeCodigo($row[5]);
+            $sigla_marca = $this->extraeCodigo($marcaExcel);
         } else {
             $marca_id = $busca_marca->id;
             $sigla_marca = $this->extraeCodigo($busca_marca->nombre);
         }
 
-        $busca_tipo = Tipo::where('nombre', 'like', "%$row[4]%")
-           ->first();
+        $tipoExcel = trim($row[4]);
+        $busca_tipo = Tipo::where('nombre', 'like', "%$tipoExcel%")
+                        ->first();
 
         if ($busca_tipo == null) 
         {
             $tipo = new Tipo();
             $tipo->user_id = Auth::user()->id;
-            $tipo->nombre = $row[4];
+            $tipo->nombre = $tipoExcel;
             $tipo->save();
             $tipo_id = $tipo->id;
-            $sigla_tipo = $this->extraeCodigo($row[4]);
+            $sigla_tipo = $this->extraeCodigo($tipoExcel);
         } else {
             $tipo_id = $busca_tipo->id;
             $sigla_tipo = $this->extraeCodigo($busca_tipo->nombre);
         }
 
-        $busca_categoria = Categoria::where('nombre', 'like', "%$row[3]%")
+        $categoriaExcel = trim($row[3]);
+        $busca_categoria = Categoria::where('nombre', 'like', "%$categoriaExcel%")
             ->first();
 
         if ($busca_categoria == null) {
             $categoria = new Categoria();
             $categoria->user_id = Auth::user()->id;
-            $categoria->nombre = $row[3];
+            $categoria->nombre = $categoriaExcel;
             $categoria->save();
             $categoria_id = $categoria->id;
-            $sigla_categoria = $this->extraeCodigo($row[3]);
+            $sigla_categoria = $this->extraeCodigo($categoriaExcel);
         } else {
             $categoria_id = $busca_categoria->id;
             $sigla_categoria = $this->extraeCodigo($busca_categoria->nombre);
         }
-
-        $sigla_nombre = $this->extraeCodigo($row[1]);
+        $nombreExcel = trim($row[1]);
+        $sigla_nombre = $this->extraeCodigo($nombreExcel);
 
         $codigoGenerado = $sigla_marca.'-'.$sigla_tipo.'-'.$sigla_nombre;
 
@@ -85,7 +88,7 @@ class ProductosImport implements ToModel, WithStartRow
         $producto->marca_id        = $marca_id;
         $producto->tipo_id         = $tipo_id;
         $producto->codigo          = $codigoGenerado;
-        $producto->nombre          = $row[1];
+        $producto->nombre          = $nombreExcel;
         $producto->nombre_venta    = $row[2];
         $producto->modelo          = $row[6];
         $producto->precio_compra   = $row[7];
