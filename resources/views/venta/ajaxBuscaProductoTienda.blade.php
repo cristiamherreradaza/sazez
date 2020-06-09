@@ -9,7 +9,7 @@
                 <th>Tipo</th>
                 <th>Modelo</th>
                 <th>Colores</th>
-                <th class="text-right">Stock</th>
+                <th class="w-10 text-center text-info"><i class="fas fa-archive"></i></th>
                 <th class="text-right">Precio</th>
                 <th class="text-nowrap"></th>
             </tr>
@@ -107,7 +107,7 @@
             let tipo    = currentRow.find("td:eq(4)").text();
             let modelo  = currentRow.find("td:eq(5)").text();
             let colores = currentRow.find("td:eq(6)").text();
-            let stock   = currentRow.find("td:eq(7)").text();
+            let stock   = currentRow.find("td:eq(7)").html();
             let precio  = currentRow.find("td:eq(8)").text();
 
             precios = $("#preciosEscalas_"+id).val(); //capturamos los precios del input
@@ -129,28 +129,28 @@
                         <input type="hidden" name="precio_venta[`+id+`]" value="`+precio+`">`,
                         `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
                         `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
-                        '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
+                        '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash"></i></button>'
                     ]).draw(false);
                     sumaSubTotales();
                 }                
 
             }else{
 
-                let buscaItem = itemsPedidoMayorArray.lastIndexOf(id);
+                let buscaItem = itemsPedidoArrayMayor.lastIndexOf(id);
                 if(buscaItem < 0)
                 {
-                    itemsPedidoMayorArray.push(id);
+                    itemsPedidoArrayMayor.push(id);
                     tm.row.add([
                         codigo,
                         nombre,
                         marca,
                         stock,
-                        `<select class="form-control name="escala_id[`+id+`]" id="escala_`+id+`" onchange="cambiaPrecio(`+id+`)"></select>`,
-                        `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" style="width: 100px;">
-                        <input type="hidden" name="precio_venta[`+id+`]" value="`+precio+`">`,
-                        `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
-                        `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
-                        '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
+                        `<select class="form-control name="escala_id_m[`+id+`]" id="escala_m_`+id+`" onchange="cambiaPrecioM(`+id+`)"></select>`,
+                        `<input type="number" class="form-control text-right precioMayor" name="precio_m[`+id+`]" id="precio_m_`+id+`" value="`+precio+`" data-idm="`+id+`" step="any" min="1" style="width: 100px;">
+                        <input type="hidden" name="precio_venta_m[`+id+`]" value="`+precio+`">`,
+                        `<input type="number" class="form-control text-right cantidadMayor" name="cantidad_m[`+id+`]" id="cantidad_m_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
+                        `<input type="number" class="form-control text-right subtotalMayor" name="subtotal_m[`+id+`]" id="subtotal_m_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
+                        '<button type="button" class="btnEliminaMayor btn btn-danger" title="Elimina Producto"><i class="fas fa-trash"></i></button>'
                     ]).draw(false);
                     sumaSubTotales();
                 }                
@@ -173,15 +173,15 @@
             // console.log(productoId);
             // console.log(`${key}: ${value.escala_id}`);
             // $("#escala_"+value.escala_id).append(new Option(value.nombre, value.escala_id));
-            $('#escala_'+productoId).append(`<option value="`+value.escala_id+`" data-precio="`+value.precio+`">`+value.nombre+`</option>`);
+            $('#escala_m_'+productoId).append(`<option value="`+value.escala_id+`" data-precio="`+value.precio+`">`+value.nombre+`</option>`);
         }
     }
 
     function cambiaPrecio(productoId)
     {
         // alert(productoId);
-        let precio = $("#escala_"+productoId).find(':selected').data('precio');
-        $("#precio_"+productoId).val(precio);
+        let precio = $("#escala_m_"+productoId).find(':selected').data('precio');
+        $("#precio_m_"+productoId).val(precio);
         // console.log
     }
 

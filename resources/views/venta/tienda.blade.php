@@ -117,7 +117,7 @@
                                             <th>Nombre</th>
                                             <th>Marca</th>
                                             <th>Tipo</th>
-                                            <th>Stock</th>
+                                            <th class="w-10 text-center text-info"><i class="fas fa-archive"></i></th>
                                             <th>Precio</th>
                                             <th>Cantidad</th>
                                             <th class="w-10 text-center">Total</th>
@@ -150,7 +150,7 @@
                                             <th>Codigo</th>
                                             <th>Nombre</th>
                                             <th>Marca</th>
-                                            <th>Stock</th>
+                                            <th class="text-center text-info"><i class="fas fa-archive"></i></th>
                                             <th>Unidad</th>
                                             <th>Precio</th>
                                             <th>Cantidad</th>
@@ -159,11 +159,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-            
                                     </tbody>
-            
                                 </table>
-            
                             </div>
                         </div>
                     </div>
@@ -250,7 +247,7 @@
 
     // array para controlar la cantidad de items en pedido unitario
     var itemsPedidoArray = [];
-    var itemsPedidoMayorArray = [];
+    var itemsPedidoArrayMayor = [];
 
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -263,6 +260,7 @@
 
         $(".select2").select2();
 
+        // elimina productos de la tabla por unidad
         $('#tablaPedido tbody').on('click', '.btnElimina', function () {
             t.row($(this).parents('tr'))
                 .remove()
@@ -272,6 +270,18 @@
             itemsPedidoArray.splice(pos, 1);
             sumaSubTotales();
         });
+
+        // elimina productos de la tabla por mayor
+        $('#tablaPedidoMayor tbody').on('click', '.btnEliminaMayor', function () {
+            tm.row($(this).parents('tr'))
+                .remove()
+                .draw();
+            let itemBorrarMayor = $(this).closest("tr").find("td:eq(0)").text();
+            let posMayor = itemsPedidoArrayMayor.lastIndexOf(itemBorrarMayor);
+            itemsPedidoArrayMayor.splice(posMayor, 1);
+            sumaSubTotales();
+        });
+
 
         $(document).on('keyup change', '#efectivo', function () {
             // alert("cambio");
@@ -288,22 +298,16 @@
 
     });
 
-    function muestraPromo(promo_id)
-    {
-        console.log(promo_id);
-
-    }
-
-    $(document).on('keyup change', '.precio', function(e){
-        let precio = Number($(this).val());
-        let id = $(this).data("id");
-        let cantidad = Number($("#cantidad_"+id).val());
-        let subtotal = precio*cantidad;
-        $("#subtotal_"+id).val(subtotal);
+    $(document).on('keyup change', '.precioMayor', function(e){
+        let precioMayor = Number($(this).val());
+        let idm = $(this).data("idm");
+        let cantidadMayor = Number($("#cantidad_m_"+idm).val());
+        let subtotalMayor = precioMayor*cantidadMayor;
+        $("#subtotal_m_"+idm).val(subtotalMayor);
         sumaSubTotales();
     });
 
-    $(document).on('keyup change', '.cantidad', function(e){
+    $(document).on('keyup change', '.cantidadMayor', function(e){
         // alert("cambio");
         let cantidad = Number($(this).val());
         let id = $(this).data("id");

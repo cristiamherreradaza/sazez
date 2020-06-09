@@ -129,7 +129,7 @@
                                 <input name="minimo_escala" type="number" id="minimo_escala" class="form-control" min="1" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad Maxima</label>
                                 <span class="text-danger">
@@ -137,7 +137,7 @@
                                 </span>
                                 <input name="maximo_escala" type="number" id="maximo_escala" class="form-control" min="1" required>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">
