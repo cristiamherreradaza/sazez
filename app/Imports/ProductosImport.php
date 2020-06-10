@@ -105,7 +105,8 @@ class ProductosImport implements ToModel, WithStartRow
         $producto_id = $producto->id;
 
         $cambia_codigo = Producto::find($producto_id);
-        $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
+        $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
+        $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
         $cambia_codigo->save();
 
         $busca_almacen = Almacene::where('nombre', 'like', "%$row[11]%")
@@ -184,7 +185,8 @@ class ProductosImport implements ToModel, WithStartRow
         $palabra = explode(" ", $texto);
         $primeras = Str::substr($palabra[0], 0, 3);
         $sigla = str_replace(" ", "", $primeras);
-        return $sigla;
+        $siglaMayusculas = strtoupper($sigla);
+        return $siglaMayusculas;
     }
 
     /*public function startRow(): int
