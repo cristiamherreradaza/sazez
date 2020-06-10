@@ -6,6 +6,7 @@ use App\Tipo;
 use App\Marca;
 use App\Escala;
 use App\Precio;
+use App\Venta;
 use DataTables;
 use App\Almacene;
 use App\Producto;
@@ -24,6 +25,211 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProductoController extends Controller
 {
+    public function panelControl(Request $request)
+    {
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $fecha_actual = $fecha->format('Y-m-d');//obtenes la fecha actual
+        $mes = $fecha->format('m');//obtenes la fecha actual
+        $anio = $fecha->format('Y');//obtenes la fecha actual
+        $anio_atr = date("Y-m",strtotime($fecha_actual."- 1 year"."+ 1 month"));
+        $anio_atras = $anio_atr.'-01';
+        // dd($anio_atras); 
+
+        //OBTENEMOS LAS FECHA DEL COMIENZO Y FIN DE LAS SEMANA 
+        if (date("D") == "Mon"){
+            $inicio_semana = date("Y-m-d");
+        } else {
+            $inicio_semana = date("Y-m-d", strtotime('last Monday', time()));
+        }
+            $fin_semana = date("Y-m-d", strtotime('next Sunday', time()));
+
+        $usuario = Auth::user()->name;
+        // dd($usuario);
+        if ($usuario == 'Administrador') {
+        //OBTENEMOS LAS VENTAS DIARIAS GLOBALES
+        $venta_diaria = Venta::where('fecha','=',$fecha_actual) 
+                ->select('*')
+                ->count('fecha');
+
+        //OBTENEMOS LAS VENTAS SEMANALES GLOBALES
+        $venta_semanal = Venta::whereBetween('fecha', [$inicio_semana, $fin_semana]) 
+                ->select('*')
+                ->count('fecha');
+
+        //OBTENEMOS LAS VENTAS MENSUALES GLOBALES
+        $venta_mensual = Venta::whereMonth('fecha', $mes)
+                ->whereYear('fecha', $anio) 
+                ->select('*')
+                ->count('fecha');
+
+        //OBTENEMOS LAS VENTAS ANUALES GLOBALES
+        $venta_anual = Venta::whereYear('fecha', $anio) 
+                ->select('*')
+                ->count('fecha');
+
+        //OBTENEMOS LAS VENTAS ANUALES POR MESES
+        $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
+                                    FROM ventas
+                                    WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+                                    GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+
+        // $otro = $this->anio_meses($anual_mes);
+
+        //OBTENEMOS LOS PRODUCTOS MAS VENDIDOS DEL MES ACTUAL
+        $productos_mas_vendidos = DB::select("SELECT prod.id, prod.codigo, prod.nombre, tmp.nro
+                                                FROM productos prod, (SELECT producto_id, COUNT(producto_id) as nro
+                                                                                FROM ventas_productos
+                                                                                WHERE MONTH(fecha) = '$mes'
+                                                                                GROUP BY producto_id DESC)tmp
+                                                WHERE prod.id = tmp.producto_id");
+
+        //OBTENEMOS LA LISTA DE PRODUCTOS CON SUS STOCK
+        $stock_productos = DB::select("SELECT prod.codigo, prod.cantidad_minima, prod.id, prod.nombre, tmp.total
+                                                FROM productos prod, (SELECT producto_id, (SUM(ingreso) - SUM(salida))as total
+                                                                        FROM movimientos
+                                                                        GROUP BY producto_id)tmp
+                                                WHERE prod.id = tmp.producto_id
+                                                ORDER BY tmp.total ASC");
+        } else {
+            
+            $almacen_id = Auth::user()->almacen_id;
+            // dd($almacen_id);
+           //OBTENEMOS LAS VENTAS DIARIAS GLOBALES
+            $venta_diaria = Venta::where('fecha','=',$fecha_actual)
+                    ->where('almacene_id', $almacen_id) 
+                    ->select('*')
+                    ->count('fecha');
+
+            //OBTENEMOS LAS VENTAS SEMANALES GLOBALES
+            $venta_semanal = Venta::whereBetween('fecha', [$inicio_semana, $fin_semana])
+                    ->where('almacene_id', $almacen_id)  
+                    ->select('*')
+                    ->count('fecha');
+
+            //OBTENEMOS LAS VENTAS MENSUALES GLOBALES
+            $venta_mensual = Venta::whereMonth('fecha', $mes)
+                    ->where('almacene_id', $almacen_id) 
+                    ->whereYear('fecha', $anio) 
+                    ->select('*')
+                    ->count('fecha');
+
+            //OBTENEMOS LAS VENTAS ANUALES GLOBALES
+            $venta_anual = Venta::whereYear('fecha', $anio)
+                    ->where('almacene_id', $almacen_id)  
+                    ->select('*')
+                    ->count('fecha');
+
+            //OBTENEMOS LAS VENTAS ANUALES POR MESES
+            $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
+                                        FROM ventas
+                                        WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+                                        GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+
+            // $otro = $this->anio_meses($anual_mes);
+
+            //OBTENEMOS LOS PRODUCTOS MAS VENDIDOS DEL MES ACTUAL
+            $productos_mas_vendidos = DB::select("SELECT DISTINCT prod.id, prod.codigo, prod.nombre, tmp.nro
+                                                    FROM productos prod, ventas vent, (SELECT vent_prod.producto_id, COUNT(vent_prod.producto_id) as nro
+                                                                                        FROM ventas ven, ventas_productos vent_prod
+                                                                                        WHERE ven.almacene_id = '$almacen_id'
+                                                                                        AND ven.id = vent_prod.venta_id
+                                                                                        AND MONTH(vent_prod.fecha) = '$mes'
+                                                                                        GROUP BY vent_prod.producto_id DESC)tmp
+                                                    WHERE prod.id = tmp.producto_id");
+
+            //OBTENEMOS LA LISTA DE PRODUCTOS CON SUS STOCK
+            $stock_productos = DB::select("SELECT prod.codigo, prod.cantidad_minima, prod.id, prod.nombre, tmp.total
+                                                    FROM productos prod, (SELECT producto_id, (SUM(ingreso) - SUM(salida))as total
+                                                                            FROM movimientos
+                                                                            WHERE almacene_id = '$almacen_id'
+                                                                            GROUP BY producto_id)tmp
+                                                    WHERE prod.id = tmp.producto_id
+                                                    ORDER BY tmp.total ASC"); 
+        }
+        
+        return view('producto.panelControl')->with(compact('venta_diaria', 'venta_semanal', 'venta_mensual', 'venta_anual','productos_mas_vendidos', 'stock_productos'));
+    }
+
+    public function anio_meses($anual_mes)
+    {   
+        $num = $anual_mes[0]->mes;
+        $mes = $this->meses_literal($num);
+
+        // DB::table('prueba')->insert([
+        //     'mes_literal' => $mes,
+        //     'cantidad' => $anual_mes[0]->total,
+        //     'orden' => 1,
+        //     ]);
+        //     
+
+        for ($i=1; $i < 13 ; $i++) {
+            $num += 1;
+            if (!empty($anual_mes[$i]->mes)) {
+                if ($num == $anual_mes[$i]->mes) {
+                    
+                } else {
+
+                }
+            } else {
+                
+            }
+            # code...
+        }
+        // foreach ($anual_mes as $value) {
+        //     if ($num == $value->mes && $num < 12) {
+                
+        //     } else {
+
+        //     }
+        //     $dato = $value->mes;
+        //     echo $dato.', ';
+        // }
+        // dd($anual_mes);
+        // return $anual_mes;
+    }
+
+    public function meses_literal($num)
+    {
+        switch ($num) {
+            case 1:
+                return 'Ene';
+                break;
+            case 2:
+                return 'Feb';
+                break;
+            case 3:
+                return 'Mar';
+                break;
+            case 4:
+                return 'Abr';
+                break;
+            case 5:
+                return 'May';
+                break;
+            case 6:
+                return 'Jun';
+                break;
+            case 7:
+                return 'Jul';
+                break;
+            case 8:
+                return 'Ago';
+                break;
+            case 9:
+                return 'Sep';
+                break;
+            case 10:
+                return 'Oct';
+                break;
+            case 11:
+                return 'Nov';
+                break;
+            case 12:
+                return 'Dic';
+                break;
+        }
+    }
+
     public function nuevo()
     {
         $marcas = Marca::where('deleted_at', NULL)->get();
@@ -254,10 +460,6 @@ class ProductoController extends Controller
         return view('producto.ajaxMuestraImgProducto')->with(compact('imagenes_producto'));
     }
 
-    public function panelControl(Request $request)
-    {
-        return view('producto.panelControl');
-    }
 
     function extraeCodigo($texto)
     {
