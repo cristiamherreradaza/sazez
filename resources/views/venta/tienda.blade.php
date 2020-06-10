@@ -298,6 +298,29 @@
 
     });
 
+    // calcula el precio en funcion al cambio de precios tabla unidades
+    $(document).on('keyup change', '.precio', function(e){
+        let precio = Number($(this).val());
+        let id = $(this).data("id");
+        let cantidad = Number($("#cantidad_"+id).val());
+        let subtotal = precio*cantidad;
+        $("#subtotal_"+id).val(subtotal);
+        sumaSubTotales();
+    });
+
+    // calcula el precio en funcion a la cantidad tabla unidades
+    $(document).on('keyup change', '.cantidad', function(e){
+        // alert("cambio");
+        let cantidad = Number($(this).val());
+        let id = $(this).data("id");
+        let precio = Number($("#precio_"+id).val());
+        let subtotal = precio*cantidad;
+        console.log(precio);
+        $("#subtotal_"+id).val(subtotal);
+        sumaSubTotales();
+    });
+
+    // calcula el precio en funcion al cambio de precios tabla mayores
     $(document).on('keyup change', '.precioMayor', function(e){
         let precioMayor = Number($(this).val());
         let idm = $(this).data("idm");
@@ -321,7 +344,8 @@
     function sumaSubTotales()
     {
         let sum = 0;
-        $('.subtotal').each(function(){
+
+        $('.subtotal, .subtotalMayor').each(function(){
             sum += parseFloat(this.value);
         });
         // sumaVisible = sum.toLocaleString('en', {useGrouping:true});

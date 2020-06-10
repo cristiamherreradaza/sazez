@@ -74,6 +74,7 @@ class MovimientoController extends Controller
     {
         // echo "desde movimientos";
         $producto_id = $request->producto_id;
+        $datosProducto = Producto::find($producto_id);
         $cantidadTotal = Movimiento::select(
             DB::raw('SUM(movimientos.ingreso) - SUM(movimientos.salida) as total'),
             'almacenes.nombre as almacen'
@@ -82,7 +83,7 @@ class MovimientoController extends Controller
         ->where('movimientos.producto_id', $producto_id)
         ->groupBy('movimientos.almacene_id')
         ->get();
-        return view('movimiento.ajaxMuestraTotalesAlmacen')->with(compact('cantidadTotal'));
+        return view('movimiento.ajaxMuestraTotalesAlmacen')->with(compact('cantidadTotal', 'datosProducto'));
         // dd($cantidadTotal);
     }
 }

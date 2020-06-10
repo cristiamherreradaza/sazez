@@ -177,7 +177,7 @@
         }
     }
 
-    function cambiaPrecio(productoId)
+    function cambiaPrecioM(productoId)
     {
         // alert(productoId);
         let precio = $("#escala_m_"+productoId).find(':selected').data('precio');
