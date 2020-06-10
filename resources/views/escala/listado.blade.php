@@ -19,8 +19,8 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
-                        <th>Cantidad Minima</th>
-                        <th>Cantidad Maxima</th>
+                        <th>Cantidad</th>
+                        {{-- <th>Cantidad Maxima</th> --}}
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -30,7 +30,7 @@
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $escala->nombre }}</td>
                             <td>{{ $escala->minimo }}</td>
-                            <td>{{ $escala->maximo }}</td>
+                            {{-- <td>{{ $escala->maximo }}</td> --}}
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar escala"  onclick="editar('{{ $escala->id }}', '{{ $escala->nombre }}', '{{ $escala->minimo }}', '{{ $escala->maximo }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar escala"  onclick="eliminar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-trash"></i></button>
@@ -69,14 +69,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Cantidad Minima</label>
+                                <label class="control-label">Cantidad</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input name="minimo" type="number" id="minimo" class="form-control" min="1" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad Maxima</label>
                                 <span class="text-danger">
@@ -84,7 +84,7 @@
                                 </span>
                                 <input name="maximo" type="number" id="maximo" class="form-control" min="1" required>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -129,7 +129,7 @@
                                 <input name="minimo_escala" type="number" id="minimo_escala" class="form-control" min="1" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Cantidad Maxima</label>
                                 <span class="text-danger">
@@ -137,7 +137,7 @@
                                 </span>
                                 <input name="maximo_escala" type="number" id="maximo_escala" class="form-control" min="1" required>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">

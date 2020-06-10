@@ -191,13 +191,13 @@
                                                             <input type="number" class="form-control" name="precio_venta[{{ $e->id }}]" id="precio_venta" min="0" step="any" value="{{ $precio }}">
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label>Minimo</label>
+                                                            <label>Cantidad</label>
                                                             <input type="text" class="form-control" name="minimo" value="{{ $e->minimo }}" readonly>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        {{-- <div class="col-md-4">
                                                             <label>Maximo</label>
                                                             <input type="text" class="form-control" name="maximo" value="{{ $e->maximo }}" readonly>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
                                                 </div>
                                                 @endforeach

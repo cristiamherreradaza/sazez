@@ -134,6 +134,19 @@
 
                 <li class="sidebar-item"> 
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="share" class="feather-icon"></i><span class="hide-menu"> CUPONES </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Cupon/listado') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i data-feather="settings" class="feather-icon"></i><span class="hide-menu"> CONFIGURACIONES </span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
