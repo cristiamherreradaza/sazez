@@ -330,14 +330,15 @@
         sumaSubTotales();
     });
 
+    // calcula el precio en funcion al cambio de cantidad tabla mayores
     $(document).on('keyup change', '.cantidadMayor', function(e){
         // alert("cambio");
-        let cantidad = Number($(this).val());
-        let id = $(this).data("id");
-        let precio = Number($("#precio_"+id).val());
-        let subtotal = precio*cantidad;
-        console.log(precio);
-        $("#subtotal_"+id).val(subtotal);
+        let cantidadMayor = Number($(this).val());
+        let idm = $(this).data("idm");
+        // console.log(idm);
+        let precioMayor = Number($("#precio_m_"+idm).val());
+        let subtotalMayor = precioMayor*cantidadMayor;
+        $("#subtotal_m_"+idm).val(subtotalMayor);
         sumaSubTotales();
     });
 

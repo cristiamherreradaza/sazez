@@ -148,7 +148,7 @@
                         `<select class="form-control name="escala_id_m[`+id+`]" id="escala_m_`+id+`" onchange="cambiaPrecioM(`+id+`)"></select>`,
                         `<input type="number" class="form-control text-right precioMayor" name="precio_m[`+id+`]" id="precio_m_`+id+`" value="`+precio+`" data-idm="`+id+`" step="any" min="1" style="width: 100px;">
                         <input type="hidden" name="precio_venta_m[`+id+`]" value="`+precio+`">`,
-                        `<input type="number" class="form-control text-right cantidadMayor" name="cantidad_m[`+id+`]" id="cantidad_m_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
+                        `<input type="number" class="form-control text-right cantidadMayor" name="cantidad_m[`+id+`]" id="cantidad_m_`+id+`" value="1" data-idm="`+id+`" min="1" style="width: 70px;">`,
                         `<input type="number" class="form-control text-right subtotalMayor" name="subtotal_m[`+id+`]" id="subtotal_m_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
                         '<button type="button" class="btnEliminaMayor btn btn-danger" title="Elimina Producto"><i class="fas fa-trash"></i></button>'
                     ]).draw(false);
