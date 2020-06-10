@@ -89,6 +89,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
     Route::post('Cliente/password', 'ClienteController@password');
 
+    //CUPONES
+    Route::get('Cupon/listado', 'CuponController@listado');
+    Route::post('Cupon/guardar', 'CuponController@guardar');
+    Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
+
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');
     Route::post('Movimiento/ajaxBuscaProducto', 'MovimientoController@ajaxBuscaProducto');
