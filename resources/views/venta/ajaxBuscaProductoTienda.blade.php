@@ -153,36 +153,31 @@
                         '<button type="button" class="btnEliminaMayor btn btn-danger" title="Elimina Producto"><i class="fas fa-trash"></i></button>'
                     ]).draw(false);
                     sumaSubTotales();
+                    adicionaItemUnidad(precios, id);
                 }                
 
             }
-            // console.log($(this).data('venta'));
-            // console.log(JSON.parse(precios));
-            adicionaItemUnidad(precios, id);
-            
         });
 
     });
 
+    // funcion para llenar el combo de los productos al por mayor
     function adicionaItemUnidad(precios, productoId)
     {
         let objetoPrecios = JSON.parse(precios);
-        // console.log(JSON.parse(precios));
         for (let [key, value] of Object.entries(objetoPrecios)) {
-            // console.log(`${key}: ${value.nombre}`);
-            // console.log(productoId);
-            // console.log(`${key}: ${value.escala_id}`);
-            // $("#escala_"+value.escala_id).append(new Option(value.nombre, value.escala_id));
             $('#escala_m_'+productoId).append(`<option value="`+value.escala_id+`" data-precio="`+value.precio+`">`+value.nombre+`</option>`);
         }
     }
 
     function cambiaPrecioM(productoId)
     {
-        // alert(productoId);
         let precio = $("#escala_m_"+productoId).find(':selected').data('precio');
         $("#precio_m_"+productoId).val(precio);
-        // console.log
+        let cantidadMayor = Number($("#cantidad_m_"+productoId).val());
+        let precioMayor = Number($("#precio_m_"+productoId).val());
+        let subtotalMayor = precioMayor*cantidadMayor;
+        $("#subtotal_m_"+productoId).val(subtotalMayor);
     }
 
 </script>

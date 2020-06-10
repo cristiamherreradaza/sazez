@@ -332,10 +332,8 @@
 
     // calcula el precio en funcion al cambio de cantidad tabla mayores
     $(document).on('keyup change', '.cantidadMayor', function(e){
-        // alert("cambio");
         let cantidadMayor = Number($(this).val());
         let idm = $(this).data("idm");
-        // console.log(idm);
         let precioMayor = Number($("#precio_m_"+idm).val());
         let subtotalMayor = precioMayor*cantidadMayor;
         $("#subtotal_m_"+idm).val(subtotalMayor);
