@@ -204,8 +204,7 @@
                         </table>
                     </div>
                     <div class="form-group">
-                        <button class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">REGISTRAR
-                            VENTA</button>
+                        <button class="btn waves-effect waves-light btn-block btn-success">REGISTRAR VENTA</button>
                     </div>
                 </div>
             </div>
@@ -447,7 +446,7 @@
     function validaItems()
     {
         // alert("entro");
-        if (itemsPedidoArray.length > 0) {
+        if (itemsPedidoArray.length > 0 || itemsPedidoArrayMayor.length > 0) {
             alert("bien carajo");
         } else {
             alert("llena carajo");

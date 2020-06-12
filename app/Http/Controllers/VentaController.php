@@ -136,7 +136,8 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-        // dd($request->precio);
+        dd($request->all());
+        //cremaos la venta
         $venta              = new Venta();
         $venta->user_id     = Auth::user()->id;
         $venta->almacene_id = Auth::user()->almacen_id;
@@ -146,15 +147,42 @@ class VentaController extends Controller
         $venta->save();
         $venta_id = $venta->id;
 
-        $llaves = array_keys($request->precio);
-        foreach ($llaves as $key => $ll) {
+        // guardamos todos los items de la venta por unidad
+        if ($request->has('precio')) {
+            $llaves = array_keys($request->precio);
+            foreach ($llaves as $key => $ll) {
+                $productos                 = new VentasProducto();
+                $productos->user_id        = Auth::user()->id;
+                $productos->producto_id    = $ll;
+                $productos->venta_id       = $venta_id;
+                $productos->precio_venta   = $request->precio_venta[$ll];
+                $productos->precio_cobrado = $request->precio[$ll];
+                $productos->cantidad       = $request->cantidad[$ll];
+                $productos->fecha          = $request->fecha;
+                $productos->save();
+
+                $movimiento               = new Movimiento();
+                $movimiento->user_id      = Auth::user()->id;
+                $movimiento->almacene_id  = Auth::user()->almacen_id;
+                $movimiento->venta_id     = $venta_id;
+                $movimiento->producto_id  = $ll;
+                $movimiento->precio_venta = $request->precio[$ll];
+                $movimiento->salida       = $request->cantidad[$ll];
+                $movimiento->estado       = 'Venta';
+                $movimiento->save();
+            }
+        }
+
+        // guardamos todos los items de la venta por mayor
+        $llavesMayor = array_keys($request->precio_m);
+        foreach ($llavesMayor as $key => $llm) {
             $productos                 = new VentasProducto();
             $productos->user_id        = Auth::user()->id;
-            $productos->producto_id    = $ll;
+            $productos->producto_id    = $llm;
             $productos->venta_id       = $venta_id;
-            $productos->precio_venta   = $request->precio_venta[$ll];
-            $productos->precio_cobrado = $request->precio[$ll];
-            $productos->cantidad       = $request->cantidad[$ll];
+            $productos->precio_venta_mayor   = $request->precio_venta[$llm];
+            $productos->precio_cobrado = $request->precio[$llm];
+            $productos->cantidad       = $request->cantidad[$llm];
             $productos->fecha          = $request->fecha;
             $productos->save();
 
@@ -162,14 +190,14 @@ class VentaController extends Controller
             $movimiento->user_id      = Auth::user()->id;
             $movimiento->almacene_id  = Auth::user()->almacen_id;
             $movimiento->venta_id     = $venta_id;
-            $movimiento->producto_id  = $ll;
-            $movimiento->precio_venta = $request->precio[$ll];
-            $movimiento->salida       = $request->cantidad[$ll];
+            $movimiento->producto_id  = $llm;
+            $movimiento->precio_venta = $request->precio[$llm];
+            $movimiento->salida       = $request->cantidad[$llm];
             $movimiento->estado       = 'Venta';
             $movimiento->save();
         }
-        return redirect('Venta/listado');
 
+        return redirect('Venta/listado');
     }
 
     public function listado()

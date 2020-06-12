@@ -27,6 +27,8 @@ class CreateVentasProductosTable extends Migration
             $table->foreign('venta_id')->references('id')->on('ventas');
             $table->decimal('precio_venta', 15, 2)->default(0);
             $table->decimal('precio_cobrado', 15, 2)->default(0);
+            $table->decimal('precio_venta_mayor', 15, 2)->default(0);
+            $table->decimal('precio_cobrado_mayor', 15, 2)->default(0);
             $table->decimal('cantidad', 15, 2)->default(0);
             $table->date('fecha')->nullable();
             $table->string('estado', 30)->nullable();
