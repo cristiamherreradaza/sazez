@@ -17,11 +17,11 @@
         <tbody>
             @php
                 $hoy = date('Y-m-d');
-                $promosArray = [];
                 $arrayPreciosProductos = [];
             @endphp
             @foreach ($productos as $key => $p)
             @php
+                $promosArray = [];
                 $promo = App\CombosProducto::where('producto_id', $p->id)->get();
                 foreach ($promo as $contador => $pro) {
                     $valida = App\Combo::where('id', $pro->combo_id)
@@ -68,7 +68,8 @@
                         @php
                             $contadorPromos = 0;
                         @endphp
-                        @forelse ($promosArray as $cpro => $pA)
+                        @forelse ($promosArray as $pA)
+                        <?php print_r($pA); ?>
                             <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pA }})">P {{ ++$contadorPromos }}</small>
                         @empty
                             
