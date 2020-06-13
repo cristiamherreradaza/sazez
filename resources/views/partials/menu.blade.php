@@ -65,11 +65,11 @@
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Tienda </span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
+                        {{-- <li class="sidebar-item">
                             <a href="{{ url('Venta/mayorista') }}" class="sidebar-link">
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Mayorista </span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="sidebar-item">
                             <a href="{{ url('Venta/listado') }}" class="sidebar-link">
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>

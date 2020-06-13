@@ -137,8 +137,8 @@
 
             }else{
 
-                let buscaItem = itemsPedidoArrayMayor.lastIndexOf(id);
-                if(buscaItem < 0)
+                let buscaItemMayor = itemsPedidoArrayMayor.lastIndexOf(id);
+                if(buscaItemMayor < 0)
                 {
                     itemsPedidoArrayMayor.push(id);
                     tm.row.add([
