@@ -179,18 +179,21 @@ class VentaController extends Controller
             $llavesMayor = array_keys($request->precio_m);
             foreach ($llavesMayor as $key => $llm) {
                 $cantidadVendida = 0;
+                $cantidaMayor = $request->cantidad_m[$llm];
+                $cantidadEscala = $request->cantidad_escala_m[$llm];
+
                 $productosMayor                       = new VentasProducto();
                 $productosMayor->user_id              = Auth::user()->id;
                 $productosMayor->producto_id          = $llm;
                 $productosMayor->venta_id             = $venta_id;
-                $productosMayor->combo_id             = $request->escala_id_m[$llm];
+                $productosMayor->escala_id            = $request->escala_id_m[$llm];
                 $productosMayor->precio_venta_mayor   = $request->precio_venta_m[$llm];
                 $productosMayor->precio_cobrado_mayor = $request->precio_m[$llm];
                 $productosMayor->cantidad             = $request->cantidad_m[$llm];
                 $productosMayor->fecha                = $request->fecha;
                 $productosMayor->save();
 
-                $cantidadVendida = $request->cantidad_m[$llm]*$request->cantidad_escala_m[$llm];
+                $cantidadVendida = $cantidaMayor * $cantidadEscala;
 
                 $movimientoMayor               = new Movimiento();
                 $movimientoMayor->user_id      = Auth::user()->id;
