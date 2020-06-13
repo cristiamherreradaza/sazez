@@ -95,6 +95,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Cupon/listado', 'CuponController@listado');
     Route::post('Cupon/guardar', 'CuponController@guardar');
     Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
+    Route::get('Cupon/eliminar/{id}', 'CuponController@eliminar');
 
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');

@@ -85,4 +85,11 @@ class CuponController extends Controller
         return $clave_privada;
     }
 
+    public function eliminar(Request $request)
+    {
+        $cupon = Cupone::find($request->id);
+        $cupon->delete();
+        return redirect('Cupon/listado');
+    }
+
 }

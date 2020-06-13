@@ -65,8 +65,7 @@
                             <td>{{ $cupon->fecha_inicio }}</td>
                             <td>{{ $cupon->fecha_final }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar cupon"  onclick="editar('{{ $cupon->id }}', '{{ $cupon->producto_id }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}', '{{ $cupon->producto_id }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}')"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -190,39 +189,6 @@
 </div>
 <!-- fin modal cupon nuevo -->
 
-<!-- inicio modal editar cupon -->
-<!-- <div id="editar_marcas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">EDITAR CUP&Oacute;N</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <form action="{{ url('Marca/actualizar') }}"  method="POST" >
-                @csrf
-                <div class="modal-body">
-                    <input type="hidden" name="id" id="id" value="">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Nombre</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="nombre" type="text" id="nombre" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualiza_marca()">ACTUALIZAR MARCA</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div> -->
-<!-- fin modal editar cupon -->
-
 @stop
 
 @section('js')
@@ -266,30 +232,10 @@
         }
     }
 
-    function editar(id, nombre)
-    {
-        $("#id").val(id);
-        $("#nombre").val(nombre);
-        $("#editar_marcas").modal('show');
-    }
-
-    function actualiza_marca()
-    {
-        var id = $("#id").val();
-        var nombre = $("#nombre").val();
-        if(nombre.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Marca actualizada correctamente.',
-                'success'
-            )
-        }
-    }
-
-    function eliminar(id, nombre)
+    function eliminar(id)
     {
         Swal.fire({
-            title: 'Quieres borrar ' + nombre + '?',
+            title: 'Quieres borrar este cupón?',
             text: "Luego no podras recuperarlo!",
             type: 'warning',
             showCancelButton: true,
@@ -301,10 +247,10 @@
             if (result.value) {
                 Swal.fire(
                     'Excelente!',
-                    'La marca fue eliminada',
+                    'El cupón fue eliminado',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Marca/eliminar') }}/"+id;
+                    window.location.href = "{{ url('Cupon/eliminar') }}/"+id;
                 });
             }
         })
