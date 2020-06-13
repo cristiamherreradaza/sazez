@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\CuponMail;
+use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -202,4 +204,10 @@ Route::get('Cliente/inicio', 'ClienteController@inicio');
 Route::get('Tienda/inicio', 'TiendaController@inicio');
 Route::get('Tienda/ver/{id}', 'TiendaController@ver');
 
-Route::get('Prueba/sumas', 'ComboController@sumas');
+//PRUEBAS -> BORRAR
+Route::get('Cupon/test', 'CuponController@codigoGenerador');
+Route::get('Cupon/tests', 'CuponController@test');
+Route::get('/email', function() {
+    Mail::to('arielfernandez.rma7@gmail.com')->send(new CuponMail());
+    //return new CuponMail(); 
+});

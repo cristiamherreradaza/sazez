@@ -2,6 +2,7 @@
 
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
 @endsection
 
 @section('metadatos')
@@ -38,13 +39,31 @@
                         <tr>
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $cupon->codigo }}</td>
-                            <td>{{ $cupon->producto_id }}</td>
-                            <td>{{ $cupon->cliente_id }}</td>
-                            <td>{{ $cupon->almacene_id }}</td>
-                            <td>{{ $cupon->estado }}</td>
+                            <td>{{ $cupon->producto->nombre }}</td>
+                            <td>{{ $cupon->user->name }}</td>
+                            <td>
+                                @if($cupon->almacen)
+                                    {{ $cupon->almacen->nombre }}
+                                @endif
+                            </td>
+                            <td>
+                                @php
+                                    $cobrado = App\CuponesCobrado::where('cupone_id', $cupon->id)
+                                                ->first();
+                                @endphp
+                                @if($cobrado)
+                                    Si
+                                @else
+                                    No
+                                @endif
+                            </td>
+                            <td>
+                                @if($cobrado)
+                                    {{ $cobrado->fecha }}
+                                @endif
+                            </td>
                             <td>{{ $cupon->fecha_inicio }}</td>
-                            <td>{{ $cupon->fecha_inicio }}</td>
-                            <td>{{ $cupon->fecha_fin }}</td>
+                            <td>{{ $cupon->fecha_final }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar cupon"  onclick="editar('{{ $cupon->id }}', '{{ $cupon->producto_id }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}', '{{ $cupon->producto_id }}')"><i class="fas fa-trash"></i></button>
@@ -60,7 +79,7 @@
 
 <!-- inicio modal cupon nuevo -->
 <div id="modal_cupones" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-full-width">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">NUEVO CUP&Oacute;N</h4>
@@ -97,13 +116,13 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Descuento</label>
-                                    <input name="producto_descuento" type="number" id="producto_descuento" class="form-control" value="1">
+                                    <input name="producto_descuento" type="number" id="producto_descuento" class="form-control" value="0">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Total</label>
-                                    <input name="producto_total" type="number" id="producto_total" class="form-control" value="0">
+                                    <input name="producto_total" type="number" id="producto_total" class="form-control" step="any">
                                 </div>
                             </div>
                         </div>
@@ -146,7 +165,8 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="fecha_inicio" type="date" id="fecha_inicio" class="form-control" required>
+                                <input type="text" class="form-control" placeholder="Inicio" id="fecha_inicio" name="fecha_inicio">
+                                <!-- <input name="fecha_inicio" type="date" id="fecha_inicio" class="form-control" required> -->
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -155,7 +175,8 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="fecha_fin" type="date" id="fecha_fin" class="form-control" required>
+                                <input type="text" class="form-control" placeholder="Fin" id="fecha_fin" name="fecha_fin">
+                                <!-- <input name="fecha_fin" type="date" id="fecha_fin" class="form-control" required> -->
                             </div>
                         </div>
                     </div>
@@ -214,6 +235,10 @@
                 url: '{{ asset('datatableEs.json') }}'
             },
         });
+    });
+
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
     });
 </script>
 <script>
@@ -309,5 +334,39 @@
         }
 
     });
+
+    $(document).on('keyup change', '#producto_descuento', function(e){
+        let descuento = Number($(this).val())/100;
+        //alert(descuento);
+        // let id = $(this).data("id");
+        let precio = Number($("#producto_precio").val());
+        //alert(precio);
+
+        let total = precio - (precio*descuento);
+        //alert(total);
+        $("#producto_total").val(total);
+        // sumaSubTotales();
+    });
+
+
+
 </script>
+    <script src="{{ asset('assets/libs/moment/min/moment-with-locales.js') }}"></script>
+    <script src="{{ asset('assets/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
+    <script>
+    $('#fecha_inicio').bootstrapMaterialDatePicker({ format: 'YYYY-MM-DD HH:mm', minDate: new Date(), lang: 'es' });
+    $('#fecha_fin').bootstrapMaterialDatePicker({ format: 'YYYY-MM-DD HH:mm', minDate: new Date(), lang: 'es' });
+
+    // MAterial Date picker    
+    $('#mdate').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
+    $('#timepicker').bootstrapMaterialDatePicker({ format: 'HH:mm', time: true, date: false });
+    $('#date-format').bootstrapMaterialDatePicker({ format: 'dddd DD MMMM YYYY - HH:mm' });
+
+    $('#min-date').bootstrapMaterialDatePicker({ format: 'DD/MM/YYYY HH:mm', minDate: new Date() });
+    $('#date-fr').bootstrapMaterialDatePicker({ format: 'DD/MM/YYYY HH:mm', lang: 'fr', weekStart: 1, cancelText: 'ANNULER' });
+    $('#date-end').bootstrapMaterialDatePicker({ weekStart: 0 });
+    $('#date-start').bootstrapMaterialDatePicker({ weekStart: 0 }).on('change', function(e, date) {
+        $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
+    });
+    </script>
 @endsection
