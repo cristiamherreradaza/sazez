@@ -26,7 +26,6 @@ class EscalaController extends Controller
         $escala->user_id = Auth::user()->id;
         $escala->nombre = $request->nombre_escala;
         $escala->minimo = $request->minimo;
-        $escala->maximo = $request->maximo;
         $escala->save();
         return redirect('Escala/listado');
     }
@@ -37,7 +36,6 @@ class EscalaController extends Controller
         $escala->user_id = Auth::user()->id;
         $escala->nombre = $request->nombre;
         $escala->minimo = $request->minimo_escala;
-        $escala->maximo = $request->maximo_escala;
         $escala->save();
         return redirect('Escala/listado');
     }

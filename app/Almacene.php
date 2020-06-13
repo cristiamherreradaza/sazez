@@ -37,4 +37,9 @@ class Almacene extends Model
     {
         return $this->hasMany('App\Venta');
     }
+
+    public function cupones()
+    {
+        return $this->hasMany('App\Cupone');
+    }
 }

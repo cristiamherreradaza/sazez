@@ -20,7 +20,6 @@
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Cantidad</th>
-                        {{-- <th>Cantidad Maxima</th> --}}
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -30,7 +29,6 @@
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $escala->nombre }}</td>
                             <td>{{ $escala->minimo }}</td>
-                            {{-- <td>{{ $escala->maximo }}</td> --}}
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar escala"  onclick="editar('{{ $escala->id }}', '{{ $escala->nombre }}', '{{ $escala->minimo }}', '{{ $escala->maximo }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar escala"  onclick="eliminar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-trash"></i></button>
@@ -52,7 +50,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVA ESCALA</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Escala/guardar') }}"  method="POST" >
+            <form action="{{ url('Escala/guardar') }}" method="POST" >
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -76,15 +74,6 @@
                                 <input name="minimo" type="number" id="minimo" class="form-control" min="1" required>
                             </div>
                         </div>
-                        {{-- <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Cantidad Maxima</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="maximo" type="number" id="maximo" class="form-control" min="1" required>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -122,22 +111,13 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Cantidad Minima</label>
+                                <label class="control-label">Cantidad</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input name="minimo_escala" type="number" id="minimo_escala" class="form-control" min="1" required>
                             </div>
                         </div>
-                        {{-- <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Cantidad Maxima</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="maximo_escala" type="number" id="maximo_escala" class="form-control" min="1" required>
-                            </div>
-                        </div> --}}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -173,7 +153,8 @@
     function guardar_escala()
     {
         var nombre_escala = $("#nombre_escala").val();
-        if(nombre_escala.length>0){
+        var minimo = $("#minimo").val();
+        if(nombre_escala.length>0 && minimo.length>0){
             Swal.fire(
                 'Excelente!',
                 'Una nueva escala fue registrada.',
@@ -187,7 +168,6 @@
         $("#id").val(id);
         $("#nombre").val(nombre);
         $("#minimo_escala").val(minimo);
-        $("#maximo_escala").val(maximo);
         $("#editar_escalas").modal('show');
     }
 
@@ -195,7 +175,8 @@
     {
         var id = $("#id").val();
         var nombre = $("#nombre").val();
-        if(nombre.length>0){
+        var minimo_escala = $("#minimo_escala").val();
+        if(nombre.length>0 && minimo_escala.length>0){
             Swal.fire(
                 'Excelente!',
                 'Escala actualizada correctamente.',
