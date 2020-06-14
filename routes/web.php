@@ -61,6 +61,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/ajaxMuestraImgProducto/{producto_id}', 'ProductoController@ajaxMuestraImgProducto');
     Route::get('Producto/panelControl', 'ProductoController@panelControl');
     Route::get('Producto/muestra/{id}', 'ProductoController@muestra');
+    Route::get('Producto/info', 'ProductoController@info');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');

@@ -197,8 +197,8 @@
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
                 </li>
                 <li class="sidebar-item"> 
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="../../../Documentation/document.html" aria-expanded="false">
-                        <i data-feather="codepen" class="feather-icon"></i><span class="hide-menu">Tutoriales</span>
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('Producto/info') }}" aria-expanded="false">
+                        <i data-feather="codepen" class="feather-icon"></i><span class="hide-menu">Informacion</span>
                     </a>
                 </li>
             </ul>
