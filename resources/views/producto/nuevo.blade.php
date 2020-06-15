@@ -45,7 +45,7 @@
     <!-- Column -->
     <div class="col-md-12">
         <!-- Row -->
-        <form action="/Producto/guarda"  method="post" enctype="multipart/form-data" >
+        <form action="Producto/guarda"  method="post" enctype="multipart/form-data" >
             @csrf
         <div class="row">
             <div class="col-lg-12">
@@ -371,7 +371,7 @@
                         <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
                     </div>
                     <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
-                        <form action="/Producto/importaExcel" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
+                        <form action="Producto/importaExcel" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                             
