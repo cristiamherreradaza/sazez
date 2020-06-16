@@ -11,6 +11,7 @@ use App\Mail\PruebaMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use QrCode;
 
 class CuponController extends Controller
 {
@@ -95,7 +96,10 @@ class CuponController extends Controller
 
     public function pruebaCorreo()
     {
-        Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail());
+        $png = QrCode::format('png')->size(512)->generate(1);
+        $png = base64_encode($png);
+        //echo "<img src='data:image/png;base64," . $png . "'>";
+        Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail($png));
     }
 
 }

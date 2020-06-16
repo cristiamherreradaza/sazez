@@ -5,7 +5,7 @@ Fuiste acreedor a un nuevo cupón de descuento del producto <a href="https://www
 
 @component('mail::promotion')
 
-<img src="{!!$message->embedData($codigo, 'QrCode.png', 'image/png')!!}">
+<img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(100)->generate('QrCode as PNG image!')) !!} ">
 <br>
 Cupón valido hasta {{ $msg['fecha_final'] }}.<br>
 @endcomponent

@@ -16,9 +16,12 @@ class PruebaMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+
+    public $png;
+
+    public function __construct($png)
     {
-        //
+        $this->png = $png;
     }
 
     /**
