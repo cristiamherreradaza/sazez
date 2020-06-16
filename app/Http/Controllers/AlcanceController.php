@@ -188,7 +188,6 @@ class AlcanceController extends Controller
     public function guarda(Request $request)
     {
         $user_id = $request->tipo_user;
-        dd($user_id);
         $alcance_max = $request->tipo_alcance;
         $fecha = explode("-", $request->tipo_fecha);
         $anio = $fecha[0];
@@ -198,11 +197,26 @@ class AlcanceController extends Controller
                     ->where("mes", $mes)
                     ->where("anio", $anio)
                     ->get();
-        if (!empty($almacen_id[0]->id)) {
-            dd('si');
+        if (count($alcance_id) > 0){
+            $alcance_usuarios = AlcancesUser::find($alcance_id[0]->id);
+            $alcance_usuarios->alcance_max = $alcance_max;
+            $alcance_usuarios->save();
         } else {
-            dd('no');
+            $mes_li = $this->meses_literal($mes);
+
+            $alcance_usu = new AlcancesUser();
+            $alcance_usu->user_id = $user_id;
+            $alcance_usu->alcance_max = $alcance_max;
+            $alcance_usu->mes = $mes;
+            $alcance_usu->mes_literal = $mes_li;
+            $alcance_usu->anio = $anio;
+            $alcance_usu->total_vendido = 0;
+            $alcance_usu->save();
         }
+
+        return response()->json([
+                'mensaje' => 'si'
+            ]);
 
     }
 

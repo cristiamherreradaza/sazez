@@ -20,7 +20,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVO ALCANCE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Alcance/guardar') }}" method="POST">
+            <form action="#" method="POST">
                 @csrf
                 <div class="modal-body">
                         <div class="row">
@@ -157,6 +157,13 @@
 <script src="{{ asset('assets/libs/morris.js/morris.min.js') }}"></script>
 
 <script>
+    $.ajaxSetup({
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $(function () {
         $('#myTable').DataTable({
             "paging":   true,
@@ -190,8 +197,30 @@
                 tipo_user : user_id, tipo_alcance : alcance_max, tipo_fecha : fecha
             },
             success:function(data){
-                // $("#grafico_alcance").show('slow');
-                $("#grafico_alcance").html(data);
+                if (data.mensaje == 'si') {
+                    Swal.fire(
+                        'Excelente!',
+                        'Se creo correctamente.',
+                        'success'
+                    )
+                     Swal.fire(
+                            'Excelente!',
+                            'Se creo correctamente.',
+                            'success'
+                        ).then(function() {
+                            $.ajax({
+                                type:'GET',
+                                url:"{{ url('Alcance/ajax_alcance') }}",
+                                data: {
+                                    tipo : fecha
+                                },
+                                success:function(data){
+                                    $("#grafico_alcance").html(data);
+                                    // $("#nuevo_almacen").show('slow');
+                                }
+                            });
+                        });
+                }
             }
         });
     }
