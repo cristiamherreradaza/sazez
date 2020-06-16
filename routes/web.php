@@ -199,6 +199,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Envio/ver_pedido/{id}', 'EnvioController@ver_pedido');
     Route::post('Movimiento/ajaxMuestraTotalesAlmacen', 'MovimientoController@ajaxMuestraTotalesAlmacen');
 
+    //ALCANCES
+    Route::get('Alcance', 'AlcanceController@index');
+    Route::get('Alcance/ajax_alcance', 'AlcanceController@ajax_alcance');
+    Route::get('Alcance/ajax_ventas_meses', 'AlcanceController@ajax_ventas_meses');
+
+    Route::post('Alcance/guarda', 'AlcanceController@guarda');
+
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');
