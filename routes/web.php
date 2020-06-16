@@ -1,5 +1,7 @@
 <?php
 
+use App\Mail\CuponMail;
+use Illuminate\Support\Facades\Mail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -59,6 +61,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/ajaxMuestraImgProducto/{producto_id}', 'ProductoController@ajaxMuestraImgProducto');
     Route::get('Producto/panelControl', 'ProductoController@panelControl');
     Route::get('Producto/muestra/{id}', 'ProductoController@muestra');
+    Route::get('Producto/info', 'ProductoController@info');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
@@ -93,6 +96,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Cupon/listado', 'CuponController@listado');
     Route::post('Cupon/guardar', 'CuponController@guardar');
     Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
+    Route::get('Cupon/eliminar/{id}', 'CuponController@eliminar');
 
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');
@@ -209,4 +213,10 @@ Route::get('Cliente/inicio', 'ClienteController@inicio');
 Route::get('Tienda/inicio', 'TiendaController@inicio');
 Route::get('Tienda/ver/{id}', 'TiendaController@ver');
 
-Route::get('Prueba/sumas', 'ComboController@sumas');
+//PRUEBAS -> BORRAR
+Route::get('Cupon/test', 'CuponController@codigoGenerador');
+Route::get('Cupon/tests', 'CuponController@test');
+Route::get('/email', function() {
+    Mail::to('arielfernandez.rma7@gmail.com')->send(new CuponMail());
+    //return new CuponMail(); 
+});

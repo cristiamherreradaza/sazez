@@ -45,7 +45,7 @@
     <!-- Column -->
     <div class="col-md-12">
         <!-- Row -->
-        <form action="/Producto/guarda"  method="post" enctype="multipart/form-data" >
+        <form action="Producto/guarda"  method="post" enctype="multipart/form-data" >
             @csrf
         <div class="row">
             <div class="col-lg-12">
@@ -204,12 +204,8 @@
                                                             <input type="number" class="form-control" name="precio_venta[{{ $e->id }}]" id="precio_venta" min="0" step="any" value="0">
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label>Minimo</label>
+                                                            <label>Cantidad</label>
                                                             <input type="text" class="form-control" name="minimo" value="{{ $e->minimo }}" readonly>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label>Maximo</label>
-                                                            <input type="text" class="form-control" name="maximo" value="{{ $e->maximo }}" readonly>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -375,7 +371,7 @@
                         <h4 class="mb-0 text-white">IMPORTAR EXCEL PRODUCTOS</h4>
                     </div>
                     <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
-                        <form action="/Producto/importaExcel" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
+                        <form action="{{ url('Producto/importaExcel') }}" id="formularioImportaExcel" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                             

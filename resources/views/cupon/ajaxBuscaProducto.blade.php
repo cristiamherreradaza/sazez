@@ -40,7 +40,6 @@
 <script>
     $(document).ready(function () {
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona', function () {
-
             $("#listadoProductosAjax").hide('slow');
             $("#termino").val("");
             $("#oculta_detalle").hide('slow');
@@ -51,46 +50,8 @@
             $("#producto_id").val(id);
             $("#producto_nombre").val(nombre);
             $("#producto_precio").val(precio);
-            $("#muestra_detalle").css("display", "block");
-            
-            // $(this).closest('.item-box').find('.more-info').toggle(1000, function() {
-            //     //alert('se completo');
-            //     // aqui puede resitrarse que pasa luego del cargado de esa parte de la pagina
-            // });
-            //alert(id);
-            // $("#termino").focus();
-
-            // var currentRow = $(this).closest("tr");
-
-            // var id      = currentRow.find("td:eq(0)").text();
-            // var codigo  = currentRow.find("td:eq(1)").text();
-            // var nombre  = currentRow.find("td:eq(2)").text();
-            // var marca   = currentRow.find("td:eq(3)").text();
-            // var tipo    = currentRow.find("td:eq(4)").text();
-            // var modelo  = currentRow.find("td:eq(5)").text();
-            // var colores = currentRow.find("td:eq(6)").text();
-            // var precio  = currentRow.find("td:eq(7)").text();
-
-            // let buscaItem = itemsPedidoArray.lastIndexOf(id);
-            // if(buscaItem < 0)
-            // {
-            //     itemsPedidoArray.push(id);  
-            //     t.row.add([
-            //         id,
-            //         codigo,
-            //         nombre,
-            //         marca,
-            //         tipo,
-            //         modelo,
-            //         colores,
-            //         precio,
-            //         `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1">`,
-            //         `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
-            //         `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
-            //         '<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash"></i></button>'
-            //     ]).draw(false);
-            //     sumaSubTotales();
-            // }
+            $("#producto_total").val(precio);
+            $("#muestra_detalle").css("display", "block");            
         });
 
     });

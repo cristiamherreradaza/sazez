@@ -15,6 +15,7 @@ class VentasProducto extends Model
         'producto_id',
         'combo_id',
         'venta_id',
+        'escala_id',
         'precio_venta',
         'cantidad',
         'fecha',
@@ -40,6 +41,11 @@ class VentasProducto extends Model
     public function combo()
     {
         return $this->belongsTo('App\Combo');
+    }
+
+    public function escala()
+    {
+        return $this->belongsTo('App\Escala');
     }
     
     public function venta()

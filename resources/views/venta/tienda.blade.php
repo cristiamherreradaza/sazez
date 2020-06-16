@@ -45,7 +45,7 @@
 </div><!-- /.modal -->
 {{-- fin modal promo --}}
 
-<form action="{{ url('Venta/guardaVenta') }}" method="POST">
+<form action="{{ url('Venta/guardaVenta') }}" id="formularioVenta" method="POST">
     @csrf
 
     <div class="row">
@@ -204,8 +204,7 @@
                         </table>
                     </div>
                     <div class="form-group">
-                        <button class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">REGISTRAR
-                            VENTA</button>
+                        <a class="btn waves-effect waves-light btn-block btn-success text-white" onclick="validaItems()">REGISTRAR VENTA</a>
                     </div>
                 </div>
             </div>
@@ -446,11 +445,26 @@
 
     function validaItems()
     {
+        // $("#formularioVenta").submit(function(e){
+        //     // e.preventDefault();
+        //     return false;
+        // });
         // alert("entro");
-        if (itemsPedidoArray.length > 0) {
-            alert("bien carajo");
+        if (itemsPedidoArray.length > 0 || itemsPedidoArrayMayor.length > 0) {
+            Swal.fire({
+                type: 'success',
+                title: 'Excelente',
+                text: 'Se realizo la venta'
+            })
+            // alert("bien carajo");
+            $("#formularioVenta").submit();
         } else {
-            alert("llena carajo");
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar un producto a la venta!!!'
+            })
+            // alert("llena carajo");
         }
     }
 

@@ -14,7 +14,6 @@ class Venta extends Model
         'almacene_id',
         'cotizacione_id',
         'cliente_id',
-        'combo_id',
         'numero',
         'fecha',
         'estado',
@@ -39,11 +38,6 @@ class Venta extends Model
     public function cliente()
     {
         return $this->belongsTo('App\User', 'cliente_id');
-    }
-
-    public function combo()
-    {
-        return $this->belongsTo('App\Combo');
     }
 
     public function ventas_productos()

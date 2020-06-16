@@ -65,11 +65,11 @@
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Tienda </span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
+                        {{-- <li class="sidebar-item">
                             <a href="{{ url('Venta/mayorista') }}" class="sidebar-link">
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Mayorista </span>
                             </a>
-                        </li>
+                        </li> --}}
                         <li class="sidebar-item">
                             <a href="{{ url('Venta/listado') }}" class="sidebar-link">
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
@@ -197,8 +197,8 @@
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
                 </li>
                 <li class="sidebar-item"> 
-                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="../../../Documentation/document.html" aria-expanded="false">
-                        <i data-feather="codepen" class="feather-icon"></i><span class="hide-menu">Tutoriales</span>
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('Producto/info') }}" aria-expanded="false">
+                        <i data-feather="codepen" class="feather-icon"></i><span class="hide-menu">Informacion</span>
                     </a>
                 </li>
             </ul>

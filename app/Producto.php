@@ -87,4 +87,9 @@ class Producto extends Model
     {
         return $this->hasMany('App\VentasProducto');
     }
+
+    public function cupones()
+    {
+        return $this->hasMany('App\Cupone');
+    }
 }

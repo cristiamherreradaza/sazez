@@ -23,10 +23,14 @@ class CreateVentasProductosTable extends Migration
             $table->foreign('producto_id')->references('id')->on('productos');
             $table->unsignedBigInteger('combo_id')->nullable();
             $table->foreign('combo_id')->references('id')->on('combos');
+            $table->unsignedBigInteger('escala_id')->nullable();
+            $table->foreign('escala_id')->references('id')->on('escalas');
             $table->unsignedBigInteger('venta_id');
             $table->foreign('venta_id')->references('id')->on('ventas');
             $table->decimal('precio_venta', 15, 2)->default(0);
             $table->decimal('precio_cobrado', 15, 2)->default(0);
+            $table->decimal('precio_venta_mayor', 15, 2)->default(0);
+            $table->decimal('precio_cobrado_mayor', 15, 2)->default(0);
             $table->decimal('cantidad', 15, 2)->default(0);
             $table->date('fecha')->nullable();
             $table->string('estado', 30)->nullable();
