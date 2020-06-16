@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\Cupone;
+use App\Almacene;
+use App\Producto;
+use App\Mail\CuponMail;
+use App\Mail\PruebaMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Mail\CuponMail;
 use Illuminate\Support\Facades\Mail;
-use App\Almacene;
-use App\Cupone;
-use App\Producto;
-use App\User;
 
 class CuponController extends Controller
 {
@@ -90,6 +91,11 @@ class CuponController extends Controller
         $cupon = Cupone::find($request->id);
         $cupon->delete();
         return redirect('Cupon/listado');
+    }
+
+    public function pruebaCorreo()
+    {
+        Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail());
     }
 
 }
