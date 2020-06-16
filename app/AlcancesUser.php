@@ -13,6 +13,7 @@ class AlcancesUser extends Model
         'user_id',
         'alcance_max',
         'mes',
+        'mes_literal',
         'anio',
         'total_vendido',
         'estado',

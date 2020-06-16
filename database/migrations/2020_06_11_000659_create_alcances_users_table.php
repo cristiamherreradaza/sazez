@@ -19,6 +19,7 @@ class CreateAlcancesUsersTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->decimal('alcance_max', 15, 2)->default(0);
             $table->integer('mes')->nullable();
+            $table->string('mes_literal', 30)->nullable();
             $table->integer('anio')->nullable();
             $table->decimal('total_vendido', 15, 2)->default(0);
             $table->string('estado', 30)->nullable();

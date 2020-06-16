@@ -13,10 +13,11 @@ $(function () {
         data: [
         @php
             $nro = count($grafico_mes);
-            for ($i=$nro-1; $i >= 0 ; $i--) { 
+            for ($i=$nro-1; $i >= 0 ; $i--) {
+            $mes_anio = $grafico_mes[$i]->mes_literal.'-'.$grafico_mes[$i]->anio; 
         @endphp 
         {
-            y: 'dic-2006',
+            y: '{{ $mes_anio }}',
             a: {{ $grafico_mes[$i]->total_vendido}},
             b: {{ $grafico_mes[$i]->alcance_max}}
         },

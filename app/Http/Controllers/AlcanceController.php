@@ -58,10 +58,13 @@ class AlcanceController extends Controller
 				        $alcance_usuarios->total_vendido = $usuario_venta_mensual[0]->total;
 				        $alcance_usuarios->save();
 	            	} else {
+                        $mes_li = $this->meses_literal($mes_resta);
+
 	            		$alcance_usu = new AlcancesUser();
 				        $alcance_usu->user_id = $usu->id;
 				        $alcance_usu->alcance_max = 0;
 				        $alcance_usu->mes = $mes;
+                        $alcance_usu->mes_literal = $mes_li;
 				        $alcance_usu->anio = $anio;
 				        $alcance_usu->total_vendido = $usuario_venta_mensual[0]->total;
 				        $alcance_usu->save();
@@ -109,10 +112,13 @@ class AlcanceController extends Controller
                         $alcance_usuarios->total_vendido = $usuario_venta_mensual[0]->total;
                         $alcance_usuarios->save();
                     } else {
+                        $mes_li = $this->meses_literal($mes_resta);
+
                         $alcance_usu = new AlcancesUser();
                         $alcance_usu->user_id = $id;
                         $alcance_usu->alcance_max = 0;
                         $alcance_usu->mes = $mes_resta;
+                        $alcance_usu->mes_literal = $mes_li;
                         $alcance_usu->anio = $anio_resta;
                         $alcance_usu->total_vendido = $usuario_venta_mensual[0]->total;
                         $alcance_usu->save();
@@ -135,6 +141,69 @@ class AlcanceController extends Controller
                     ->get();
 
         return view('alcance.grafico_meses')->with(compact('name', 'grafico_mes'));
+    }
+
+    public function meses_literal($num)
+    {
+        switch ($num) {
+            case 1:
+                return 'Ene';
+                break;
+            case 2:
+                return 'Feb';
+                break;
+            case 3:
+                return 'Mar';
+                break;
+            case 4:
+                return 'Abr';
+                break;
+            case 5:
+                return 'May';
+                break;
+            case 6:
+                return 'Jun';
+                break;
+            case 7:
+                return 'Jul';
+                break;
+            case 8:
+                return 'Ago';
+                break;
+            case 9:
+                return 'Sep';
+                break;
+            case 10:
+                return 'Oct';
+                break;
+            case 11:
+                return 'Nov';
+                break;
+            case 12:
+                return 'Dic';
+                break;
+        }
+    }
+
+    public function guarda(Request $request)
+    {
+        $user_id = $request->tipo_user;
+        dd($user_id);
+        $alcance_max = $request->tipo_alcance;
+        $fecha = explode("-", $request->tipo_fecha);
+        $anio = $fecha[0];
+        $mes = $fecha[1];
+
+        $alcance_id = AlcancesUser::where("user_id", $user_id)
+                    ->where("mes", $mes)
+                    ->where("anio", $anio)
+                    ->get();
+        if (!empty($almacen_id[0]->id)) {
+            dd('si');
+        } else {
+            dd('no');
+        }
+
     }
 
     public function prueba()

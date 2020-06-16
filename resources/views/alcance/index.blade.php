@@ -8,10 +8,7 @@
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/c3/c3.min.css') }}">
-
-<!-- This Page CSS -->
-    <link href="{{ asset('assets/libs/morris.js/morris.css') }}" rel="stylesheet">
-
+<link href="{{ asset('assets/libs/morris.js/morris.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -23,7 +20,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVO ALCANCE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Almacen/guardar') }}"  method="POST" >
+            <form action="{{ url('Alcance/guardar') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                         <div class="row">
@@ -62,7 +59,7 @@
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_almacen()">GUARDAR ALMACEN</button>
+                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar()">GUARDAR</button>
                 </div>
             </form>
         </div>
@@ -178,6 +175,25 @@
     {
         $(".select2").select2();
         $("#nuevo_almacen").modal('show');
+    }
+</script>
+<script>
+    function guardar()
+    {
+        var user_id = $("#user_id").val();
+        var alcance_max = $("#alcance_max").val();
+        var fecha = $("#fecha").val();
+        $.ajax({
+            type:'POST',
+            url:"{{ url('Alcance/guarda') }}",
+            data: {
+                tipo_user : user_id, tipo_alcance : alcance_max, tipo_fecha : fecha
+            },
+            success:function(data){
+                // $("#grafico_alcance").show('slow');
+                $("#grafico_alcance").html(data);
+            }
+        });
     }
 </script>
 <script>

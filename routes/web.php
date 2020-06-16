@@ -204,7 +204,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Alcance/ajax_alcance', 'AlcanceController@ajax_alcance');
     Route::get('Alcance/ajax_ventas_meses', 'AlcanceController@ajax_ventas_meses');
 
-    Route::get('Alcance/prueba', 'AlcanceController@prueba');
+    Route::post('Alcance/guarda', 'AlcanceController@guarda');
 
 });
 
