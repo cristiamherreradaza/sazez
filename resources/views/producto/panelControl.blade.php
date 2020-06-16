@@ -92,7 +92,17 @@
         <div class="card">
             <div class="card-body analytics-info">
                 <h4 class="card-title">Productos mas Vendidos del Mes</h4>
+                @php
+                    if(!empty($productos_mas_vendidos[0]->id)){
+                @endphp
                 <div id="nested-pie" style="height:400px;"></div>
+                @php
+                    } else {
+                @endphp
+                <h3 style="height:400px;">NO SE ENCUENTRA NINGUN REGISTRO DE VENTAS DE ESTE MES</h3>
+                @php
+                    }
+                @endphp
             </div>
         </div>
     </div>
