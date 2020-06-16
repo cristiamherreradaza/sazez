@@ -64,7 +64,7 @@ class CuponController extends Controller
             'producto' => $producto,
         ];
         //Se envia el email
-        Mail::to("arielfernandez.rma7@gmail.com")->send(new CuponMail($message, $codigo));
+        Mail::to("cupones@sazez.net")->send(new CuponMail($message, $codigo));
 
         return redirect('Cupon/listado');
     }
