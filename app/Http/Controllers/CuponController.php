@@ -123,7 +123,7 @@ class CuponController extends Controller
         Storage::disk('qrs')->put($codigo.'.png', $png);
 
         //Se envia el email
-        Mail::to("cupones@sazez.net")->send(new CuponMail($message, $codigo));
+        Mail::to("arielfernandez.rma7@gmail.com")->send(new CuponMail($message, $codigo));
 
         return redirect('Cupon/listado');
     }
