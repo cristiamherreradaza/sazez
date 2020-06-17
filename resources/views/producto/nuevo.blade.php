@@ -397,7 +397,7 @@
                                         disabled style="display: none;">
                                         <span class="spinner-border spinner-border-sm" role="status"
                                             aria-hidden="true"></span>
-                                        &nbsp;&nbsp;Estamos trabajando, ten pasciencia ;-)
+                                        &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
                                     </button>
 
                                 </div>

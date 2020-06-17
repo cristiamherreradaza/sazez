@@ -92,7 +92,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Producto</label>
-                                <input name="termino" type="text" id="termino" class="form-control">
+                                <input name="termino" type="text" id="termino" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -134,17 +134,24 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Cliente</label>
                                 <select name="cliente" id="cliente" class="form-control">
+                                    <option value="" selected></option>
                                     @foreach($clientes as $cliente)
                                         <option value="{{ $cliente->id }}"> {{ $cliente->name }} </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Correo Electrónico</label>
+                                <input name="email" type="email" id="email" class="form-control" placeholder="Llenar si NO existe el cliente">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Tienda</label>
                                 <select name="tienda" id="tienda" class="form-control">
@@ -164,8 +171,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="text" class="form-control" placeholder="Inicio" id="fecha_inicio" name="fecha_inicio">
-                                <!-- <input name="fecha_inicio" type="date" id="fecha_inicio" class="form-control" required> -->
+                                <input type="text" class="form-control" placeholder="Inicio" id="fecha_inicio" name="fecha_inicio" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -174,8 +180,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="text" class="form-control" placeholder="Fin" id="fecha_fin" name="fecha_fin">
-                                <!-- <input name="fecha_fin" type="date" id="fecha_fin" class="form-control" required> -->
+                                <input type="text" class="form-control" placeholder="Fin" id="fecha_fin" name="fecha_fin" required>
                             </div>
                         </div>
                     </div>
@@ -220,6 +225,7 @@
         $("#modal_cupones").modal('show');
     }
 
+    // funcion no utilizada
     function guarda_cupon()
     {
         var nombre_producto = $("#nombre_producto").val();
@@ -255,15 +261,6 @@
             }
         })
     }
-
-
-
-
-
-
-
-
-
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();

@@ -8,9 +8,8 @@
                 <th>Marca</th>
                 <th>Tipo</th>
                 <th>Modelo</th>
-                <th>Colores</th>
                 <th>Precio</th>
-                <th class="text-nowrap">Action</th>
+                <th class="text-nowrap"></th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +21,6 @@
                     <td>{{ $p->marca->nombre }}</td>
                     <td>{{ $p->tipo->nombre }}</td>
                     <td>{{ $p->modelo }}</td>
-                    <td>{{ $p->colores }}</td>
                     @php
                         $precio = App\Precio::where('producto_id', $p->id)
                                     ->where('escala_id', 1)
@@ -41,12 +39,12 @@
     $(document).ready(function () {
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona', function () {
             $("#listadoProductosAjax").hide('slow');
-            $("#termino").val("");
+            //$("#termino").val("");
             $("#oculta_detalle").hide('slow');
             var currentRow = $(this).closest("tr");
             var id = currentRow.find("td:eq(0)").text();
             var nombre = currentRow.find("td:eq(2)").text();
-            var precio = currentRow.find("td:eq(7)").text();
+            var precio = currentRow.find("td:eq(6)").text();
             $("#producto_id").val(id);
             $("#producto_nombre").val(nombre);
             $("#producto_precio").val(precio);

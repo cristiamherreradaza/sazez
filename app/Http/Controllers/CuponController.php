@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use QrCode;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class CuponController extends Controller
 {
@@ -34,6 +37,44 @@ class CuponController extends Controller
 
     public function guardar(Request $request)
     {
+        //Validamos que exista el producto
+        if(!$request->producto_id){
+            return redirect('Cupon/listado');
+        }
+
+        //Validamos que se haya introducido un cliente o un email
+        if(!$request->cliente && !$request->email){
+            return redirect('Cupon/listado');
+        }
+
+        //si existe cliente id
+        if($request->cliente){
+            //registrara en cupon
+            $id_cliente = $request->cliente;
+        }else{
+            //se asume que se envio un email, entonces validamos que email este no se encuentre en la base de datos
+            //buscamos si se encuentra este email en la base de datos
+            $email = User::where('email', $request->email)->first(); 
+            // Preguntamos si esta variable no esta definida (si no encontro registro)           
+            if(!$email){
+                //no existe el email o es un registro eliminado(soft delete) y crea un nuevo usuario
+                try{
+                    $cliente = new User();
+                    $cliente->name = $request->email;
+                    $cliente->rol = 'Cliente';
+                    $cliente->email = $request->email;
+                    $cliente->save();
+                    $id_cliente = $cliente->id;
+                }catch(Exception $e){
+                    //existe este registro, pero esta eliminado
+                    return redirect('Cupon/listado');
+                }
+            }else{
+                //existe el email en la base de datos, entonces se captura el id de ese email
+                $id_cliente = $email->id;
+            }
+        }
+
         //comprobamos que el codigo generado no se encuentre en la base de datos(Unico)
         $sw=1;
         while($sw==1){
@@ -48,7 +89,7 @@ class CuponController extends Controller
         $cupon = new Cupone();
         $cupon->user_id = Auth::user()->id;
         $cupon->producto_id = $request->producto_id;
-        $cupon->cliente_id = $request->cliente;
+        $cupon->cliente_id = $id_cliente;
         $cupon->almacene_id = $request->tienda;
         $cupon->descuento = $request->producto_descuento;
         $cupon->monto_total = $request->producto_total;
@@ -64,8 +105,13 @@ class CuponController extends Controller
             'fecha_final' => $request->fecha_fin,
             'producto' => $producto,
         ];
+
+        //              PENDIENTE
+        //creando qr
+        $png = QrCode::format('png')->size(512)->generate($codigo);
+        Storage::put($codigo.'.png', $png);
         //Se envia el email
-        Mail::to("cupones@sazez.net")->send(new CuponMail($message, $codigo));
+        //Mail::to("cupones@sazez.net")->send(new CuponMail($message));
 
         return redirect('Cupon/listado');
     }
@@ -96,10 +142,33 @@ class CuponController extends Controller
 
     public function pruebaCorreo()
     {
-        $png = QrCode::format('png')->size(512)->generate(1);
-        $png = base64_encode($png);
-        //echo "<img src='data:image/png;base64," . $png . "'>";
-        Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail($png));
+        $png = QrCode::format('png')->size(512)->generate('AAAA-BBBB-CCCC');
+
+        //$direccionqrs = 'qrs/';
+        Storage::put('qwe.png', $png);
+
+
+        // $fichero = 'gente.txt';
+        // // Abre el fichero para obtener el contenido existente
+        // $actual = file_get_contents($fichero);
+        // // Añade una nueva persona al fichero
+        // $actual .= "John Smith\n";
+        // // Escribe el contenido al fichero
+        // file_put_contents($fichero, $actual);
+
+
+        //Storage::putFileAs('photos', new File('/path/to/photo'), 'aaa1.png');
+        //Storage::disk('public')->move('storage/app/aaa.png', 'public/qrs/aaa.png');
+        //echo $var;
+
+        //Storage::putFileAs('photos', new File(public_path() . '\qrs'), 'photo.png');
+        
+        
+        //Storage::putFile($var, new File(public_path() . '\qrs'));
+        // $png = base64_encode($png);
+        // dd($png);
+        // //echo "<img src='data:image/png;base64," . $png . "'>";
+        // Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail($png));
     }
 
 }

@@ -313,16 +313,14 @@ class ProductoController extends Controller
             $borraPrecios         = Precio::where('producto_id', $producto_id)->delete();
 
             $cambia_codigo = Producto::find($producto_id);
-            $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
-            $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
+            $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
             $cambia_codigo->save();
 
             // $borraImagenes        = ImagenesProducto::where('producto_id', $producto_id)->delete();
         } else {
             $producto_id = $nuevoProducto->id;
             $cambia_codigo = Producto::find($producto_id);
-            $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
-            $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
+            $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
             $cambia_codigo->save();
         }
 
@@ -468,8 +466,7 @@ class ProductoController extends Controller
         $palabra = explode(" ", $texto);
         $primeras = Str::substr($palabra[0], 0, 3);
         $sigla = str_replace(" ", "", $primeras);
-        $siglaMayusculas = strtoupper($sigla);
-        return $siglaMayusculas;
+        return $sigla;
     }
 
     public function muestra($id)
@@ -479,10 +476,5 @@ class ProductoController extends Controller
         $almacenes = Almacene::get();
         $categorias_productos = CategoriasProducto::where('producto_id', $id)->get();
         return view('producto.muestra')->with(compact('producto', 'categorias', 'categorias_productos', 'almacenes'));
-    }
-
-    public function info()
-    {
-        return view('producto.info');
     }
 }

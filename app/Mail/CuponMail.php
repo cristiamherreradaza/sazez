@@ -14,16 +14,14 @@ class CuponMail extends Mailable
     public $subject = "Cupón de Oferta!";
 
     public $msg;
-    public $codigo;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($msg, $codigo)
+    public function __construct($msg)
     {
         $this->msg = $msg;
-        $this->codigo = $codigo;
     }
 
     /**
