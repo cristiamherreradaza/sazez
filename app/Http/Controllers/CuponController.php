@@ -100,18 +100,30 @@ class CuponController extends Controller
 
         //Se preparan los datos para el envio del email
         $producto = Producto::find($request->producto_id);
-        $producto = $producto->nombre;
+        $tienda = Almacene::find($request->tienda);
+        if($tienda){
+            //Si existe una tienda especifica
+            $tienda = $tienda->nombre;
+        }else{
+            //Si puede cobrar en cualquier tienda
+            $tienda = "Cualquier sucursal";
+        }
+        //$precio_normal =
+        //$precio_oferta 
         $message = [
             'fecha_final' => $request->fecha_fin,
-            'producto' => $producto,
+            'producto' => $producto->nombre,
+            'precio_normal' => $request->producto_precio,
+            'precio_descuento' => $request->producto_total,
+            'tienda' => $tienda,
         ];
 
-        //              PENDIENTE
-        //creando qr
-        $png = QrCode::format('png')->size(512)->generate($codigo);
-        Storage::put($codigo.'.png', $png);
+        //Creando imagen de QR
+        $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
+        Storage::disk('qrs')->put($codigo.'.png', $png);
+
         //Se envia el email
-        //Mail::to("cupones@sazez.net")->send(new CuponMail($message));
+        Mail::to("cupones@sazez.net")->send(new CuponMail($message, $codigo));
 
         return redirect('Cupon/listado');
     }
@@ -140,14 +152,14 @@ class CuponController extends Controller
         return redirect('Cupon/listado');
     }
 
-    public function pruebaCorreo()
+    public function pruebaCorreo(Request $request)
     {
-        $png = QrCode::format('png')->size(512)->generate('AAAA-BBBB-CCCC');
+        //$png = QrCode::format('png')->size(512)->generate('AAAA-BBBB-CCCC');
+        //Storage::disk('qrs')->put('qwe.png', $png);
 
-        //$direccionqrs = 'qrs/';
-        Storage::put('qwe.png', $png);
-
-
+        //$filename = 'qwe.png';
+        //request()->documento->move(public_path('qrs'), $filename);
+        //request()->documento->move(public_path('images'), $filename);
         // $fichero = 'gente.txt';
         // // Abre el fichero para obtener el contenido existente
         // $actual = file_get_contents($fichero);
@@ -155,20 +167,16 @@ class CuponController extends Controller
         // $actual .= "John Smith\n";
         // // Escribe el contenido al fichero
         // file_put_contents($fichero, $actual);
-
-
         //Storage::putFileAs('photos', new File('/path/to/photo'), 'aaa1.png');
         //Storage::disk('public')->move('storage/app/aaa.png', 'public/qrs/aaa.png');
         //echo $var;
-
         //Storage::putFileAs('photos', new File(public_path() . '\qrs'), 'photo.png');
-        
-        
         //Storage::putFile($var, new File(public_path() . '\qrs'));
         // $png = base64_encode($png);
         // dd($png);
         // //echo "<img src='data:image/png;base64," . $png . "'>";
-        // Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail($png));
+        $png="G2EF-3ZQB-R2W9";
+        Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail($png));
     }
 
 }

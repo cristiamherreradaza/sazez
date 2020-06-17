@@ -31,6 +31,6 @@ class PruebaMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.prueba');
+        return $this->markdown('email.prueba');
     }
 }
