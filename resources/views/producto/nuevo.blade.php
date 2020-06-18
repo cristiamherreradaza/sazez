@@ -454,11 +454,11 @@ function enviaExcel(){
     $("#btnTrabajandoExcel").show();
 }
 
+// generamos los tabs
 $('#tabsProductos div .btn').click(function () {
     var t = $(this).attr('id');
-    console.log($(this));
 
-    if ($(this).hasClass('inactivo')) { //this is the start of our condition 
+    if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
         $('#tabsProductos div .btn').addClass('inactivo');
         $(this).removeClass('inactivo');
 
