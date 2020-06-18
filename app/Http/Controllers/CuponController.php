@@ -51,12 +51,14 @@ class CuponController extends Controller
         if($request->cliente){
             //registrara en cupon
             $id_cliente = $request->cliente;
+            $correo_destino = User::find($request->cliente);
+            $correo_destino = $correo_destino->email;
         }else{
             //se asume que se envio un email, entonces validamos que email este no se encuentre en la base de datos
             //buscamos si se encuentra este email en la base de datos
-            $email = User::where('email', $request->email)->first(); 
+            $usuario = User::where('email', $request->email)->first();
             // Preguntamos si esta variable no esta definida (si no encontro registro)           
-            if(!$email){
+            if(!$usuario){
                 //no existe el email o es un registro eliminado(soft delete) y crea un nuevo usuario
                 try{
                     $cliente = new User();
@@ -65,13 +67,17 @@ class CuponController extends Controller
                     $cliente->email = $request->email;
                     $cliente->save();
                     $id_cliente = $cliente->id;
+                    //guardamos este correo para su posterior envio
+                    $correo_destino = $request->email;
                 }catch(Exception $e){
                     //existe este registro, pero esta eliminado
                     return redirect('Cupon/listado');
                 }
             }else{
                 //existe el email en la base de datos, entonces se captura el id de ese email
-                $id_cliente = $email->id;
+                $id_cliente = $usuario->id;
+                //guardamos este correo para su posterior envio
+                $correo_destino = $request->email;
             }
         }
 
@@ -108,8 +114,7 @@ class CuponController extends Controller
             //Si puede cobrar en cualquier tienda
             $tienda = "Cualquier sucursal";
         }
-        //$precio_normal =
-        //$precio_oferta 
+
         $message = [
             'fecha_final' => $request->fecha_fin,
             'producto' => $producto->nombre,
@@ -123,7 +128,7 @@ class CuponController extends Controller
         Storage::disk('qrs')->put($codigo.'.png', $png);
 
         //Se envia el email
-        Mail::to("arielfernandez.rma7@gmail.com")->send(new CuponMail($message, $codigo));
+        Mail::to($correo_destino)->send(new CuponMail($message, $codigo));
 
         return redirect('Cupon/listado');
     }
