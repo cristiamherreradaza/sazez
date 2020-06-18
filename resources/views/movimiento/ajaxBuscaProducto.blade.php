@@ -70,7 +70,7 @@
                     `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="0" data-id="`+id+`" step="any" min="0">`,
                     `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
                     `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="1" step="any" readonly>`,
-                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash"></i></button>'
+                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash-alt"></i></button>'
                 ]).draw(false);
                 sumaSubTotales();
             }

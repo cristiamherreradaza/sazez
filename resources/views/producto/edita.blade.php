@@ -326,7 +326,7 @@
                                                             <img src="{{ asset('imagenesProductos')."/".$ip->imagen }}" alt="" height="200">
                                                             <br />
                                                             <button type="button" class="btn waves-effect waves-light btn-danger"
-                                                                onclick="elimina_imagen({{ $ip->id }}, {{ $ip->producto_id }})"> <i class="fas fa-trash"></i>
+                                                                onclick="elimina_imagen({{ $ip->id }}, {{ $ip->producto_id }})"> <i class="fas fa-trash-alt"></i>
                                                                 Eliminar</button>
                                                         </div>
                                                     </div>

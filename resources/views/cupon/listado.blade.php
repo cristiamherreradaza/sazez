@@ -65,7 +65,7 @@
                             <td>{{ $cupon->fecha_inicio }}</td>
                             <td>{{ $cupon->fecha_final }}</td>
                             <td>
-                                <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

@@ -164,7 +164,7 @@
                                     <td>
                                         <button type="button" class="btn btn-danger"
                                             onclick="elimina_asignacion('{{ $ad->id }}', '{{ $ad->asignatura->nombre_asignatura }}')"><i
-                                                class="fas fa-trash"></i></button>
+                                                class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                                 @endforeach

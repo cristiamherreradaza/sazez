@@ -117,7 +117,7 @@
                                     <td><input type="number" class="form-control text-right precio" name="precio[{{ $producto->producto_id }}]" id="precio_{{ $producto->producto_id }}" value="{{ $producto->precio }}" data-id="{{ $producto->producto_id }}" step="any" min="1"></td>
                                     <td><input type="number" class="form-control text-right cantidad" name="cantidad[{{ $producto->producto_id }}]" id="cantidad_{{ $producto->producto_id }}" value="{{ $producto->cantidad }}" data-id="{{ $producto->producto_id }}" min="1"></td>
                                     <td><input type="number" class="form-control text-right subtotal" name="subtotal[{{ $producto->producto_id }}]" id="subtotal_{{ $producto->producto_id }}" value="{{ ($producto->precio*$producto->cantidad) }}" step="any" style="width: 120px;" readonly></td>
-                                    <td><button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash"></i></button></td>
+                                    <td><button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash-alt"></i></button></td>
                                     @php
                                         $total += ($producto->precio*$producto->cantidad)
                                     @endphp

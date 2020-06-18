@@ -263,7 +263,9 @@ class ProductoController extends Controller
 
         return Datatables::of($productos)
             ->addColumn('action', function ($productos) {
-                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="muestra_producto(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                return '<button onclick="edita_producto(' . $productos->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i>
+                </button> <button onclick="muestra_producto(' . $productos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>
+                </button> <button onclick="elimina_producto(' . $productos->id . ')" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>';
             })
             ->make(true);    
     }
