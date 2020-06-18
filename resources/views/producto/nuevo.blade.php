@@ -387,8 +387,7 @@
                                     <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
                                         class="btn waves-effect waves-light btn-block btn-success">Importar archivo
                                         excel</button>
-                                    <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
-                                        disabled style="display: none;">
+                                    <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel" disabled style="display: none;">
                                         <span class="spinner-border spinner-border-sm" role="status"
                                             aria-hidden="true"></span>
                                         &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
