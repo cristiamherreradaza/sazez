@@ -54,42 +54,29 @@
                         <h4 class="mb-0 text-white">PRODUCTO NUEVO</h4>
                     </div>
                         <div class="card-body">
-
+                            <div class="row" id="tabsProductos">
+                                <div class="col-md-3">
+                                    <button type="button" id="tab1" class="btn btn-block btn-danger activo">PRINCIPAL</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="tab2" class="btn btn-block btn-primary inactivo">PRECIOS</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="tab3" class="btn btn-block btn-warning inactivo">CARACTERISTICAS</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="tab4" class="btn btn-block btn-info inactivo">MULTIMEDIA</button>
+                                </div>
+                            </div>
                             <div class="row">
-                                <div class="col-sm-2 mb-2 mb-sm-0">
-                                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                        <a class="nav-link active show" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
-                                            aria-controls="v-pills-home" aria-selected="true">
-                                            <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-agenda"></i> Datos Principales</span>
-                                        </a>
-                                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
-                                            aria-controls="v-pills-profile" aria-selected="false">
-                                            <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-money"></i> Lista de Precios</span>
-                                        </a>
-                                        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
-                                            aria-controls="v-pills-settings" aria-selected="false">
-                                            <i class="mdi mdi-settings-outline d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-ruler-pencil"></i> Caracteristicas y Detalles</span>
-                                        </a>
-                                        <a class="nav-link" id="v-pills-multimedia-tab" data-toggle="pill" href="#v-pills-multimedia" role="tab"
-                                            aria-controls="v-pills-multimedia" aria-selected="false">
-                                            <i class="mdi mdi-multimedia-outline d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-image"></i> Multimedia y Enlaces</span>
-                                        </a>
-                                    </div>
-                                </div> <!-- end col-->
-                            
-                                <div class="col-sm-10">
-                                    <div class="tab-content" id="v-pills-tabContent">
-                                        <div class="tab-pane fade active show" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-
+                                <div class="col-md-12 tabContenido" id="tab1C">
+                                    <div class="card border-danger">
+                                        <div class="card-body">
                                             <div class="form-row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="nombre">
-                                                            NOMBRE 
+                                                            NOMBRE
                                                             <span class="text-danger">
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
@@ -141,7 +128,7 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label>
-                                                            CANTIDAD 
+                                                            CANTIDAD
                                                             <span class="text-danger">
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
@@ -181,27 +168,32 @@
                                                             </span>
                                                         </label>
                                                         <input type="hidden" value="" id="categorias_valores" name="categorias_valores">
-                                                        <select class="select2 form-control block" multiple="multiple" name="categorias" id="categorias" style="width: 100%"
-                                                            multiple="multiple" data-placeholder="Choose" required>
+                                                        <select class="select2 form-control block" multiple="multiple" name="categorias" id="categorias"
+                                                            style="width: 100%" multiple="multiple" data-placeholder="Choose" required>
                                                             @foreach ($categorias as $c)
                                                             <option value="{{ $c->id }}">{{ $c->nombre }}</option>
                                                             @endforeach
                                                         </select>
-
+                                            
                                                     </div>
                                                 </div>
                                             
                                             </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">
+                                    <div class="card border-primary">
+                                        <div class="card-body">
                                             <div class="row">
                                                 @foreach ($escalas as $key => $e)
                                                 <div class="col-md-12">
                                                     <div class="form-group row">
                                                         <div class="col-md-4">
                                                             <label>{{ $e->nombre }}</label>
-                                                            <input type="number" class="form-control" name="precio_venta[{{ $e->id }}]" id="precio_venta" min="0" step="any" value="0">
+                                                            <input type="number" class="form-control" name="precio_venta[{{ $e->id }}]" id="precio_venta" min="0"
+                                                                step="any" value="0">
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label>Cantidad</label>
@@ -211,9 +203,12 @@
                                                 </div>
                                                 @endforeach
                                             </div>
-
                                         </div>
-                                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 tabContenido" id="tab3C" style="display: none;">
+                                    <div class="card border-warning">
+                                        <div class="card-body">
                                             <div class="row">
                                             
                                                 <div class="col">
@@ -276,11 +271,12 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
                                         </div>
-
-                                        <div class="tab-pane fade" id="v-pills-multimedia" role="tabpanel" aria-labelledby="v-pills-multimedia-tab">
-
+                                    </div>
+                                </div>
+                                <div class="col-md-12 tabContenido" id="tab4C" style="display: none;">
+                                    <div class="card border-info">
+                                        <div class="card-body">
                                             <div class="row">
                                             
                                                 <div class="col-md-6">
@@ -312,7 +308,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                            
                                                 <div class="col-md-4">
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -324,7 +320,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                            
                                                 <div class="col-md-4">
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -338,13 +334,11 @@
                                                 </div>
                                             
                                             </div>
-
                                         </div>
-                                    </div> <!-- end tab-content-->
-                                </div> <!-- end col-->
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3>&nbsp;</h3>
+                            
                             <div class="row">
                                 <div class="col-md-6">
                                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
@@ -459,6 +453,19 @@ function enviaExcel(){
     $("#btnEnviaExcel").hide();
     $("#btnTrabajandoExcel").show();
 }
+
+$('#tabsProductos div .btn').click(function () {
+    var t = $(this).attr('id');
+    console.log($(this));
+
+    if ($(this).hasClass('inactivo')) { //this is the start of our condition 
+        $('#tabsProductos div .btn').addClass('inactivo');
+        $(this).removeClass('inactivo');
+
+        $('.tabContenido').hide();
+        $('#' + t + 'C').fadeIn('slow');
+    }
+});
 
 $(document).ready(function() {
 

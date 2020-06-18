@@ -12,7 +12,6 @@
 
 @section('content')
 
-
 <div class="card card-outline-info">
     <form action="{{ url('Pedido/guarda') }}" method="POST">
         @csrf
