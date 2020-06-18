@@ -306,21 +306,24 @@ class ProductoController extends Controller
         $nuevoProducto->save();
         // $producto_id = $nuevoProducto->id;
 
-        if ($request->has('producto_id')) {
+        if ($request->has('producto_id')) 
+        {
             $producto_id          = $request->producto_id;
             $borraCaracteristicas = Caracteristica::where('producto_id', $producto_id)->delete();
             $borraCategorias      = CategoriasProducto::where('producto_id', $producto_id)->delete();
             $borraPrecios         = Precio::where('producto_id', $producto_id)->delete();
-
+            
             $cambia_codigo = Producto::find($producto_id);
-            $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
+            $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
+            $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
             $cambia_codigo->save();
 
             // $borraImagenes        = ImagenesProducto::where('producto_id', $producto_id)->delete();
         } else {
             $producto_id = $nuevoProducto->id;
             $cambia_codigo = Producto::find($producto_id);
-            $cambia_codigo->codigo = $codigoGenerado.'-'.$producto_id;
+            $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
+            $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
             $cambia_codigo->save();
         }
 
@@ -466,7 +469,8 @@ class ProductoController extends Controller
         $palabra = explode(" ", $texto);
         $primeras = Str::substr($palabra[0], 0, 3);
         $sigla = str_replace(" ", "", $primeras);
-        return $sigla;
+        $siglaMayusculas = strtoupper($sigla);
+        return $siglaMayusculas;
     }
 
     public function muestra($id)
