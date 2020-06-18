@@ -134,7 +134,15 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <label class="control-label">Medio a enviar</label>
+                            <select name="tipo_envio" id="tipo_envio" class="form-control" required>
+                                <option value="" selected></option>
+                                <option value="1">Cliente</option>
+                                <option value="2">Correo Electrónico</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Cliente</label>
                                 <select name="cliente" id="cliente" class="form-control">
@@ -145,13 +153,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
-                                <input name="email" type="email" id="email" class="form-control" placeholder="Llenar si NO existe el cliente">
+                                <input name="email" type="email" id="email" class="form-control" disabled>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Tienda</label>
                                 <select name="tienda" id="tienda" class="form-control">
@@ -210,6 +218,23 @@
 
     $(function () {
         $('#datetimepicker1').datetimepicker();
+    });
+
+    $( function() {
+        $("#cliente").prop("disabled", true);
+        $("#email").prop("disabled", true);
+        $("#tipo_envio").val("");
+
+        $("#tipo_envio").change( function() {
+            if ($(this).val() == "1") {
+                $("#cliente").prop("disabled", false);
+                $("#email").prop("disabled", true);
+            }
+            if ($(this).val() == "2") {
+                $("#cliente").prop("disabled", true);
+                $("#email").prop("disabled", false);
+            }
+        });
     });
 </script>
 <script>
