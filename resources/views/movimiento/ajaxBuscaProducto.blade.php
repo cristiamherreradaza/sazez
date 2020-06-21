@@ -9,6 +9,7 @@
                 <th>Tipo</th>
                 <th>Modelo</th>
                 <th>Colores</th>
+                <th>Stock</th>
                 <th>Precio</th>
                 <th class="text-nowrap">Action</th>
             </tr>
@@ -23,6 +24,14 @@
                     <td>{{ $p->tipo->nombre }}</td>
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
+                    @php
+                        $cantidadTotal = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                            ->where('producto_id', $p->id)
+                            ->where('almacene_id', auth()->user()->almacen_id)
+                            ->first();
+                        $cantidadTotal=intval($cantidadTotal->total);
+                    @endphp
+                    <td>{{ $cantidadTotal }}</td>
                     @php
                         $precio = App\Precio::where('producto_id', $p->id)
                                     ->where('escala_id', 1)
@@ -54,6 +63,7 @@
             var tipo    = currentRow.find("td:eq(4)").text();
             var modelo  = currentRow.find("td:eq(5)").text();
             var colores = currentRow.find("td:eq(6)").text();
+            var stock   = currentRow.find("td:eq(7)").text();
 
             let buscaItem = itemsPedidoArray.lastIndexOf(id);
             if(buscaItem < 0)
@@ -67,6 +77,7 @@
                     tipo,
                     modelo,
                     colores,
+                    stock,
                     `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="0" data-id="`+id+`" step="any" min="0">`,
                     `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1">`,
                     `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="1" step="any" readonly>`,

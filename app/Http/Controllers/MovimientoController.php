@@ -33,7 +33,7 @@ class MovimientoController extends Controller
             $movimientos->precio_compra = rand(15, 1000);
             $movimientos->precio_venta = rand(15, 1000);
             $movimientos->save();
-            echo 'inserntando '.$i."<br />"; 
+            echo 'insertando '.$i."<br />"; 
         }
     }
 
