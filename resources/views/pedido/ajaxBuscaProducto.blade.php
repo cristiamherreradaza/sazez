@@ -73,7 +73,7 @@
                     colores,
                     stock,
                     `<input type="number" class="form-control" value="1" min="1" name="item[` + id + `]">`,
-                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash"></i></button>'
+                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash-alt"></i></button>'
                 ]).draw(false);
             }
         });

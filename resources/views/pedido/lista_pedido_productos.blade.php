@@ -21,7 +21,7 @@
                             <td>{{ $producto->producto->nombre_venta }}</td>
                             <td><input style="text-align: center;" size="8" min="0" pattern="^[0-9]+" onchange="calcula( {{ $producto->id }} )" type="number" id="cantidad-{{ $producto->id }}" name="cantidad-{{ $producto->id }}" value="{{ $producto->cantidad }}"></td>
                             <td>
-                                <button type="button" class="btn btn-danger" onclick="eliminar_pedido_producto('{{ $producto->pedido_id }}', '{{ $producto->producto_id }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" onclick="eliminar_pedido_producto('{{ $producto->pedido_id }}', '{{ $producto->producto_id }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

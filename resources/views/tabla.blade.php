@@ -145,7 +145,7 @@
                                     <td>
                                         <button type="button" class="btn btn-info"><i class="fas fa-eye"></i></button>
                                         <button type="button" class="btn btn-warning"><i class="fas fa-edit"></i></button>
-                                        <button type="button" class="btn btn-danger" ><i class="fas fa-trash"></i></button>
+                                        <button type="button" class="btn btn-danger" ><i class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                             </tbody>

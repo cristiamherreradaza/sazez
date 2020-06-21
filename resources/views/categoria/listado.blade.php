@@ -29,7 +29,7 @@
                             <td>{{ $categoria->nombre }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar categoria"  onclick="editar('{{ $categoria->id }}', '{{ $categoria->nombre }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar categoria"  onclick="eliminar('{{ $categoria->id }}', '{{ $categoria->nombre }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar categoria"  onclick="eliminar('{{ $categoria->id }}', '{{ $categoria->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

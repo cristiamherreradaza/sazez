@@ -32,7 +32,7 @@
                             <td>{{ $combo->fecha_final }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar combo"  onclick="editar('{{ $combo->id }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar combo"  onclick="eliminar('{{ $combo->id }}', '{{ $combo->nombre }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar combo"  onclick="eliminar('{{ $combo->id }}', '{{ $combo->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

@@ -33,7 +33,7 @@
                             <td>{{ $almacen->telefonos }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar almacen"  onclick="editar('{{ $almacen->id }}', '{{ $almacen->nombre }}', '{{ $almacen->telefonos }}', '{{ $almacen->direccion }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar almacen"  onclick="eliminar('{{ $almacen->id }}', '{{ $almacen->nombre }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar almacen"  onclick="eliminar('{{ $almacen->id }}', '{{ $almacen->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

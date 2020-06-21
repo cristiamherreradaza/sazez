@@ -74,7 +74,7 @@
                             <td>{{ $pedido->numero }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar pedido"  onclick="editar('{{ $pedido->id }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar pedido"  onclick="eliminar('{{ $pedido->id }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar pedido"  onclick="eliminar('{{ $pedido->id }}')"><i class="fas fa-trash-alt"></i></button>
                                 <button type="button" class="btn btn-dark" title="Entregar pedido"  onclick="entrega('{{ $pedido->id }}')"><i class="fas fa-reply"></i></button>
                                 <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel('{{ $pedido->id }}')"><i class="fas fa-file-excel"></i></button>
                                 <button type="button" class="btn btn-secondary" title="Entregar pedido por Excel"  onclick="entrega_excel('{{ $pedido->id }}')"><i class="fas fa-shipping-fast"></i></button>

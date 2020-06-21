@@ -71,7 +71,7 @@
                             <td>{{ $cupon->fecha_final }}</td>
                             <td>
                                 <button type="button" class="btn btn-primary" title="Cobrar cupon"  onclick="cobrar('{{ $cupon->id }}', '{{ $cupon->user->id }}', '{{ $cupon->user->name }}', '{{ $cupon->user->ci }}', '{{ $cupon->user->celulares }}', '{{ $cupon->user->email }}', '{{ $cupon->user->nit }}', '{{ $cupon->user->razon_social }}', '{{ $cupon->producto->id }}', '{{ $cupon->producto->nombre }}', '{{ $cantidadTotal }}', '{{ auth()->user()->almacen->nombre }}', '{{ $cupon->producto->precio[0]->precio }}', '{{ $cupon->descuento }}', '{{ $cupon->monto_total }}')"><i class="fas fa-info"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach
