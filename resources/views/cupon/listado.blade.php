@@ -22,7 +22,6 @@
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>#</th>
                         <th>Cup&oacute;n</th>
                         <th>Producto</th>
                         <th>Cliente</th>
@@ -37,9 +36,15 @@
                 <tbody>
                     @foreach($cupones as $key => $cupon)
                         <tr>
-                            <td>{{ ($key+1) }}</td>
                             <td>{{ $cupon->codigo }}</td>
                             <td>{{ $cupon->producto->nombre }}</td>
+                            @php
+                                $cantidadTotal = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                                    ->where('producto_id', $cupon->producto->id)
+                                    ->where('almacene_id', auth()->user()->almacen_id)
+                                    ->first();
+                                $cantidadTotal=intval($cantidadTotal->total);
+                            @endphp
                             <td>{{ $cupon->user->name }}</td>
                             <td>
                                 @if($cupon->almacen)
@@ -65,6 +70,7 @@
                             <td>{{ $cupon->fecha_inicio }}</td>
                             <td>{{ $cupon->fecha_final }}</td>
                             <td>
+                                <button type="button" class="btn btn-primary" title="Cobrar cupon"  onclick="cobrar('{{ $cupon->id }}', '{{ $cupon->user->id }}', '{{ $cupon->user->name }}', '{{ $cupon->user->ci }}', '{{ $cupon->user->celulares }}', '{{ $cupon->user->email }}', '{{ $cupon->user->nit }}', '{{ $cupon->user->razon_social }}', '{{ $cupon->producto->id }}', '{{ $cupon->producto->nombre }}', '{{ $cantidadTotal }}', '{{ auth()->user()->almacen->nombre }}', '{{ $cupon->producto->precio[0]->precio }}', '{{ $cupon->descuento }}', '{{ $cupon->monto_total }}')"><i class="fas fa-info"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar cupon"  onclick="eliminar('{{ $cupon->id }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -202,6 +208,148 @@
 </div>
 <!-- fin modal cupon nuevo -->
 
+<!-- Inicio modal cobro cupon -->
+<div id="modal_cobro" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">COBRO CUP&Oacute;N</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Cupon/cobrar') }}" method="POST" >
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="cobro_cupon_id" id="cobro_cupon_id" value="">
+                    <input type="hidden" name="cobro_cliente_id" id="cobro_cliente_id" value="">
+                    <input type="hidden" name="cobro_producto_id" id="cobro_producto_id" value="">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="cobro_nombre" type="text" id="cobro_nombre" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Cedula de Identidad</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="cobro_ci" type="text" id="cobro_ci" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Celulares</label>
+                                <input name="cobro_celular" type="text" id="cobro_celular" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Correo Electrónico</label>
+                                <input name="cobro_email" type="email" id="cobro_email" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Nit</label>
+                                <input name="cobro_nit" type="text" id="cobro_nit" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Razon Social</label>
+                                <input name="cobro_razon_social" type="text" id="cobro_razon_social" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Producto</label>
+                                        <input name="cobro_producto" type="text" id="cobro_producto" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Tienda</label>
+                                        <input name="cobro_tienda" type="text" id="cobro_tienda" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Stock</label>
+                                        <input name="cobro_stock" type="text" id="cobro_stock" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Precio</label>
+                                        <input name="cobro_precio" type="text" id="cobro_precio" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Descuento</label>
+                                        <input name="cobro_descuento" type="text" id="cobro_descuento" class="form-control" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Total</label>
+                                        <input name="cobro_promo" type="text" id="cobro_promo" class="form-control" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h3 class="text-center"><strong>Detalle</strong></h3>
+                            <div class="row">
+                                <div class="form-group row">
+                                    <label for="email2" class="col-sm-4 text-right control-label col-form-label">TOTAL</label>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control" name="cobro_total" id="cobro_total" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group row">
+                                    <label for="email2" class="col-sm-4 text-right control-label col-form-label">EFECTIVO</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control" name="cobro_efectivo" id="cobro_efectivo" value="0" step="any">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group row">
+                                    <label for="email2" class="col-sm-4 text-right control-label col-form-label">CAMBIO</label>
+                                    <div class="col-sm-7">
+                                        <input type="number" class="form-control" name="cobro_cambio" id="cobro_cambio" value="0" step="any" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block waves-effect waves-light" onclick="cobra_cupon()" id="boton_compra" disabled >Efectuar compra</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Fin modal cobro cupon -->
 @stop
 
 @section('js')
@@ -245,6 +393,69 @@
         }
     });
 
+    // Se efectua el cobro del cupon, por tanto se necesitara los datos del cupon(cupones) y los datos del cliente(users)
+    // ademas de crear un nuevo registro de cupones_creados
+    function cobrar(id, cliente_id, nombre, ci, celular, email, nit, razon_social, producto_id, producto, stock, tienda, precio, descuento, promo)
+    {
+        // Colocamos en modal los datos del cliente
+        $("#cobro_cupon_id").val(id);
+        $("#cobro_cliente_id").val(cliente_id);
+        $("#cobro_nombre").val(nombre);
+        $("#cobro_ci").val(ci);
+        $("#cobro_celular").val(celular);
+        $("#cobro_email").val(email);
+        $("#cobro_nit").val(nit);
+        $("#cobro_razon_social").val(razon_social);
+        // Colocamos en modal los datos del producto
+        $("#cobro_producto_id").val(producto_id);
+        $("#cobro_producto").val(producto);
+        $("#cobro_stock").val(stock);
+        $("#cobro_tienda").val(tienda);
+        $("#cobro_precio").val(precio);
+        $("#cobro_descuento").val(descuento+' %');
+        $("#cobro_promo").val(promo);
+        // Colocamos en modal los datos la transaccion
+        $("#cobro_total").val(promo);
+        $("#cobro_efectivo").val(0);
+        $("#cobro_cambio").val(0);
+        $("#boton_compra").prop("disabled", true);
+        // Desplegamos el modal de cobro
+        $("#modal_cobro").modal('show');
+    }
+
+    $(document).on('keyup change', '#cobro_efectivo', function () {
+        let totalVenta = Number($("#cobro_total").val());
+        let efectivo = Number($("#cobro_efectivo").val());
+        let cambio = efectivo - totalVenta; 
+        if (cambio > 0) {
+            $("#cobro_cambio").val(cambio);
+        }else{
+            $("#cobro_cambio").val(0);
+        }        
+        //Validar que el boton se habilite una vez se efectue la compra
+        //siempre que el stock sea 1 o mayor y el efectivo sea igual o mayor al totalVenta
+        let stock = Number($("#cobro_stock").val());
+        if (efectivo >= totalVenta && stock >= 1) {
+            $("#boton_compra").prop("disabled", false);
+        }else{
+            $("#boton_compra").prop("disabled", true);
+        }
+    });
+
+    function cobra_cupon()
+    {
+        let nombre = $("#cobro_nombre").val();
+        let ci = $("#cobro_ci").val();
+
+        if(nombre.length>0 && ci.length>0){
+            Swal.fire(
+                'Excelente!',
+                'Cupón cobrado exitosamente.',
+                'success'
+            )
+        }        
+    }
+
     function nuevo_cupon()
     {
         $("#modal_cupones").modal('show');
@@ -286,6 +497,8 @@
             }
         })
     }
+
+    
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
