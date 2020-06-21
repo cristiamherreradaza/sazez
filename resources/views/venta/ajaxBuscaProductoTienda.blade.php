@@ -82,8 +82,10 @@
                     <td><h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3></td>
                     <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
                     <td>
-                        <button type="button" class="btnSelecciona btn btn-info" data-venta="tienda" title="Adiciona Item"><i class="fas fa-plus"></i></button>
-                        <button type="button" class="btnSeleccionaMayor btn btn-danger" data-venta="mayor" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        @if ($cantidadTotal->total > 0)
+                            <button type="button" class="btnSelecciona btn btn-info" data-venta="tienda" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="btnSeleccionaMayor btn btn-danger" data-venta="mayor" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        @endif
                     </td>
                 </tr>    
             @endforeach

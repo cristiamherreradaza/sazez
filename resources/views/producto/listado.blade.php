@@ -153,10 +153,10 @@ function muestra_producto(producto_id)
             if (result.value) {
                 Swal.fire(
                     'Excelente!',
-                    'La marca fue eliminada',
+                    'El producto fue eliminada',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Producto/eliminar') }}/"+id;
+                    window.location.href = "{{ url('Producto/elimina') }}/"+id;
                 });
             }
         })
