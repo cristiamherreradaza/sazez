@@ -37,21 +37,25 @@
                         <i data-feather="package" class="feather-icon"></i><span class="hide-menu"> PRODUCTOS </span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
+                        @if(auth()->user()->rol == 'Administrador')
                         <li class="sidebar-item">
                             <a href="{{ url('Producto/nuevo') }}" class="sidebar-link">
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
                             </a>
                         </li>
+                        @endif
                         <li class="sidebar-item">
                             <a href="{{ url('Producto/listado') }}" class="sidebar-link">
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
                             </a>
                         </li>
+                        @if(auth()->user()->rol == 'Administrador')
                         <li class="sidebar-item">
                             <a href="{{ url('Movimiento/ingreso') }}" class="sidebar-link">
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Ingreso </span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </li>
 
