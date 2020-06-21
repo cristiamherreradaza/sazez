@@ -177,7 +177,9 @@ class CuponController extends Controller
         $cliente = User::find($request->cobro_cliente_id);
         $cliente->name = $request->cobro_nombre;
         $cliente->ci = $request->cobro_ci;
-        $cliente->password = Hash::make($cliente->email);
+        if(!$cliente->password){
+            $cliente->password = Hash::make($cliente->email);
+        }
         $cliente->celulares = $request->cobro_celular;
         $cliente->nit = $request->cobro_nit;
         $cliente->razon_social = $request->cobro_razon_social;
