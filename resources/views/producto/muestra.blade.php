@@ -25,58 +25,63 @@
 
 <div class="container-fluid mt-5">
     <div class="row justify-content-md-center">
-        <div class="col-lg-4 col-xlg-3 col-md-5">
-            @if(count($producto->imagenes) != 0)
-                <!-- empiezo de carrusel -->
-                <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
-                    <ol class="carousel-indicators">                    
-                        @for($i = 0; $i< count($producto->imagenes); $i++ )
-                            <li data-target="#carouselExampleIndicators2" data-slide-to="{{ $i }}" class="{{ $i==0 ? 'active' : '' }}"></li>
-                        @endfor
-                    </ol>
-                    <div class="carousel-inner my-4" role="listbox">
-                        @foreach($producto->imagenes as $key => $imagen)
-                            <div class="carousel-item{{ $key == 0 ? ' active' : '' }}">
-                                <img class="img-fluid align-center" src="{{ asset('imagenesProductos/'.$imagen->imagen) }}">
+        <div class="card col-lg-10 col-xlg-10 col-md-10">
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    @if(count($producto->imagenes) != 0)
+                        <!-- empiezo de carrusel -->
+                        <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">                    
+                                @for($i = 0; $i< count($producto->imagenes); $i++ )
+                                    <li data-target="#carouselExampleIndicators2" data-slide-to="{{ $i }}" class="{{ $i==0 ? 'active' : '' }}"></li>
+                                @endfor
+                            </ol>
+                            <div class="carousel-inner my-4" role="listbox">
+                                @foreach($producto->imagenes as $key => $imagen)
+                                    <div class="carousel-item{{ $key == 0 ? ' active' : '' }}">
+                                        <img class="img-fluid align-center" src="{{ asset('imagenesProductos/'.$imagen->imagen) }}">
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators2" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <!-- fin de carrusel -->
+                    @else
+                        <img src="{{ asset('assets/images/product/nube.png') }}" class="img-fluid" style="height:400px; width:350px;">
+                    @endif
                 </div>
-                <!-- fin de carrusel -->
-            @else
-                <img src="{{ asset('assets/images/product/nube.png') }}" class="img-fluid" style="height:400px; width:350px;">
-            @endif
-        </div>
-        <div class="col-lg-6 col-xlg-7 col-md-5">
-            <div class="card px-5 py-5">
-                <h1><strong>{{ $producto->nombre }}</strong></h1>
-                @php
-                    $precio = App\Precio::where('producto_id', $producto->id)
-                                ->where('escala_id', 1)
-                                ->first();
-                @endphp
-                <h2 class="text-danger"><strong>{{ $precio->precio }} Bs.</strong></h2>
-                <ul class="list">
-                    <li>
-                        <span>Categorias :</span>
-                        @foreach ($producto->categorias as $categorias)
-                            {{ $categorias->categoria->nombre }}
-                        @endforeach
-                    </li>
-                    <li><span>Marca</span> : {{ $producto->marca->nombre }}</li>
-                </ul>
-                <h2 class="mt-3"><strong>Descripción</strong></h2>
-                <p> {{ $producto->descripcion }} </p>
+                <div class="col-md-8">
+                    <div class="px-5 py-5">
+                        <h1><strong>{{ $producto->nombre }}</strong></h1>
+                        @php
+                            $precio = App\Precio::where('producto_id', $producto->id)
+                                        ->where('escala_id', 1)
+                                        ->first();
+                        @endphp
+                        <h2 class="text-danger"><strong>{{ $precio->precio }} Bs.</strong></h2>
+                        <ul class="list">
+                            <li>
+                                <span>Categorias :</span>
+                                @foreach ($producto->categorias as $categorias)
+                                    {{ $categorias->categoria->nombre }}
+                                @endforeach
+                            </li>
+                            <li><span>Marca</span> : {{ $producto->marca->nombre }}</li>
+                        </ul>
+                        <h2 class="mt-3"><strong>Descripción</strong></h2>
+                        <p> {{ $producto->descripcion }} </p>
 
+                    </div>
+                </div>
             </div>
+            
         </div>
         <div class="col-lg-2 col-xlg-2 col-md-2">
             <div class="card text-white bg-white">
