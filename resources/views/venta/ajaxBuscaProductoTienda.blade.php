@@ -112,6 +112,7 @@
             let colores = currentRow.find("td:eq(6)").text();
             let stock   = currentRow.find("td:eq(7)").html();
             let precio  = currentRow.find("td:eq(8)").text();
+            let stockNum = currentRow.find("td:eq(7)").text();
 
             precios = $("#preciosEscalas_"+id).val(); //capturamos los precios del input
             let tipoVenta = $(this).data('venta');
@@ -130,7 +131,7 @@
                         stock,
                         `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" style="width: 100px;">
                         <input type="hidden" name="precio_venta[`+id+`]" value="`+precio+`">`,
-                        `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" style="width: 70px;">`,
+                        `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" max="`+stockNum+`" style="width: 70px;">`,
                         `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
                         '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
                     ]).draw(false);
@@ -152,7 +153,7 @@
                         `<input type="number" class="form-control text-right precioMayor" name="precio_m[`+id+`]" id="precio_m_`+id+`" value="`+precio+`" data-idm="`+id+`" step="any" min="1" style="width: 100px;">
                         <input type="hidden" name="precio_venta_m[`+id+`]" id="precio_venta_m_`+id+`" value="`+precio+`">
                         <input type="hidden" name="cantidad_escala_m[`+id+`]" id="cantidad_escala_m_`+id+`" value="1">`,
-                        `<input type="number" class="form-control text-right cantidadMayor" name="cantidad_m[`+id+`]" id="cantidad_m_`+id+`" value="1" data-idm="`+id+`" min="1" style="width: 70px;">`,
+                        `<input type="number" class="form-control text-right cantidadMayor" name="cantidad_m[`+id+`]" id="cantidad_m_`+id+`" value="1" data-idm="`+id+`" min="1" max="`+stockNum+`" style="width: 70px;">`,
                         `<input type="number" class="form-control text-right subtotalMayor" name="subtotal_m[`+id+`]" id="subtotal_m_`+id+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
                         '<button type="button" class="btnEliminaMayor btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
                     ]).draw(false);
