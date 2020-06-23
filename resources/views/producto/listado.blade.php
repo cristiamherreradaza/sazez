@@ -156,5 +156,30 @@ function muestra_producto(producto_id)
             }
         });
     });
+
+    function elimina_producto(id, nombre)
+    {
+        // console.log(id);
+        Swal.fire({
+            title: 'Quieres borrar ' + nombre + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'El producto fue eliminada',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Producto/elimina') }}/"+id;
+                });
+            }
+        })
+    }
 </script>
 @endsection

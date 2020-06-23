@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Cupone;
+use App\CuponesCobrado;
 use App\Almacene;
 use App\Producto;
+use App\Venta;
+use App\VentasProducto;
+use App\Movimiento;
 use App\Mail\CuponMail;
 use App\Mail\PruebaMail;
 use Illuminate\Http\Request;
@@ -14,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use QrCode;
 use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Exception;
 
 class CuponController extends Controller
@@ -129,6 +134,64 @@ class CuponController extends Controller
 
         //Se envia el email
         Mail::to($correo_destino)->send(new CuponMail($message, $codigo));
+
+        return redirect('Cupon/listado');
+    }
+
+    public function cobrar(Request $request)
+    {
+        // Registramos en Ventas
+        $venta = new Venta();
+        $venta->user_id = Auth::user()->id;
+        $venta->almacene_id = Auth::user()->almacen->id;
+        $venta->cliente_id = $request->cobro_cliente_id;
+        $venta->total = $request->cobro_total;
+        $venta->fecha = date('Y-m-d');
+        $venta->estado = 'Cupon';
+        $venta->save();
+
+        // Registramos en Ventas_producto
+        $ventaProducto = new VentasProducto();
+        $ventaProducto->user_id = Auth::user()->id;
+        $ventaProducto->producto_id = $request->cobro_producto_id;
+        $ventaProducto->venta_id = $venta->id;
+        $ventaProducto->precio_venta = $request->cobro_precio;
+        $ventaProducto->precio_cobrado = $request->cobro_total;
+        $ventaProducto->cantidad = 1;
+        $ventaProducto->fecha = date('Y-m-d');
+        $ventaProducto->save();
+        
+        // Registrar en Movimientos
+        $movimiento = new Movimiento();
+        $movimiento->user_id = Auth::user()->id;
+        $movimiento->producto_id = $request->cobro_producto_id;
+        $movimiento->almacene_id = Auth::user()->almacen->id;
+        $movimiento->venta_id = $venta->id;
+        $movimiento->precio_venta = $request->cobro_total;
+        $movimiento->salida = 1;
+        $movimiento->fecha = date('Y-m-d');
+        $movimiento->estado = 'Cupon';
+        $movimiento->save();
+
+        // Actualizamos datos del cliente
+        $cliente = User::find($request->cobro_cliente_id);
+        $cliente->name = $request->cobro_nombre;
+        $cliente->ci = $request->cobro_ci;
+        if(!$cliente->password){
+            $cliente->password = Hash::make($cliente->email);
+        }
+        $cliente->celulares = $request->cobro_celular;
+        $cliente->nit = $request->cobro_nit;
+        $cliente->razon_social = $request->cobro_razon_social;
+        $cliente->save();
+
+        // Registramos la transaccion
+        $datos_cupon = new CuponesCobrado();
+        $datos_cupon->cupone_id = $request->cobro_cupon_id;
+        $datos_cupon->cobrador_id = Auth::user()->id;
+        $datos_cupon->almacene_id = Auth::user()->almacen->id;
+        $datos_cupon->fecha = $request->cobro_cupon_id;
+        $datos_cupon->save();
 
         return redirect('Cupon/listado');
     }

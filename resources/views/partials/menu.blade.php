@@ -37,21 +37,25 @@
                         <i data-feather="package" class="feather-icon"></i><span class="hide-menu"> PRODUCTOS </span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
+                        @if(auth()->user()->rol == 'Administrador')
                         <li class="sidebar-item">
                             <a href="{{ url('Producto/nuevo') }}" class="sidebar-link">
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
                             </a>
                         </li>
+                        @endif
                         <li class="sidebar-item">
                             <a href="{{ url('Producto/listado') }}" class="sidebar-link">
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
                             </a>
                         </li>
+                        @if(auth()->user()->rol == 'Administrador')
                         <li class="sidebar-item">
                             <a href="{{ url('Movimiento/ingreso') }}" class="sidebar-link">
                                 <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Ingreso </span>
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </li>
 
@@ -78,6 +82,7 @@
                     </ul>
                 </li>
 
+                @if(auth()->user()->rol == 'Administrador')
                 <li class="sidebar-item"> 
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i data-feather="star" class="feather-icon"></i><span class="hide-menu"> PROMOS </span>
@@ -95,6 +100,8 @@
                         </li>
                     </ul>
                 </li>
+                @endif
+                
 
                 <li class="sidebar-item"> 
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
@@ -145,6 +152,7 @@
                     </ul>
                 </li>
 
+                @if(auth()->user()->rol == 'Administrador')
                 <li class="sidebar-item"> 
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i data-feather="settings" class="feather-icon"></i><span class="hide-menu"> CONFIGURACIONES </span>
@@ -192,7 +200,8 @@
                         </li>
                     </ul>
                 </li>
-
+                @endif
+                @if(auth()->user()->rol == 'Administrador')
                 <li class="sidebar-item"> 
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i data-feather="star" class="feather-icon"></i><span class="hide-menu"> REPORTES </span>
@@ -205,7 +214,7 @@
                         </li>
                     </ul>
                 </li>
-                
+                @endif
                 <li class="nav-devider"></li>
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
                 </li>

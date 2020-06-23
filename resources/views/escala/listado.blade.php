@@ -31,7 +31,7 @@
                             <td>{{ $escala->minimo }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar escala"  onclick="editar('{{ $escala->id }}', '{{ $escala->nombre }}', '{{ $escala->minimo }}', '{{ $escala->maximo }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar escala"  onclick="eliminar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar escala"  onclick="eliminar('{{ $escala->id }}', '{{ $escala->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

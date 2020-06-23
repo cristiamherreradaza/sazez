@@ -445,19 +445,18 @@
 
     function validaItems()
     {
-        // $("#formularioVenta").submit(function(e){
-        //     // e.preventDefault();
-        //     return false;
-        // });
-        // alert("entro");
+        // verificamos que la venta tengan productos
         if (itemsPedidoArray.length > 0 || itemsPedidoArrayMayor.length > 0) {
-            Swal.fire({
-                type: 'success',
-                title: 'Excelente',
-                text: 'Se realizo la venta'
-            })
-            // alert("bien carajo");
-            $("#formularioVenta").submit();
+            // verificamos que las cantidades sean las correctas
+            if ($("#formularioVenta")[0].checkValidity()) {
+                Swal.fire({
+                    type: 'success',
+                    title: 'Excelente',
+                    text: 'Se realizo la venta'
+                })
+            }else{
+                $("#formularioVenta")[0].reportValidity();
+            }
         } else {
             Swal.fire({
                 type: 'error',

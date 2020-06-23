@@ -29,7 +29,7 @@
                             <td>{{ $marca->nombre }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar marca"  onclick="editar('{{ $marca->id }}', '{{ $marca->nombre }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar marca"  onclick="eliminar('{{ $marca->id }}', '{{ $marca->nombre }}')"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar marca"  onclick="eliminar('{{ $marca->id }}', '{{ $marca->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

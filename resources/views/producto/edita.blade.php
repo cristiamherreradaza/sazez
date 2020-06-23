@@ -51,58 +51,49 @@
             <div class="col-lg-12">
                 <div class="card border-info">
                     <div class="card-header bg-info">
-                        <h4 class="mb-0 text-white">PRODUCTO NUEVO</h4>
+                        <h4 class="mb-0 text-white">EDICION PRODUCTO</h4>
                     </div>
                         <div class="card-body">
 
-                            <div class="row">
-                                <div class="col-sm-2 mb-2 mb-sm-0">
-                                    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                        <a class="nav-link active show" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
-                                            aria-controls="v-pills-home" aria-selected="true">
-                                            <i class="mdi mdi-home-variant d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-agenda"></i> Principal</span>
-                                        </a>
-                                        <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
-                                            aria-controls="v-pills-profile" aria-selected="false">
-                                            <i class="mdi mdi-account-circle d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-money"></i> Precios</span>
-                                        </a>
-                                        <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
-                                            aria-controls="v-pills-settings" aria-selected="false">
-                                            <i class="mdi mdi-settings-outline d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-ruler-pencil"></i> Detalles</span>
-                                        </a>
-                                        <a class="nav-link" id="v-pills-multimedia-tab" data-toggle="pill" href="#v-pills-multimedia" role="tab"
-                                            aria-controls="v-pills-multimedia" aria-selected="false">
-                                            <i class="mdi mdi-multimedia-outline d-lg-none d-block mr-1"></i>
-                                            <span class="d-none d-lg-block"><i class="ti-image"></i> Multimedia</span>
-                                        </a>
-                                    </div>
-                                </div> <!-- end col-->
-                            
-                                <div class="col-sm-10">
-                                    <div class="tab-content" id="v-pills-tabContent">
-                                        <div class="tab-pane fade active show" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                            <div class="row" id="tabsProductos">
+                                <div class="col-md-3">
+                                    <button type="button" id="tab1" class="btn btn-block btn-danger activo">PRINCIPAL</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="tab2" class="btn btn-block btn-primary inactivo">PRECIOS</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="tab3" class="btn btn-block btn-warning inactivo">CARACTERISTICAS</button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" id="tab4" class="btn btn-block btn-info inactivo">MULTIMEDIA</button>
+                                </div>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-md-12 tabContenido" id="tab1C">
+                                    <div class="card border-danger">
+                                        <div class="card-body">
                                             <div class="form-row">
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label for="nombre">
-                                                            NOMBRE 
+                                                            NOMBRE
                                                             <span class="text-danger">
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
                                                         </label>
                                                         <input type="hidden" name="producto_id" value="{{ $producto->id }}">
-                                                        <input type="text" class="form-control" name="nombre" id="validationTooltip01" value="{{ $producto->nombre }}" autofocus required>
+                                                        <input type="text" class="form-control" name="nombre" id="validationTooltip01"
+                                                            value="{{ $producto->nombre }}" autofocus required>
                                                     </div>
                                                 </div>
                                             
                                                 <div class="col-md-5">
                                                     <div class="form-group">
                                                         <label>NOMBRE COMERCIAL</label>
-                                                        <input type="text" class="form-control" name="nombre_venta" id="nombre_venta" value="{{ $producto->nombre_venta }}">
+                                                        <input type="text" class="form-control" name="nombre_venta" id="nombre_venta"
+                                                            value="{{ $producto->nombre_venta }}">
                                                     </div>
                                                 </div>
                                             
@@ -111,7 +102,8 @@
                                                         <label>TIPOS </label>
                                                         <select name="tipo_id" class="form-control">
                                                             @foreach ($tipos as $c)
-                                                            <option value="{{ $c->id }}" {{ ($producto->tipo_id == $c->id)?"selected":"" }}>{{ $c->nombre }}</option>
+                                                            <option value="{{ $c->id }}" {{ ($producto->tipo_id == $c->id)?"selected":"" }}>{{ $c->nombre }}
+                                                            </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -133,7 +125,8 @@
                                                         <label>MARCA </label>
                                                         <select name="marca_id" class="form-control">
                                                             @foreach ($marcas as $m)
-                                                            <option value="{{ $m->id }}" {{ ($producto->marca_id == $m->id)?"selected":"" }}>{{ $m->nombre }}</option>
+                                                            <option value="{{ $m->id }}" {{ ($producto->marca_id == $m->id)?"selected":"" }}>{{ $m->nombre }}
+                                                            </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -146,7 +139,8 @@
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
                                                         </label>
-                                                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any" required value="{{ $producto->precio_compra }}">
+                                                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any"
+                                                            required value="{{ $producto->precio_compra }}">
                                                     </div>
                                                 </div>
                                             
@@ -166,14 +160,18 @@
                                                             @endforeach
                                                             @endforeach
                                                         </select>
-                                                
+                                            
                                                     </div>
                                                 </div>
                                             
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                                    </div>
+                                </div>
 
+                                <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">
+                                    <div class="card border-primary">
+                                        <div class="card-body">
                                             <div class="row">
                                                 @foreach ($escalas as $key => $e)
                                                 <div class="col-md-12">
@@ -181,30 +179,36 @@
                                                         <div class="col-md-4">
                                                             <label>{{ $e->nombre }}</label>
                                                             @php
-                                                                $preciosProducto = App\Precio::where('escala_id', $e->id)->where('producto_id', $producto->id)->first();
-                                                                if($preciosProducto){
-                                                                    $precio = $preciosProducto->precio;
-                                                                }else{
-                                                                    $precio = 0;
-                                                                }
+                                                            $preciosProducto = App\Precio::where('escala_id', $e->id)->where('producto_id', $producto->id)->first();
+                                                            if($preciosProducto){
+                                                            $precio = $preciosProducto->precio;
+                                                            }else{
+                                                            $precio = 0;
+                                                            }
                                                             @endphp
-                                                            <input type="number" class="form-control" name="precio_venta[{{ $e->id }}]" id="precio_venta" min="0" step="any" value="{{ $precio }}">
+                                                            <input type="number" class="form-control" name="precio_venta[{{ $e->id }}]" id="precio_venta" min="0"
+                                                                step="any" value="{{ $precio }}">
                                                         </div>
                                                         <div class="col-md-4">
                                                             <label>Cantidad</label>
                                                             <input type="text" class="form-control" name="minimo" value="{{ $e->minimo }}" readonly>
                                                         </div>
                                                         {{-- <div class="col-md-4">
-                                                            <label>Maximo</label>
-                                                            <input type="text" class="form-control" name="maximo" value="{{ $e->maximo }}" readonly>
-                                                        </div> --}}
-                                                    </div>
+                                                                                                        <label>Maximo</label>
+                                                                                                        <input type="text" class="form-control" name="maximo" value="{{ $e->maximo }}"
+                                                        readonly>
+                                                    </div> --}}
                                                 </div>
-                                                @endforeach
                                             </div>
-
+                                            @endforeach
+                                            </div>
                                         </div>
-                                        <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 tabContenido" id="tab3C" style="display: none;">
+                                    <div class="card border-warning">
+                                        <div class="card-body">
                                             <div class="row">
                                             
                                                 <div class="col">
@@ -217,28 +221,32 @@
                                                 <div class="col nopadding">
                                                     <div class="form-group">
                                                         <label>LARGO </label>
-                                                        <input type="text" class="form-control" name="largo" id="largo" min="0" step="any" value="{{ $producto->largo }}">
+                                                        <input type="text" class="form-control" name="largo" id="largo" min="0" step="any"
+                                                            value="{{ $producto->largo }}">
                                                     </div>
                                                 </div>
                                             
                                                 <div class="col nopadding">
                                                     <div class="form-group">
                                                         <label>ANCHO </label>
-                                                        <input type="text" class="form-control" name="ancho" id="ancho" min="0" step="any" value="{{ $producto->ancho }}">
+                                                        <input type="text" class="form-control" name="ancho" id="ancho" min="0" step="any"
+                                                            value="{{ $producto->ancho }}">
                                                     </div>
                                                 </div>
                                             
                                                 <div class="col nopadding">
                                                     <div class="form-group">
                                                         <label>ALTO </label>
-                                                        <input type="text" class="form-control" name="alto" id="alto" min="0" step="any" value="{{ $producto->alto }}">
+                                                        <input type="text" class="form-control" name="alto" id="alto" min="0" step="any"
+                                                            value="{{ $producto->alto }}">
                                                     </div>
                                                 </div>
                                             
                                                 <div class="col nopadding">
                                                     <div class="form-group">
                                                         <label>PESO </label>
-                                                        <input type="text" class="form-control" name="peso" id="peso" min="0" step="any" value="{{ $producto->peso }}">
+                                                        <input type="text" class="form-control" name="peso" id="peso" min="0" step="any"
+                                                            value="{{ $producto->peso }}">
                                                     </div>
                                                 </div>
                                             
@@ -250,12 +258,14 @@
                                                         <label>CARACTERISTICAS </label>
                                                         @foreach ($caracteristicas_producto as $cp)
                                                         <div class="input-group removeclass{{ $cp->id }}">
-                                                            <input type="text" class="form-control" id="caracteristica" name="caracteristica[]" value="{{ $cp->descripcion }}">
-
+                                                            <input type="text" class="form-control" id="caracteristica" name="caracteristica[]"
+                                                                value="{{ $cp->descripcion }}">
+                                            
                                                             <div class="input-group-append">
-                                                                <button class="btn btn-danger" type="button" onclick="remove_education_fields({{ $cp->id }});"><i class="fa fa-minus"></i></button>
+                                                                <button class="btn btn-danger" type="button" onclick="remove_education_fields({{ $cp->id }});"><i
+                                                                        class="fa fa-minus"></i></button>
                                                             </div>
-
+                                            
                                                         </div>
                                                         <br />
                                                         @endforeach
@@ -274,54 +284,60 @@
                                                 <div class="col-md-8 nopadding">
                                                     <div class="form-group">
                                                         <label>DESCRIPCION </label>
-                                                        <textarea class="form-control" id="mymce" rows="5" name="descripcion">{{ $producto->descripcion }}</textarea>
+                                                        <textarea class="form-control" id="mymce" rows="5"
+                                                            name="descripcion">{{ $producto->descripcion }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
-                                            
                                         </div>
+                                    </div>
+                                </div>
 
-                                        <div class="tab-pane fade" id="v-pills-multimedia" role="tabpanel" aria-labelledby="v-pills-multimedia-tab">
-
+                                <div class="col-md-12 tabContenido" id="tab4C" style="display: none;">
+                                    <div class="card border-info">
+                                        <div class="card-body">
                                             <div class="row">
-                                            
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>URL ARTICULO </label>
-                                                        <input type="text" class="form-control" name="url_referencia" id="url_referencia" value="{{ $producto->url_referencia }}">
+                                                        <input type="text" class="form-control" name="url_referencia" id="url_referencia"
+                                                            value="{{ $producto->url_referencia }}">
                                                     </div>
                                                 </div>
-                                            
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>URL VIDEO </label>
                                                         <input type="text" class="form-control" name="video" id="video" value="{{ $producto->video }}">
                                                     </div>
                                                 </div>
-                                            
+
                                             </div>
 
                                             <div class="row" id="bloqueAjaxListadoImg">
 
-                                                 @foreach ($imagenes_producto as $ip)
+                                                @foreach ($imagenes_producto as $ip)
 
-                                                 <div class="col-md-4">
-                                                     <div class="card">
-                                                         <div class="card-body">
-                                                             <h4 class="card-title">Imagen</h4>
-                                                             <img src="{{ asset('imagenesProductos')."/".$ip->imagen }}" alt="" height="200" >
-                                                             <br />
-                                                             <button type="button" class="btn waves-effect waves-light btn-danger" onclick="elimina_imagen({{ $ip->id }}, {{ $ip->producto_id }})"> <i class="fas fa-trash"></i> Eliminar</button>
-                                                         </div>
-                                                     </div>
-                                                 </div>
+                                                <div class="col-md-4">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h4 class="card-title">Imagen</h4>
+                                                            <img src="{{ asset('imagenesProductos')."/".$ip->imagen }}" alt="" height="200">
+                                                            <br />
+                                                            <button type="button" class="btn waves-effect waves-light btn-danger"
+                                                                onclick="elimina_imagen({{ $ip->id }}, {{ $ip->producto_id }})"> <i class="fas fa-trash-alt"></i>
+                                                                Eliminar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                                 @endforeach
+                                                @endforeach
 
                                             </div>
 
                                             <div class="row">
-                                            
+
                                                 <div class="col-md-4">
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
@@ -357,15 +373,12 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            
+
                                             </div>
-
                                         </div>
-                                    </div> <!-- end tab-content-->
-                                </div> <!-- end col-->
+                                    </div>
+                                </div>
                             </div>
-
-                            <h3>&nbsp;</h3>
                             <div class="row">
                                 <div class="col-md-6">
                                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
@@ -418,6 +431,19 @@ var room = 1;
         });
     }, false);
 })();
+
+// generamos los tabs
+$('#tabsProductos div .btn').click(function () {
+    var t = $(this).attr('id');
+
+    if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
+        $('#tabsProductos div .btn').addClass('inactivo');
+        $(this).removeClass('inactivo');
+
+        $('.tabContenido').hide();
+        $('#' + t + 'C').fadeIn('slow');
+    }
+});
 
 $(document).ready(function() {
 

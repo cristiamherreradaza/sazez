@@ -62,6 +62,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/panelControl', 'ProductoController@panelControl');
     Route::get('Producto/muestra/{id}', 'ProductoController@muestra');
     Route::get('Producto/info', 'ProductoController@info');
+    Route::get('Producto/elimina/{id}', 'ProductoController@elimina');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
@@ -98,6 +99,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cupon/guardar', 'CuponController@guardar');
     Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
     Route::get('Cupon/eliminar/{id}', 'CuponController@eliminar');
+    Route::post('Cupon/cobrar', 'CuponController@cobrar');
 
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');

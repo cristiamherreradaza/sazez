@@ -74,6 +74,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
+                                    <th>Stock</th>
                                     <th>Cantidad por Caja</th>
                                     <th style="width: 5%">Cantidad</th>
                                     <th>Total Cantidad</th>
@@ -85,7 +86,7 @@
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR INGRESO</button>
                         </div>
                     </div>
                 </div>

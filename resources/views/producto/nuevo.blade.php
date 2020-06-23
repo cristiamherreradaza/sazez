@@ -387,8 +387,7 @@
                                     <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
                                         class="btn waves-effect waves-light btn-block btn-success">Importar archivo
                                         excel</button>
-                                    <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
-                                        disabled style="display: none;">
+                                    <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel" disabled style="display: none;">
                                         <span class="spinner-border spinner-border-sm" role="status"
                                             aria-hidden="true"></span>
                                         &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
@@ -454,11 +453,11 @@ function enviaExcel(){
     $("#btnTrabajandoExcel").show();
 }
 
+// generamos los tabs
 $('#tabsProductos div .btn').click(function () {
     var t = $(this).attr('id');
-    console.log($(this));
 
-    if ($(this).hasClass('inactivo')) { //this is the start of our condition 
+    if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
         $('#tabsProductos div .btn').addClass('inactivo');
         $(this).removeClass('inactivo');
 
