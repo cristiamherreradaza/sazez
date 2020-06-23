@@ -99,7 +99,9 @@
                 @php
                     } else {
                 @endphp
-                <h3 style="height:400px;">NO SE ENCUENTRA NINGUN REGISTRO DE VENTAS DE ESTE MES</h3>
+                <div style="height:400px;">
+                    <img src="{{ asset('assets/images/imagen.jpg') }}">
+                </div>
                 @php
                     }
                 @endphp

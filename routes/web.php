@@ -211,6 +211,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::post('Alcance/guarda', 'AlcanceController@guarda');
 
+    //REPORTE DE TIENDA
+    Route::get('Tienda/reporte_tienda', 'TiendaController@reporte_tienda');
+    Route::get('Tienda/ajax_tienda_listado', 'TiendaController@ajax_tienda_listado');
+
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');
