@@ -126,11 +126,14 @@
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
+
 <script>
 $(document).ready(function() {
+  
 
     // DataTable
     var table = $('#tabla-usuarios').DataTable( {
+        
         "iDisplayLength": 10,
         "processing": true,
         // "scrollX": true,
