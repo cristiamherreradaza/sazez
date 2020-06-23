@@ -490,10 +490,10 @@ class ProductoController extends Controller
 
     public function elimina($productoId)
     {
-        dd($productoId);
+        // dd($productoId);
         $producto = Producto::find($request->id);
         $producto->delete();
-        Caracteristica::where('producto_id', $request->id);
+        Caracteristica::where('producto_id', $request->id)->delete();
         // caracteristicas
         // precio
         // categorias 
