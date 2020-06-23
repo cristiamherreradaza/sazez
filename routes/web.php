@@ -95,6 +95,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     //CUPONES
     Route::get('Cupon/listado', 'CuponController@listado');
+    Route::get('Cupon/ajax_listado', 'CuponController@ajax_listado');
+    Route::get('Cupon/ajaxMuestraCupon', 'CuponController@ajaxMuestraCupon');
     Route::get('Cupon/pruebaCorreo', 'CuponController@pruebaCorreo');
     Route::post('Cupon/guardar', 'CuponController@guardar');
     Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
@@ -208,6 +210,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Alcance/ajax_ventas_meses', 'AlcanceController@ajax_ventas_meses');
 
     Route::post('Alcance/guarda', 'AlcanceController@guarda');
+
+    //REPORTE DE TIENDA
+    Route::get('Tienda/reporte_tienda', 'TiendaController@reporte_tienda');
+    Route::get('Tienda/ajax_tienda_listado', 'TiendaController@ajax_tienda_listado');
 
 });
 

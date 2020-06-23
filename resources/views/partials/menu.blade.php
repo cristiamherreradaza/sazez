@@ -201,7 +201,20 @@
                     </ul>
                 </li>
                 @endif
-                
+                @if(auth()->user()->rol == 'Administrador')
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="star" class="feather-icon"></i><span class="hide-menu"> REPORTES </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Tienda/reporte_tienda') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Reporte de Tienda </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
                 <li class="nav-devider"></li>
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
                 </li>

@@ -26,7 +26,7 @@
                             <th>TIPO</th>
                             <th>MARCA</th>
                             <th>COLOR</th>
-                            <th>Accion</th>
+                            <td>Accion</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,6 +58,10 @@ $(document).ready(function() {
     //     var title = $(this).text();
     //     $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
     // } );
+    $("#tabla-usuarios thead th").each(function() {
+        var title = $(this).text();
+        $(this).html('<input type="text" placeholder=" ' + title + '" />');
+      });
 
     // DataTable
     var table = $('#tabla-usuarios').DataTable( {
@@ -78,6 +82,22 @@ $(document).ready(function() {
             url: '{{ asset('datatableEs.json') }}'
         },
     } );
+
+    table.columns().every(function(index) {
+        var that = this;
+
+        $("input", this.header()).on("keyup change clear", function() {
+          if (that.search() !== this.value) {
+            that.search(this.value).draw();
+            table
+              .rows()
+              .$("tr", { filter: "applied" })
+              .each(function() {
+                // console.log(table.row(this).data());
+              });
+          }
+        });
+      });
 
     // Apply the search
     // table.columns().every( function () {
