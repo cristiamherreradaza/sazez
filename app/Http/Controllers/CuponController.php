@@ -21,6 +21,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Exception;
 
+use Illuminate\Support\Facades\DB;
+use DataTables;
+
 class CuponController extends Controller
 {
     public function listado()
@@ -29,6 +32,50 @@ class CuponController extends Controller
         $almacenes = Almacene::get();
         $clientes = User::where('rol', 'Cliente')->get();
         return view('cupon.listado')->with(compact('almacenes', 'cupones', 'clientes'));
+    }
+
+    public function ajax_listado()
+    {
+        $cupones = DB::table('cupones')
+                    ->whereNull('cupones.deleted_at')
+                    ->where(function($query){
+                        $query->where('cupones.almacene_id', Auth::user()->almacen->id)
+                        ->orwhereNull('cupones.almacene_id');
+                    })
+                    ->leftJoin('productos', 'cupones.producto_id', '=', 'productos.id')
+                    ->leftJoin('users', 'cupones.cliente_id', '=', 'users.id')
+                    ->leftJoin('almacenes', 'cupones.almacene_id', '=', 'almacenes.id')
+                    ->leftJoin('cupones_cobrados', 'cupones.id', '=', 'cupones_cobrados.cupone_id')
+                    ->select(
+                        'cupones.id',
+                        'cupones.codigo as codigo',
+                        'users.id as cliente_id',
+                        'users.name as cliente_nombre',
+                        'productos.id as producto_id',
+                        'productos.nombre as producto_nombre',
+                        'almacenes.nombre as tienda',
+                        'cupones_cobrados.fecha as cobrado',
+                        'cupones.fecha_inicio as fecha_inicio',
+                        'cupones.fecha_final as fecha_final'
+                    );
+        return Datatables::of($cupones)->addColumn('action', function ($cupones) {
+            if(is_null($cupones->cobrado)){
+                if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final)){
+                    return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+                }else{
+                    return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                    <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+                }   
+            }
+        })->make(true);
+    }
+
+    public function ajaxMuestraCupon(Request $request)
+    {
+        $producto = Producto::find($request->producto_id);
+        $cupon = Cupone::find($request->cupon_id);
+        $cliente = User::find($request->cliente_id);
+        return view('cupon.ajaxMuestraCupon')->with(compact('producto', 'cupon', 'cliente'));
     }
 
     public function ajaxBuscaProducto(Request $request)
@@ -190,7 +237,7 @@ class CuponController extends Controller
         $datos_cupon->cupone_id = $request->cobro_cupon_id;
         $datos_cupon->cobrador_id = Auth::user()->id;
         $datos_cupon->almacene_id = Auth::user()->almacen->id;
-        $datos_cupon->fecha = $request->cobro_cupon_id;
+        $datos_cupon->fecha = date('Y-m-d H:i:s');
         $datos_cupon->save();
 
         return redirect('Cupon/listado');
@@ -222,6 +269,15 @@ class CuponController extends Controller
 
     public function pruebaCorreo(Request $request)
     {
+        $actual = strtotime(date('Y-m-d H:i:s'));
+        $final = strtotime('2020-06-23 18:32:00');
+        if($actual > $final){
+            echo $actual ."<br>". $final;
+            dd('Caduco');
+        }else{
+            echo $actual ."<br>". $final;
+            dd('Vigente');
+        }
         //$png = QrCode::format('png')->size(512)->generate('AAAA-BBBB-CCCC');
         //Storage::disk('qrs')->put('qwe.png', $png);
 
@@ -243,6 +299,7 @@ class CuponController extends Controller
         // $png = base64_encode($png);
         // dd($png);
         // //echo "<img src='data:image/png;base64," . $png . "'>";
+
         $png="G2EF-3ZQB-R2W9";
         Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail($png));
     }
