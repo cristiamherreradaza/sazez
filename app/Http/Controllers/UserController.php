@@ -11,6 +11,7 @@ use App\Asignatura;
 use App\NotasPropuesta;
 use App\Turno;
 use App\User;
+use Validator;
 
 class UserController extends Controller
 {
@@ -158,5 +159,31 @@ class UserController extends Controller
         return response()->json([
             'usuario' => $datosNP->user_id
         ]);
+    }
+
+    public function actualizarImagen(Request $request)
+    {
+        //dd($request->documento);
+        $validation = Validator::make($request->all(), [
+            'documento' => 'required|mimes:jpeg,jpg,png|max:2048'
+        ]);
+        if($validation->passes()){
+
+            $filename = time().'.'.request()->documento->getClientOriginalExtension();
+            request()->documento->move(public_path('assets/images/users'), $filename);
+
+            $usuario = User::find($request->id_usuario);
+            $usuario->image = $filename;
+            $usuario->save();
+            
+            return redirect('User/listado');
+        }else{
+            switch ($validation->errors()->first()) {
+                default:
+                    $mensaje = "Fallo al cambiar de imagen, verificar que el archivo importado sea del tipo .jpg .jpeg .png y el limite no sea mayor a 2048 kbs.";
+                    break;
+            }
+            return redirect('User/perfil')->with('flash', $mensaje);
+        }
     }
 }

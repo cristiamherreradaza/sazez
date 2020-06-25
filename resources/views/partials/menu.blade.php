@@ -11,7 +11,7 @@
                         <!-- User profile image -->
                         <div class="profile-img m-auto">
                             @if(auth()->user()->image)
-                                <img src="{{ auth()->user()->image }}" alt="user" class="w-100 rounded-circle">
+                                <img src="{{ asset('assets/images/users/'.auth()->user()->image) }}" alt="user" class="w-100 rounded-circle">
                             @else
                                 <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="w-100 rounded-circle">
                             @endif

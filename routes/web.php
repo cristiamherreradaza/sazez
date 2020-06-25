@@ -181,6 +181,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('User/eliminar/{id}', 'UserController@eliminar');
     Route::get('User/perfil', 'UserController@perfil');
     Route::post('User/password', 'UserController@password');
+    Route::post('User/actualizarImagen', 'UserController@actualizarImagen');
 
     //VENTAS
     Route::post('Venta/ajaxBuscaProducto', 'VentaController@ajaxBuscaProducto');

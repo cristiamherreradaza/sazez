@@ -408,7 +408,7 @@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         @if(auth()->user()->image)
-                                            <img src="{{ auth()->user()->image }}" alt="user" class="rounded-circle" width="31">
+                                            <img src="{{ asset('assets/images/users/'.auth()->user()->image) }}" alt="user" class="rounded-circle" width="31">
                                         @else
                                             <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="rounded-circle" width="31"/>
                                         @endif
@@ -417,7 +417,7 @@
                                         <div class="d-flex no-block align-items-center p-3 mb-2 border-bottom">
                                             <div class="">
                                                 @if(auth()->user()->image)
-                                                    <img src="{{ auth()->user()->image }}" alt="user" class="rounded" width="80">
+                                                    <img src="{{ asset('assets/images/users/'.auth()->user()->image) }}" alt="user" class="rounded" width="80">
                                                 @else
                                                     <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="rounded" width="80">
                                                 @endif
