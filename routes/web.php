@@ -63,6 +63,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/muestra/{id}', 'ProductoController@muestra');
     Route::get('Producto/info', 'ProductoController@info');
     Route::get('Producto/elimina/{id}', 'ProductoController@elimina');
+    Route::get('Producto/exportar', 'ProductoController@exportar');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');

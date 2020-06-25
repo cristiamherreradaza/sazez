@@ -123,7 +123,10 @@ class CuponController extends Controller
                     $correo_destino = $request->email;
                 }catch(Exception $e){
                     //existe este registro, pero esta eliminado
-                    return redirect('Cupon/listado');
+                    $usuario_borrado = DB::table('users')->where('email', $request->email)->update(['deleted_at' => NULL]);
+                    $usuario_borrado = DB::table('users')->where('email', $request->email)->first();
+                    $id_cliente = $usuario_borrado->id;
+                    $correo_destino = $request->email;
                 }
             }else{
                 //existe el email en la base de datos, entonces se captura el id de ese email

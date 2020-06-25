@@ -18,22 +18,24 @@
                 <h4 class="card-title">LISTADO DEL PRODUCTOS </h4>
                 {{-- <div class="table-responsive m-t-40"> --}}
                 <div class="table-responsive">
-                <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
-                    <thead>
-                        <tr>
-                            <th>COD</th>
-                            <th>NOMBRE</th>
-                            <th>TIPO</th>
-                            <th>MARCA</th>
-                            <th>COLOR</th>
-                            <td>Accion</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                    <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
+                        <thead>
+                            <tr>
+                                <th>COD</th>
+                                <th>NOMBRE</th>
+                                <th>TIPO</th>
+                                <th>MARCA</th>
+                                <th>COLOR</th>
+                                <td>Accion</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
                 </div>
                 {{-- </div> --}}
+                <br>
+                <a href="{{ url('Producto/exportar') }}" class="btn btn-success btn-block">Exportar Listado de Productos</a>
             </div>
         </div>
     </div>
