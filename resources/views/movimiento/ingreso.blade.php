@@ -86,7 +86,7 @@
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR INGRESO</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">GUARDAR INGRESO</button>
                         </div>
                     </div>
                 </div>
@@ -222,6 +222,25 @@
                 });
             }
         })
+    }
+
+    function validaItems()
+    {
+        if(itemsPedidoArray.length > 0){
+            //alert(itemsPedidoArray[0].precio);
+            // Swal.fire({
+            //     type: 'success',
+            //     title: 'Excelente',
+            //     text: 'Se realizo el ingreso'
+            // })
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar al menos un producto.'
+            })
+        }        
     }
 
 </script>

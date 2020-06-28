@@ -231,8 +231,9 @@
                                 <div class="input-group">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" id="documento" name="documento" required>                                        
-                                        <label class="custom-file-label form-control" for="inputGroupFile04">Cambiar foto de perfil</label>
                                         <div class="form-control-focus"> </div>
+                                        <label class="custom-file-label form-control" for="inputGroupFile04">Cambiar foto de perfil</label>
+                                        
                                     </div>
                                     <div class="input-group-append">
                                         <button class="btn btn-primary text-white" type="submit" id="inputGroupFileAddon04">Actualizar Foto</button>

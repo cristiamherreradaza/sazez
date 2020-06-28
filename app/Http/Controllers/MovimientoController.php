@@ -54,19 +54,22 @@ class MovimientoController extends Controller
 
     public function guarda(Request $request)
     {
-        $fecha = date("Y-m-d H:i:s");
-        $llaves = array_keys($request->precio);
-        foreach ($llaves as $key => $ll) 
+        if($request->precio)
         {
-            // Creación de Movimiento
-            $ingreso = new Movimiento();
-            $ingreso->user_id = Auth::user()->id;
-            $ingreso->producto_id = $ll;
-            $ingreso->almacene_id = $request->almacen;
-            $ingreso->ingreso = $request->subtotal[$ll];
-            $ingreso->fecha = $fecha;
-            $ingreso->save();
-        }
+            $fecha = date("Y-m-d H:i:s");
+            $llaves = array_keys($request->precio);
+            foreach ($llaves as $key => $ll) 
+            {
+                // Creación de Movimiento
+                $ingreso = new Movimiento();
+                $ingreso->user_id = Auth::user()->id;
+                $ingreso->producto_id = $ll;
+                $ingreso->almacene_id = $request->almacen;
+                $ingreso->ingreso = $request->subtotal[$ll];
+                $ingreso->fecha = $fecha;
+                $ingreso->save();
+            }
+        }   
         return redirect('Producto/listado');
     }
 
