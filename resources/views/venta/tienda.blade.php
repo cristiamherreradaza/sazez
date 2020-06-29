@@ -344,7 +344,7 @@
         let sum = 0;
 
         $('.subtotal, .subtotalMayor').each(function(){
-            sum += parseFloat(this.value);
+            // sum += parseFloat(this.value);
         });
         // sumaVisible = sum.toLocaleString('en', {useGrouping:true});
         

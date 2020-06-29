@@ -248,7 +248,9 @@ class ProductoController extends Controller
     public function ajax_listado()
     {
         // $lista_personal = Producto::all();
+        // $productos = DB::table('productos')
         $productos = DB::table('productos')
+            ->whereNull('productos.deleted_at')
             ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
             ->leftJoin('marcas', 'productos.marca_id', '=', 'marcas.id')
             ->select(
@@ -488,20 +490,28 @@ class ProductoController extends Controller
         return view('producto.info');
     }
 
-    public function elimina($productoId)
+    public function elimina(Request $request, $productoId)
     {
         // dd($productoId);
-        $producto = Producto::find($request->id);
+        $producto = Producto::find($productoId);
         $producto->delete();
-        Caracteristica::where('producto_id', $request->id)->delete();
+        // eliminamos las tablas relacionadas
         // caracteristicas
+        Caracteristica::where('producto_id', $productoId)->delete();
         // precio
+        Precio::where('producto_id', $productoId)->delete();
         // categorias 
+        CategoriasProducto::where('producto_id', $productoId)->delete();
         // imagenes producto 
+        ImagenesProducto::where('producto_id', $productoId)->delete();
         // combos productos 
+        CombosProducto::where('producto_id', $productoId)->delete();
         // pedidos productos 
+        PedidosProducto::where('producto_id', $productoId)->delete();
         // ventas 
+        VentasProducto::where('producto_id', $productoId)->delete();
         // cupones 
+        Cupone::where('producto_id', $productoId)->delete();
         return redirect('Producto/listado');
     }
 }
