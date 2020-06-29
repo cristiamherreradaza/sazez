@@ -27,13 +27,18 @@
     <!-- ============================================================== -->
     <!-- Row -->
     <div class="row">
+        @if (session('flash'))
+            <div class="alert alert-danger col-md-12" role="alert">
+                {{ session('flash') }}
+            </div>
+        @endif
         <!-- Column -->
         <div class="col-md-12 col-lg-4 col-xlg-3">
             <div class="card">
                 <div class="card-body">
                     <center class="mt-4"> 
                         @if(auth()->user()->image)
-                            <img src="{{ auth()->user()->image }}" class="img-circle" width="150">
+                            <img src="{{ asset('assets/images/users/'.auth()->user()->image) }}" class="img-circle" width="150">
                         @else
                             <img src="{{ asset('assets/images/users/usuario.png') }}" class="img-circle" width="150">
                         @endif    
@@ -216,6 +221,22 @@
                                         <button type="submit" class="btn btn-success" onclick="actualizar_usuario()">Actualizar Perfil</button>
                                         <button type="button" class="btn btn-info" onclick="contrasena()">Cambiar contrase&nacute;a</button>
                                         <a href="{{ url('home') }}" class="btn btn-primary" >Volver</a>
+                                    </div>
+                                </div>
+                            </form>
+                            <form method="post" action="{{ url('User/actualizarImagen') }}" class="needs-validation form-horizontal form-material" novalidate enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="id_usuario" id="id_usuario" value="{{ auth()->user()->id }}">
+
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" id="documento" name="documento" required>                                        
+                                        <div class="form-control-focus"> </div>
+                                        <label class="custom-file-label form-control" for="inputGroupFile04">Cambiar foto de perfil</label>
+                                        
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary text-white" type="submit" id="inputGroupFileAddon04">Actualizar Foto</button>
                                     </div>
                                 </div>
                             </form>

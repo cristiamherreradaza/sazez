@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductosExport;
 
 class ProductoController extends Controller
 {
@@ -513,5 +514,11 @@ class ProductoController extends Controller
         // cupones 
         Cupone::where('producto_id', $productoId)->delete();
         return redirect('Producto/listado');
+    }
+
+    public function exportar()
+    {
+        $date = strtotime(date('Y-m-d H:i:s'));
+        return Excel::download(new ProductosExport, "Listado_productos_$date.xlsx");
     }
 }
