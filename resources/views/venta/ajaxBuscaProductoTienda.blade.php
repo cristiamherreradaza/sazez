@@ -186,6 +186,7 @@
         let subtotalMayor = precioMayor*cantidadMayor;
         $("#subtotal_m_"+productoId).val(subtotalMayor);
         $("#cantidad_escala_m_"+productoId).val(cantidadEscala);
+        sumaSubTotales();
     }
 
 </script>
