@@ -365,12 +365,14 @@ class ProductoController extends Controller
         {
             $llaves = array_keys($request->precio_venta);
             foreach ($llaves as $key => $ll) {
-                $nuevoPrecio              = new Precio();
-                $nuevoPrecio->user_id     = Auth::user()->id;
-                $nuevoPrecio->producto_id = $producto_id;
-                $nuevoPrecio->escala_id   = $ll;
-                $nuevoPrecio->precio      = $request->precio_venta[$ll];
-                $nuevoPrecio->save();
+                if ($request->precio_venta[$ll]>0) {
+                    $nuevoPrecio              = new Precio();
+                    $nuevoPrecio->user_id     = Auth::user()->id;
+                    $nuevoPrecio->producto_id = $producto_id;
+                    $nuevoPrecio->escala_id   = $ll;
+                    $nuevoPrecio->precio      = $request->precio_venta[$ll];
+                    $nuevoPrecio->save();
+                }
             }
 
         }
