@@ -483,7 +483,7 @@ class ProductoController extends Controller
     {
         $producto = Producto::find($id);
         $categorias = Categoria::get();
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::orderBy('nombre', 'asc')->get();
         $categorias_productos = CategoriasProducto::where('producto_id', $id)->get();
         return view('producto.muestra')->with(compact('producto', 'categorias', 'categorias_productos', 'almacenes'));
     }
