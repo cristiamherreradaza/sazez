@@ -94,10 +94,15 @@ $(document).ready(function() {
 
 } );
 
-function edita_producto(producto_id)
+/*function edita_producto(producto_id)
 {
     // console.log(producto_id);
     window.location.href = "{{ url('Producto/edita') }}/" + producto_id;
+}*/
+
+function muestra(venta_id)
+{
+    window.location.href = "{{ url('Venta/muestra') }}/" + venta_id;
 }
 
 </script>

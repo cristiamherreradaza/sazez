@@ -231,9 +231,17 @@ class VentaController extends Controller
 
         return Datatables::of($ventas)
             ->addColumn('action', function ($ventas) {
-                return '<button onclick="edita_producto(' . $ventas->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button> <button onclick="asigna_materias(' . $ventas->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                return '<button onclick="edita_producto(' . $ventas->id . ')" class="btn btn-warning"><i class="fas fa-edit"></i></button>
+                <button onclick="muestra(' . $ventas->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
             })
             ->make(true);    
     }
 
+    public function muestra(Request $request, $ventaId)
+    {
+        $datosVenta = Venta::find($ventaId);
+        $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
+        // dd($datosVenta);
+        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta'));;
+    }
 }
