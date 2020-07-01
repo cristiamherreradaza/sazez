@@ -12,9 +12,9 @@
             <div class="d-flex align-items-center">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mt-2">
-                        <li class="breadcrumb-item"><a href="#">INICIO</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">CATEGORIAS</li>
-                        <li class="breadcrumb-item active" aria-current="page">PRODUCTO</li>
+                        <li class="breadcrumb-item"><a href="{{ url('home') }}">INICIO</a></li>
+                        <!-- <li class="breadcrumb-item active" aria-current="page">CATEGORIAS</li> -->
+                        <li class="breadcrumb-item active" aria-current="page"><a href="{{ url('Producto/listado') }}">PRODUCTOS</a></li>
                         <li class="breadcrumb-item active" aria-current="page">{{ $producto->nombre}}</li>
                     </ol>
                 </nav>
@@ -25,7 +25,7 @@
 
 <div class="container-fluid mt-5">
     <div class="row justify-content-md-center">
-        <div class="card col-lg-10 col-xlg-10 col-md-10">
+        <div class="card col-md-12">
             <div class="row">
                 <div class="col-md-4 text-center">
                     @if(count($producto->imagenes) != 0)
@@ -81,7 +81,15 @@
                     </div>
                 </div>
             </div>
-            
+            <div class="row">
+                <div class="card text-white bg-white">
+                    <div class="card-body">
+                        <div class="white-box text-center ">
+                            <img src='data:image/png;base64, {{ base64_encode(QrCode::format("png")->color(34,82,162)->size(200)->generate("$producto->codigo")) }}' class="img-responsive">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-lg-2 col-xlg-2 col-md-2">
             <div class="card text-white bg-white">
