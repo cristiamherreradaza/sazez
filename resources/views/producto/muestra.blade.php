@@ -97,18 +97,18 @@
                 <!-- Tabs -->
                 <ul class="nav nav-pills custom-pills justify-content-md-center" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active text-primary" id="pills-setting-tab" data-toggle="pill" href="#previous-month" role="tab" aria-controls="pills-setting" aria-selected="true"><strong>STOCK EN TIENDAS</strong></a>
+                        <a class="nav-link active text-primary" id="pills-setting-tab" data-toggle="pill" href="#stock" role="tab" aria-controls="pills-setting" aria-selected="true"><strong>STOCK EN TIENDAS</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link  text-primary" id="pills-timeline-tab" data-toggle="pill" href="#current-month" role="tab" aria-controls="pills-timeline" aria-selected="false"><strong>INFORMACI&Oacute;N GENERAL</strong></a>
+                        <a class="nav-link  text-primary" id="pills-timeline-tab" data-toggle="pill" href="#general" role="tab" aria-controls="pills-timeline" aria-selected="false"><strong>INFORMACI&Oacute;N GENERAL</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-primary" id="pills-profile-tab" data-toggle="pill" href="#last-month" role="tab" aria-controls="pills-profile" aria-selected="false"><strong>ESPECIFICACIONES</strong></a>
+                        <a class="nav-link text-primary" id="pills-profile-tab" data-toggle="pill" href="#especificacion" role="tab" aria-controls="pills-profile" aria-selected="false"><strong>ESPECIFICACIONES</strong></a>
                     </li>                    
                 </ul>
                 <!-- Tabs -->
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="previous-month" role="tabpanel" aria-labelledby="pills-setting-tab">
+                    <div class="tab-pane fade show active" id="stock" role="tabpanel" aria-labelledby="pills-setting-tab">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table">
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="current-month" role="tabpanel" aria-labelledby="pills-timeline-tab">
+                    <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="pills-timeline-tab">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">CODIGO</strong>
@@ -180,7 +180,7 @@
                                 <a href="{{ $producto->video }}" target="_blank">{{ $producto->video }}</a>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="last-month" role="tabpanel" aria-labelledby="pills-profile-tab">
+                    <div class="tab-pane fade" id="especificacion" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <div class="card-body">
                             <div class="row">
                                 <div class="table-responsive col-md-6">

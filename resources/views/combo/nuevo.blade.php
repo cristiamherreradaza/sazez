@@ -104,7 +104,7 @@
                             </tfoot>
                         </table>
                         <div class="form-group">
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR COMBO</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">GUARDAR COMBO</button>
                         </div>
                     </div>
                 </div>
@@ -237,6 +237,56 @@
                 });
             }
         })
+    }
+
+    function validaItems()
+    {
+        var total = $("#resultadoSubTotales").val();
+        // var inicio = $("#fecha_inicio").val();
+        // var fin = $("#fecha_fin").val();
+        // //2020-07-01
+        // var fechainicial = new Date($("#fecha_inicio").val());
+        // var fechafinal = new Date($("#fecha_fin").val());
+        // if(Date.parse(fechafinal) < Date.parse(fechainicial)){
+        // //La fecha final es menor que la inicial
+        //     alert('La fecha final es menor que la inicial');
+        // }else{
+        // //La fecha Final es mayor...
+        //     alert('La fecha Final es mayor...');
+        // }
+        //alert(date);
+
+        
+        // //Split de las fechas recibidas para separarlas
+        // var x = inicio.split("-");
+        // var y = fin.split("-");
+
+        // //Cambiamos el orden al formato americano, de esto yyyy/mm/dd a esto mm/dd/yyyy
+        // inicio = x[1] + “-” + x[2] + “-” + x[0];
+        // fin = z[1] + “-” + z[2] + “-” + z[0];
+
+        // //Comparamos las fechas
+        // if (Date.parse(inicio) > Date.parse(fin)){
+        //         alert('inicio es mayor');
+        //     }else{
+        //         alert('inicio es menor');
+        //     }
+
+        if(itemsPedidoArray.length > 0){
+            //alert(itemsPedidoArray[0].precio);
+            // Swal.fire({
+            //     type: 'success',
+            //     title: 'Excelente',
+            //     text: 'Se realizo el ingreso'
+            // })
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar al menos un producto.'
+            })
+        }        
     }
 </script>
 @endsection
