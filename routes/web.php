@@ -93,6 +93,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cliente/actualizar', 'ClienteController@actualizar');
     Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
     Route::post('Cliente/password', 'ClienteController@password');
+    Route::post('Cliente/ajaxGuardaCliente', 'ClienteController@ajaxGuardaCliente');
+    Route::post('Cliente/ajaxVerificaCorreo', 'ClienteController@ajaxVerificaCorreo');
+    Route::get('Cliente/ajaxComboClienteNuevo/{clienteId}', 'ClienteController@ajaxComboClienteNuevo');
 
     //CUPONES
     Route::get('Cupon/listado', 'CuponController@listado');

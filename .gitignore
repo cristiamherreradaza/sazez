@@ -11,6 +11,8 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 .phpintel/*
+.phpintel/*
+.phpintel/
 sazez.sublime-workspace
 sazez.code-workspace
 /public/imagenesProductos/

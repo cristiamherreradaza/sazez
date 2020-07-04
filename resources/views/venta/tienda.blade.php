@@ -45,11 +45,89 @@
 </div><!-- /.modal -->
 {{-- fin modal promo --}}
 
+{{-- modal nuevo cliente --}}
+<div id="success-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title text-white" id="warning-header-modalLabel">NUEVO CLIENTE</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Cliente/guardar') }}"  method="POST" id="formularioAjaxNuevoCliente">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="nombre_usuario" type="text" id="nombre_usuario" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Correo Electrónico</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="email_usuario" type="email" id="email_usuario" onchange="validaEmail()" class="form-control" required>
+                                <small id="msgValidaEmail" class="badge badge-default badge-danger form-text text-white float-left" style="display: none;">El correo ya existe, el cliente ya esta registrado</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Celular(es)</label>
+                                <input name="celular_usuario" type="text" id="celular_usuario" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Nit</label>
+                                <input name="nit_usuario" type="text" id="nit_usuario" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Razón Social</label>
+                                <input name="razon_social_usuario" type="text" id="razon_social_usuario" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Contraseña</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn waves-effect waves-light text-white btn-block btn-success" onclick="guardaAjaxCLiente()" id="btnGuardaCliente" style="display: none;">GUARDAR CLIENTE</a>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{-- fin modal nuevo cliente --}}
+
 <form action="{{ url('Venta/guardaVenta') }}" id="formularioVenta" method="POST">
     @csrf
 
     <div class="row">
         <div class="col-md-12">
+        
             <div class="card border-dark">
                 <div class="card-header bg-dark">
                     <h4 class="mb-0 text-white">DATOS PARA LA VENTA</h4>
@@ -59,14 +137,19 @@
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Cliente</label>
-
-                                <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
-                                    style="width: 100%; height:36px;">
-                                    @foreach($clientes as $c)
-                                    <option value="{{ $c->id }}"> {{ $c->name }} </option>
-                                    @endforeach
-                                </select>
+                                <label class="control-label">
+                                    Cliente 
+                                    <small id="tag_nuevo_cliente" class="badge badge-default badge-success form-text text-white" onclick="nuevoCliente()">NUEVO</small>
+                                    <small id="tag_edita_cliente" class="badge badge-default badge-warning form-text text-white" onclick="editaCliente()" style="display: none;"><span id="tagCliente"></span></small>
+                                </label>
+                                <div id="ajaxComboClienteNuevo">
+                                    <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
+                                        style="width: 100%; height:36px;" onchange="seleccionaCliente()">
+                                        @foreach($clientes as $c)
+                                        <option value="{{ $c->id }}"> {{ $c->name }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -466,6 +549,73 @@
             })
             // alert("llena carajo");
         }
+    }
+
+    function seleccionaCliente()
+    {
+        let nombreCliente = $("#cliente_id").find(':selected').text();
+        $("#tagCliente").html('EDITA '+nombreCliente);
+        $("#tag_edita_cliente").show();
+    }
+
+    function nuevoCliente()
+    {
+        $("#success-header-modal").modal("show");
+        
+    }
+
+    function guardaAjaxCLiente()
+    {
+        let datosFormularioAjaxCliente = $("#formularioAjaxNuevoCliente").serializeArray();
+        if ($("#formularioAjaxNuevoCliente")[0].checkValidity()) {
+            $.ajax({
+                url: "{{ url('Cliente/ajaxGuardaCliente') }}",
+                data: datosFormularioAjaxCliente,
+                type: 'POST',
+                success: function (data) {
+                    if (data.validaEmail == 1) {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'El email ya existe!!!'
+                        })
+                    } else {
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Excelente!',
+                            text: 'Cliente registrado'
+                        })
+                        $("#ajaxComboClienteNuevo").load('{{ url("Cliente/ajaxComboClienteNuevo") }}/'+data.clienteId);
+                        // console.log(data.clienteId);
+                        // $("#cliente_id").val(data.clienteId);
+
+                    }
+                    // $("#ajaxMuestraTotalesAlmacenes").html(data);
+                }
+            });
+        }else{
+            $("#formularioAjaxNuevoCliente")[0].reportValidity();
+        }
+    }
+
+    function validaEmail()
+    {
+        let correo_cliente = $("#email_usuario").val();
+        $.ajax({
+            url: "{{ url('Cliente/ajaxVerificaCorreo') }}",
+            data: { correo: correo_cliente },
+            type: 'POST',
+            success: function(data) {
+                if (data.valida == 1) {
+                    $("#msgValidaEmail").show();
+                    // $("#btnGuardaCliente").hide();
+                }else{
+                    $("#msgValidaEmail").hide();
+                    $("#btnGuardaCliente").show();
+                }
+            }
+        });
+        // console.log($("#email_usuario").val());
     }
 
 </script>

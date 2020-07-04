@@ -207,7 +207,7 @@ class VentaController extends Controller
             }
         }
 
-        return redirect('Venta/listado');
+        return redirect("Venta/muestra/".$venta_id);
     }
 
     public function listado()

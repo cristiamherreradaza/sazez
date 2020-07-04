@@ -70,4 +70,54 @@ class ClienteController extends Controller
         $usuario->delete();
         return redirect('Cliente/listado');
     }
+
+    public function ajaxGuardaCliente(Request $request)
+    {
+        $validaEmail = 0;
+        $clienteId = 0;
+        $consultaEmail = User::where('email', $request->email_usuario)->count();
+        if($consultaEmail > 0){
+            $validaEmail = 1;
+        }else{
+            $usuario = new User();
+            $usuario->name = $request->nombre_usuario;
+            $usuario->email = $request->email_usuario;
+            $usuario->celulares = $request->celular_usuario;
+            $usuario->nit = $request->nit_usuario;
+            $usuario->rol = 'Cliente';
+            $usuario->razon_social = $request->razon_social_usuario;
+            $usuario->password = Hash::make($request->password_usuario);
+            $usuario->save();
+            $clienteId = $usuario->id;
+        }
+
+        return response()->json([
+            'validaEmail' => $validaEmail,
+            'clienteId' => $clienteId
+        ]);
+
+    }
+
+    public function ajaxVerificaCorreo(Request $request)
+    {
+        $valida = 0;
+        $consultaEmail = User::where('email', $request->correo)->count();
+        if($consultaEmail > 0){
+            $valida = 1;
+        }
+
+        return response()->json([
+            'valida' => $valida
+        ]);
+    }
+
+    public function ajaxComboClienteNuevo(Request $request, $clienteId)
+    {
+        // dd($clienteId);
+        $clientes = User::where('rol', 'Cliente')
+            ->get();
+        $clienteSeleccionado = $clienteId;
+
+        return view('cliente.ajaxComboClienteNuevo')->with(compact('clientes', 'clienteSeleccionado'));
+    }
 }
