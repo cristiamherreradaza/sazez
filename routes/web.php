@@ -93,9 +93,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cliente/actualizar', 'ClienteController@actualizar');
     Route::get('Cliente/eliminar/{id}', 'ClienteController@eliminar');
     Route::post('Cliente/password', 'ClienteController@password');
-    Route::post('Cliente/ajaxGuardaCliente', 'ClienteController@ajaxGuardaCliente');
-    Route::post('Cliente/ajaxVerificaCorreo', 'ClienteController@ajaxVerificaCorreo');
-    Route::get('Cliente/ajaxComboClienteNuevo/{clienteId}', 'ClienteController@ajaxComboClienteNuevo');
 
     //CUPONES
     Route::get('Cupon/listado', 'CuponController@listado');
@@ -106,6 +103,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
     Route::get('Cupon/eliminar/{id}', 'CuponController@eliminar');
     Route::post('Cupon/cobrar', 'CuponController@cobrar');
+    Route::get('Cupon/ajaxImprimeCupon', 'CuponController@ajaxImprimeCupon');
 
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');
@@ -234,3 +232,4 @@ Route::get('/email', function() {
     Mail::to('arielfernandez.rma7@gmail.com')->send(new CuponMail());
     //return new CuponMail(); 
 });
+Route::get('Cupon/prueba', 'CuponController@pruebaImprime');

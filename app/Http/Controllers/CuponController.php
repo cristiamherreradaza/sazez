@@ -64,6 +64,7 @@ class CuponController extends Controller
                     return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
                 }else{
                     return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                    <button onclick="imprimir('.$cupones->id.')" class="btn btn-success" title="Imprimir cupon"><i class="fas fa-print"></i> </button>
                     <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
                 }   
             }
@@ -76,6 +77,12 @@ class CuponController extends Controller
         $cupon = Cupone::find($request->cupon_id);
         $cliente = User::find($request->cliente_id);
         return view('cupon.ajaxMuestraCupon')->with(compact('producto', 'cupon', 'cliente'));
+    }
+
+    public function ajaxImprimeCupon(Request $request)
+    {
+        $cupon = Cupone::find($request->cupon_id);
+        return view('cupon.ajaxImprimeCupon')->with(compact('cupon'));
     }
 
     public function ajaxBuscaProducto(Request $request)
@@ -307,4 +314,8 @@ class CuponController extends Controller
         Mail::to("arielfernandez.rma7@gmail.com")->send(new PruebaMail($png));
     }
 
+    public function pruebaImprime()
+    {
+        return view('cupon.prueba');
+    }
 }
