@@ -4,3 +4,8 @@
         <option value="{{ $c->id }}" <?php echo ($c->id==$clienteSeleccionado)?'selected':'' ?>> {{ $c->name }} </option>
     @endforeach
 </select>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script type="text/javascript">
+	$(".select2").select2();
+</script>

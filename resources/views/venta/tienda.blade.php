@@ -45,6 +45,23 @@
 </div><!-- /.modal -->
 {{-- fin modal promo --}}
 
+{{-- modal edita cliente --}}
+<div id="modalEditaCliete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title text-white" id="warning-header-modalLabel">EDITA CLIENTE</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body" id="ajaxFormEditaCliente">
+
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{-- fin modal promo --}}
+
 {{-- modal nuevo cliente --}}
 <div id="success-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel"
     aria-hidden="true">
@@ -54,7 +71,7 @@
                 <h4 class="modal-title text-white" id="warning-header-modalLabel">NUEVO CLIENTE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Cliente/guardar') }}"  method="POST" id="formularioAjaxNuevoCliente">
+            <form action="#" method="POST" id="formularioAjaxNuevoCliente">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -79,10 +96,30 @@
                         </div>
                     </div>
                     <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Contraseña</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
+                            </div>
+                        </div>
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Celular(es)</label>
                                 <input name="celular_usuario" type="text" id="celular_usuario" class="form-control">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Razón Social</label>
+                                <input name="razon_social_usuario" type="text" id="razon_social_usuario" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -92,26 +129,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Razón Social</label>
-                                <input name="razon_social_usuario" type="text" id="razon_social_usuario" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Contraseña</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
-                            </div>
-                        </div>
-                        
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <a class="btn waves-effect waves-light text-white btn-block btn-success" onclick="guardaAjaxCLiente()" id="btnGuardaCliente" style="display: none;">GUARDAR CLIENTE</a>
@@ -560,8 +578,14 @@
 
     function nuevoCliente()
     {
+        $("#nombre_usuario").focus();
+        $("#nombre_usuario").val('');
+        $("#email_usuario").val('');
+        $("#password_usuario").val('');
+        $("#celular_usuario").val('');
+        $("#razon_social_usuario").val('');
+        $("#nit_usuario").val('');
         $("#success-header-modal").modal("show");
-        
     }
 
     function guardaAjaxCLiente()
@@ -580,12 +604,15 @@
                             text: 'El email ya existe!!!'
                         })
                     } else {
+
+                        $("#ajaxComboClienteNuevo").load('{{ url("Cliente/ajaxComboClienteNuevo") }}/'+data.clienteId);
+                        $("#success-header-modal").modal("hide");
+
                         Swal.fire({
                             type: 'success',
                             title: 'Excelente!',
                             text: 'Cliente registrado'
                         })
-                        $("#ajaxComboClienteNuevo").load('{{ url("Cliente/ajaxComboClienteNuevo") }}/'+data.clienteId);
                         // console.log(data.clienteId);
                         // $("#cliente_id").val(data.clienteId);
 
@@ -618,5 +645,58 @@
         // console.log($("#email_usuario").val());
     }
 
+    function editaCliente()
+    {
+        let clienteId = $("#cliente_id").find(':selected').val();
+        $.ajax({
+            url: "{{ url('Cliente/ajaxEditaCliente') }}",
+            data: { clienteId: clienteId },
+            type: 'POST',
+            success: function(data) {
+                $("#ajaxFormEditaCliente").html(data);
+            }
+        });
+
+        $("#modalEditaCliete").modal("show");
+
+    }
+
+    function guardaAjaxCLienteEdicion()
+    {
+        // console.log("entro");
+        let datosFormularioAjaxEditaCliente = $("#formularioAjaxEditaCliente").serializeArray();
+        if ($("#formularioAjaxEditaCliente")[0].checkValidity()) {
+            $.ajax({
+                url: "{{ url('Cliente/guardaAjaxCLienteEdicion') }}",
+                data: datosFormularioAjaxEditaCliente,
+                type: 'POST',
+                success: function (data) {
+                    if (data.validaEmail == 1) {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'El email ya existe!!!'
+                        })
+                    } else {
+
+                        $("#ajaxComboClienteNuevo").load('{{ url("Cliente/ajaxComboClienteNuevo") }}/'+data.clienteId);
+                        $("#success-header-modal").modal("hide");
+
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Excelente!',
+                            text: 'Cliente registrado'
+                        })
+                        // console.log(data.clienteId);
+                        // $("#cliente_id").val(data.clienteId);
+
+                    }
+                    // $("#ajaxMuestraTotalesAlmacenes").html(data);
+                }
+            });
+        }else{
+            $("#formularioAjaxNuevoCliente")[0].reportValidity();
+        }
+    }
 </script>
 @endsection

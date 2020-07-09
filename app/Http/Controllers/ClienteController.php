@@ -120,4 +120,15 @@ class ClienteController extends Controller
 
         return view('cliente.ajaxComboClienteNuevo')->with(compact('clientes', 'clienteSeleccionado'));
     }
+
+    public function ajaxEditaCliente(Request $request)
+    {
+        $datosCliente = User::find($request->clienteId);
+        return view('cliente.ajaxEditaCliente')->with(compact('datosCliente'));
+    }
+
+    public function guardaAjaxCLienteEdicion()
+    {
+        
+    }
 }
