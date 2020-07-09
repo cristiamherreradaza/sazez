@@ -3,6 +3,10 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css') }}">
+<!-- impresora -->
+<link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/lobilist.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 @endsection
 
 @section('metadatos')
@@ -173,11 +177,22 @@
     </div>
 </div>
 <!-- Fin modal cobro cupon -->
+
+<!-- Inicio modal imprimir cupon -->
+<div id="modal_imprime" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" id="imprimeCuponAjax">
+        
+    </div>
+</div>
+<!-- Fin modal imprimir cupon -->
 @stop
 
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<!-- impresora -->
+<script src="{{ asset('assets/extra-libs/taskboard/js/jquery.ui.touch-punch-improved.js') }}"></script>
+<script src="{{ asset('assets/extra-libs/taskboard/js/jquery-ui.min.js') }}"></script>
 <script>
     $(function () {
         $('#myTable').DataTable({
@@ -230,6 +245,21 @@
                 //$("#muestraCuponAjax").show('slow');
                 $("#muestraCuponAjax").html(data);
                 $("#modal_cobro").modal('show');
+            }
+        }); 
+    }
+
+    function imprimir(cupon_id)
+    {
+        $.ajax({
+            url: "{{ url('Cupon/ajaxImprimeCupon') }}",
+            data: {
+                cupon_id: cupon_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#imprimeCuponAjax").html(data);
+                $("#modal_imprime").modal('show');
             }
         }); 
     }
@@ -328,14 +358,16 @@
     // funcion no utilizada
     function guarda_cupon()
     {
-        var nombre_producto = $("#nombre_producto").val();
-        if(nombre_producto.length>0){
+        var producto_nombre = $("#producto_nombre").val();
+        if(producto_nombre.length>0){
             Swal.fire(
                 'Excelente!',
                 'Una nuevo cupón fue registrado.',
                 'success'
             )
         }
+        //Abriendo el documento en otra pagina
+        window.open('{{ url("Cupon/prueba") }}', '_blank');
     }
 
     function eliminar(id)
@@ -388,6 +420,7 @@
         //alert(precio);
 
         let total = precio - (precio*descuento);
+        total = Math.round(total);
         //alert(total);
         $("#producto_total").val(total);
         // sumaSubTotales();
