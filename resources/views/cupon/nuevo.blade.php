@@ -25,6 +25,35 @@
                             <h4 class="mb-0 text-white">NUEVO CUP&Oacute;N</h4>
                         </div>
                         <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="control-label">Tipo de Oferta</label>
+                                    <select name="tipo_oferta" id="tipo_oferta" class="form-control" required>
+                                        <option value="" selected></option>
+                                        <option value="1">Cupon de un Producto</option>
+                                        <option value="2">Cupon de Promocion</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha Inicio</label>
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                        <input type="text" class="form-control" placeholder="Inicio" id="fecha_inicio" name="fecha_inicio" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Fecha Fin</label>
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                        <input type="text" class="form-control" placeholder="Fin" id="fecha_fin" name="fecha_fin" required>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row" id="oculta_detalle">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -32,6 +61,30 @@
                                         <input name="termino" type="text" id="termino" class="form-control" required>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="row" id="detalle_promocion">
+                                <div class="col-md-12">
+                                    <label class="control-label">Seleccione promoción</label>
+                                    <select name="promocion" id="promocion" class="form-control">
+                                        <option value="" selected></option>
+                                        @foreach($promociones as $promocion)
+                                            <option value="{{ $promocion->id }}">{{ $promocion->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!-- <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Inicio de promocion</label>
+                                        <input type="text" class="form-control" placeholder="Inicio" id="inicio_promocion" name="inicio_promocion" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Fin de promocion</label>
+                                        <input type="text" class="form-control" placeholder="Fin" id="fin_promocion" name="fin_promocion" readonly>
+                                    </div>
+                                </div> -->
                             </div>
 
                             <div id="muestra_detalle" style="display: none">
@@ -68,27 +121,6 @@
                                 <div class="col-md-12">
                                     <div id="listadoProductosAjax">
 
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Fecha Inicio</label>
-                                        <span class="text-danger">
-                                            <i class="mr-2 mdi mdi-alert-circle"></i>
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="Inicio" id="fecha_inicio" name="fecha_inicio" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Fecha Fin</label>
-                                        <span class="text-danger">
-                                            <i class="mr-2 mdi mdi-alert-circle"></i>
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="Fin" id="fecha_fin" name="fecha_fin" required>
                                     </div>
                                 </div>
                             </div>
@@ -227,6 +259,56 @@
             $('.tabContenido').hide();
             $('#' + t + 'C').fadeIn('slow');
         }
+    });
+    
+    //Funcion de habilitar y deshabilitar clientes y emails en base al select
+    $( function() {
+        $("#cliente").prop("disabled", true);
+        $("#email").prop("disabled", true);
+        $("#tipo_envio").val("");
+
+        $("#tipo_envio").change( function() {
+            if ($(this).val() == "1") {
+                $("#cliente").prop("disabled", false);
+                $("#email").prop("disabled", true);
+            }
+            if ($(this).val() == "2") {
+                $("#cliente").prop("disabled", true);
+                $("#email").prop("disabled", false);
+            }
+        });
+    });
+
+    //Funcion para ocultar/mostrar cupon o promocion
+    $( function() {
+        $("#oculta_detalle").hide();
+        $("#detalle_promocion").hide();
+        $("#tipo_oferta").change( function() {
+            if ($(this).val() == "1") {
+                $("#detalle_promocion").hide();
+                $("#oculta_detalle").show();
+            }
+            if ($(this).val() == "2") {
+                $("#oculta_detalle").hide();
+                $("#muestra_detalle").hide();
+                $("#detalle_promocion").show();
+            }
+        });
+
+        // $("#cliente").prop("disabled", true);
+        // $("#email").prop("disabled", true);
+        // $("#tipo_envio").val("");
+
+        // $("#tipo_envio").change( function() {
+        //     if ($(this).val() == "1") {
+        //         $("#cliente").prop("disabled", false);
+        //         $("#email").prop("disabled", true);
+        //     }
+        //     if ($(this).val() == "2") {
+        //         $("#cliente").prop("disabled", true);
+        //         $("#email").prop("disabled", false);
+        //     }
+        // });
     });
 
     $(document).on('keyup', '#termino', function(e) {

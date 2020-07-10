@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Cupone;
 use App\Grupo;
+use App\Combo;
 use App\CuponesCobrado;
 use App\Almacene;
 use App\Producto;
@@ -32,7 +33,8 @@ class CuponController extends Controller
         $grupos = Grupo::get();
         $clientes = User::where('rol', 'Cliente')->get();
         $almacenes = Almacene::get();
-        return view('cupon.nuevo')->with(compact('almacenes', 'clientes', 'grupos'));
+        $promociones = Combo::get();
+        return view('cupon.nuevo')->with(compact('almacenes', 'clientes', 'promociones', 'grupos'));
     }
 
     public function listado()
