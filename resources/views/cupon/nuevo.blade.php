@@ -26,15 +26,18 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="control-label">Tipo de Oferta</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
                                     <select name="tipo_oferta" id="tipo_oferta" class="form-control" required>
                                         <option value="" selected></option>
                                         <option value="1">Cupon de un Producto</option>
                                         <option value="2">Cupon de Promocion</option>
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Fecha Inicio</label>
                                         <span class="text-danger">
@@ -43,7 +46,7 @@
                                         <input type="text" class="form-control" placeholder="Inicio" id="fecha_inicio" name="fecha_inicio" required>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Fecha Fin</label>
                                         <span class="text-danger">
@@ -52,13 +55,24 @@
                                         <input type="text" class="form-control" placeholder="Fin" id="fecha_fin" name="fecha_fin" required>
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Tienda</label>
+                                        <select name="tienda" id="tienda" class="form-control">
+                                            <option value="" selected></option>
+                                            @foreach($almacenes as $almacen)
+                                                <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="row" id="oculta_detalle">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">Producto</label>
-                                        <input name="termino" type="text" id="termino" class="form-control" required>
+                                        <input name="termino" type="text" id="termino" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -141,15 +155,15 @@
                                     <div class="card border-info">
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-md-3">
+                                                <div class="col-md-4">
                                                     <label class="control-label">Medio a enviar</label>
-                                                    <select name="tipo_envio" id="tipo_envio" class="form-control" required>
+                                                    <select name="tipo_envio" id="tipo_envio" class="form-control">
                                                         <option value="" selected></option>
                                                         <option value="1">Cliente</option>
                                                         <option value="2">Correo Electrónico</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label class="control-label">Cliente</label>
                                                         <select name="cliente" id="cliente" class="form-control">
@@ -160,23 +174,13 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label class="control-label">Correo Electrónico</label>
                                                         <input name="email" type="email" id="email" class="form-control" disabled>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Tienda</label>
-                                                        <select name="tienda" id="tienda" class="form-control">
-                                                            <option value="" selected></option>
-                                                            @foreach($almacenes as $almacen)
-                                                                <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -185,7 +189,7 @@
                                 <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">
                                     <div class="card border-primary">
                                         <div class="card-body">
-                                            <h4>Seleccione a quienes va dirigido el cupón: </h4>
+                                            <h4>Seleccione a que clientes va dirigido el cupón: </h4>
                                             <div class="form-group row pt-3">
                                                 <div class="col-sm-4">
                                                     @foreach($grupos as $key => $grupo)

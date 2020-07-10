@@ -23,7 +23,7 @@
                 <thead>
                     <tr>
                         <th>Cup&oacute;n</th>
-                        <th>Producto</th>
+                        <th>Producto/Promoción</th>
                         <th>Cliente</th>
                         <th>Tienda</th>
                         <th>Cobrado</th>
