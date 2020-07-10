@@ -1,71 +1,82 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
-    <title>Monster admin Template - The Ultimate Multipurpose admin template</title>
-	<link rel="canonical" href="https://www.wrappixel.com/templates/monsteradmin/" />
-    <!-- Custom CSS -->
-    <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
-    <!-- This Page CSS -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/extra-libs/prism/prism.css') }}">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-</head>
+@section('css')
+<link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/lobilist.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
+@endsection
 
-<body>
-    <div class="row">
-        <div class="col-md-12 bg-primary">
-            <h1>hola</h1>
-            <div class="card text-center">
-                <div class="card-header">
-                    Featured
+@section('content')
+<div class="row">
+    <div class="col-md-12">
+        <div class="card text-center" id="printableArea">
+            <div class="card-header">
+                SAZEZ
+            </div>
+            <!-- contenido de impresion -->
+            <div class="card-body">
+                <h2>CUPÓN DE DESCUENTO</h2>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <ul class="text-left col-md-4">
+                        <li><strong> PRODUCTO : </strong><br> {{ $cupon->producto->nombre }}</li>
+                        @php
+                            $precio = App\Precio::where('producto_id', $cupon->producto->id)->where('escala_id', 1)->first();
+                            $precio = round($precio->precio);
+                        @endphp
+                        <li><strong> PRECIO NORMAL : </strong><br> {{ $precio }} Bs.</li>
+                        <li><strong> PRECIO DESCUENTO : </strong><br> {{ round($cupon->monto_total) }} Bs.</li>
+                        <li>
+                            <strong> TIENDA : </strong><br> 
+                            @if($cupon->almacene_id)
+                                {{ $cupon->almacen->nombre }}, ubicado en {{ $cupon->almacen->direccion }}
+                            @else
+                                <table>
+                                    @foreach($almacenes as $almacen)
+                                        <tr>
+                                            <td>{{ $almacen->nombre }}, ubicado en {{ $almacen->direccion }}</td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            @endif
+                        </li>
+                    </ul>
+                    <div class="col-md-4"></div>
                 </div>
-                <div class="card-body">
-                    <h4 class="card-title">Special title treatment</h4>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="javascript:void(0)" class="btn btn-info">Go somewhere</a>
-                </div>
-                <div class="card-footer text-muted">
-                    2 days ago
-                </div>
+                <img src="{{ asset('qrs/' .$cupon->codigo. '.png') }}" alt="">
+                <br>
+                <p><strong>Cupón valido hasta {{ $cupon->fecha_final }}.</strong></p>
+                <p>
+                    Al momento de tu compra, muestra <br>
+                    este ticket y se realizara el descuento.<br>
+                    Visitanos y conoce nuestros ofertas.
+                </p>
+            </div>
+            <!-- contenido de impresion -->
+            <div class="card-footer">
+                © 2015 - {{ date('Y') }} Sazez.net
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="{{ asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <!-- apps -->
-    <script src="{{ asset('dist/js/app.min.js') }}"></script>
-    <script src="{{ asset('dist/js/app.init.js') }}"></script>
-    <script src="{{ asset('dist/js/app-style-switcher.js') }}"></script>
-    <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="{{ asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/libs/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
-    <!--Wave Effects -->
-    <script src="{{ asset('dist/js/waves.js') }}"></script>
-    <!--Menu sidebar -->
-    <script src="{{ asset('dist/js/sidebarmenu.js') }}"></script>
-    <!--Custom JavaScript -->
-    <script src="{{ asset('dist/js/feather.min.js') }}"></script>
-    <script src="{{ asset('dist/js/custom.min.js') }}"></script>
-    <!-- This Page JS -->
-    <script src="{{ asset('assets/extra-libs/prism/prism.js') }}"></script>
-</body>
+    <button id="botonImprimir" class="btn btn-success btn-block print-page" type="button"> <span><i class="fa fa-print"></i> Imprimir</span></button>
+</div>
+@stop
 
-</html>
+@section('js')
+<script src="{{ asset('assets/extra-libs/taskboard/js/jquery.ui.touch-punch-improved.js') }}"></script>
+<script src="{{ asset('assets/extra-libs/taskboard/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('assets/extra-libs/sparkline/sparkline.js') }}"></script>
+<script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
+<script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
+<script>
+    $("#botonImprimir").click(function() {
+		var mode = 'iframe'; //popup
+		var close = mode == "popup";
+		var options = {
+				mode: mode,
+				popClose: close
+		};
+		$("div#printableArea").printArea(options);
+	});
+</script>
+@endsection

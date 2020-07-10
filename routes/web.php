@@ -99,6 +99,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cliente/ajaxEditaCliente', 'ClienteController@ajaxEditaCliente');
 
     //CUPONES
+    Route::get('Cupon/nuevo', 'CuponController@nuevo');
     Route::get('Cupon/listado', 'CuponController@listado');
     Route::get('Cupon/ajax_listado', 'CuponController@ajax_listado');
     Route::get('Cupon/ajaxMuestraCupon', 'CuponController@ajaxMuestraCupon');
@@ -107,7 +108,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
     Route::get('Cupon/eliminar/{id}', 'CuponController@eliminar');
     Route::post('Cupon/cobrar', 'CuponController@cobrar');
-    Route::get('Cupon/ajaxImprimeCupon', 'CuponController@ajaxImprimeCupon');
+    Route::get('Cupon/ver/{id}', 'CuponController@ver');
 
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');

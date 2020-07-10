@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Cupone;
+use App\Grupo;
 use App\CuponesCobrado;
 use App\Almacene;
 use App\Producto;
@@ -26,6 +27,14 @@ use DataTables;
 
 class CuponController extends Controller
 {
+    public function nuevo()
+    {
+        $grupos = Grupo::get();
+        $clientes = User::where('rol', 'Cliente')->get();
+        $almacenes = Almacene::get();
+        return view('cupon.nuevo')->with(compact('almacenes', 'clientes', 'grupos'));
+    }
+
     public function listado()
     {
         $cupones = Cupone::get();
@@ -64,9 +73,9 @@ class CuponController extends Controller
                     return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
                 }else{
                     return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
-                    <button onclick="imprimir('.$cupones->id.')" class="btn btn-success" title="Imprimir cupon"><i class="fas fa-print"></i> </button>
+                    <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>
                     <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
-                }   
+                }
             }
         })->make(true);
     }
@@ -79,10 +88,11 @@ class CuponController extends Controller
         return view('cupon.ajaxMuestraCupon')->with(compact('producto', 'cupon', 'cliente'));
     }
 
-    public function ajaxImprimeCupon(Request $request)
+    public function ver($id)
     {
-        $cupon = Cupone::find($request->cupon_id);
-        return view('cupon.ajaxImprimeCupon')->with(compact('cupon'));
+        $cupon = Cupone::find($id);
+        $almacenes = Almacene::get();
+        return view('cupon.ver')->with(compact('cupon', 'almacenes'));
     }
 
     public function ajaxBuscaProducto(Request $request)
