@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\User;
+use App\Grupo;
+use App\Turno;
 use App\Almacene;
 use App\Asignatura;
 use App\NotasPropuesta;
-use App\Turno;
-use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ClienteController extends Controller
 {
@@ -123,8 +124,9 @@ class ClienteController extends Controller
 
     public function ajaxEditaCliente(Request $request)
     {
+        $grupos = Grupo::all();
         $datosCliente = User::find($request->clienteId);
-        return view('cliente.ajaxEditaCliente')->with(compact('datosCliente'));
+        return view('cliente.ajaxEditaCliente')->with(compact('datosCliente', 'grupos'));
     }
 
     public function guardaAjaxCLienteEdicion()

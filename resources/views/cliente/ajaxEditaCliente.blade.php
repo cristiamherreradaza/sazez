@@ -31,6 +31,22 @@
             </div>
 
         </div>
+
+        <div class="row">
+        
+            <div class="col-md-12">
+                @foreach ($grupos as $g)
+                    {{ $g->nombre }}
+                @endforeach
+                <div class="form-group">
+                    <label class="control-label">Celular(es)</label>
+                    <input name="celular_usuario" type="text" id="celular_usuario" class="form-control"
+                        value="{{ $datosCliente->celulares }}">
+                </div>
+            </div>
+        
+        </div>
+
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
