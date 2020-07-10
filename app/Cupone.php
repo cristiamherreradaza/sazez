@@ -11,7 +11,8 @@ class Cupone extends Model
 
     protected $fillable = [
     	'user_id',
-    	'producto_id',
+        'producto_id',
+        'combo_id',
     	'cliente_id',
     	'almacene_id',
         'descuento',
@@ -36,6 +37,11 @@ class Cupone extends Model
     public function producto()
     {
         return $this->belongsTo('App\Producto', 'producto_id');
+    }
+
+    public function combo()
+    {
+        return $this->belongsTo('App\Combo', 'combo_id');
     }
     
 }
