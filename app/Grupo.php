@@ -10,8 +10,14 @@ class Grupo extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'nombre',
-        'descripcion'
+    	'user_id',
+    	'nombre',
+        'estado',
+        'deleted_at'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
 }

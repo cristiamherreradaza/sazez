@@ -63,6 +63,11 @@ class User extends Authenticatable
         return $this->hasMany('App\Combo');
     }
 
+    public function grupos()
+    {
+        return $this->hasMany('App\Grupo');
+    }
+
     public function combos_productos()
     {
         return $this->hasMany('App\CombosProducto');

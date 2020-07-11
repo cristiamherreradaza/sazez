@@ -145,6 +145,11 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
+                            <a href="{{ url('Cupon/nuevo') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url('Cupon/listado') }}" class="sidebar-link">
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
                             </a>
