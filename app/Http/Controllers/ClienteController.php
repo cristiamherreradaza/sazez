@@ -8,6 +8,7 @@ use App\Turno;
 use App\Almacene;
 use App\Asignatura;
 use App\NotasPropuesta;
+use App\GruposUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -124,13 +125,35 @@ class ClienteController extends Controller
 
     public function ajaxEditaCliente(Request $request)
     {
-        $grupos = Grupo::all();
-        $datosCliente = User::find($request->clienteId);
-        return view('cliente.ajaxEditaCliente')->with(compact('datosCliente', 'grupos'));
+        $grupos        = Grupo::all();
+        $gruposCliente = GruposUser::where('user_id', $request->clienteId)->get();
+        $datosCliente  = User::find($request->clienteId);
+        return view('cliente.ajaxEditaCliente')->with(compact('datosCliente', 'grupos', 'gruposCliente'));
     }
 
-    public function guardaAjaxCLienteEdicion()
+    public function guardaAjaxClienteEdicion(Request $request)
     {
-        
+        // dd($request->all());
+        $cliente               = User::find($request->clienteId);
+        $cliente->name         = $request->nombre_usuario;
+        $cliente->celulares    = $request->celulares;
+        $cliente->nit          = $request->nit_usuario;
+        $cliente->razon_social = $request->razon_social_usuario;
+        $cliente->save();
+
+        if($request->has('grupos')){
+            GruposUser::where('user_id', $request->clienteId)->delete();
+            foreach ($request->grupos as $g) {
+                $grupo           = new GruposUser();
+                $grupo->user_id  = $request->clienteId;
+                $grupo->grupo_id = $g;
+                $grupo->save();
+            }
+        }
+
+        return response()->json([
+            'msg'       => 1,
+            'clienteId' => $request->clienteId
+        ]);
     }
 }

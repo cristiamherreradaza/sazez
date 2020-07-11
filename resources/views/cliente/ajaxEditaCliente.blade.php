@@ -35,17 +35,30 @@
         <div class="row">
         
             <div class="col-md-12">
+                <label class="control-label">Categorias:&nbsp;&nbsp;</label>
                 @foreach ($grupos as $g)
-                    {{ $g->nombre }}
+                    @php
+                        $buscaGrupos = App\GruposUser::where('user_id', $datosCliente->id)
+                                        ->where('grupo_id', $g->id)
+                                        ->count();
+                        if ($buscaGrupos > 0) {
+                            $marcado = 'checked';
+                        }else{
+                            $marcado = '';
+                        }
+                    @endphp
+                    <div class="form-check form-check-inline">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name="grupos[]" class="custom-control-input" id="grupo_{{ $g->id }}" value="{{ $g->id }}" {{ $marcado }}>
+                            <label class="custom-control-label" for="grupo_{{ $g->id }}">{{ $g->nombre }}</label>
+                        </div>
+                    </div>
                 @endforeach
-                <div class="form-group">
-                    <label class="control-label">Celular(es)</label>
-                    <input name="celular_usuario" type="text" id="celular_usuario" class="form-control"
-                        value="{{ $datosCliente->celulares }}">
-                </div>
             </div>
         
         </div>
+
+        <hr>
 
         <div class="row">
             <div class="col-md-6">

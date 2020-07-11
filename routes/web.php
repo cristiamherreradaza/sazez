@@ -97,6 +97,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cliente/ajaxVerificaCorreo', 'ClienteController@ajaxVerificaCorreo');
     Route::get('Cliente/ajaxComboClienteNuevo/{clienteId}', 'ClienteController@ajaxComboClienteNuevo');
     Route::post('Cliente/ajaxEditaCliente', 'ClienteController@ajaxEditaCliente');
+    Route::post('Cliente/guardaAjaxClienteEdicion', 'ClienteController@guardaAjaxClienteEdicion');
 
     //CUPONES
     Route::get('Cupon/listado', 'CuponController@listado');

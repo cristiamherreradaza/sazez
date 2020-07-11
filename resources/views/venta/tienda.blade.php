@@ -665,22 +665,23 @@
     {
         // console.log("entro");
         let datosFormularioAjaxEditaCliente = $("#formularioAjaxEditaCliente").serializeArray();
+        console.log(datosFormularioAjaxEditaCliente);
         if ($("#formularioAjaxEditaCliente")[0].checkValidity()) {
             $.ajax({
-                url: "{{ url('Cliente/guardaAjaxCLienteEdicion') }}",
+                url: "{{ url('Cliente/guardaAjaxClienteEdicion') }}",
                 data: datosFormularioAjaxEditaCliente,
                 type: 'POST',
                 success: function (data) {
-                    if (data.validaEmail == 1) {
+                    if (data.msg != 1) {
                         Swal.fire({
                             type: 'error',
                             title: 'Oops...',
-                            text: 'El email ya existe!!!'
+                            text: 'No se puedo realizar la edicion'
                         })
                     } else {
 
                         $("#ajaxComboClienteNuevo").load('{{ url("Cliente/ajaxComboClienteNuevo") }}/'+data.clienteId);
-                        $("#success-header-modal").modal("hide");
+                        // $("#success-header-modal").modal("hide");
 
                         Swal.fire({
                             type: 'success',
@@ -691,6 +692,7 @@
                         // $("#cliente_id").val(data.clienteId);
 
                     }
+                    $("#modalEditaCliete").modal("hide");
                     // $("#ajaxMuestraTotalesAlmacenes").html(data);
                 }
             });
@@ -698,5 +700,6 @@
             $("#formularioAjaxNuevoCliente")[0].reportValidity();
         }
     }
+
 </script>
 @endsection
