@@ -199,7 +199,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Venta/tienda', 'VentaController@tienda');
     Route::get('Venta/listado', 'VentaController@listado');
     Route::get('Venta/ajax_listado', 'VentaController@ajax_listado');
-    Route::get('Venta/mayorista', 'VentaController@mayorista');
+    Route::get('Venta/muestra/{ventaId}', 'VentaController@muestra');
     
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');
