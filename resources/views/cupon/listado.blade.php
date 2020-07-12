@@ -23,7 +23,8 @@
                 <thead>
                     <tr>
                         <th>Cup&oacute;n</th>
-                        <th>Producto/Promoción</th>
+                        <th>Producto</th>
+                        <th>Promoción</th>
                         <th>Cliente</th>
                         <th>Tienda</th>
                         <th>Cobrado</th>
@@ -123,6 +124,7 @@
             columns: [
                 {data: 'codigo', name: 'codigo'},
                 {data: 'producto_nombre', name: 'productos.nombre'},
+                {data: 'combo_nombre', name: 'combos.nombre'},
                 {data: 'cliente_nombre', name: 'users.name'},
                 {data: 'tienda', name: 'almacenes.nombre'},
                 {data: 'cobrado', name: 'cupones_cobrados.fecha'},
