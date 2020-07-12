@@ -116,6 +116,23 @@
 
                     </div>
                     <div class="row">
+                    
+                        <div class="col-md-12">
+                            <label class="control-label">Categorias:&nbsp;&nbsp;</label>
+                            @foreach ($grupos as $g)
+                            <div class="form-check form-check-inline">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" name="grupos[]" class="custom-control-input" id="grupo_{{ $g->id }}"
+                                        value="{{ $g->id }}">
+                                    <label class="custom-control-label" for="grupo_{{ $g->id }}">{{ $g->nombre }}</label>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    
+                    </div>
+                    <hr>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Razón Social</label>
@@ -158,7 +175,7 @@
                                 <label class="control-label">
                                     Cliente 
                                     <small id="tag_nuevo_cliente" class="badge badge-default badge-success form-text text-white" onclick="nuevoCliente()">NUEVO</small>
-                                    <small id="tag_edita_cliente" class="badge badge-default badge-warning form-text text-white" onclick="editaCliente()" style="display: none;"><span id="tagCliente"></span></small>
+                                    <small id="tag_edita_cliente" class="badge badge-default badge-info form-text text-white" onclick="editaCliente()" style="display: none;"><span id="tagCliente"></span></small>
                                 </label>
                                 <div id="ajaxComboClienteNuevo">
                                     <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
@@ -572,7 +589,7 @@
     function seleccionaCliente()
     {
         let nombreCliente = $("#cliente_id").find(':selected').text();
-        $("#tagCliente").html('EDITA '+nombreCliente);
+        $("#tagCliente").html('EDITA -'+nombreCliente);
         $("#tag_edita_cliente").show();
     }
 

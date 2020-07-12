@@ -91,6 +91,15 @@ class ClienteController extends Controller
             $usuario->password = Hash::make($request->password_usuario);
             $usuario->save();
             $clienteId = $usuario->id;
+
+            if ($request->has('grupos')) {
+                foreach ($request->grupos as $g) {
+                    $grupo = new GruposUser();
+                    $grupo->user_id = $clienteId;
+                    $grupo->grupo_id = $g;
+                    $grupo->save();
+                }
+            }
         }
 
         return response()->json([

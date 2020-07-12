@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Combo;
+use App\Grupo;
 use App\Venta;
 use App\Precio;
 use DataTables;
@@ -96,9 +97,10 @@ class VentaController extends Controller
     public function tienda()
     {
         $almacenes = Almacene::get();
+        $grupos = Grupo::all();
         $clientes = User::where('rol', 'Cliente')
                     ->get();
-        return view('venta.tienda')->with(compact('almacenes', 'clientes'));
+        return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos'));
     }
 
     public function mayorista()
