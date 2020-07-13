@@ -17,9 +17,9 @@
             </div>
             <div class="modal-body">
                 <h4 class="card-title">Escriba el porque desea eliminar la venta</h4>
-                <form class="mt-3" action="">
+                <form class="mt-3" action="{{ url('Producto/guarda') }}" method="POST">
                     <div class="form-group">
-                        <textarea class="form-control" rows="3"></textarea>
+                        <textarea class="form-control" rows="3" maxlength=500 required></textarea>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
