@@ -1,8 +1,9 @@
 <?php
 
+use App\Configuracione;
 use Illuminate\Database\Seeder;
 
-class ConfiguracioneSeeder extends Seeder
+class ConfiguracionesTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -30,7 +31,7 @@ class ConfiguracioneSeeder extends Seeder
             ],
             [
                 'descripcion' => 'ComboCambiaProductoVenta',
-                'valor' => 'Producto roto'
+                'valor' => 'Producto '
             ]
         ]);
     }
