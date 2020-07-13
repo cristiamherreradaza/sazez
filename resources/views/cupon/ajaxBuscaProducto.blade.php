@@ -49,7 +49,8 @@
             $("#producto_nombre").val(nombre);
             $("#producto_precio").val(precio);
             $("#producto_total").val(precio);
-            $("#muestra_detalle").css("display", "block");            
+            $("#muestra_detalle").css("display", "block");  
+            //$("#guarda_cupon").prop("disabled", false);          
         });
 
     });
