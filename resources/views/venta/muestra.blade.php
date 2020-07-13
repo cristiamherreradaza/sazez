@@ -6,6 +6,38 @@
 
 @section('content')
 
+{{-- modal elimina venta --}}
+<div id="modalElimina" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-danger">
+                <h4 class="modal-title text-white" id="danger-header-modalLabel">ELIMINAR VENTA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <h4 class="card-title">Escriba el porque desea eliminar la venta</h4>
+                <form class="mt-3" action="">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="eliminaVenta()">ELIMINAR VENTA</button>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{ url('Producto/listado') }}">
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">CANCELAR</button>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{-- fin modal elimina venta --}}
+
 <div class="card card-body">
     <div class="invoice-123" id="printableArea">
         <div class="row pt-3">
@@ -18,7 +50,7 @@
             </div>
             <div class="col-md-12">
                 <div class="table-responsive mt-5" style="clear: both;">
-                    <table class="table table-hover">
+                    <table class="tablesaw table-striped table-hover table-bordered table no-wrap">
                         <thead>
                             <tr>
                                 <th class="text-center">#</th>
@@ -30,6 +62,7 @@
                                 <th class="text-right">PRECIO</th>
                                 <th class="text-right">CANTIDAD</th>
                                 <th class="text-right">Total</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,24 +89,41 @@
                                         $sumaSubTotal += $subTotal;
                                     @endphp
                                     <td class="text-right">{{ $subTotal }}</td>
+                                    <td>
+                                        <button type="button" class="btnSeleccionaMayor btn btn-info" data-venta="mayor" title="VENTA POR MAYOR"><i
+                                            class="fas fa-exchange-alt"></i></button>
+                                        </td>
                                 </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="text-center"></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="text-right"></th>
+                                <th class="text-right"></th>
+                                <th class="text-right">TOTAL</th>
+                                <th class="text-right">{{ $sumaSubTotal }}</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="pull-right mt-4 text-right">
-                    <hr>
-                    <h3><b>Total :</b> {{ $sumaSubTotal }}</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger" onclick="eliminaVenta()">ELIMINAR VENTA</button>
+                    </div>
+                    <div class="col-md-6">
+                        <a href="{{ url('Producto/listado') }}">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">CANCELAR</button>
+                        </a>
+                    </div>
                 </div>
-                <div class="clearfix"></div>
-                <hr>
-                {{-- <div class="text-right">
-                    <button class="btn btn-danger" type="submit"> Proceed to payment </button>
-                    <button class="btn btn-default print-page" type="button"> <span><i class="fa fa-print"></i> Print</span>
-                    </button>
-                </div> --}}
             </div>
         </div>
     </div>
@@ -97,67 +147,15 @@
         });
     });
 
-</script>
-<script>
-    function nueva_marca()
+    function eliminaVenta()
     {
-        $("#modal_marcas").modal('show');
+        $("#modalElimina").modal("show");
     }
 
-    function guarda_marca()
+    function enviaDatosEliminar()
     {
-        var nombre_marca = $("#nombre_marca").val();
-        if(nombre_marca.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Una nueva marca fue registrada.',
-                'success'
-            )
-        }
+
     }
 
-    function editar(id, nombre)
-    {
-        $("#id").val(id);
-        $("#nombre").val(nombre);
-        $("#editar_marcas").modal('show');
-    }
-
-    function actualiza_marca()
-    {
-        var id = $("#id").val();
-        var nombre = $("#nombre").val();
-        if(nombre.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Marca actualizada correctamente.',
-                'success'
-            )
-        }
-    }
-
-    function eliminar(id, nombre)
-    {
-        Swal.fire({
-            title: 'Quieres borrar ' + nombre + '?',
-            text: "Luego no podras recuperarlo!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, estoy seguro!',
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Excelente!',
-                    'La marca fue eliminada',
-                    'success'
-                ).then(function() {
-                    window.location.href = "{{ url('Marca/eliminar') }}/"+id;
-                });
-            }
-        })
-    }
 </script>
 @endsection
