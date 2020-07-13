@@ -194,8 +194,8 @@
                                                 <div class="col-sm-4">
                                                     @foreach($grupos as $key => $grupo)
                                                         <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="customCheck{{$key}}">
-                                                            <label class="custom-control-label" for="customCheck{{$key}}">{{ $grupo->nombre }}</label>
+                                                            <input type="checkbox" class="custom-control-input" value="{{ $grupo->id }}" id="customCheck{{$key}}" name="grupos[]">
+                                                            <label for="customCheck{{$key}}" class="custom-control-label">{{ $grupo->nombre }}</label>
                                                         </div>
                                                     @endforeach
                                                 </div>
