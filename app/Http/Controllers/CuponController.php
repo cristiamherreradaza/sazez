@@ -100,7 +100,17 @@ class CuponController extends Controller
     {
         $cupon = Cupone::find($id);
         $almacenes = Almacene::get();
-        return view('cupon.ver')->with(compact('cupon', 'almacenes'));
+        if($cupon->producto_id)             // Es un cupon por un producto
+        {
+            return view('cupon.ver')->with(compact('cupon', 'almacenes'));
+        }
+        else                                // Es un cupon por una promocion
+        {
+            $promocion = Combo::find($cupon->combo_id);
+            $productos_promocion = CombosProducto::where('combo_id', $promocion->id)->get();
+            return view('cupon.ver_promocion')->with(compact('cupon', 'almacenes', 'promocion', 'productos_promocion'));
+        }
+        
     }
 
     public function ajaxBuscaProducto(Request $request)

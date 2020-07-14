@@ -1,13 +1,29 @@
 @component('mail::message')
-# Introduction
 
-The body of your message.
-{{ $promocion->nombre }}
+# Felicitaciones
+Fuiste acreedor a {{ $promocion->nombre }} que contiene:
+@foreach($productos_promocion as $producto)
++ **Producto:** {{ $producto->producto->nombre }}, {{ $producto->cantidad }} unidad(es) a {{ round($producto->precio) }} Bs.
+@endforeach
+<br>
+Puedes efectuar esta promocion en:
+<br>
+@foreach($tienda as $sucursal)
++ {{ $sucursal->nombre }}, {{ $sucursal->direccion }}. <br>
+@endforeach
 
-@component('mail::button', ['url' => ''])
-Button Text
+@component('mail::promotion')
+
+![Qr code][qr]
+
+[qr]: {{ asset('qrs/' .$codigo. '.png') }}
+
+<br>
+Cupón valido hasta {{ $fecha_final }}.
+
 @endcomponent
 
-Thanks,<br>
-{{ config('app.name') }}
+Al momento de tu compra, muestra este código y se realizara el descuento<br>
+Visitanos y conoce nuestros ofertas.
+
 @endcomponent
