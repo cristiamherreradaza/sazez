@@ -12,6 +12,7 @@ use App\Almacene;
 use App\Producto;
 use App\Movimiento;
 use App\Cotizacione;
+use App\Configuracione;
 use App\VentasProducto;
 use Illuminate\Http\Request;
 use App\CotizacionesProducto;
@@ -220,16 +221,15 @@ class VentaController extends Controller
     public function ajax_listado()
     {
         $almacen = Auth::user()->almacen_id;
-        $ventas = DB::table('ventas')
-            ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
-            ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
-            ->select(
+        $ventas = Venta::select(
                 'ventas.id', 
                 'almacenes.nombre as almacene', 
                 'users.name as user', 
                 'ventas.total',
                 'ventas.fecha'
-            );
+            )
+            ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
+            ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id');
 
         return Datatables::of($ventas)
             ->addColumn('action', function ($ventas) {
@@ -242,12 +242,18 @@ class VentaController extends Controller
     {
         $datosVenta = Venta::find($ventaId);
         $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
+        $opcionesEliminaVenta = Configuracione::where('descripcion', 'comboEliminaVenta')->get();
         // dd($datosVenta);
-        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta'));;
+        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta'));
     }
 
     public function elimina(Request $request)
     {
-        
+        $venta = Venta::find($request->ventaId);
+        $venta->delete();
+
+        VentasProducto::where('venta_id', $request->ventaId)->delete();
+        return redirect('Venta/listado');
+        // dd($request->all());
     }
 }

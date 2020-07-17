@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-striped no-wrap" id="tablaProductosEncontrados">
+    <table class="tablesaw table-striped table-hover table-bordered table no-wrap" id="tablaProductosEncontrados">
         <thead>
             <tr>
                 <th>ID</th>

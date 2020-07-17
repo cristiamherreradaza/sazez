@@ -228,7 +228,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive m-t-40">
-                                <table id="tablaPedido" class="table table-bordered table-striped">
+                                <table id="tablaPedido" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
                                             <th>Codigo</th>
@@ -262,7 +262,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive m-t-40">
-                                <table id="tablaPedidoMayor" class="table table-bordered table-striped">
+                                <table id="tablaPedidoMayor" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
                                             <th>Codigo</th>

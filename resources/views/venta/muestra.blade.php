@@ -16,19 +16,29 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <h4 class="card-title">Escriba el porque desea eliminar la venta</h4>
-                <form class="mt-3" action="{{ url('Producto/guarda') }}" method="POST">
+                <h4 class="card-title">Seleccione el motivo</h4>
+                <form class="mt-3" action="{{ url('Venta/elimina') }}" method="POST" id="formularioEliminaVenta">
+                    @csrf
                     <div class="form-group">
-                        <textarea class="form-control" rows="3" maxlength=500 required></textarea>
+                        <input type="hidden" value="{{ $datosVenta->id }}" name="ventaId">
+                        <select name="opcion_elimina" id="opcion_elimina" class="form-control" onchange="cambiaOpcionEliminaVenta()" required>
+                            <option value="">Seleccione una opcion</option>
+                            @foreach ($opcionesEliminaVenta as $oev)
+                            <option value="{{ $oev->valor }}">{{ $oev->valor }}</option>
+                            @endforeach
+                        </select>
                     </div>
+
+                    {{-- <div class="form-group">
+                        <textarea class="form-control" rows="3" maxlength=500 id="comentario_elimina" name="comentario_elimina" required></textarea>
+                    </div> --}}
+
                     <div class="row">
                         <div class="col-md-6">
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="eliminaVenta()">ELIMINAR VENTA</button>
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="enviaDatosEliminar()">ELIMINAR VENTA</button>
                         </div>
                         <div class="col-md-6">
-                            <a href="{{ url('Producto/listado') }}">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">CANCELAR</button>
-                            </a>
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-inverse" onclick="cancelaElimnacion()">CANCELAR</button>
                         </div>
                     </div>
                 </form>
@@ -116,10 +126,10 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
-                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger" onclick="eliminaVenta()">ELIMINAR VENTA</button>
+                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger" onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
                     </div>
                     <div class="col-md-6">
-                        <a href="{{ url('Producto/listado') }}">
+                        <a href="{{ url('Venta/listado') }}">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">CANCELAR</button>
                         </a>
                     </div>
@@ -147,14 +157,46 @@
         });
     });
 
-    function eliminaVenta()
+    function muestraFormularioEliminaVenta()
     {
         $("#modalElimina").modal("show");
     }
 
     function enviaDatosEliminar()
     {
+        if ($("#formularioEliminaVenta")[0].checkValidity()) {
 
+        Swal.fire({
+            type: 'success',
+            title: 'Excelente!',
+            text: 'Venta Eliminada'
+        })
+        $("#formularioEliminaVenta").submit();
+
+        }else{
+            $("#formularioEliminaVenta")[0].reportValidity();
+        }
+    }
+
+    function cambiaOpcionEliminaVenta()
+    {
+        let opcionEliminaVenta = $("#opcion_elimina").val();
+            $.ajax({
+            url: "{{ url('Cliente/ajaxEditaCliente') }}",
+            data: { clienteId: clienteId },
+            type: 'POST',
+            success: function(data) {
+                $("#ajaxFormEditaCliente").html(data);
+            }
+        });
+
+        // $("#comentario_elimina").val(opcionEliminaVenta);
+        // console.log(opcionEliminaVenta);
+    }
+
+    function cancelaElimnacion()
+    {
+        $("#modalElimina").modal("hide");
     }
 
 </script>
