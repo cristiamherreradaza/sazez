@@ -87,18 +87,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <!-- <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">Inicio de promocion</label>
-                                        <input type="text" class="form-control" placeholder="Inicio" id="inicio_promocion" name="inicio_promocion" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">Fin de promocion</label>
-                                        <input type="text" class="form-control" placeholder="Fin" id="fin_promocion" name="fin_promocion" readonly>
-                                    </div>
-                                </div> -->
                             </div>
 
                             <div id="muestra_detalle" style="display: none">
@@ -194,7 +182,7 @@
                                                 <div class="col-sm-4">
                                                     @foreach($grupos as $key => $grupo)
                                                         <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" value="{{ $grupo->id }}" id="customCheck{{$key}}" name="grupos[]">
+                                                            <input type="checkbox" class="custom-control-input cajas" value="{{ $grupo->id }}" id="customCheck{{$key}}" name="grupos[]">
                                                             <label for="customCheck{{$key}}" class="custom-control-label">{{ $grupo->nombre }}</label>
                                                         </div>
                                                     @endforeach
@@ -207,7 +195,7 @@
                             
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR CUP&Oacute;N</button>
+                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" id="guarda_cupon" onclick="validaItems()">GUARDAR CUP&Oacute;N</button>
                                 </div>
                             </div>
                         </div>
@@ -283,14 +271,51 @@
         });
     });
 
-    //Funcion para ocultar/mostrar cupon o promocion
+    //Funcion para colocar todos los valores en ""
+    $( function() {
+        //$("#guarda_cupon").prop("disabled", true);
+        $("#tipo_oferta").val("");
+        $("#fecha_inicio").val("");
+        $("#fecha_fin").val("");
+        $("#tienda").val("");
+        $("#termino").val("");
+        $("#producto_id").val("");
+        $("#producto_nombre").val("");
+        $("#producto_precio").val(0);
+        $("#producto_descuento").val(0);
+        $("#producto_total").val(0);
+        $("#promocion").val("");
+        $("#tipo_envio").val("");
+        $("#cliente").val("");
+        $("#email").val("");
+        $(".cajas").prop("checked", false);
+    });
+
+    //Funcion para ocultar/mostrar datos de cupon/promocion
     $( function() {
         $("#oculta_detalle").hide();
         $("#detalle_promocion").hide();
         $("#tipo_oferta").change( function() {
+            if($(this).val() == "") {
+                $("#termino").val("");
+                $("#producto_id").val("");
+                $("#producto_nombre").val("");
+                $("#producto_precio").val(0);
+                $("#producto_descuento").val(0);
+                $("#producto_total").val(0);
+                $("#promocion").val("");
+                
+                
+                //$("#guarda_cupon").prop("disabled", true);
+                $("#detalle_promocion").hide();
+                $("#listadoProductosAjax").hide();
+                $("#oculta_detalle").hide();
+                $("#muestra_detalle").hide();
+            }
             if ($(this).val() == "1") {
                 $("#detalle_promocion").hide();
                 $("#oculta_detalle").show();
+                //$("#guarda_cupon").prop("disabled", false);
             }
             if ($(this).val() == "2") {
                 $("#oculta_detalle").hide();
@@ -298,22 +323,31 @@
                 $("#detalle_promocion").show();
             }
         });
-
-        // $("#cliente").prop("disabled", true);
-        // $("#email").prop("disabled", true);
-        // $("#tipo_envio").val("");
-
-        // $("#tipo_envio").change( function() {
-        //     if ($(this).val() == "1") {
-        //         $("#cliente").prop("disabled", false);
-        //         $("#email").prop("disabled", true);
-        //     }
-        //     if ($(this).val() == "2") {
-        //         $("#cliente").prop("disabled", true);
-        //         $("#email").prop("disabled", false);
-        //     }
-        // });
     });
+
+    // Funcion para ocultar datos de promocion
+    function validaItems()
+    {   
+        if(($("#tipo_envio").val().length!=0 && ($("#cliente").val().length!=0 || $("#email").val().length!=0)) || ($(".cajas").is(':checked')) && ($("#producto_id").val().length!=0 || $("#promocion").val().length!=0))
+        {
+            Swal.fire(
+                'Excelente!',
+                'Procesando cupon...',
+                'success'
+            )
+            swal.showLoading();
+        }
+        else
+        {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que completar datos en el formulario!'
+            })
+            event.preventDefault();
+        }
+
+    }
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();

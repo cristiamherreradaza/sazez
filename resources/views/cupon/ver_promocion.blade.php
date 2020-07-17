@@ -8,24 +8,24 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-4">
         <div class="card text-center" id="printableArea">
             <div class="card-header">
                 SAZEZ
             </div>
             <!-- contenido de impresion -->
             <div class="card-body">
-                <h2>CUPÓN DE DESCUENTO</h2>
+                <h2>PROMOCION DE DESCUENTO</h2>
                 <div class="row">
-                    <div class="col-md-4"></div>
-                    <ul class="text-left col-md-4">
-                        <li><strong> PRODUCTO : </strong><br> {{ $cupon->producto->nombre }}</li>
-                        @php
-                            $precio = App\Precio::where('producto_id', $cupon->producto->id)->where('escala_id', 1)->first();
-                            $precio = round($precio->precio);
-                        @endphp
-                        <li><strong> PRECIO NORMAL : </strong><br> {{ $precio }} Bs.</li>
-                        <li><strong> PRECIO DESCUENTO : </strong><br> {{ round($cupon->monto_total) }} Bs.</li>
+                    <ul class="text-left">
+                        <li><strong> NOMBRE DE PROMOCIÓN : </strong><br> {{ $promocion->nombre }}</li>
+                        <li><strong> PRODUCTOS INCLUIDOS: </strong><br>
+                            @foreach($productos_promocion as $key => $producto)
+                                <strong>Producto {{ ($key+1) }}:</strong> {{ $producto->producto->nombre }}<br>
+                                <strong>Cantidad:</strong> {{ $producto->cantidad }}<br>
+                                <strong>Precio:</strong> {{ round($producto->precio) }} Bs.<br>
+                            @endforeach
+                        </li>
                         <li>
                             <strong> TIENDA : </strong><br> 
                             @if($cupon->almacene_id)
@@ -41,7 +41,6 @@
                             @endif
                         </li>
                     </ul>
-                    <div class="col-md-4"></div>
                 </div>
                 <img src="{{ asset('qrs/' .$cupon->codigo. '.png') }}" alt="">
                 <br>
@@ -58,7 +57,9 @@
             </div>
         </div>
     </div>
-    <button id="botonImprimir" class="btn btn-success btn-block print-page" type="button"> <span><i class="fa fa-print"></i> Imprimir</span></button>
+</div>
+<div class="row">
+<button id="botonImprimir" class="btn btn-success btn-block col-md-4 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
 </div>
 @stop
 
