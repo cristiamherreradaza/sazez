@@ -30,7 +30,7 @@ class ConfiguracionesTableSeeder extends Seeder
                 'valor' => 'Producto defectuoso'
             ],
             [
-                'descripcion' => 'ComboCambiaProductoVenta',
+                'descripcion' => 'comboCambiaProductoVenta',
                 'valor' => 'Producto '
             ]
         ]);

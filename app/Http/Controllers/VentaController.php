@@ -243,14 +243,21 @@ class VentaController extends Controller
         $datosVenta = Venta::find($ventaId);
         $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
         $opcionesEliminaVenta = Configuracione::where('descripcion', 'comboEliminaVenta')->get();
+        $opcionesCambiaProductoVenta = Configuracione::where('descripcion', 'comboCambiaProductoVenta')->get();
         // dd($datosVenta);
-        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta'));
+        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta'));
     }
 
     public function elimina(Request $request)
     {
         $venta = Venta::find($request->ventaId);
+        $venta->descripcion = $request->opcion_elimina;
+        $venta->save();
+
+        $venta = Venta::find($request->ventaId);
         $venta->delete();
+
+        Movimiento::where('venta_id', $request->ventaId)->delete();
 
         VentasProducto::where('venta_id', $request->ventaId)->delete();
         return redirect('Venta/listado');

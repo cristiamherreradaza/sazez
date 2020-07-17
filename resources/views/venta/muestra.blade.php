@@ -48,6 +48,51 @@
 </div><!-- /.modal -->
 {{-- fin modal elimina venta --}}
 
+{{-- modal cambia producto --}}
+<div id="modalCambiaProducto" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="info-header-modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-danger">
+                <h4 class="modal-title text-white" id="danger-header-modalLabel">CAMBIA PRODUCTO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <h4 class="card-title">Seleccione el motivo</h4>
+                <form class="mt-3" action="{{ url('Venta/elimina') }}" method="POST" id="formularioEliminaVenta">
+                    @csrf
+                    <div class="form-group">
+                        <input type="hidden" value="{{ $datosVenta->id }}" name="ventaId">
+                        <select name="opcion_elimina" id="opcion_elimina" class="form-control"
+                            onchange="cambiaOpcionEliminaVenta()" required>
+                            <option value="">Seleccione una opcion</option>
+                            @foreach ($opcionesCambiaProductoVenta as $ocv)
+                            <option value="{{ $ocv->valor }}">{{ $ocv->valor }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- <div class="form-group">
+                        <textarea class="form-control" rows="3" maxlength=500 id="comentario_elimina" name="comentario_elimina" required></textarea>
+                    </div> --}}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success"
+                                onclick="enviaDatosEliminar()">CAMBIAR PRODUCTO</button>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-inverse"
+                                onclick="cancelaElimnacion()">CANCELAR</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{-- info modal cambia CambiaProductoo --}}
+
 <div class="card card-body">
     <div class="invoice-123" id="printableArea">
         <div class="row pt-3">
@@ -62,7 +107,6 @@
                 <div class="table-responsive mt-5" style="clear: both;">
                     <table class="tablesaw table-striped table-hover table-bordered table no-wrap">
                         <thead>
-                            <tr>
                                 <th class="text-center">#</th>
                                 <th>CODIGO</th>
                                 <th>NOMBRE</th>
@@ -100,9 +144,10 @@
                                     @endphp
                                     <td class="text-right">{{ $subTotal }}</td>
                                     <td>
-                                        <button type="button" class="btnSeleccionaMayor btn btn-info" data-venta="mayor" title="VENTA POR MAYOR"><i
-                                            class="fas fa-exchange-alt"></i></button>
-                                        </td>
+                                        <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto()">
+                                            <i class="fas fa-exchange-alt"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -197,6 +242,11 @@
     function cancelaElimnacion()
     {
         $("#modalElimina").modal("hide");
+    }
+
+    function cambiaProducto()
+    {
+        $("#modalCambiaProducto").modal("show");
     }
 
 </script>
