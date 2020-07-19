@@ -201,6 +201,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Venta/ajax_listado', 'VentaController@ajax_listado');
     Route::get('Venta/muestra/{ventaId}', 'VentaController@muestra');
     Route::post('Venta/elimina', 'VentaController@elimina');
+    Route::post('Venta/ajaxCambiaProducto', 'VentaController@ajaxCambiaProducto');
     
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');

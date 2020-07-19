@@ -263,4 +263,10 @@ class VentaController extends Controller
         return redirect('Venta/listado');
         // dd($request->all());
     }
+
+    public function ajaxCambiaProducto(Request $request)
+    {
+        dd($request->all());
+       // $productoVenta = VentasProducto::where('venta_id', $request->productoId);
+    }
 }

@@ -53,23 +53,47 @@
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-danger">
-                <h4 class="modal-title text-white" id="danger-header-modalLabel">CAMBIA PRODUCTO</h4>
+            <div class="modal-header modal-colored-header bg-info">
+                <h4 class="modal-title text-white" id="danger-header-modalLabel">CAMBIA PRODUCTO: <span id="nombreCambiaProducto"></span></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <h4 class="card-title">Seleccione el motivo</h4>
-                <form class="mt-3" action="{{ url('Venta/elimina') }}" method="POST" id="formularioEliminaVenta">
+                
+                <form class="mt-3" action="" method="POST" id="formularioCambiaProducto">
                     @csrf
-                    <div class="form-group">
-                        <input type="hidden" value="{{ $datosVenta->id }}" name="ventaId">
-                        <select name="opcion_elimina" id="opcion_elimina" class="form-control"
-                            onchange="cambiaOpcionEliminaVenta()" required>
-                            <option value="">Seleccione una opcion</option>
-                            @foreach ($opcionesCambiaProductoVenta as $ocv)
-                            <option value="{{ $ocv->valor }}">{{ $ocv->valor }}</option>
-                            @endforeach
-                        </select>
+
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="hidden" value="{{ $datosVenta->id }}" name="ventaModificaId" id="ventaModificaId">
+                                <input type="hidden" value="" name="productoModificaId" id="productoModificaId">
+                                <label>PRODUCTO</label>
+                                <input type="text" class="form-control" name="nombre_producto_cambio" id="nombre_producto_cambio" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>COMP</label>
+                                <input type="text" class="form-control" name="cantidad_producto" id="cantidad_producto" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>A CAMBIAR</label>
+                                <input type="number" class="form-control" name="cantidad_producto_a_cambiar" min="1" id="cantidad_producto_a_cambiar">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>MOTIVO</label>
+                                <select name="opcion_elimina" id="opcion_cambia" class="form-control" required>
+                                    <option value="">Seleccione una opcion</option>
+                                    @foreach ($opcionesCambiaProductoVenta as $ocv)
+                                    <option value="{{ $ocv->valor }}">{{ $ocv->valor }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     {{-- <div class="form-group">
@@ -79,7 +103,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-success"
-                                onclick="enviaDatosEliminar()">CAMBIAR PRODUCTO</button>
+                                onclick="enviaDatosCambia()">CAMBIAR PRODUCTO</button>
                         </div>
                         <div class="col-md-6">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-inverse"
@@ -144,7 +168,7 @@
                                     @endphp
                                     <td class="text-right">{{ $subTotal }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto()">
+                                        <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}')">
                                             <i class="fas fa-exchange-alt"></i>
                                         </button>
                                     </td>
@@ -223,10 +247,10 @@
         }
     }
 
-    function cambiaOpcionEliminaVenta()
+    /*function cambiaOpcionEliminaVenta()
     {
         let opcionEliminaVenta = $("#opcion_elimina").val();
-            $.ajax({
+        $.ajax({
             url: "{{ url('Cliente/ajaxEditaCliente') }}",
             data: { clienteId: clienteId },
             type: 'POST',
@@ -237,16 +261,37 @@
 
         // $("#comentario_elimina").val(opcionEliminaVenta);
         // console.log(opcionEliminaVenta);
-    }
+    }*/
 
     function cancelaElimnacion()
     {
         $("#modalElimina").modal("hide");
     }
 
-    function cambiaProducto()
+    function cambiaProducto(productoId, ventaId, nombreProducto, cantidad)
     {
+        $("#nombre_producto_cambio").val(nombreProducto);
+        $("#cantidad_producto").val(parseInt(cantidad));
+
+        $("#cantidad_producto_a_cambiar").attr({"max":cantidad});
+        $("#nombreCambiaProducto").html(nombreProducto);
+        $("#productoModificaId").val(productoId);
         $("#modalCambiaProducto").modal("show");
+    }
+
+    function enviaDatosCambia()
+    {
+        let productoCambiaId = $("#productoModificaId").val();
+        let ventaCambiaId = $("#ventaModificaId").val();
+        let opcionCambia = $("#opcion_cambia").val();
+        $.ajax({
+            url: "{{ url('Venta/ajaxCambiaProducto') }}",
+            data: {"_token": "{{ csrf_token() }}", "productoId": productoCambiaId, "ventaId": ventaCambiaId, "opcionCambia": opcionCambia },
+            type: 'POST',
+            success: function(data) {
+                $("#ajaxFormEditaCliente").html(data);
+            }
+        });
     }
 
 </script>
