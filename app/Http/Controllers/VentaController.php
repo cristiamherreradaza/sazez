@@ -244,8 +244,12 @@ class VentaController extends Controller
         $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
         $opcionesEliminaVenta = Configuracione::where('descripcion', 'comboEliminaVenta')->get();
         $opcionesCambiaProductoVenta = Configuracione::where('descripcion', 'comboCambiaProductoVenta')->get();
+        $cambiados = Movimiento::withTrashed()
+                        ->where('venta_id', $ventaId)
+                        ->where('estado', 'Devuelto')
+                        ->get();
         // dd($datosVenta);
-        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta'));
+        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta', 'cambiados'));
     }
 
     public function elimina(Request $request)
@@ -266,7 +270,53 @@ class VentaController extends Controller
 
     public function ajaxCambiaProducto(Request $request)
     {
-        dd($request->all());
-       // $productoVenta = VentasProducto::where('venta_id', $request->productoId);
+        dd($request->all());    
+        $ventaProducto = VentasProducto::find($request->ventaId);
+
+        $consultaMovimiento = Movimiento::where('venta_id', $request->ventaId) 
+                                ->where('producto_id', $request->productoId)
+                                ->first();
+
+        $cantidadSalida = $consultaMovimiento->salida;
+
+        $nuevaCantidad = $cantidadSalida-$request->cantidad;
+        $movimientoId = $consultaMovimiento->id;
+
+        $editaMovimiento = Movimiento::find($movimientoId);
+        $editaMovimiento->salida      = $nuevaCantidad;
+        $editaMovimiento->devuelto    = 'Si';
+        $editaMovimiento->descripcion = $request->opcionCambia;
+        $editaMovimiento->save();
+
+        // registramos la devolucion
+        $nuevoMovimiento               = new Movimiento();
+        $nuevoMovimiento->user_id      = $consultaMovimiento->user_id;
+        $nuevoMovimiento->producto_id  = $consultaMovimiento->producto_id;
+        $nuevoMovimiento->almacene_id  = $consultaMovimiento->almacene_id;
+        $nuevoMovimiento->venta_id     = $consultaMovimiento->venta_id;
+        $nuevoMovimiento->precio_venta = $consultaMovimiento->precio_venta;
+        $nuevoMovimiento->ingreso      = $request->cantidad;
+        $nuevoMovimiento->deleted_at   = date("Y-m-d H:i:s");
+        $nuevoMovimiento->estado       = "Devuelto";
+        $nuevoMovimiento->save();
+
+        // registramos la salida
+        $nuevoMovimiento = new Movimiento();
+        $nuevoMovimiento->user_id      = $consultaMovimiento->user_id;
+        $nuevoMovimiento->producto_id  = $consultaMovimiento->producto_id;
+        $nuevoMovimiento->almacene_id  = $consultaMovimiento->almacene_id;
+        $nuevoMovimiento->venta_id     = $consultaMovimiento->venta_id;
+        $nuevoMovimiento->precio_venta = $consultaMovimiento->precio_venta;
+        $nuevoMovimiento->salida       = $request->cantidad;
+        $nuevoMovimiento->estado       = $consultaMovimiento->estado;
+        $nuevoMovimiento->save();
+
+        return redirect("Venta/muestra/$request->ventaId");
+        // $productoVenta = VentasProducto::where('venta_id', $request->productoId);
+    }
+
+    public function ajaxMuestraDevueltos(Request $request, $ventaId)
+    {
+
     }
 }

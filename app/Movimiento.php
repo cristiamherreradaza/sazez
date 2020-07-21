@@ -22,6 +22,8 @@ class Movimiento extends Model
         'fecha',
         'numero',
         'estado',
+        'devuelto',
+        'descripcion',
         'deleted_at',
     ];
 

@@ -54,7 +54,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-colored-header bg-info">
-                <h4 class="modal-title text-white" id="danger-header-modalLabel">CAMBIA PRODUCTO: <span id="nombreCambiaProducto"></span></h4>
+                <h4 class="modal-title text-white" id="danger-header-modalLabel">CAMBIA PRODUCTO </h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
@@ -67,7 +67,8 @@
                             <div class="form-group">
                                 <input type="hidden" value="{{ $datosVenta->id }}" name="ventaModificaId" id="ventaModificaId">
                                 <input type="hidden" value="" name="productoModificaId" id="productoModificaId">
-                                <label>PRODUCTO</label>
+                                <input type="hidden" value="" name="cantidadCambio" id="cantidadCambio">
+                                <label>PRODUCTO </label>
                                 <input type="text" class="form-control" name="nombre_producto_cambio" id="nombre_producto_cambio" readonly>
                             </div>
                         </div>
@@ -81,6 +82,7 @@
                             <div class="form-group">
                                 <label>A CAMBIAR</label>
                                 <input type="number" class="form-control" name="cantidad_producto_a_cambiar" min="1" id="cantidad_producto_a_cambiar">
+                                <small id="nombrePaqueteCambio" class="badge badge-default badge-info form-text text-white float-left"></small>
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -95,6 +97,7 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
 
                     {{-- <div class="form-group">
                         <textarea class="form-control" rows="3" maxlength=500 id="comentario_elimina" name="comentario_elimina" required></textarea>
@@ -168,7 +171,7 @@
                                     @endphp
                                     <td class="text-right">{{ $subTotal }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}')">
+                                        <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}')">
                                             <i class="fas fa-exchange-alt"></i>
                                         </button>
                                     </td>
@@ -190,6 +193,38 @@
                             </tr>
                         </tfoot>
                     </table>
+                    {{-- {{ dd($cambiados->count()) }} --}}
+                    @if ($cambiados->count() >0 )
+                        <h2 class="text-info">PRODUCTOS CAMBIADOS</h2>
+                        <table class="tablesaw table-striped table-hover table-bordered table no-wrap">
+                            <thead>
+                                <th class="text-center">#</th>
+                                <th>CODIGO</th>
+                                <th>NOMBRE</th>
+                                <th>MARCA</th>
+                                <th>TIPO</th>
+                                <th class="text-right"></th>
+                                <th class="text-right">PRECIO</th>
+                                <th class="text-right">CANTIDAD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cambiados as $con => $pc)
+                                <tr>
+                                    <td class="text-center">{{ ++$con }}</td>
+                                    <td>{{ $pc->producto->codigo }}</td>
+                                    <td>{{ $pc->producto->nombre }}</td>
+                                    <td>{{ $pc->producto->marca->nombre }}</td>
+                                    <td>{{ $pc->producto->tipo->nombre }}</td>
+                                    <td class="text-right"><b>{{ $pc->cantidad }}</td>
+                                        <td class="text-right">{{ $pc->precio_venta }}</td>
+                                    <td class="text-right"><b>{{ $pc->ingreso }}</b></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+
                 </div>
             </div>
             <div class="col-md-12">
@@ -268,10 +303,12 @@
         $("#modalElimina").modal("hide");
     }
 
-    function cambiaProducto(productoId, ventaId, nombreProducto, cantidad)
+    function cambiaProducto(productoId, ventaId, nombreProducto, cantidad, nombrePaquete)
     {
         $("#nombre_producto_cambio").val(nombreProducto);
         $("#cantidad_producto").val(parseInt(cantidad));
+        $("#cantidad_producto_a_cambiar").val(parseInt(cantidad));
+        $("#nombrePaqueteCambio").html(nombrePaquete);
 
         $("#cantidad_producto_a_cambiar").attr({"max":cantidad});
         $("#nombreCambiaProducto").html(nombreProducto);
@@ -284,12 +321,14 @@
         let productoCambiaId = $("#productoModificaId").val();
         let ventaCambiaId = $("#ventaModificaId").val();
         let opcionCambia = $("#opcion_cambia").val();
+        let cantidadCambio = $("#cantidad_producto_a_cambiar").val();
         $.ajax({
             url: "{{ url('Venta/ajaxCambiaProducto') }}",
-            data: {"_token": "{{ csrf_token() }}", "productoId": productoCambiaId, "ventaId": ventaCambiaId, "opcionCambia": opcionCambia },
+            data: {"_token": "{{ csrf_token() }}", "productoId": productoCambiaId, "ventaId": ventaCambiaId, "opcionCambia": opcionCambia, "cantidad": cantidadCambio },
             type: 'POST',
             success: function(data) {
-                $("#ajaxFormEditaCliente").html(data);
+                // $("#ajaxFormEditaCliente").html(data);
+
             }
         });
     }
