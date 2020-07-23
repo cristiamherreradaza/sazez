@@ -271,6 +271,7 @@ class VentaController extends Controller
     public function ajaxCambiaProducto(Request $request)
     {
         $ventaProducto = VentasProducto::find($request->ventaProductoId);
+
         if ($ventaProducto->precio_venta_mayor > 0){
             $cantidadPaquete = $ventaProducto->escala->minimo;
         }else{
@@ -313,7 +314,7 @@ class VentaController extends Controller
         $nuevoMovimiento->almacene_id  = $consultaMovimiento->almacene_id;
         $nuevoMovimiento->venta_id     = $consultaMovimiento->venta_id;
         $nuevoMovimiento->precio_venta = $consultaMovimiento->precio_venta;
-        $nuevoMovimiento->salida       = $request->cantidad;
+        $nuevoMovimiento->salida       = $cantidadMultiplicada;
         $nuevoMovimiento->estado       = $consultaMovimiento->estado;
         $nuevoMovimiento->save();
 

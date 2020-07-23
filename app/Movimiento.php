@@ -15,6 +15,7 @@ class Movimiento extends Model
         'almacene_id',
         'pedido_id',
         'venta_id',
+        'escala_id',
         'precio_compra',
         'precio_venta',
         'ingreso',
@@ -40,6 +41,21 @@ class Movimiento extends Model
     public function almacen()
     {
         return $this->belongsTo('App\Almacene');
+    }
+
+    public function pedido()
+    {
+        return $this->belongsTo('App\Pedido');
+    }
+
+    public function venta()
+    {
+        return $this->belongsTo('App\Venta');
+    }
+
+    public function escala()
+    {
+        return $this->belongsTo('App\Escala');
     }
 
 }
