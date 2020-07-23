@@ -59,8 +59,6 @@ class VentaController extends Controller
             'pedido_id'      => 1
         ]);
 
-
-        // return view('venta.ajaxBuscaProducto')->with(compact('productos'));
     }
 
     public function adicionaItem(Request $request)
@@ -202,6 +200,7 @@ class VentaController extends Controller
                 $movimientoMayor->user_id      = Auth::user()->id;
                 $movimientoMayor->almacene_id  = Auth::user()->almacen_id;
                 $movimientoMayor->venta_id     = $venta_id;
+                $movimientoMayor->escala_id    = $request->escala_id_m[$llm];
                 $movimientoMayor->producto_id  = $llm;
                 $movimientoMayor->precio_venta = $request->precio_m[$llm];
                 $movimientoMayor->salida       = $cantidadVendida;
@@ -270,18 +269,20 @@ class VentaController extends Controller
 
     public function ajaxCambiaProducto(Request $request)
     {
+        dd($request->all());    
+
         $ventaProducto = VentasProducto::find($request->ventaProductoId);
 
         if ($ventaProducto->precio_venta_mayor > 0){
             $cantidadPaquete = $ventaProducto->escala->minimo;
         }else{
-            $cantidadPaquete = $ventaProducto->cantidad;
+            $cantidadPaquete = 1;
         }
-        // dd($cantidadPaquete);    
         $cantidadMultiplicada = $cantidadPaquete*$request->cantidad;
 
         $consultaMovimiento = Movimiento::where('venta_id', $request->ventaId) 
                                 ->where('producto_id', $request->productoId)
+                                ->where('escala_id', $ventaProducto->escala_id)
                                 ->first();
 
         $cantidadSalida = $consultaMovimiento->salida;
@@ -318,7 +319,11 @@ class VentaController extends Controller
         $nuevoMovimiento->estado       = $consultaMovimiento->estado;
         $nuevoMovimiento->save();
 
-        return redirect("Venta/muestra/$request->ventaId");
+        return response()->json([
+            'ventaId' => $request->ventaId
+        ]);
+
+        // return redirect("Venta/muestra/$request->ventaId");
         // $productoVenta = VentasProducto::where('venta_id', $request->productoId);
     }
 

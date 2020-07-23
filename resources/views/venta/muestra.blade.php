@@ -217,8 +217,17 @@
                                     <td>{{ $pc->producto->nombre }}</td>
                                     <td>{{ $pc->producto->marca->nombre }}</td>
                                     <td>{{ $pc->producto->tipo->nombre }}</td>
-                                    <td class="text-right"><b>{{ $pc->cantidad }}</td>
-                                        <td class="text-right">{{ $pc->precio_venta }}</td>
+                                    @if ($pc->escala)
+                                        @php
+                                            $nombreEscala = $pc->escala->nombre
+                                        @endphp
+                                    @else
+                                        @php
+                                            $nombreEscala = ""
+                                        @endphp
+                                    @endif
+                                    <td class="text-right"><b>{{ $nombreEscala }}</td>
+                                    <td class="text-right">{{ $pc->precio_venta }}</td>
                                     <td class="text-right"><b>{{ $pc->ingreso }}</b></td>
                                 </tr>
                                 @endforeach
@@ -325,21 +334,37 @@
         let opcionCambia = $("#opcion_cambia").val();
         let cantidadCambio = $("#cantidad_producto_a_cambiar").val();
         let ventaProductoId = $("#ventaProductoCambia").val();
-        $.ajax({
-            url: "{{ url('Venta/ajaxCambiaProducto') }}",
-            data: {"_token": "{{ csrf_token() }}", 
-                    "productoId": productoCambiaId, 
-                    "ventaId": ventaCambiaId, 
-                    "opcionCambia": opcionCambia, 
-                    "cantidad": cantidadCambio, 
-                    "ventaProductoId": ventaProductoId 
-                    },
-            type: 'POST',
-            success: function(data) {
-                // $("#ajaxFormEditaCliente").html(data);
 
-            }
-        });
+        if ($("#formularioCambiaProducto")[0].checkValidity()) {
+
+            $.ajax({
+                url: "{{ url('Venta/ajaxCambiaProducto') }}",
+                data: {"_token": "{{ csrf_token() }}", 
+                        "productoId": productoCambiaId, 
+                        "ventaId": ventaCambiaId, 
+                        "opcionCambia": opcionCambia, 
+                        "cantidad": cantidadCambio, 
+                        "ventaProductoId": ventaProductoId 
+                        },
+                type: 'POST',
+                success: function(data) {
+                    // $("#ajaxFormEditaCliente").html(data);
+                    // window.location.href = "{{ url("Venta/muestra") }}/"+data.ventaId;
+                }
+            });
+
+
+        /*Swal.fire({
+            type: 'success',
+            title: 'Excelente!',
+            text: 'Venta Eliminada'
+        })*/
+        // $("#formularioEliminaVenta").submit();
+
+        }else{
+            $("#formularioCambiaProducto")[0].reportValidity();
+        }
+
     }
 
 </script>
