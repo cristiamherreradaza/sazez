@@ -221,7 +221,7 @@
     <div class="row">
         <div class="col-md-9">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" id="bloqueProductosUnidad" style="display: none;">
                     <div class="card border-info">
                         <div class="card-header bg-info">
                             <h4 class="mb-0 text-white">PRODUCTOS POR UNIDAD</h4>
@@ -255,7 +255,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12" id="bloqueProductosMayor" style="display: none;">
                     <div class="card border-danger">
                         <div class="card-header bg-danger">
                             <h4 class="mb-0 text-white">VENTAS AL POR MAYOR</h4>

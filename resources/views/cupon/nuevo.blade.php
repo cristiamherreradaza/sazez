@@ -179,14 +179,14 @@
                                         <div class="card-body">
                                             <h4>Seleccione a que clientes va dirigido el cupón: </h4>
                                             <div class="form-group row pt-3">
-                                                <div class="col-sm-4">
-                                                    @foreach($grupos as $key => $grupo)
+                                                @foreach($grupos as $key => $grupo)
+                                                    <div class="col-sm-3">
                                                         <div class="custom-control custom-checkbox">
                                                             <input type="checkbox" class="custom-control-input cajas" value="{{ $grupo->id }}" id="customCheck{{$key}}" name="grupos[]">
                                                             <label for="customCheck{{$key}}" class="custom-control-label">{{ $grupo->nombre }}</label>
                                                         </div>
-                                                    @endforeach
-                                                </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
                                     </div>

@@ -68,6 +68,7 @@
                                 <input type="hidden" value="{{ $datosVenta->id }}" name="ventaModificaId" id="ventaModificaId">
                                 <input type="hidden" value="" name="productoModificaId" id="productoModificaId">
                                 <input type="hidden" value="" name="cantidadCambio" id="cantidadCambio">
+                                <input type="hidden" value="" name="ventaProductoCambia" id="ventaProductoCambia">
                                 <label>PRODUCTO </label>
                                 <input type="text" class="form-control" name="nombre_producto_cambio" id="nombre_producto_cambio" readonly>
                             </div>
@@ -308,6 +309,7 @@
         $("#nombre_producto_cambio").val(nombreProducto);
         $("#cantidad_producto").val(parseInt(cantidad));
         $("#cantidad_producto_a_cambiar").val(parseInt(cantidad));
+        $("#ventaProductoCambia").val(ventaId);
         $("#nombrePaqueteCambio").html(nombrePaquete);
 
         $("#cantidad_producto_a_cambiar").attr({"max":cantidad});
@@ -322,9 +324,16 @@
         let ventaCambiaId = $("#ventaModificaId").val();
         let opcionCambia = $("#opcion_cambia").val();
         let cantidadCambio = $("#cantidad_producto_a_cambiar").val();
+        let ventaProductoId = $("#ventaProductoCambia").val();
         $.ajax({
             url: "{{ url('Venta/ajaxCambiaProducto') }}",
-            data: {"_token": "{{ csrf_token() }}", "productoId": productoCambiaId, "ventaId": ventaCambiaId, "opcionCambia": opcionCambia, "cantidad": cantidadCambio },
+            data: {"_token": "{{ csrf_token() }}", 
+                    "productoId": productoCambiaId, 
+                    "ventaId": ventaCambiaId, 
+                    "opcionCambia": opcionCambia, 
+                    "cantidad": cantidadCambio, 
+                    "ventaProductoId": ventaProductoId 
+                    },
             type: 'POST',
             success: function(data) {
                 // $("#ajaxFormEditaCliente").html(data);

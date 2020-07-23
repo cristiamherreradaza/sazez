@@ -270,8 +270,14 @@ class VentaController extends Controller
 
     public function ajaxCambiaProducto(Request $request)
     {
-        dd($request->all());    
-        $ventaProducto = VentasProducto::find($request->ventaId);
+        $ventaProducto = VentasProducto::find($request->ventaProductoId);
+        if ($ventaProducto->precio_venta_mayor > 0){
+            $cantidadPaquete = $ventaProducto->escala->minimo;
+        }else{
+            $cantidadPaquete = $ventaProducto->cantidad;
+        }
+        // dd($cantidadPaquete);    
+        $cantidadMultiplicada = $cantidadPaquete*$request->cantidad;
 
         $consultaMovimiento = Movimiento::where('venta_id', $request->ventaId) 
                                 ->where('producto_id', $request->productoId)
@@ -279,7 +285,7 @@ class VentaController extends Controller
 
         $cantidadSalida = $consultaMovimiento->salida;
 
-        $nuevaCantidad = $cantidadSalida-$request->cantidad;
+        $nuevaCantidad = $cantidadSalida-$cantidadMultiplicada;
         $movimientoId = $consultaMovimiento->id;
 
         $editaMovimiento = Movimiento::find($movimientoId);
@@ -295,7 +301,7 @@ class VentaController extends Controller
         $nuevoMovimiento->almacene_id  = $consultaMovimiento->almacene_id;
         $nuevoMovimiento->venta_id     = $consultaMovimiento->venta_id;
         $nuevoMovimiento->precio_venta = $consultaMovimiento->precio_venta;
-        $nuevoMovimiento->ingreso      = $request->cantidad;
+        $nuevoMovimiento->ingreso      = $cantidadMultiplicada;
         $nuevoMovimiento->deleted_at   = date("Y-m-d H:i:s");
         $nuevoMovimiento->estado       = "Devuelto";
         $nuevoMovimiento->save();

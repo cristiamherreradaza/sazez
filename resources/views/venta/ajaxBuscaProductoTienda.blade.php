@@ -69,7 +69,6 @@
                             $contadorPromos = 0;
                         @endphp
                         @forelse ($promosArray as $pA)
-                        <?php print_r($pA); ?>
                             <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pA }})">P {{ ++$contadorPromos }}</small>
                         @empty
                             
@@ -136,6 +135,7 @@
                         '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
                     ]).draw(false);
                     sumaSubTotales();
+                    $("#bloqueProductosUnidad").show('slow'); //mostarmos la tabla de ventas al menor
                 }                
 
             }else{
@@ -159,6 +159,7 @@
                     ]).draw(false);
                     sumaSubTotales();
                     adicionaItemUnidad(precios, id);
+                    $("#bloqueProductosMayor").show('slow'); //mostarmos la tabla de ventas al mayor
                 }                
 
             }
