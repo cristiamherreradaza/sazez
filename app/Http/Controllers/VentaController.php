@@ -269,7 +269,6 @@ class VentaController extends Controller
 
     public function ajaxCambiaProducto(Request $request)
     {
-        dd($request->all());    
 
         $ventaProducto = VentasProducto::find($request->ventaProductoId);
 
@@ -293,7 +292,6 @@ class VentaController extends Controller
         $editaMovimiento = Movimiento::find($movimientoId);
         $editaMovimiento->salida      = $nuevaCantidad;
         $editaMovimiento->devuelto    = 'Si';
-        $editaMovimiento->descripcion = $request->opcionCambia;
         $editaMovimiento->save();
 
         // registramos la devolucion
@@ -303,21 +301,22 @@ class VentaController extends Controller
         $nuevoMovimiento->almacene_id  = $consultaMovimiento->almacene_id;
         $nuevoMovimiento->venta_id     = $consultaMovimiento->venta_id;
         $nuevoMovimiento->precio_venta = $consultaMovimiento->precio_venta;
+        $nuevoMovimiento->descripcion  = $request->opcionCambia;
         $nuevoMovimiento->ingreso      = $cantidadMultiplicada;
         $nuevoMovimiento->deleted_at   = date("Y-m-d H:i:s");
         $nuevoMovimiento->estado       = "Devuelto";
         $nuevoMovimiento->save();
 
         // registramos la salida
-        $nuevoMovimiento = new Movimiento();
-        $nuevoMovimiento->user_id      = $consultaMovimiento->user_id;
-        $nuevoMovimiento->producto_id  = $consultaMovimiento->producto_id;
-        $nuevoMovimiento->almacene_id  = $consultaMovimiento->almacene_id;
-        $nuevoMovimiento->venta_id     = $consultaMovimiento->venta_id;
-        $nuevoMovimiento->precio_venta = $consultaMovimiento->precio_venta;
-        $nuevoMovimiento->salida       = $cantidadMultiplicada;
-        $nuevoMovimiento->estado       = $consultaMovimiento->estado;
-        $nuevoMovimiento->save();
+        $nuevoMovimientoSalida               = new Movimiento();
+        $nuevoMovimientoSalida->user_id      = $consultaMovimiento->user_id;
+        $nuevoMovimientoSalida->producto_id  = $consultaMovimiento->producto_id;
+        $nuevoMovimientoSalida->almacene_id  = $consultaMovimiento->almacene_id;
+        $nuevoMovimientoSalida->venta_id     = $consultaMovimiento->venta_id;
+        $nuevoMovimientoSalida->precio_venta = $consultaMovimiento->precio_venta;
+        $nuevoMovimientoSalida->salida       = $cantidadMultiplicada;
+        $nuevoMovimientoSalida->estado       = $consultaMovimiento->estado;
+        $nuevoMovimientoSalida->save();
 
         return response()->json([
             'ventaId' => $request->ventaId

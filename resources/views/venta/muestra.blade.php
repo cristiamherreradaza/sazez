@@ -349,7 +349,7 @@
                 type: 'POST',
                 success: function(data) {
                     // $("#ajaxFormEditaCliente").html(data);
-                    // window.location.href = "{{ url("Venta/muestra") }}/"+data.ventaId;
+                    window.location.href = "{{ url("Venta/muestra") }}/"+data.ventaId;
                 }
             });
 
