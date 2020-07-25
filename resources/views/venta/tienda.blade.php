@@ -751,7 +751,7 @@
         {
             alert("Selecciona una promocion")
         }else{
-            console.log(promocionId);
+            muestraPromo(promocionId);
         }
     }
 

@@ -332,8 +332,9 @@ class VentaController extends Controller
         // $productoVenta = VentasProducto::where('venta_id', $request->productoId);
     }
 
-    public function ajaxMuestraDevueltos(Request $request, $ventaId)
+    public function muestraPromoCombo(Request $request)
     {
 
     }
+
 }
