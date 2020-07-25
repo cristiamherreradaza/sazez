@@ -12,6 +12,7 @@ use App\Almacene;
 use App\Producto;
 use App\Movimiento;
 use App\Cotizacione;
+use App\CombosProducto;
 use App\Configuracione;
 use App\VentasProducto;
 use Illuminate\Http\Request;
@@ -96,6 +97,7 @@ class VentaController extends Controller
     public function tienda()
     {
         $hoy = date('Y-m-d');
+        $arrayPromociones = [];
         $almacenes = Almacene::get();
         $grupos = Grupo::all();
         $clientes = User::where('rol', 'Cliente')
@@ -104,6 +106,18 @@ class VentaController extends Controller
         $promociones = Combo::where('fecha_inicio', '<=', $hoy) 
         ->where('fecha_final', '>=', $hoy)
         ->get();
+
+        foreach ($promociones as $key => $p) {
+            $totalPromocion = 0;
+            $promocionProducto = CombosProducto::where('combo_id', $p->id)->get();
+            foreach ($promocionProducto as $pp) {
+                $totalPromocion += $pp->precio;
+            }
+            $arrayPromociones[$key]['id']=$p->id;
+            $arrayPromociones[$key]['nombre']=$p->nombre;
+            $arrayPromociones[$key]['total']=$totalPromocion;
+        }
+        dd($arrayPromociones);
 
         return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos', 'promociones'));
     }

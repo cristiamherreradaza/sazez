@@ -226,9 +226,9 @@
                             <div class="form-group">
                                 <label class="control-label"></label>
                                 <div class="input-group mb-3">
-                                    <a onclick="muestraPromocionCombo()" class="btn btn-success text-white"><i class="fas fa-eye"></i> </a>
+                                    <a onclick="muestraPromocionCombo()" class="btn btn-info text-white"><i class="fas fa-eye"></i> </a>
                                     &nbsp;
-                                    <a onclick="edita_producto(5)" class="btn btn-info text-white"><i class="fas fa-plus"></i> </a>
+                                    <a onclick="adicionaPromocion()" class="btn btn-success text-white"><i class="fas fa-plus"></i> </a>
                                 </div>
                             </div>
                         </div>
@@ -245,6 +245,7 @@
     </div>
 
     <div class="row">
+        {{-- ventas la por unidad --}}
         <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12" id="bloqueProductosUnidad" style="display: none;">
@@ -280,6 +281,38 @@
                 </div>
             </div>
 
+            {{-- venta de promociones --}}
+            <div class="row">
+                <div class="col-md-12" id="bloquePromociones" style="display: block;">
+                    <div class="card border-success">
+                        <div class="card-header bg-success">
+                            <h4 class="mb-0 text-white">PROMOCIONES</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive m-t-40">
+                                <table id="tablaPedido" class="tablesaw table-striped table-hover table-bordered table no-wrap">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th class="w-10 text-center">Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+            
+                                    </tbody>
+            
+                                </table>
+            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ventas al por mayor --}}
             <div class="row">
                 <div class="col-md-12" id="bloqueProductosMayor" style="display: none;">
                     <div class="card border-danger">
@@ -745,6 +778,17 @@
     }
 
     function muestraPromocionCombo()
+    {
+        let promocionId = $("#promocione_id").val();
+        if(promocionId == "")
+        {
+            alert("Selecciona una promocion")
+        }else{
+            muestraPromo(promocionId);
+        }
+    }
+
+    function adicionaPromocion()
     {
         let promocionId = $("#promocione_id").val();
         if(promocionId == "")
