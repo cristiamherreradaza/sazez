@@ -95,11 +95,17 @@ class VentaController extends Controller
 
     public function tienda()
     {
+        $hoy = date('Y-m-d');
         $almacenes = Almacene::get();
         $grupos = Grupo::all();
         $clientes = User::where('rol', 'Cliente')
                     ->get();
-        return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos'));
+
+        $promociones = Combo::where('fecha_inicio', '<=', $hoy) 
+        ->where('fecha_final', '>=', $hoy)
+        ->get();
+
+        return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos', 'promociones'));
     }
 
     public function mayorista()

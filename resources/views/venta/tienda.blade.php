@@ -188,7 +188,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Fecha</label>
                                 <input type="date" name="fecha" id="fecha" class="form-control"
@@ -196,7 +196,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Buscar Producto</label>
                                 <div class="input-group mb-3">
@@ -207,6 +207,32 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Promociones</label>
+                                <div class="input-group mb-3">
+                                    <select name="promocione_id" id="promocione_id" class="select2 form-control custom-select" style="width: 100%; height:36px;" >
+                                        <option value=""> Seleciones una </option>
+                                        @foreach($promociones as $p)
+                                            <option value="{{ $p->id }}"> {{ $p->nombre }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label"></label>
+                                <div class="input-group mb-3">
+                                    <a onclick="muestraPromocionCombo()" class="btn btn-success text-white"><i class="fas fa-eye"></i> </a>
+                                    &nbsp;
+                                    <a onclick="edita_producto(5)" class="btn btn-info text-white"><i class="fas fa-plus"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="row">
                         <div class="col-md-12">
@@ -715,6 +741,17 @@
             });
         }else{
             $("#formularioAjaxNuevoCliente")[0].reportValidity();
+        }
+    }
+
+    function muestraPromocionCombo()
+    {
+        let promocionId = $("#promocione_id").val();
+        if(promocionId == "")
+        {
+            alert("Selecciona una promocion")
+        }else{
+            console.log(promocionId);
         }
     }
 
