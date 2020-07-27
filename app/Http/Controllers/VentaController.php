@@ -117,9 +117,9 @@ class VentaController extends Controller
             $arrayPromociones[$key]['nombre']=$p->nombre;
             $arrayPromociones[$key]['total']=$totalPromocion;
         }
-        dd($arrayPromociones);
+        // dd($arrayPromociones);
 
-        return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos', 'promociones'));
+        return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos', 'arrayPromociones'));
     }
 
     public function mayorista()
@@ -157,7 +157,7 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         //cremaos la venta
         $venta              = new Venta();
         $venta->user_id     = Auth::user()->id;

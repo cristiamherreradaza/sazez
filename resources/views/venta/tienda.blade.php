@@ -213,9 +213,9 @@
                                 <label class="control-label">Promociones</label>
                                 <div class="input-group mb-3">
                                     <select name="promocione_id" id="promocione_id" class="select2 form-control custom-select" style="width: 100%; height:36px;" >
-                                        <option value=""> Seleciones una </option>
-                                        @foreach($promociones as $p)
-                                            <option value="{{ $p->id }}"> {{ $p->nombre }} </option>
+                                        <option value=""> Selecione una </option>
+                                        @foreach($arrayPromociones as $p)
+                                            <option value="{{ $p['id'] }}" data-precio="{{ $p['total'] }}"> {{ $p['nombre'] }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -290,7 +290,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive m-t-40">
-                                <table id="tablaPedido" class="tablesaw table-striped table-hover table-bordered table no-wrap">
+                                <table id="tablaPromos" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
                                             <th>Nombre</th>
@@ -421,9 +421,22 @@
         },
     });
 
+    // tabla de promociones
+    var tp = $('#tablaPromos').DataTable({
+        paging: false,
+        searching: false,
+        ordering:  false,
+        info: false,
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        },
+    });
+
+
     // array para controlar la cantidad de items en pedido unitario
     var itemsPedidoArray = [];
     var itemsPedidoArrayMayor = [];
+    var itemsPromos = [];
 
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -486,12 +499,10 @@
 
     // calcula el precio en funcion a la cantidad tabla unidades
     $(document).on('keyup change', '.cantidad', function(e){
-        // alert("cambio");
         let cantidad = Number($(this).val());
         let id = $(this).data("id");
         let precio = Number($("#precio_"+id).val());
         let subtotal = precio*cantidad;
-        console.log(precio);
         $("#subtotal_"+id).val(subtotal);
         sumaSubTotales();
     });
@@ -791,11 +802,23 @@
     function adicionaPromocion()
     {
         let promocionId = $("#promocione_id").val();
-        if(promocionId == "")
+        let nombre = $("#promocione_id").find(':selected').text();
+        let precio = $("#promocione_id").find(':selected').data('precio');
+        
+        if(promocionId != "")
         {
-            alert("Selecciona una promocion")
+            // console.log(nombre);
+            tp.row.add([
+                nombre,
+                precio,
+                `<input type="number" class="form-control text-right cantidaPromo" name="cantidadPromo[`+promocionId+`]" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
+                <input type="hidden" name="promoId[`+promocionId+`]" id="promoId`+promocionId+`" value="`+promocionId+`">`,
+                `<input type="number" class="form-control text-right subtotalMayor" name="subtotalPromo[`+promocionId+`]" id="subtotalPromocion_`+promocionId+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
+                '<button type="button" class="btnEliminaPromo btn btn-danger" title="Elimina Promocion"><i class="fas fa-trash-alt"></i></button>'
+            ]).draw(false);
+            // muestraPromo(promocionId);
         }else{
-            muestraPromo(promocionId);
+            alert("Selecciona una promocion")
         }
     }
 
