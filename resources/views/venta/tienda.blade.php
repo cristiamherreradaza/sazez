@@ -436,7 +436,7 @@
     // array para controlar la cantidad de items en pedido unitario
     var itemsPedidoArray = [];
     var itemsPedidoArrayMayor = [];
-    var itemsPromos = [];
+    var itemsPromosArray = [];
 
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -471,10 +471,20 @@
             sumaSubTotales();
         });
 
+        // elimina productos de la tabla promociones
+        $('#tablaPromos tbody').on('click', '.btnEliminaPromo', function () {
+            tp.row($(this).parents('tr'))
+                .remove()
+                .draw();
+            // let itemBorrarMayor = $(this).closest("tr").find("td:eq(0)").text();
+            // let posMayor = itemsPedidoArrayMayor.lastIndexOf(itemBorrarMayor);
+            // itemsPedidoArrayMayor.splice(posMayor, 1);
+            sumaSubTotales();
+        });
+
 
         $(document).on('keyup change', '#efectivo', function () {
             let totalVenta = Number($("#resultadoSubTotales").val());
-            // console.log(totalVenta);
             let efectivo = Number($("#efectivo").val());
             let cambio = efectivo - totalVenta; 
             if (cambio > 0) {
@@ -807,22 +817,30 @@
         let promocionId = $("#promocione_id").val();
         let nombre = $("#promocione_id").find(':selected').text();
         let precio = $("#promocione_id").find(':selected').data('precio');
-        
-        if(promocionId != "")
+
+        // buscamos a la promocion en el array
+        let buscaItemPromo = itemsPromosArray.lastIndexOf(promocionId);
+        if (buscaItemPromo < 0)
         {
-            // console.log(nombre);
-            tp.row.add([
-                nombre,
-                precio,
-                `<input type="number" class="form-control text-right cantidadPromocion" name="cantidadPromo[`+promocionId+`]" data-idp="`+promocionId+`" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
-                <input type="hidden" name="promoId[`+promocionId+`]" id="promoId_`+promocionId+`" value="`+promocionId+`">
-                <input type="hidden" name="precioPromocion[`+precio+`]" id="precioPromocion_`+promocionId+`" value="`+precio+`">`,
-                `<input type="number" class="form-control text-right subtotalPromocion" name="subtotalPromocion[`+promocionId+`]" id="subtotalPromocion_`+promocionId+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
-                '<button type="button" class="btnEliminaPromo btn btn-danger" title="Elimina Promocion"><i class="fas fa-trash-alt"></i></button>'
-            ]).draw(false);
-            // muestraPromo(promocionId);
-        }else{
-            alert("Selecciona una promocion")
+            if(promocionId != "")
+            {
+                itemsPromosArray.push(promocionId);
+                console.log(itemsPromosArray);
+
+                tp.row.add([
+                    nombre,
+                    precio,
+                    `<input type="number" class="form-control text-right cantidadPromocion" name="cantidadPromo[`+promocionId+`]" data-idp="`+promocionId+`" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
+                    <input type="hidden" name="promoId[`+promocionId+`]" id="promoId_`+promocionId+`" value="`+promocionId+`">
+                    <input type="hidden" name="precioPromocion[`+precio+`]" id="precioPromocion_`+promocionId+`" value="`+precio+`">`,
+                    `<input type="number" class="form-control text-right subtotalPromocion" name="subtotalPromocion[`+promocionId+`]" id="subtotalPromocion_`+promocionId+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
+                    '<button type="button" class="btnEliminaPromo btn btn-danger" title="Elimina Promocion"><i class="fas fa-trash-alt"></i></button>'
+                ]).draw(false);
+                sumaSubTotales();
+                // muestraPromo(promocionId);
+            }else{
+                alert("Selecciona una promocion")
+            }
         }
     }
 
