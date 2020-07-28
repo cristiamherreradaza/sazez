@@ -473,7 +473,6 @@
 
 
         $(document).on('keyup change', '#efectivo', function () {
-            // alert("cambio");
             let totalVenta = Number($("#resultadoSubTotales").val());
             // console.log(totalVenta);
             let efectivo = Number($("#efectivo").val());
@@ -527,14 +526,23 @@
         sumaSubTotales();
     });
 
+    // calcula el precio en funcion a la unidad de la tabla promociones
+    $(document).on('keyup change', '.cantidadPromocion', function(e){
+        let cantidadPromocion = Number($(this).val());
+        let idp = $(this).data("idp");
+        let precioPromocion = Number($("#precioPromocion_"+idp).val());
+        let subtotalPromocion = precioPromocion*cantidadPromocion;
+        $("#subtotalPromocion_"+idp).val(subtotalPromocion);
+        sumaSubTotales();
+    });
+
     function sumaSubTotales()
     {
         let sum = 0;
 
-        $('.subtotal, .subtotalMayor').each(function(){
+        $('.subtotal, .subtotalMayor, .subtotalPromocion').each(function(){
             sum += parseFloat(this.value);
         });
-        // sumaVisible = sum.toLocaleString('en', {useGrouping:true});
         
         $("#resultadoSubTotales").val(sum);
         valorLiteral = numeroALetras(sum, {
@@ -544,7 +552,6 @@
             centSingular: 'Centavo'
         });
         $("#montoLiteral").html(valorLiteral);
-        // console.log(valor);
     }
 
     $(document).on('keyup', '#termino', function(e) {
@@ -565,11 +572,7 @@
 
     function adicionaPedido(item)
     {
-        /*var item = $("#item_"+item).closest("tr").find('td').each(function(){
-    console.log(this.text);
-            });*/
         var item = $("#item_" + item).closest("tr").find('td').text();
-        console.log(item);
     }
 
     function eliminar_pedido()
@@ -811,9 +814,10 @@
             tp.row.add([
                 nombre,
                 precio,
-                `<input type="number" class="form-control text-right cantidaPromo" name="cantidadPromo[`+promocionId+`]" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
-                <input type="hidden" name="promoId[`+promocionId+`]" id="promoId`+promocionId+`" value="`+promocionId+`">`,
-                `<input type="number" class="form-control text-right subtotalMayor" name="subtotalPromo[`+promocionId+`]" id="subtotalPromocion_`+promocionId+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
+                `<input type="number" class="form-control text-right cantidadPromocion" name="cantidadPromo[`+promocionId+`]" data-idp="`+promocionId+`" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
+                <input type="hidden" name="promoId[`+promocionId+`]" id="promoId_`+promocionId+`" value="`+promocionId+`">
+                <input type="hidden" name="precioPromocion[`+precio+`]" id="precioPromocion_`+promocionId+`" value="`+precio+`">`,
+                `<input type="number" class="form-control text-right subtotalPromocion" name="subtotalPromocion[`+promocionId+`]" id="subtotalPromocion_`+promocionId+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
                 '<button type="button" class="btnEliminaPromo btn btn-danger" title="Elimina Promocion"><i class="fas fa-trash-alt"></i></button>'
             ]).draw(false);
             // muestraPromo(promocionId);
