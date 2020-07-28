@@ -27,6 +27,7 @@ class Producto extends Model
         'descripcion',
         'url_referencia',
         'video',
+        'dias_garantia',
         'estado',
         'deleted_at',
     ];

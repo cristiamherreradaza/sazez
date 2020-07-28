@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ProductosExport;
+use Session;
 
 class ProductoController extends Controller
 {
@@ -522,5 +523,36 @@ class ProductoController extends Controller
     {
         $date = strtotime(date('Y-m-d H:i:s'));
         return Excel::download(new ProductosExport, "Listado_productos_$date.xlsx");
+    }
+
+    public function garantia()
+    {
+        $almacenes = Almacene::get();
+        $tipos = Tipo::get();
+        return view('producto.garantia')->with(compact('almacenes', 'tipos'));
+    }
+
+    public function ajaxProductosGarantia(Request $request)
+    {
+        $tipo_id = $request->tipo;
+        $productos = Producto::where('tipo_id', $tipo_id)
+                            ->get();
+        return view('producto.ajaxProductosGarantia')->with(compact('productos'));
+    }
+
+    public function guardaGarantia(Request $request)
+    {
+        //dd($request->producto_id);
+        foreach($request->producto_id as $producto_id)
+        {
+            $producto = Producto::find($producto_id);
+            if($producto)
+            {
+                $producto->dias_garantia = $request->dias;
+                $producto->save();
+            }
+        }
+        Session::flash('success','Se guardo correctamente!');
+        return back();
     }
 }

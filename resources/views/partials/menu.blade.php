@@ -189,6 +189,11 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ url('Producto/garantia') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Garantias </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url('Marca/listado') }}" class="sidebar-link">
                                 <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Marcas </span>
                             </a>
