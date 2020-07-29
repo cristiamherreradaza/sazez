@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Movimiento;
 use App\Almacene;
 use App\Producto;
+use App\Proveedore;
 
 class MovimientoController extends Controller
 {
@@ -40,7 +41,8 @@ class MovimientoController extends Controller
     public function ingreso()
     {
         $almacenes = Almacene::get();
-        return view('movimiento.ingreso')->with(compact('almacenes'));
+        $proveedores = Proveedore::get();
+        return view('movimiento.ingreso')->with(compact('almacenes', 'proveedores'));
     }
 
     public function ajaxBuscaProducto(Request $request)
@@ -65,7 +67,9 @@ class MovimientoController extends Controller
                 $ingreso->user_id = Auth::user()->id;
                 $ingreso->producto_id = $ll;
                 $ingreso->almacene_id = $request->almacen;
+                $ingreso->proveedor_id = $request->proveedor;
                 $ingreso->ingreso = $request->subtotal[$ll];
+                $ingreso->estado = 'Ingreso';
                 $ingreso->fecha = $fecha;
                 $ingreso->save();
             }
