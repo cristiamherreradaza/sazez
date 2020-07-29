@@ -166,6 +166,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Pedido/ajax_listado', 'PedidoController@ajax_listado');
     Route::get('Pedido/editar/{id}', 'PedidoController@editar');
 
+    // PROVEEDORES
+    Route::get('Proveedor/listado', 'ProveedorController@listado');
+    Route::post('Proveedor/guardar', 'ProveedorController@guardar');
+    Route::post('Proveedor/actualizar', 'ProveedorController@actualizar');
+    Route::get('Proveedor/eliminar/{id}', 'ProveedorController@eliminar');
+
     // ENTREGAS
     Route::get('Entrega/entrega/{id}', 'EntregaController@entrega');
     Route::post('Entrega/store', 'EntregaController@store');

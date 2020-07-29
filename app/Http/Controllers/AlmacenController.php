@@ -38,8 +38,8 @@ class AlmacenController extends Controller
 
     public function eliminar(Request $request)
     {
-        $marca = Almacene::find($request->id);
-        $marca->delete();
+        $almacen = Almacene::find($request->id);
+        $almacen->delete();
         return redirect('Almacen/listado');
     }
 }

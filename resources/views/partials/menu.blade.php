@@ -199,6 +199,11 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ url('Proveedor/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Proveedores </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url('Tipo/listado') }}" class="sidebar-link">
                                 <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Tipos </span>
                             </a>

@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Almacen</label>
                                 <span class="text-danger">
@@ -34,7 +34,21 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Proveedor</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="proveedor" id="proveedor" class="form-control">
+                                    @foreach($proveedores as $proveedor)
+                                    <option value="{{ $proveedor->id }}"> {{ $proveedor->nombre }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Buscar Producto</label>
                                 <div class="input-group mb-3">

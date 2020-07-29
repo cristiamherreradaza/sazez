@@ -143,8 +143,20 @@
                                                             required value="{{ $producto->precio_compra }}">
                                                     </div>
                                                 </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>DIAS DE GARANTIA
+                                                            <span class="text-danger">
+                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                            </span>
+                                                        </label>
+                                                        <input type="number" class="form-control" name="dias_garantia" id="dias_garantia" min="0" step="any"
+                                                            required value="{{ $producto->dias_garantia }}">
+                                                    </div>
+                                                </div>
                                             
-                                                <div class="col-md-8">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>CATEGORIAS
                                                             <span class="text-danger">
