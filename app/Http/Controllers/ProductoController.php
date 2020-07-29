@@ -301,6 +301,7 @@ class ProductoController extends Controller
         $nuevoProducto->nombre_venta   = $request->nombre_venta;
         $nuevoProducto->modelo         = $request->modelo;
         $nuevoProducto->precio_compra  = $request->precio_compra;
+        $nuevoProducto->dias_garantia  = $request->dias_garantia;
         $nuevoProducto->largo          = $request->largo;
         $nuevoProducto->ancho          = $request->ancho;
         $nuevoProducto->alto           = $request->alto;

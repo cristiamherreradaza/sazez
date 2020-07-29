@@ -127,18 +127,6 @@
                                             
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label>
-                                                            CANTIDAD
-                                                            <span class="text-danger">
-                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                            </span>
-                                                        </label>
-                                                        <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" required>
-                                                    </div>
-                                                </div>
-                                            
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
                                                         <label>P/COMPRA
                                                             <span class="text-danger">
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
@@ -160,6 +148,30 @@
                                                     </div>
                                                 </div>
                                             
+                                                <div class="col-md-1">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            CANTIDAD
+                                                            <span class="text-danger">
+                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                            </span>
+                                                        </label>
+                                                        <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-1">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            DIAS DE GARANTIA
+                                                            <span class="text-danger">
+                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                            </span>
+                                                        </label>
+                                                        <input type="number" class="form-control" name="dias_garantia" id="dias_garantia" min="0" required>
+                                                    </div>
+                                                </div>
+
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>CATEGORIAS
