@@ -14,6 +14,7 @@ class Movimiento extends Model
         'producto_id',
         'almacene_id',
         'pedido_id',
+        'proveedor_id',
         'venta_id',
         'escala_id',
         'precio_compra',
@@ -58,4 +59,8 @@ class Movimiento extends Model
         return $this->belongsTo('App\Escala');
     }
 
+    public function proveedor()
+    {
+        return $this->belongsTo('App\Proveedore', 'proveedor_id');
+    }
 }
