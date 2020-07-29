@@ -283,7 +283,7 @@
 
             {{-- venta de promociones --}}
             <div class="row">
-                <div class="col-md-12" id="bloquePromociones" style="display: block;">
+                <div class="col-md-12" id="bloquePromociones" style="display: none;">
                     <div class="card border-success">
                         <div class="card-header bg-success">
                             <h4 class="mb-0 text-white">PROMOCIONES</h4>
@@ -647,7 +647,7 @@
     function validaItems()
     {
         // verificamos que la venta tengan productos
-        if (itemsPedidoArray.length > 0 || itemsPedidoArrayMayor.length > 0) {
+        if (itemsPedidoArray.length > 0 || itemsPedidoArrayMayor.length > 0 || itemsPromosArray.length > 0) {
             // verificamos que las cantidades sean las correctas
             if ($("#formularioVenta")[0].checkValidity()) {
                 Swal.fire({
@@ -814,9 +814,13 @@
 
     function adicionaPromocion()
     {
+        // capturamos las variables del formulario
         let promocionId = $("#promocione_id").val();
         let nombre = $("#promocione_id").find(':selected').text();
         let precio = $("#promocione_id").find(':selected').data('precio');
+
+        // mostramos el bloque de la tabla promociones
+        $("#bloquePromociones").show();
 
         // buscamos a la promocion en el array
         let buscaItemPromo = itemsPromosArray.lastIndexOf(promocionId);
@@ -824,9 +828,10 @@
         {
             if(promocionId != "")
             {
+                // adicionamos la promo al array
                 itemsPromosArray.push(promocionId);
-                console.log(itemsPromosArray);
 
+                // adicionamos la fila a la tabla
                 tp.row.add([
                     nombre,
                     precio,
@@ -836,8 +841,9 @@
                     `<input type="number" class="form-control text-right subtotalPromocion" name="subtotalPromocion[`+promocionId+`]" id="subtotalPromocion_`+promocionId+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
                     '<button type="button" class="btnEliminaPromo btn btn-danger" title="Elimina Promocion"><i class="fas fa-trash-alt"></i></button>'
                 ]).draw(false);
+
+                // calculamos el valor a totales
                 sumaSubTotales();
-                // muestraPromo(promocionId);
             }else{
                 alert("Selecciona una promocion")
             }

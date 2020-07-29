@@ -157,7 +157,9 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-        dd($request->all());
+        // dd($llavesPromos);
+
+        // dd($request->all());
         //cremaos la venta
         $venta              = new Venta();
         $venta->user_id     = Auth::user()->id;
@@ -183,6 +185,7 @@ class VentaController extends Controller
                 $productos->fecha          = $request->fecha;
                 $productos->save();
 
+                // guardamos lo movimientos de la venta
                 $movimiento               = new Movimiento();
                 $movimiento->user_id      = Auth::user()->id;
                 $movimiento->almacene_id  = Auth::user()->almacen_id;
@@ -226,6 +229,61 @@ class VentaController extends Controller
                 $movimientoMayor->salida       = $cantidadVendida;
                 $movimientoMayor->estado       = 'Venta';
                 $movimientoMayor->save();
+            }
+
+        }
+
+        // guardamos los datos de la promocion
+        if($request->has('promoId'))
+        {
+            $llavesPromos = array_keys($request->promoId);
+            foreach ($llavesPromos as $key => $llpr) {
+                $productosPromocion = CombosProducto::where('combo_id', $llpr)->get();
+                foreach ($productosPromocion as $ppr) {
+
+                    if($ppr->cantidad > 1 ){
+                        $precioProductoCombo = intval($ppr->precio/$ppr->cantidad);
+                    }else{
+                        $precioProductoCombo = $ppr->precio;
+                    }
+
+                    $cantidadProductosPromo = $request->cantidadPromo[$llpr] * $ppr->cantidad;
+                    /*print_r($ppr->producto_id);
+                    echo " - ";
+                    print_r($ppr->precio);
+                    echo " - ";
+                    print_r($ppr->cantidad);
+                    echo " - ";
+                    print_r($request->cantidadPromo[$llpr]);    
+                    echo " - ";
+                    print_r($cantidadProductosPromo);
+                    echo "<br />";*/
+
+                    // guardamos los productos de la promocion
+                    $productosPr                 = new VentasProducto();
+                    $productosPr->user_id        = Auth::user()->id;
+                    $productosPr->producto_id    = $ppr->producto_id;
+                    $productosPr->venta_id       = $venta_id;
+                    $productosPr->combo_id       = $ppr->combo_id;
+                    $productosPr->precio_venta   = $precioProductoCombo;
+                    $productosPr->precio_cobrado = $precioProductoCombo;
+                    $productosPr->cantidad       = $cantidadProductosPromo;
+                    $productosPr->fecha          = $request->fecha;
+                    $productosPr->save();
+
+                    // guardamos lo movimientos de la promocion
+                    $movimientoPromocion               = new Movimiento();
+                    $movimientoPromocion->user_id      = Auth::user()->id;
+                    $movimientoPromocion->almacene_id  = Auth::user()->almacen_id;
+                    $movimientoPromocion->venta_id     = $venta_id;
+                    $movimientoPromocion->producto_id  = $ppr->producto_id;
+                    $movimientoPromocion->precio_venta = $precioProductoCombo;
+                    $movimientoPromocion->salida       = $cantidadProductosPromo;
+                    $movimientoPromocion->estado       = 'Venta';
+                    $movimientoPromocion->save();
+                }
+                // print_r($llpr);
+                // echo "<br>";
             }
         }
 

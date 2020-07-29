@@ -111,7 +111,7 @@
                         </div>
                         <div class="col-md-6">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-inverse"
-                                onclick="cancelaElimnacion()">CANCELAR</button>
+                                onclick="cancelaCambio()">CANCELAR</button>
                         </div>
                     </div>
                 </form>
@@ -292,25 +292,14 @@
         }
     }
 
-    /*function cambiaOpcionEliminaVenta()
-    {
-        let opcionEliminaVenta = $("#opcion_elimina").val();
-        $.ajax({
-            url: "{{ url('Cliente/ajaxEditaCliente') }}",
-            data: { clienteId: clienteId },
-            type: 'POST',
-            success: function(data) {
-                $("#ajaxFormEditaCliente").html(data);
-            }
-        });
-
-        // $("#comentario_elimina").val(opcionEliminaVenta);
-        // console.log(opcionEliminaVenta);
-    }*/
-
     function cancelaElimnacion()
     {
         $("#modalElimina").modal("hide");
+    }
+
+    function cancelaCambio()
+    {
+        $("#modalCambiaProducto").modal("hide");
     }
 
     function cambiaProducto(productoId, ventaId, nombreProducto, cantidad, nombrePaquete)
