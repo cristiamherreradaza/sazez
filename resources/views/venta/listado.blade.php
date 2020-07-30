@@ -106,6 +106,11 @@ function muestra(venta_id)
     window.location.href = "{{ url('Venta/muestra') }}/" + venta_id;
 }
 
+function imprimir(venta_id)
+{
+    window.location.href = "{{ url('Venta/imprimir') }}/" + venta_id;
+}
+
 </script>
 
 <script type="text/javascript">

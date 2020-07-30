@@ -310,7 +310,8 @@ class VentaController extends Controller
 
         return Datatables::of($ventas)
             ->addColumn('action', function ($ventas) {
-                return '<button onclick="muestra(' . $ventas->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                return '<button onclick="muestra(' . $ventas->id . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>
+                        <button onclick="imprimir(' .$ventas->id. ')" class="btn btn-primary" title="Imprimir garantia"><i class="fas fa-print"></i> </button>';
             })
             ->make(true);    
     }
@@ -327,6 +328,13 @@ class VentaController extends Controller
                         ->get();
         // dd($datosVenta);
         return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta', 'cambiados'));
+    }
+
+    public function imprimir($venta_id)
+    {
+        $venta = Venta::find($venta_id);
+        $productos_venta = VentasProducto::where('venta_id', $venta_id)->get();
+        return view('venta.imprime')->with(compact('venta', 'productos_venta'));
     }
 
     public function elimina(Request $request)
