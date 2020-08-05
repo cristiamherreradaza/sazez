@@ -213,6 +213,11 @@
                                 <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Usuarios </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Configuracione/listadoEliminaVenta') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Motivos Eliminacion</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endif
