@@ -239,9 +239,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');
     Route::post('Configuracione/guardarEliminaVenta', 'ConfiguracioneController@guardarEliminaVenta');
-    Route::post('Configuracione/actualizar', 'ConfiguracioneController@actualizar');
     Route::get('Configuracione/eliminarEliminaVenta/{id}', 'ConfiguracioneController@eliminarEliminaVenta');
 
+    //CONFIGURACIONES MENSAJES CAMBIO DE PRODUCTOS
+    Route::get('Configuracione/listadoDevolucionProducto', 'ConfiguracioneController@listadoDevolucionProducto');
+    Route::post('Configuracione/guardaDevolucionProducto', 'ConfiguracioneController@guardaDevolucionProducto');
+    Route::get('Configuracione/eliminaMotivoDevolucionProducto/{id}', 'ConfiguracioneController@eliminaMotivoDevolucionProducto');
 
 });
 
