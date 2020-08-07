@@ -258,14 +258,14 @@
                                 <table id="tablaPedido" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
-                                            <th>Nombre</th>
-                                            <th>Marca</th>
+                                            <th>CODIGO</th>
+                                            <th>NOMBRE</th>
+                                            <th>MARCA</th>
                                             <th>Tipo</th>
                                             <th class="w-10 text-center text-info"><i class="fas fa-archive"></i></th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th class="w-10 text-center">Total</th>
+                                            <th>CANTIDAD</th>
+                                            <th class="w-10 text-center">PRECIO</th>
+                                            <th class="w-10 text-center">IMPORTE</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -293,19 +293,16 @@
                                 <table id="tablaPromos" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th class="w-10 text-center">Total</th>
+                                            <th>NOMBRE</th>
+                                            <th>PRECIO</th>
+                                            <th>CANTIDAD</th>
+                                            <th class="w-10 text-center">IMPORTE</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-            
                                     </tbody>
-            
                                 </table>
-            
                             </div>
                         </div>
                     </div>
@@ -324,14 +321,14 @@
                                 <table id="tablaPedidoMayor" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
-                                            <th>Nombre</th>
-                                            <th>Marca</th>
+                                            <th>CODIGO</th>
+                                            <th>NOMBRE</th>
+                                            <th>MARCA</th>
                                             <th class="text-center text-info"><i class="fas fa-archive"></i></th>
-                                            <th>Unidad</th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th class="w-10 text-center">Total</th>
+                                            <th class="w-10 text-center">UNIDAD</th>
+                                            <th>CANTIDAD</th>
+                                            <th class="w-10 text-center">PRECIO</th>
+                                            <th class="w-10 text-center">IMPORTE</th>
                                             <th></th>
                                         </tr>
                                     </thead>

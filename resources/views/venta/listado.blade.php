@@ -66,7 +66,7 @@ $(document).ready(function() {
         // "scrollX": true,
         serverSide: true,
         ajax: "{{ url('Venta/ajax_listado') }}",
-        "order": [[ 1, "desc" ]],
+        "order": [[ 0, "desc" ]],
         columns: [
             {data: 'id', name: 'id'},
             {data: 'almacene', name: 'almacenes.nombre'},
