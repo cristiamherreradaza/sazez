@@ -140,10 +140,9 @@
                                 <th>NOMBRE</th>
                                 <th>MARCA</th>
                                 <th>TIPO</th>
-                                <th class="text-right"></th>
-                                <th class="text-right">PRECIO</th>
                                 <th class="text-right">CANTIDAD</th>
-                                <th class="text-right">Total</th>
+                                <th class="text-right">PRECIO</th>
+                                <th class="text-right">IMPORTE</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -158,9 +157,8 @@
                                     <td>{{ $pv->producto->nombre }}</td>
                                     <td>{{ $pv->producto->marca->nombre }}</td>
                                     <td>{{ $pv->producto->tipo->nombre }}</td>
-                                    <td class="text-right"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></td>
+                                    <td class="text-right"><span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>&nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
                                     <td class="text-right">{{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor:$pv->precio_cobrado }}</td>
-                                    <td class="text-right"><b>{{ $pv->cantidad }}</td>
                                     @php
                                         if ($pv->precio_cobrado_mayor>0) {
                                             $precio_costo = $pv->precio_cobrado_mayor;
@@ -170,7 +168,7 @@
                                         $subTotal = $precio_costo * $pv->cantidad;
                                         $sumaSubTotal += $subTotal;
                                     @endphp
-                                    <td class="text-right">{{ $subTotal }}</td>
+                                    <td class="text-right"><b>{{ $subTotal }}</b></td>
                                     <td>
                                         <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}')">
                                             <i class="fas fa-exchange-alt"></i>

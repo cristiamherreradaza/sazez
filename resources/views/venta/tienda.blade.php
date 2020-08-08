@@ -173,7 +173,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">
-                                    Cliente 
+                                    CLIENTE 
                                     <small id="tag_nuevo_cliente" class="badge badge-default badge-success form-text text-white" onclick="nuevoCliente()">NUEVO</small>
                                     <small id="tag_edita_cliente" class="badge badge-default badge-info form-text text-white" onclick="editaCliente()" style="display: none;"><span id="tagCliente"></span></small>
                                 </label>
@@ -190,7 +190,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Fecha</label>
+                                <label class="control-label">FECHA</label>
                                 <input type="date" name="fecha" id="fecha" class="form-control"
                                     value="{{ date("Y-m-d") }}" required>
                             </div>
@@ -198,7 +198,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Buscar Producto</label>
+                                <label class="control-label">PRODUCTO (NOM/COD)</label>
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" id="termino" name="termino">
                                     <div class="input-group-append">
@@ -210,11 +210,14 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Promociones</label>
+                                <label class="control-label">PROMOCIONES</label>
                                 <div class="input-group mb-3">
                                     <select name="promocione_id" id="promocione_id" class="select2 form-control custom-select" style="width: 100%; height:36px;" >
                                         <option value=""> Selecione una </option>
                                         @foreach($arrayPromociones as $p)
+                                            @php
+                                                
+                                            @endphp
                                             <option value="{{ $p['id'] }}" data-precio="{{ $p['total'] }}"> {{ $p['nombre'] }} </option>
                                         @endforeach
                                     </select>
@@ -228,7 +231,7 @@
                                 <div class="input-group mb-3">
                                     <a onclick="muestraPromocionCombo()" class="btn btn-info text-white"><i class="fas fa-eye"></i> </a>
                                     &nbsp;
-                                    <a onclick="adicionaPromocion()" class="btn btn-success text-white"><i class="fas fa-plus"></i> </a>
+                                    <a onclick="adicionaPromocionCombo()" class="btn btn-success text-white"><i class="fas fa-plus"></i> </a>
                                 </div>
                             </div>
                         </div>
@@ -296,7 +299,7 @@
                                             <th>NOMBRE</th>
                                             <th>PRECIO</th>
                                             <th>CANTIDAD</th>
-                                            <th class="w-10 text-center">IMPORTE</th>
+                                            <th>IMPORTE</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -473,9 +476,9 @@
             tp.row($(this).parents('tr'))
                 .remove()
                 .draw();
-            // let itemBorrarMayor = $(this).closest("tr").find("td:eq(0)").text();
-            // let posMayor = itemsPedidoArrayMayor.lastIndexOf(itemBorrarMayor);
-            // itemsPedidoArrayMayor.splice(posMayor, 1);
+            let itemBorrarPromo = $(this).closest("tr").find("td:eq(0)").text();
+            let posPromo = itemsPromosArray.lastIndexOf(itemBorrarPromo);
+            itemsPromosArray.splice(posPromo, 1);
             sumaSubTotales();
         });
 
@@ -809,12 +812,18 @@
         }
     }
 
-    function adicionaPromocion()
+    function adicionaPromocionCombo()
     {
-        // capturamos las variables del formulario
         let promocionId = $("#promocione_id").val();
         let nombre = $("#promocione_id").find(':selected').text();
         let precio = $("#promocione_id").find(':selected').data('precio');
+        adicionaPromocion(promocionId, nombre, precio);
+    }
+
+    function adicionaPromocion(promocionId = null, nombre = null, precio = null)
+    {
+        // cerramos el modal de las promociones
+        $("#danger-header-modal").modal("hide");
 
         // mostramos el bloque de la tabla promociones
         $("#bloquePromociones").show();

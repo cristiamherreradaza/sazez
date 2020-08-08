@@ -45,3 +45,4 @@
         </tfoot>
     </table>
 </div>
+<a class="btn waves-effect waves-light text-white btn-block btn-info" onclick="adicionaPromocion('{{ $datosCombo->id }}', '{{ $datosCombo->nombre }}', '{{ $total }}')">ADICIONA PROMOCION</a>
