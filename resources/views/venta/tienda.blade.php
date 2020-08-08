@@ -839,7 +839,7 @@
 
                 // adicionamos la fila a la tabla
                 tp.row.add([
-                    nombre,
+                    nombre + '<small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo('+promocionId+')">VER</small>',
                     precio,
                     `<input type="number" class="form-control text-right cantidadPromocion" name="cantidadPromo[`+promocionId+`]" data-idp="`+promocionId+`" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
                     <input type="hidden" name="promoId[`+promocionId+`]" id="promoId_`+promocionId+`" value="`+promocionId+`">
