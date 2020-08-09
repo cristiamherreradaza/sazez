@@ -8,7 +8,11 @@
 
 @section('content')
 <div class="row">
+<<<<<<< HEAD
     <div class="col-md-6">
+=======
+    <div class="col-md-8">
+>>>>>>> 234dbdac04cc512df11768858b202bbf44d1aa2d
         <div class="card text-center" id="printableArea">
             <div class="card-header">
                 SAZEZ
@@ -17,11 +21,11 @@
             <div class="card-body">
                 <h2>GARANTIA DE VENTA</h2>
                 <div class="row">
-                    <h3><strong>Venta : </strong>{{ $venta->id }}</h3>
+                    <h3><strong>VENTA : </strong>{{ $venta->id }}</h3>
                     <hr>
-                    <h3><strong>Cliente : </strong>{{ $venta->cliente->name }}</h3>
+                    <h3><strong>CLIENTE : </strong>{{ $venta->cliente->name }}</h3>
                     <hr>
-                    <h3><strong>Fecha : </strong>{{ $venta->fecha }}</h3>
+                    <h3><strong>FECHA : </strong>{{ $venta->fecha }}</h3>
                     <table class="table">
                         <thead>
                             <tr>
@@ -76,7 +80,11 @@
     </div>
 </div>
 <div class="row">
+<<<<<<< HEAD
     <button id="botonImprimir" class="btn btn-success btn-block col-md-6 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
+=======
+<button id="botonImprimir" class="btn btn-success btn-block col-md-8 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
+>>>>>>> 234dbdac04cc512df11768858b202bbf44d1aa2d
 </div>
 @stop
 

@@ -157,9 +157,9 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-        // dd($llavesPromos);
-
         // dd($request->all());
+        $errorVenta = 0;
+        $mensajeError = "";
         //cremaos la venta
         $venta              = new Venta();
         $venta->user_id     = Auth::user()->id;
@@ -169,69 +169,6 @@ class VentaController extends Controller
         $venta->total       = $request->totalCompra;
         $venta->save();
         $venta_id = $venta->id;
-
-        // guardamos todos los items de la venta por unidad
-        if ($request->has('precio')) {
-            $llaves = array_keys($request->precio);
-            foreach ($llaves as $key => $ll) {
-                $productos                 = new VentasProducto();
-                $productos->user_id        = Auth::user()->id;
-                $productos->producto_id    = $ll;
-                $productos->venta_id       = $venta_id;
-                // $productos->combo_id       = null;
-                $productos->precio_venta   = $request->precio_venta[$ll];
-                $productos->precio_cobrado = $request->precio[$ll];
-                $productos->cantidad       = $request->cantidad[$ll];
-                $productos->fecha          = $request->fecha;
-                $productos->save();
-
-                // guardamos lo movimientos de la venta
-                $movimiento               = new Movimiento();
-                $movimiento->user_id      = Auth::user()->id;
-                $movimiento->almacene_id  = Auth::user()->almacen_id;
-                $movimiento->venta_id     = $venta_id;
-                $movimiento->producto_id  = $ll;
-                $movimiento->precio_venta = $request->precio[$ll];
-                $movimiento->salida       = $request->cantidad[$ll];
-                $movimiento->estado       = 'Venta';
-                $movimiento->save();
-            }
-        }
-
-        // guardamos todos los items de la venta por mayor
-        if($request->has('precio_m')){
-            $llavesMayor = array_keys($request->precio_m);
-            foreach ($llavesMayor as $key => $llm) {
-                $cantidadVendida = 0;
-                $cantidaMayor = $request->cantidad_m[$llm];
-                $cantidadEscala = $request->cantidad_escala_m[$llm];
-
-                $productosMayor                       = new VentasProducto();
-                $productosMayor->user_id              = Auth::user()->id;
-                $productosMayor->producto_id          = $llm;
-                $productosMayor->venta_id             = $venta_id;
-                $productosMayor->escala_id            = $request->escala_id_m[$llm];
-                $productosMayor->precio_venta_mayor   = $request->precio_venta_m[$llm];
-                $productosMayor->precio_cobrado_mayor = $request->precio_m[$llm];
-                $productosMayor->cantidad             = $request->cantidad_m[$llm];
-                $productosMayor->fecha                = $request->fecha;
-                $productosMayor->save();
-
-                $cantidadVendida = $cantidaMayor * $cantidadEscala;
-
-                $movimientoMayor               = new Movimiento();
-                $movimientoMayor->user_id      = Auth::user()->id;
-                $movimientoMayor->almacene_id  = Auth::user()->almacen_id;
-                $movimientoMayor->venta_id     = $venta_id;
-                $movimientoMayor->escala_id    = $request->escala_id_m[$llm];
-                $movimientoMayor->producto_id  = $llm;
-                $movimientoMayor->precio_venta = $request->precio_m[$llm];
-                $movimientoMayor->salida       = $cantidadVendida;
-                $movimientoMayor->estado       = 'Venta';
-                $movimientoMayor->save();
-            }
-
-        }
 
         // guardamos los datos de la promocion
         if($request->has('promoId'))
@@ -248,46 +185,151 @@ class VentaController extends Controller
                     }
 
                     $cantidadProductosPromo = $request->cantidadPromo[$llpr] * $ppr->cantidad;
-                    /*print_r($ppr->producto_id);
-                    echo " - ";
-                    print_r($ppr->precio);
-                    echo " - ";
-                    print_r($ppr->cantidad);
-                    echo " - ";
-                    print_r($request->cantidadPromo[$llpr]);    
-                    echo " - ";
-                    print_r($cantidadProductosPromo);
-                    echo "<br />";*/
 
-                    // guardamos los productos de la promocion
-                    $productosPr                 = new VentasProducto();
-                    $productosPr->user_id        = Auth::user()->id;
-                    $productosPr->producto_id    = $ppr->producto_id;
-                    $productosPr->venta_id       = $venta_id;
-                    $productosPr->combo_id       = $ppr->combo_id;
-                    $productosPr->precio_venta   = $precioProductoCombo;
-                    $productosPr->precio_cobrado = $precioProductoCombo;
-                    $productosPr->cantidad       = $cantidadProductosPromo;
-                    $productosPr->fecha          = $request->fecha;
-                    $productosPr->save();
+                    // vemos la cantida de stock en el almacen
+                    $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                        ->where('producto_id', $ppr->producto_id)
+                        ->where('almacene_id', auth()->user()->almacen_id)
+                        ->first();
+                    $totalVerificar = $cantidadTotalProducto->total - $cantidadProductosPromo;
 
-                    // guardamos lo movimientos de la promocion
-                    $movimientoPromocion               = new Movimiento();
-                    $movimientoPromocion->user_id      = Auth::user()->id;
-                    $movimientoPromocion->almacene_id  = Auth::user()->almacen_id;
-                    $movimientoPromocion->venta_id     = $venta_id;
-                    $movimientoPromocion->producto_id  = $ppr->producto_id;
-                    $movimientoPromocion->precio_venta = $precioProductoCombo;
-                    $movimientoPromocion->salida       = $cantidadProductosPromo;
-                    $movimientoPromocion->estado       = 'Venta';
-                    $movimientoPromocion->save();
+                    if ($totalVerificar < 0) {
+                        $errorVenta = 1;
+                        $mensajeError = 'No tienes suficientes productos para tu promocion';
+                    }else{
+                        // guardamos los productos de la promocion
+                        $productosPr                 = new VentasProducto();
+                        $productosPr->user_id        = Auth::user()->id;
+                        $productosPr->producto_id    = $ppr->producto_id;
+                        $productosPr->venta_id       = $venta_id;
+                        $productosPr->combo_id       = $ppr->combo_id;
+                        $productosPr->precio_venta   = $precioProductoCombo;
+                        $productosPr->precio_cobrado = $precioProductoCombo;
+                        $productosPr->cantidad       = $cantidadProductosPromo;
+                        $productosPr->fecha          = $request->fecha;
+                        $productosPr->save();
+
+                        // guardamos lo movimientos de la promocion
+                        $movimientoPromocion               = new Movimiento();
+                        $movimientoPromocion->user_id      = Auth::user()->id;
+                        $movimientoPromocion->almacene_id  = Auth::user()->almacen_id;
+                        $movimientoPromocion->venta_id     = $venta_id;
+                        $movimientoPromocion->producto_id  = $ppr->producto_id;
+                        $movimientoPromocion->precio_venta = $precioProductoCombo;
+                        $movimientoPromocion->salida       = $cantidadProductosPromo;
+                        $movimientoPromocion->estado       = 'Venta';
+                        $movimientoPromocion->save();
+                    }
+
                 }
-                // print_r($llpr);
-                // echo "<br>";
             }
         }
 
-        return redirect("Venta/muestra/".$venta_id);
+        // guardamos todos los items de la venta por unidad
+        if ($request->has('precio')) {
+            $llaves = array_keys($request->precio);
+            foreach ($llaves as $key => $ll) {
+
+                // verificamos la cantidad de productos en el almancen
+                $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                    ->where('producto_id', $ll)
+                    ->where('almacene_id', auth()->user()->almacen_id)
+                    ->first();
+                $totalVerificar = $cantidadTotalProducto->total - $request->cantidad[$ll];
+
+                if ($totalVerificar < 0) {
+                    $errorVenta = 1;
+                    $mensajeError = 'No tienes suficientes productos para tu venta';
+                } else {
+
+                    // guardamos los productos a vender
+                    $productos                 = new VentasProducto();
+                    $productos->user_id        = Auth::user()->id;
+                    $productos->producto_id    = $ll;
+                    $productos->venta_id       = $venta_id;
+                    $productos->precio_venta   = $request->precio_venta[$ll];
+                    $productos->precio_cobrado = $request->precio[$ll];
+                    $productos->cantidad       = $request->cantidad[$ll];
+                    $productos->fecha          = $request->fecha;
+                    $productos->save();
+
+                    // guardamos lo movimientos de la venta
+                    $movimiento               = new Movimiento();
+                    $movimiento->user_id      = Auth::user()->id;
+                    $movimiento->almacene_id  = Auth::user()->almacen_id;
+                    $movimiento->venta_id     = $venta_id;
+                    $movimiento->producto_id  = $ll;
+                    $movimiento->precio_venta = $request->precio[$ll];
+                    $movimiento->salida       = $request->cantidad[$ll];
+                    $movimiento->estado       = 'Venta';
+                    $movimiento->save();
+                }
+            }
+        }
+
+        // guardamos todos los items de la venta por mayor
+        if($request->has('precio_m')){
+            $llavesMayor = array_keys($request->precio_m);
+            foreach ($llavesMayor as $key => $llm) {
+
+                $cantidadVendida = 0;
+                $cantidaMayor = $request->cantidad_m[$llm];
+                $cantidadEscala = $request->cantidad_escala_m[$llm];
+
+                // verificamos la cantidad de productos en el almancen
+                $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                    ->where('producto_id', $llm)
+                    ->where('almacene_id', auth()->user()->almacen_id)
+                    ->first();
+                $totalVerificar = $cantidadTotalProducto->total - $request->cantidad_m[$ll];
+
+                if ($totalVerificar < 0) {
+                    $errorVenta = 1;
+                    $mensajeError = 'No tienes suficientes productos para tu venta al por mayor';
+                } else {
+                    $productosMayor                       = new VentasProducto();
+                    $productosMayor->user_id              = Auth::user()->id;
+                    $productosMayor->producto_id          = $llm;
+                    $productosMayor->venta_id             = $venta_id;
+                    $productosMayor->escala_id            = $request->escala_id_m[$llm];
+                    $productosMayor->precio_venta_mayor   = $request->precio_venta_m[$llm];
+                    $productosMayor->precio_cobrado_mayor = $request->precio_m[$llm];
+                    $productosMayor->cantidad             = $request->cantidad_m[$llm];
+                    $productosMayor->fecha                = $request->fecha;
+                    $productosMayor->save();
+
+                    $cantidadVendida = $cantidaMayor * $cantidadEscala;
+
+                    $movimientoMayor               = new Movimiento();
+                    $movimientoMayor->user_id      = Auth::user()->id;
+                    $movimientoMayor->almacene_id  = Auth::user()->almacen_id;
+                    $movimientoMayor->venta_id     = $venta_id;
+                    $movimientoMayor->escala_id    = $request->escala_id_m[$llm];
+                    $movimientoMayor->producto_id  = $llm;
+                    $movimientoMayor->precio_venta = $request->precio_m[$llm];
+                    $movimientoMayor->salida       = $cantidadVendida;
+                    $movimientoMayor->estado       = 'Venta';
+                    $movimientoMayor->save();
+                }
+            }
+
+        }
+
+        if ($errorVenta == 1) {
+                    // elimnamos la venta
+            $venta = Venta::find($venta_id);
+            $venta->delete();
+
+            // eliminamos los datos de la venta
+            Movimiento::where('venta_id', $venta_id)->delete();
+            VentasProducto::where('venta_id', $venta_id)->delete();
+        }
+
+        return response()->json([
+            'errorVenta' => $errorVenta,
+            'mensajeError'  => $mensajeError,
+            'ventaId'  => $venta_id
+        ]);
     }
 
     public function listado()
@@ -343,12 +385,14 @@ class VentaController extends Controller
         $venta->descripcion = $request->opcion_elimina;
         $venta->save();
 
+        // elimnamos la venta
         $venta = Venta::find($request->ventaId);
         $venta->delete();
 
+        // eliminamos los datos de la venta
         Movimiento::where('venta_id', $request->ventaId)->delete();
-
         VentasProducto::where('venta_id', $request->ventaId)->delete();
+
         return redirect('Venta/listado');
         // dd($request->all());
     }

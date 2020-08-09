@@ -173,7 +173,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">
-                                    Cliente 
+                                    CLIENTE 
                                     <small id="tag_nuevo_cliente" class="badge badge-default badge-success form-text text-white" onclick="nuevoCliente()">NUEVO</small>
                                     <small id="tag_edita_cliente" class="badge badge-default badge-info form-text text-white" onclick="editaCliente()" style="display: none;"><span id="tagCliente"></span></small>
                                 </label>
@@ -190,7 +190,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Fecha</label>
+                                <label class="control-label">FECHA</label>
                                 <input type="date" name="fecha" id="fecha" class="form-control"
                                     value="{{ date("Y-m-d") }}" required>
                             </div>
@@ -198,7 +198,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Buscar Producto</label>
+                                <label class="control-label">PRODUCTO (NOM/COD)</label>
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" id="termino" name="termino">
                                     <div class="input-group-append">
@@ -210,11 +210,14 @@
 
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Promociones</label>
+                                <label class="control-label">PROMOCIONES</label>
                                 <div class="input-group mb-3">
                                     <select name="promocione_id" id="promocione_id" class="select2 form-control custom-select" style="width: 100%; height:36px;" >
                                         <option value=""> Selecione una </option>
                                         @foreach($arrayPromociones as $p)
+                                            @php
+                                                
+                                            @endphp
                                             <option value="{{ $p['id'] }}" data-precio="{{ $p['total'] }}"> {{ $p['nombre'] }} </option>
                                         @endforeach
                                     </select>
@@ -228,7 +231,7 @@
                                 <div class="input-group mb-3">
                                     <a onclick="muestraPromocionCombo()" class="btn btn-info text-white"><i class="fas fa-eye"></i> </a>
                                     &nbsp;
-                                    <a onclick="adicionaPromocion()" class="btn btn-success text-white"><i class="fas fa-plus"></i> </a>
+                                    <a onclick="adicionaPromocionCombo()" class="btn btn-success text-white"><i class="fas fa-plus"></i> </a>
                                 </div>
                             </div>
                         </div>
@@ -258,14 +261,14 @@
                                 <table id="tablaPedido" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
-                                            <th>Nombre</th>
-                                            <th>Marca</th>
+                                            <th>CODIGO</th>
+                                            <th>NOMBRE</th>
+                                            <th>MARCA</th>
                                             <th>Tipo</th>
                                             <th class="w-10 text-center text-info"><i class="fas fa-archive"></i></th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th class="w-10 text-center">Total</th>
+                                            <th>CANTIDAD</th>
+                                            <th class="w-10 text-center">PRECIO</th>
+                                            <th class="w-10 text-center">IMPORTE</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -293,19 +296,16 @@
                                 <table id="tablaPromos" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
-                                            <th>Nombre</th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th class="w-10 text-center">Total</th>
+                                            <th>NOMBRE</th>
+                                            <th>PRECIO</th>
+                                            <th>CANTIDAD</th>
+                                            <th>IMPORTE</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-            
                                     </tbody>
-            
                                 </table>
-            
                             </div>
                         </div>
                     </div>
@@ -324,14 +324,14 @@
                                 <table id="tablaPedidoMayor" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
-                                            <th>Nombre</th>
-                                            <th>Marca</th>
+                                            <th>CODIGO</th>
+                                            <th>NOMBRE</th>
+                                            <th>MARCA</th>
                                             <th class="text-center text-info"><i class="fas fa-archive"></i></th>
-                                            <th>Unidad</th>
-                                            <th>Precio</th>
-                                            <th>Cantidad</th>
-                                            <th class="w-10 text-center">Total</th>
+                                            <th class="w-10 text-center">UNIDAD</th>
+                                            <th>CANTIDAD</th>
+                                            <th class="w-10 text-center">PRECIO</th>
+                                            <th class="w-10 text-center">IMPORTE</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -476,9 +476,9 @@
             tp.row($(this).parents('tr'))
                 .remove()
                 .draw();
-            // let itemBorrarMayor = $(this).closest("tr").find("td:eq(0)").text();
-            // let posMayor = itemsPedidoArrayMayor.lastIndexOf(itemBorrarMayor);
-            // itemsPedidoArrayMayor.splice(posMayor, 1);
+            let itemBorrarPromo = $(this).closest("tr").find("td:eq(0)").text();
+            let posPromo = itemsPromosArray.lastIndexOf(itemBorrarPromo);
+            itemsPromosArray.splice(posPromo, 1);
             sumaSubTotales();
         });
 
@@ -648,14 +648,42 @@
     {
         // verificamos que la venta tengan productos
         if (itemsPedidoArray.length > 0 || itemsPedidoArrayMayor.length > 0 || itemsPromosArray.length > 0) {
-            // verificamos que las cantidades sean las correctas
+            // verificamos que las cantidades sean las correctas si es asi enviamos el formulario
             if ($("#formularioVenta")[0].checkValidity()) {
-                Swal.fire({
-                    type: 'success',
-                    title: 'Excelente',
-                    text: 'Se realizo la venta'
+
+                let datosFormularioVenta = $("#formularioVenta").serializeArray();
+
+                $.ajax({
+                    url: "{{ url('Venta/guardaVenta') }}",
+                    data: datosFormularioVenta,
+                    type: 'POST',
+                    success: function(data) {
+                        if (data.errorVenta == 0) {
+
+                            Swal.fire({
+                                type: 'success',
+                                title: 'Excelente',
+                                text: 'Se realizo la venta'
+                            });
+
+                            window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
+
+                        } else {
+
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Oops...',
+                                text: 'No tienes las cantidades suficientes.'
+                            })
+
+                            window.location.href = "{{ url('Venta/tienda') }}";
+                            
+                        }
+                        // console.log(data);
+                        // $("#ajaxMuestraTotalesAlmacenes").html(data);
+                    }
                 });
-                $("#formularioVenta").submit();
+
             }else{
                 $("#formularioVenta")[0].reportValidity();
             }
@@ -812,12 +840,18 @@
         }
     }
 
-    function adicionaPromocion()
+    function adicionaPromocionCombo()
     {
-        // capturamos las variables del formulario
         let promocionId = $("#promocione_id").val();
         let nombre = $("#promocione_id").find(':selected').text();
         let precio = $("#promocione_id").find(':selected').data('precio');
+        adicionaPromocion(promocionId, nombre, precio);
+    }
+
+    function adicionaPromocion(promocionId = null, nombre = null, precio = null)
+    {
+        // cerramos el modal de las promociones
+        $("#danger-header-modal").modal("hide");
 
         // mostramos el bloque de la tabla promociones
         $("#bloquePromociones").show();
@@ -833,7 +867,7 @@
 
                 // adicionamos la fila a la tabla
                 tp.row.add([
-                    nombre,
+                    nombre + ' <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo('+promocionId+')">VER</small>',
                     precio,
                     `<input type="number" class="form-control text-right cantidadPromocion" name="cantidadPromo[`+promocionId+`]" data-idp="`+promocionId+`" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
                     <input type="hidden" name="promoId[`+promocionId+`]" id="promoId_`+promocionId+`" value="`+promocionId+`">

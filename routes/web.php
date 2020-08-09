@@ -236,6 +236,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Tienda/reporte_tienda', 'TiendaController@reporte_tienda');
     Route::get('Tienda/ajax_tienda_listado', 'TiendaController@ajax_tienda_listado');
 
+    //CONFIGURACIONES MENSAJES ELIMINACION VENTA
+    Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');
+    Route::post('Configuracione/guardarEliminaVenta', 'ConfiguracioneController@guardarEliminaVenta');
+    Route::get('Configuracione/eliminarEliminaVenta/{id}', 'ConfiguracioneController@eliminarEliminaVenta');
+
+    //CONFIGURACIONES MENSAJES CAMBIO DE PRODUCTOS
+    Route::get('Configuracione/listadoDevolucionProducto', 'ConfiguracioneController@listadoDevolucionProducto');
+    Route::post('Configuracione/guardaDevolucionProducto', 'ConfiguracioneController@guardaDevolucionProducto');
+    Route::get('Configuracione/eliminaMotivoDevolucionProducto/{id}', 'ConfiguracioneController@eliminaMotivoDevolucionProducto');
+
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');

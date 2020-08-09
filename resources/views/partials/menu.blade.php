@@ -213,6 +213,16 @@
                                 <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Usuarios </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Configuracione/listadoEliminaVenta') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Motivos Eliminacion</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Configuracione/listadoDevolucionProducto') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Motivos Devolucion</span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @endif
