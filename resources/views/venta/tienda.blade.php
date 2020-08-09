@@ -676,7 +676,7 @@
                                 text: 'No tienes las cantidades suficientes.'
                             })
 
-                            // window.location.href = "{{ url('Venta/tienda') }}";/
+                            window.location.href = "{{ url('Venta/tienda') }}";
                             
                         }
                         // console.log(data);
