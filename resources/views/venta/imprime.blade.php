@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card text-center" id="printableArea">
             <div class="card-header">
                 SAZEZ
@@ -29,10 +29,8 @@
                                 <th>Nombre</th>
                                 <th>Marca</th>
                                 <th>Tipo</th>
-                                <th>Precio</th>
                                 <th>Cantidad</th>
                                 <th>Garantia</th>
-                                <th>Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,7 +43,6 @@
                                     <td>{{ $productos->producto->nombre }}</td>
                                     <td>{{ $productos->producto->marca->nombre }}</td>
                                     <td>{{ $productos->producto->tipo->nombre }}</td>
-                                    <td>{{ ($productos->precio_cobrado_mayor>0)?$productos->precio_cobrado_mayor:$productos->precio_cobrado }}</td>
                                     <td>{{ $productos->cantidad }}</td>
                                     <td>30/08/2020</td>
                                     @php
@@ -57,16 +54,9 @@
                                         $subTotal = $precio_costo * $productos->cantidad;
                                         $total = $total + $subTotal;
                                     @endphp
-                                    <td class="text-right">{{ $subTotal }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr>
-                                <td class="text-right" colspan="8">Total : {{ $total }}</td>
-                            </tr>
-                        </tfoot>
-
                     </table>
                 </div>
                 <img src="{{ asset('qrs/1UTB-9V3T-6B96.png') }}" alt="">
@@ -86,7 +76,7 @@
     </div>
 </div>
 <div class="row">
-<button id="botonImprimir" class="btn btn-success btn-block col-md-4 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
+    <button id="botonImprimir" class="btn btn-success btn-block col-md-6 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
 </div>
 @stop
 
