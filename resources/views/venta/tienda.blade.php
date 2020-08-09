@@ -648,14 +648,42 @@
     {
         // verificamos que la venta tengan productos
         if (itemsPedidoArray.length > 0 || itemsPedidoArrayMayor.length > 0 || itemsPromosArray.length > 0) {
-            // verificamos que las cantidades sean las correctas
+            // verificamos que las cantidades sean las correctas si es asi enviamos el formulario
             if ($("#formularioVenta")[0].checkValidity()) {
-                Swal.fire({
-                    type: 'success',
-                    title: 'Excelente',
-                    text: 'Se realizo la venta'
+
+                let datosFormularioVenta = $("#formularioVenta").serializeArray();
+
+                $.ajax({
+                    url: "{{ url('Venta/guardaVenta') }}",
+                    data: datosFormularioVenta,
+                    type: 'POST',
+                    success: function(data) {
+                        if (data.errorVenta == 0) {
+
+                            Swal.fire({
+                                type: 'success',
+                                title: 'Excelente',
+                                text: 'Se realizo la venta'
+                            });
+
+                            window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
+
+                        } else {
+
+                            Swal.fire({
+                                type: 'error',
+                                title: 'Oops...',
+                                text: 'No tienes las cantidades suficientes.'
+                            })
+
+                            // window.location.href = "{{ url('Venta/tienda') }}";/
+                            
+                        }
+                        // console.log(data);
+                        // $("#ajaxMuestraTotalesAlmacenes").html(data);
+                    }
                 });
-                $("#formularioVenta").submit();
+
             }else{
                 $("#formularioVenta")[0].reportValidity();
             }
@@ -839,7 +867,7 @@
 
                 // adicionamos la fila a la tabla
                 tp.row.add([
-                    nombre + '<small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo('+promocionId+')">VER</small>',
+                    nombre + ' <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo('+promocionId+')">VER</small>',
                     precio,
                     `<input type="number" class="form-control text-right cantidadPromocion" name="cantidadPromo[`+promocionId+`]" data-idp="`+promocionId+`" id="cantidadPromo[`+promocionId+`]" value="1" min="1" style="width: 100px;">
                     <input type="hidden" name="promoId[`+promocionId+`]" id="promoId_`+promocionId+`" value="`+promocionId+`">
