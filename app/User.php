@@ -20,6 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'almacen_id',
+        'perfil_id',
         'name',
         'ci',
         'rol',
@@ -108,5 +109,15 @@ class User extends Authenticatable
     public function cupones()
     {
         return $this->hasMany('App\Cupone');
+    }
+
+    public function menususers()
+    {
+        return $this->hasMany('App\MenusUser');
+    }
+
+    public function perfil()
+    {
+        return $this->belongsTo('App\Perfile', 'perfil_id');
     }
 }
