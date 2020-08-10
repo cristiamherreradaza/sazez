@@ -160,10 +160,11 @@ class VentaController extends Controller
     {
         if ($request->pagoContado != "on") 
         {
-            $pagoCredito = 'No';
-        }else{
             $pagoCredito = 'Si';
             $saldoVenta = $request->totalCompra - $request->cambioVenta;
+        }else{
+            $pagoCredito = 'No';
+            $saldoVenta = 0;
         }
         // dd($request->all());
         $errorVenta = 0;
@@ -174,6 +175,7 @@ class VentaController extends Controller
         $venta->almacene_id = Auth::user()->almacen_id;
         $venta->cliente_id  = $request->cliente_id;
         $venta->fecha       = $request->fecha;
+        $venta->saldo       = $saldoVenta;
         $venta->credito     = $pagoCredito;
         $venta->total       = $request->totalCompra;
         $venta->save();
@@ -324,12 +326,20 @@ class VentaController extends Controller
 
         }
 
-        
+        if ($request->pagoContado != "on") 
+        {
+            $pagoARegistrar = $request->efectivo;
+        }else{
+            $pagoARegistrar = $request->totalCompra;
+        }
 
         // guardamos el pago
-        $pago = new Pago();
-        $pago->user_id = Auth::user()->id;
-        $pago->user_id = Auth::user()->id;
+        $pago             = new Pago();
+        $pago->user_id    = Auth::user()->id;
+        $pago->cliente_id = $request->cliente_id;
+        $pago->venta_id   = $venta_id;
+        $pago->importe    = $pagoARegistrar;
+        $pago->save();
 
         if ($errorVenta == 1) {
                     // elimnamos la venta

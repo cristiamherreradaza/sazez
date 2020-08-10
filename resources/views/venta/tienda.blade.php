@@ -371,7 +371,7 @@
                                 <tr>
                                     <td class="text-right">EFECTIVO</td>
                                     <td><input type="number" name="efectivo" id="efectivo"
-                                            class="form-control text-right text-right" step="any" value="0" style="width: 120px;" min="1"></td>
+                                            class="form-control text-right text-right" step="any" value="0" style="width: 120px;" min="0"></td>
                                 </tr>
                                 <tr>
                                     <td class="text-right"><span id="saldoOCambio">CAMBIO</span></td>
