@@ -7,6 +7,7 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -355,19 +356,25 @@
                         <table class="table table-striped">
                             <tbody>
                                 <tr>
-                                    <td>TOTAL</td>
+                                    <td class="text-right">PAGO</td>
+                                    <td colspan="2">
+                                        <input name="pagoContado" type="checkbox" data-toggle="toggle" data-on="CONTADO" data-off="CREDITO" data-onstyle="success" data-offstyle="danger" data-width="120" checked onchange="cambiaASaldo()">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-right">TOTAL</td>
                                     <td><input type="text" class="form-control text-right" name="totalCompra"
                                             id="resultadoSubTotales" style="width: 120px;" readonly>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>EFECTIVO</td>
+                                    <td class="text-right">EFECTIVO</td>
                                     <td><input type="number" name="efectivo" id="efectivo"
-                                            class="form-control text-right text-right" step="any" value="0"
-                                            style="width: 120px;"></td>
+                                            class="form-control text-right text-right" step="any" value="0" style="width: 120px;" min="1"></td>
                                 </tr>
                                 <tr>
-                                    <td>CAMBIO</td>
+                                    <td class="text-right"><span id="saldoOCambio">CAMBIO</span></td>
                                     <td><input type="number" name="cambioVenta" id="cambioVenta"
                                             class="form-control text-right text-right" step="any" value="0"
                                             style="width: 120px;" readonly></td>
@@ -398,6 +405,7 @@
 <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script src="{{ asset('js/NumeroALetras.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script>
     // tabla de pedidos por unidad
     var t = $('#tablaPedido').DataTable({
@@ -431,7 +439,6 @@
             url: '{{ asset('datatableEs.json') }}'
         },
     });
-
 
     // array para controlar la cantidad de items en pedido unitario
     var itemsPedidoArray = [];
@@ -487,11 +494,8 @@
             let totalVenta = Number($("#resultadoSubTotales").val());
             let efectivo = Number($("#efectivo").val());
             let cambio = efectivo - totalVenta; 
-            if (cambio > 0) {
-                $("#cambioVenta").val(cambio);
-            }else{
-                $("#cambioVenta").val(0);
-            }
+            let numeroSinSigno = Math.abs(cambio);
+            $("#cambioVenta").val(numeroSinSigno);
         });
 
     });
@@ -666,7 +670,7 @@
                                 text: 'Se realizo la venta'
                             });
 
-                            window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
+                            // window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
 
                         } else {
 
@@ -676,7 +680,7 @@
                                 text: 'No tienes las cantidades suficientes.'
                             })
 
-                            window.location.href = "{{ url('Venta/tienda') }}";
+                            // window.location.href = "{{ url('Venta/tienda') }}";
                             
                         }
                         // console.log(data);
@@ -881,6 +885,20 @@
             }else{
                 alert("Selecciona una promocion")
             }
+        }
+    }
+
+    function cambiaASaldo()
+    {
+        let texto = $('#saldoOCambio').text();
+        let montoTotalVenta = $('#resultadoSubTotales').val();
+        $("#saldoOCambio").text(
+            texto == "CAMBIO" ? "SALDO" : "CAMBIO"
+        );
+        if (texto == "CAMBIO") {
+            $("#efectivo").attr({"max": montoTotalVenta});
+        }else{
+            $("#efectivo").removeAttr("max");
         }
     }
 

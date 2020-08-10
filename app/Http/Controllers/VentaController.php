@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Pago;
 use App\User;
 use App\Combo;
 use App\Grupo;
@@ -157,6 +158,13 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
+        if ($request->pagoContado != "on") 
+        {
+            $pagoCredito = 'No';
+        }else{
+            $pagoCredito = 'Si';
+            $saldoVenta = $request->totalCompra - $request->cambioVenta;
+        }
         // dd($request->all());
         $errorVenta = 0;
         $mensajeError = "";
@@ -166,6 +174,7 @@ class VentaController extends Controller
         $venta->almacene_id = Auth::user()->almacen_id;
         $venta->cliente_id  = $request->cliente_id;
         $venta->fecha       = $request->fecha;
+        $venta->credito     = $pagoCredito;
         $venta->total       = $request->totalCompra;
         $venta->save();
         $venta_id = $venta->id;
@@ -314,6 +323,13 @@ class VentaController extends Controller
             }
 
         }
+
+        
+
+        // guardamos el pago
+        $pago = new Pago();
+        $pago->user_id = Auth::user()->id;
+        $pago->user_id = Auth::user()->id;
 
         if ($errorVenta == 1) {
                     // elimnamos la venta
