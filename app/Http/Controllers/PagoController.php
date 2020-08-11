@@ -3,83 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Pago;
+use App\Venta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PagoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function muestraPagos($ventaId)
     {
-        //
+        $datosVenta = Venta::find($ventaId);
+        $pagos = Pago::where('venta_id', $ventaId)->get();
+        return view('pago.muestraPagos')->with(compact('pagos', 'datosVenta'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function guardaPago(Request $request)
     {
-        //
+        // dd($request->all());
+        $pago             = new Pago();
+        $pago->user_id    = Auth::user()->id;
+        $pago->cliente_id = $request->cliente_id;
+        $pago->venta_id   = $request->venta_id;
+        $pago->fecha      = $request->fecha;
+        $pago->importe    = $request->importe;
+        $pago->save();
+
+        return redirect("Pago/muestraPagos/$request->venta_id");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Pago  $pago
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Pago $pago)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Pago  $pago
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pago $pago)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pago  $pago
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pago $pago)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Pago  $pago
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pago $pago)
-    {
-        //
-    }
 }

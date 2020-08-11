@@ -246,6 +246,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Configuracione/guardaDevolucionProducto', 'ConfiguracioneController@guardaDevolucionProducto');
     Route::get('Configuracione/eliminaMotivoDevolucionProducto/{id}', 'ConfiguracioneController@eliminaMotivoDevolucionProducto');
 
+    // PAGOS
+    Route::get('Pago/muestraPagos/{id}', 'PagoController@muestraPagos');
+    Route::post('Pago/guardaPago', 'PagoController@guardaPago');
+
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');

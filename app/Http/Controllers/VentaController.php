@@ -161,7 +161,7 @@ class VentaController extends Controller
         if ($request->pagoContado != "on") 
         {
             $pagoCredito = 'Si';
-            $saldoVenta = $request->totalCompra - $request->cambioVenta;
+            $saldoVenta = $request->cambioVenta;
         }else{
             $pagoCredito = 'No';
             $saldoVenta = 0;
@@ -338,6 +338,7 @@ class VentaController extends Controller
         $pago->user_id    = Auth::user()->id;
         $pago->cliente_id = $request->cliente_id;
         $pago->venta_id   = $venta_id;
+        $pago->fecha      = $request->fecha;
         $pago->importe    = $pagoARegistrar;
         $pago->save();
 
@@ -371,15 +372,18 @@ class VentaController extends Controller
                 'almacenes.nombre as almacene', 
                 'users.name as user', 
                 'ventas.total',
+                'ventas.saldo',
                 'ventas.fecha'
             )
             ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
-            ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id');
+            ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
+            ->where('ventas.almacene_id', $almacen);
 
         return Datatables::of($ventas)
             ->addColumn('action', function ($ventas) {
                 return '<button onclick="muestra(' . $ventas->id . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>
-                        <button onclick="imprimir(' .$ventas->id. ')" class="btn btn-primary" title="Imprimir garantia"><i class="fas fa-print"></i> </button>';
+                        <button onclick="imprimir(' .$ventas->id. ')" class="btn btn-primary" title="Imprimir garantia"><i class="fas fa-print"></i> </button>
+                        <button onclick="pagos(' .$ventas->id. ')" class="btn btn-success" title="Imprimir garantia"><i class="fas fa-donate"></i> </button>';
             })
             ->make(true);    
     }

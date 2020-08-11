@@ -25,6 +25,7 @@
                                 <th>TIENDA</th>
                                 <th>CLIENTE</th>
                                 <th>TOTAL</th>
+                                <th>SALDO</th>
                                 <th>FECHA</th>
                                 <th>Accion</th>
                             </tr>
@@ -72,6 +73,7 @@ $(document).ready(function() {
             {data: 'almacene', name: 'almacenes.nombre'},
             {data: 'user', name: 'users.name'},
             {data: 'total', name: 'total'},
+            {data: 'saldo', name: 'saldo'},
             {data: 'fecha', name: 'fecha'},
             {data: 'action'},
         ],
@@ -109,6 +111,11 @@ function muestra(venta_id)
 function imprimir(venta_id)
 {
     window.location.href = "{{ url('Venta/imprimir') }}/" + venta_id;
+}
+
+function pagos(venta_id)
+{
+    window.location.href = "{{ url('Pago/muestraPagos') }}/" + venta_id;
 }
 
 </script>

@@ -66,7 +66,7 @@
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
                             <a href="{{ url('Venta/tienda') }}" class="sidebar-link">
-                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Tienda </span>
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
                             </a>
                         </li>
                         {{-- <li class="sidebar-item">
