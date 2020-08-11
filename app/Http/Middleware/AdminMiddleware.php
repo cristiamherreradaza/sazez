@@ -23,5 +23,27 @@ class AdminMiddleware
             }
         }
         return $next($request);
+
+        // if(auth()->user()->perfil->nombre == 'Administrador'){
+        //     return $next($request);  
+        // }
+        // else{
+        //     return redirect('/');
+        // }
+
+        // if(auth()->user()->perfil->nombre == 'Almacen'){
+        //     return $next($request);  
+        // }
+        // else{
+        //     return redirect('/');
+        // }
+
+        // if(auth()->user()->perfil->nombre == 'Mayorista'){
+        //     return $next($request);  
+        // }
+        // else{
+        //     return redirect('/');
+        // }
+        
     }
 }
