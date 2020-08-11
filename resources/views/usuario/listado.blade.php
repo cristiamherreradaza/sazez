@@ -43,6 +43,7 @@
                             </td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->celulares }}', '{{ $usuario->nit }}', '{{ $usuario->razon_social }}', '{{ $usuario->perfil_id }}', '{{ $usuario->almacen_id }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $usuario->id }})"><i class="fas fa-key"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar usuario"  onclick="eliminar('{{ $usuario->id }}', '{{ $usuario->name }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
@@ -253,6 +254,14 @@
 </div>
 <!-- fin modal editar usuario -->
 
+<!-- inicio modal editar perfil -->
+<div id="editar_perfiles" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="editaPerfilAjax">
+        
+    </div>
+</div>
+<!-- fin modal editar perfil -->
+
 <!-- inicio modal cambiar contrasena -->
 <div id="password_usuarios" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -321,6 +330,23 @@
                 'success'
             )
         }
+    }
+
+    function permisos(usuario_id, perfil_id)
+    {
+        $.ajax({
+            url: "{{ url('User/ajaxEditaPerfil') }}",
+            data: {
+                usuario_id: usuario_id,
+                perfil_id: perfil_id
+                },
+            type: 'get',
+            success: function(data) {
+                //$("#muestraCuponAjax").show('slow');
+                $("#editaPerfilAjax").html(data);
+                $("#editar_perfiles").modal('show');
+            }
+        });
     }
 
     function editar(id, nombre, email, celular, nit, razon_social, perfil, almacen)

@@ -12,6 +12,7 @@ use App\Perfile;
 use App\NotasPropuesta;
 use App\Turno;
 use App\User;
+use App\Menu;
 use App\MenusPerfile;
 use App\MenusUser;
 use Validator;
@@ -23,7 +24,8 @@ class UserController extends Controller
         $usuarios = User::get();
         $almacenes = Almacene::get();
         $perfiles = Perfile::get();
-        return view('usuario.listado')->with(compact('usuarios', 'perfiles', 'almacenes'));
+        $menus = Menu::whereNull('padre')->get();
+        return view('usuario.listado')->with(compact('usuarios', 'perfiles', 'almacenes', 'menus'));
     }
 
     public function guardar(Request $request)
@@ -99,6 +101,15 @@ class UserController extends Controller
             }
         }
         return redirect('User/listado');
+    }
+
+    public function ajaxEditaPerfil(Request $request)
+    {
+        $perfil = Perfile::find($request->perfil_id);
+        $menugeneral = Menu::whereNull('padre')->get();
+        $menusperfil = MenusPerfile::where('perfil_id', $perfil->id)->get();
+        return view('usuario.ajaxEditaPerfil')->with(compact('perfil', 'menusperfil', 'menugeneral'));
+
     }
 
     public function password(Request $request)

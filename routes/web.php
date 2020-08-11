@@ -123,6 +123,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Movimiento/ajaxBuscaProducto', 'MovimientoController@ajaxBuscaProducto');
     Route::post('Movimiento/guarda', 'MovimientoController@guarda');
 
+    // PERFILES
+    Route::get('Perfil/listado', 'PerfilController@listado');
+    Route::post('Perfil/guardar', 'PerfilController@guardar');
+    Route::get('Perfil/ajaxEditaPerfil', 'PerfilController@ajaxEditaPerfil');
+    Route::post('Perfil/actualizar', 'PerfilController@actualizar');
+    Route::get('Perfil/eliminar/{id}', 'PerfilController@eliminar');
+
     //PROMOS
     Route::get('Combo/nuevo', 'ComboController@nuevo');//va
     Route::post('Combo/guarda', 'ComboController@guarda');//va
@@ -202,6 +209,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('User/perfil', 'UserController@perfil');
     Route::post('User/password', 'UserController@password');
     Route::post('User/actualizarImagen', 'UserController@actualizarImagen');
+    Route::get('User/ajaxEditaPerfil', 'UserController@ajaxEditaPerfil');
 
     //VENTAS
     Route::post('Venta/ajaxBuscaProducto', 'VentaController@ajaxBuscaProducto');
