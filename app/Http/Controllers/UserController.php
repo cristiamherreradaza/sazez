@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Hash;
 use DataTables;
 use App\Almacene;
 use App\Asignatura;
+use App\Perfile;
 use App\NotasPropuesta;
 use App\Turno;
 use App\User;
+use App\MenusPerfile;
+use App\MenusUser;
 use Validator;
 
 class UserController extends Controller
@@ -19,7 +22,8 @@ class UserController extends Controller
     {
         $usuarios = User::get();
         $almacenes = Almacene::get();
-        return view('usuario.listado')->with(compact('usuarios', 'almacenes'));
+        $perfiles = Perfile::get();
+        return view('usuario.listado')->with(compact('usuarios', 'perfiles', 'almacenes'));
     }
 
     public function guardar(Request $request)
@@ -30,10 +34,26 @@ class UserController extends Controller
         $usuario->celulares = $request->celular_usuario;
         $usuario->nit = $request->nit_usuario;
         $usuario->razon_social = $request->razon_social_usuario;
-        $usuario->rol = $request->rol_usuario;
+        $usuario->perfil_id = $request->perfil_usuario;
+        //$usuario->rol = $request->rol_usuario;
         $usuario->almacen_id = $request->almacen_usuario;
         $usuario->password = Hash::make($request->password_usuario);
         $usuario->save();
+        
+        if($request->perfil_usuario)
+        {
+            $menus = MenusPerfile::where('perfil_id', $request->perfil_usuario)->get();
+            if(count($menus) > 0)
+            {
+                foreach($menus as $menu)
+                {
+                    $menu_user = new MenusUser();
+                    $menu_user->user_id = $usuario->id;
+                    $menu_user->menu_id = $menu->menu_id;
+                    $menu_user->save();
+                }
+            }
+        }
         return redirect('User/listado');
     }
 
@@ -45,13 +65,39 @@ class UserController extends Controller
         $usuario->celulares = $request->celular;
         $usuario->razon_social = $request->razon_social;
         $usuario->nit = $request->nit;
-        if($request->rol){
-            $usuario->rol = $request->rol;
+        // if($request->rol){
+        //     $usuario->rol = $request->rol;
+        // }
+        if($request->perfil){
+            // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
+            $menuusers = MenusUser::where('user_id', $usuario->id)->get();
+            if(count($menuusers) > 0)
+            {
+                foreach($menuusers as $menuuser)
+                {
+                    $menuuser->delete();
+                }
+            }
+            // Asignaremos nuevo perfil
+            $usuario->perfil_id = $request->perfil;
         }
-        if($request->rol){
+        if($request->almacen){
             $usuario->almacen_id = $request->almacen;
         }
         $usuario->save();
+
+        $menus = MenusPerfile::where('perfil_id', $request->perfil)->get();
+        if(count($menus) > 0)
+        {
+            // Adicionaremos los nuevos
+            foreach($menus as $menu)
+            {
+                $menu_user = new MenusUser();
+                $menu_user->user_id = $usuario->id;
+                $menu_user->menu_id = $menu->menu_id;
+                $menu_user->save();
+            }
+        }
         return redirect('User/listado');
     }
 

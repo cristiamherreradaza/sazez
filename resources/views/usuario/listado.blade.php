@@ -21,7 +21,7 @@
                         <th>Nombre</th>
                         <th>Correo Electronico</th>
                         <th>Celular</th>
-                        <th>Rol</th>
+                        <th>Perfil</th>
                         <th>Almacen</th>
                         <th>Opciones</th>
                     </tr>
@@ -33,7 +33,7 @@
                             <td>{{ $usuario->name }}</td>
                             <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->celulares }}</td>
-                            <td>{{ $usuario->rol }}</td>
+                            <td>{{ $usuario->perfil['nombre'] }}</td>
                             <td>
                                 @if($usuario->almacen_id)
                                     {{ $usuario->almacen->nombre }}
@@ -42,7 +42,7 @@
                                 @endif
                             </td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->celulares }}', '{{ $usuario->nit }}', '{{ $usuario->razon_social }}', '{{ $usuario->rol }}', '{{ $usuario->almacen_id }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->celulares }}', '{{ $usuario->nit }}', '{{ $usuario->razon_social }}', '{{ $usuario->perfil_id }}', '{{ $usuario->almacen_id }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $usuario->id }})"><i class="fas fa-key"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar usuario"  onclick="eliminar('{{ $usuario->id }}', '{{ $usuario->name }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
@@ -111,12 +111,15 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Rol</label>
-                                <select name="rol_usuario" id="rol_usuario" class="form-control">
-                                    <option value="Cliente" selected> Cliente </option>
-                                    <option value="Distribuidor"> Distribuidor </option>
-                                    <option value="Tienda"> Tienda </option>
-                                    <option value="Administrador"> Administrador </option>
+                                <label class="control-label">Perfil</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="perfil_usuario" id="perfil_usuario" class="form-control" required>
+                                    <option value="" selected> Seleccione </option>
+                                    @foreach($perfiles as $perfil)
+                                        <option value="{{ $perfil->id }}">{{ $perfil->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -127,7 +130,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <select name="almacen_usuario" id="almacen_usuario" class="form-control" required>
-                                    <option value="" selected></option>
+                                    <option value="" selected> Seleccione </option>
                                     @foreach($almacenes as $almacen)
                                         <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
                                     @endforeach
@@ -213,12 +216,15 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Rol</label>
-                                <select name="rol" id="rol" class="form-control">
-                                    <option value="Cliente"> Cliente </option>
-                                    <option value="Distribuidor"> Distribuidor </option>
-                                    <option value="Tienda"> Tienda </option>
-                                    <option value="Administrador"> Administrador </option>
+                                <label class="control-label">Perfil</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="perfil" id="perfil" class="form-control" required>
+                                    <option value="" selected> Seleccione </option>
+                                    @foreach($perfiles as $perfil)
+                                        <option value="{{ $perfil->id }}">{{ $perfil->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -229,7 +235,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <select name="almacen" id="almacen" class="form-control" required>
-                                    <option value="" selected></option>
+                                    <option value="" selected>Seleccione</option>
                                     @foreach($almacenes as $almacen)
                                         <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
                                     @endforeach
@@ -303,12 +309,12 @@
     function guardar_usuario()
     {
         var nombre_usuario = $("#nombre_usuario").val();
-        var rol_usuario = $("#rol_usuario").val();
+        var perfil_usuario = $("#perfil_usuario").val();
         var email_usuario = $("#email_usuario").val();
         var password_usuario = $("#password_usuario").val();
         var almacen_usuario = $("#almacen_usuario").val();
 
-        if(nombre_usuario.length>0 && rol_usuario.length>0 && almacen_usuario.length>0 &&email_usuario.length>0 && password_usuario.length>7){
+        if(nombre_usuario.length>0 && perfil_usuario.length>0 && almacen_usuario.length>0 &&email_usuario.length>0 && password_usuario.length>7){
             Swal.fire(
                 'Excelente!',
                 'Una nuevo usuario fue registrado.',
@@ -317,7 +323,7 @@
         }
     }
 
-    function editar(id, nombre, email, celular, nit, razon_social, rol, almacen)
+    function editar(id, nombre, email, celular, nit, razon_social, perfil, almacen)
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
@@ -325,7 +331,7 @@
         $("#celular").val(celular);
         $("#nit").val(nit);
         $("#razon_social").val(razon_social);
-        $("#rol").val(rol);
+        $("#perfil").val(perfil);
         $("#almacen").val(almacen);
         $("#editar_usuarios").modal('show');
     }
@@ -334,10 +340,10 @@
     {
         var id = $("#id").val();
         var nombre = $("#nombre").val();
-        var rol = $("#rol").val();
+        var perfil = $("#perfil").val();
         var email = $("#email").val();
         var almacen = $("#almacen").val();
-        if(nombre.length>0 && rol.length>0 && email.length>0 && almacen.length>0){
+        if(nombre.length>0 && perfil.length>0 && email.length>0 && almacen.length>0){
             Swal.fire(
                 'Excelente!',
                 'Usuario actualizado correctamente.',

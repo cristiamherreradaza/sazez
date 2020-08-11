@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsTo('App\Almacene', 'almacen_id');
     }
 
+    public function perfil()
+    {
+        return $this->belongsTo('App\Perfile', 'perfil_id');
+}
+
     public function combos()
     {
         return $this->hasMany('App\Combo');
@@ -116,8 +121,5 @@ class User extends Authenticatable
         return $this->hasMany('App\MenusUser');
     }
 
-    public function perfil()
-    {
-        return $this->belongsTo('App\Perfile', 'perfil_id');
-    }
+    
 }
