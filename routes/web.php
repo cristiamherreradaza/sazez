@@ -114,6 +114,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cupon/cobrar', 'CuponController@cobrar');
     Route::get('Cupon/ver/{id}', 'CuponController@ver');
 
+    //MENUS
+    Route::get('Menu/listado', 'MenuController@listado');
+    Route::post('Menu/actualizar', 'MenuController@actualizar');
+
     //MOVIMIENTOS INGRESOS
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');
     Route::post('Movimiento/ajaxBuscaProducto', 'MovimientoController@ajaxBuscaProducto');
