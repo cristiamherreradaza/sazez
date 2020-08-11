@@ -29,10 +29,21 @@
                     <div class="form-group">
                         <label class="control-label">Menus</label>
                         @foreach($menugeneral as $key => $menu)
+                            @php
+                                $consulta = App\MenusPerfile::where('perfil_id', $perfil->id)->where('menu_id', $menu->id)->count();
+                                if($consulta > 0)
+                                {
+                                    $checkeado = 'checked';
+                                }
+                                else
+                                {
+                                    $checkeado = '';
+                                }
+                            @endphp
                             <div class="col-sm-3">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input cajas" value="{{ $menu->id }}" id="customCheck{{$key}}" name="menus[]">
-                                    <label for="customCheck{{$key}}" class="custom-control-label">{{ $menu->nombre }}</label>
+                                    <input type="checkbox" class="custom-control-input cajas" value="{{ $menu->id }}" id="customCheck-{{$key}}" name="datosmenu[]" {{ $checkeado }}>
+                                    <label for="customCheck-{{$key}}" class="custom-control-label">{{ $menu->nombre }}</label>
                                 </div>
                             </div>
                         @endforeach

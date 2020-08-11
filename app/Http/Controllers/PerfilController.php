@@ -19,7 +19,7 @@ class PerfilController extends Controller
 
     public function guardar(Request $request)
     {
-        //dd($request->menus);
+        dd($request->menus);
         $perfil = new Perfile();
         $perfil->user_id = Auth::user()->id;
         $perfil->nombre = $request->nombre_perfil;
@@ -68,19 +68,58 @@ class PerfilController extends Controller
 
     public function actualizar(Request $request)
     {
+        //dd($request->datosmenu);
         $perfil = Perfile::find($request->id);
         $perfil->user_id = Auth::user()->id;
         $perfil->nombre = $request->nombre;
-        $perfil->direccion = $request->direccion;
-        $perfil->telefonos = $request->telefonos;
+        $perfil->descripcion = $request->descripcion;
         $perfil->save();
-        return redirect('Almacen/listado');
+
+        //Buscamos todos los menusperfiles correspondientes al perfil
+        $menusperfiles = MenusPerfile::where('perfil_id', $perfil->id)->get();
+        //Luego eliminamos todos sus registros
+        foreach($menusperfiles as $registro)
+        {
+            $registro->delete();
+        }
+        //Preguntamos si existen datos enviados mediante el checkbox
+        if($request->datosmenu)
+        {
+            foreach($request->datosmenu as $menu_id)
+            {
+                // Agregaremos al menu padre en los menusperfile
+                $menusperfil = new MenusPerfile();
+                $menusperfil->perfil_id = $perfil->id;
+                $menusperfil->menu_id = $menu_id;
+                $menusperfil->save();
+                // Buscaremos todos los hijos de ese menu
+                $menus = Menu::where('padre', $menu_id)->get();
+                if(count($menus)>0)             // Si tiene algun hijo
+                {
+                    // Por cada hijo que tenga este menu
+                    foreach($menus as $menu)
+                    {
+                        // Crearemos un registro de cada hijo del menu principal, asociandolo a ese perfil
+                        $menusperfil = new MenusPerfile();
+                        $menusperfil->perfil_id = $perfil->id;
+                        $menusperfil->menu_id = $menu->id;
+                        $menusperfil->save();
+                    }
+                }
+            }
+        }
+        return redirect('Perfil/listado');
     }
 
     public function eliminar(Request $request)
     {
+        $menusperfiles = MenusPerfile::where('perfil_id', $request->id)->get();
+        foreach($menusperfiles as $registro)
+        {
+            $registro->delete();
+        }
         $perfil = Perfile::find($request->id);
         $perfil->delete();
-        return redirect('Almacen/listado');
+        return redirect('Perfil/listado');
     }
 }
