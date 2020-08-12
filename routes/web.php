@@ -261,6 +261,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // PAGOS
     Route::get('Pago/muestraPagos/{id}', 'PagoController@muestraPagos');
     Route::post('Pago/guardaPago', 'PagoController@guardaPago');
+    Route::get('Pago/eliminar/{pagoId}', 'PagoController@eliminar');
 
 });
 

@@ -670,7 +670,7 @@
                                 text: 'Se realizo la venta'
                             });
 
-                            // window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
+                            window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
 
                         } else {
 
@@ -680,7 +680,7 @@
                                 text: 'No tienes las cantidades suficientes.'
                             })
 
-                            // window.location.href = "{{ url('Venta/tienda') }}";
+                            window.location.href = "{{ url('Venta/tienda') }}";
                             
                         }
                         // console.log(data);

@@ -69,8 +69,8 @@
                                     <tr>
                                         <th>#</th>
                                         <th>Nombre</th>
-                                        <th>Importe</th>
-                                        <th>Fecha</th>
+                                        <th class="text-center">Importe</th>
+                                        <th class="text-center">Fecha</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -85,14 +85,11 @@
                                     <tr>
                                         <td>{{ ($key+1) }}</td>
                                         <td>{{ $p->user->name }}</td>
-                                        <td>{{ $p->importe }}</td>
-                                        <td>{{ $p->fecha }}</td>
+                                        <td class="text-right">{{ $p->importe }}</td>
+                                        <td class="text-center">{{ $p->fecha }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-warning" title="Editar almacen"
-                                                onclick="editar('{{ $p->id }}', '{{ $p->nombre }}', '{{ $p->telefonos }}', '{{ $p->direccion }}')"><i
-                                                    class="fas fa-edit"></i></button>
-                                            <button type="button" class="btn btn-danger" title="Eliminar almacen"
-                                                onclick="eliminar('{{ $p->id }}', '{{ $p->nombre }}')"><i
+                                            <button type="button" class="btn btn-danger" title="Elimina Pago"
+                                                onclick="eliminar('{{ $p->id }}', '{{ $p->importe }}')"><i
                                                     class="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
@@ -122,6 +119,30 @@
 @stop
 
 @section('js')
+<script>
+function eliminar(id, nombre)
+{
+    Swal.fire({
+        title: 'Quieres borrar ' + nombre + '?',
+        text: "Luego no podras recuperarlo!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Si, estoy seguro!',
+        cancelButtonText: "Cancelar",
+    }).then((result) => {
+        if (result.value) {
+            Swal.fire(
+                'Excelente!',
+                'El importe fue eliminado',
+                'success'
+            );
+            window.location.href = "{{ url('Pago/eliminar') }}/"+id;
+        }
+    })
+}
+</script>
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 @endsection

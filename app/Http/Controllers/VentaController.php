@@ -158,7 +158,7 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-        if ($request->pagoContado != "on"
+        if ($request->pagoContado != "on") 
         {
             $pagoCredito = 'Si';
             $saldoVenta = $request->cambioVenta;
