@@ -108,8 +108,44 @@ class UserController extends Controller
         $perfil = Perfile::find($request->perfil_id);
         $menugeneral = Menu::whereNull('padre')->get();
         $menusperfil = MenusPerfile::where('perfil_id', $perfil->id)->get();
-        return view('usuario.ajaxEditaPerfil')->with(compact('perfil', 'menusperfil', 'menugeneral'));
+        $usuario = User::find($request->usuario_id);
+        return view('usuario.ajaxEditaPerfil')->with(compact('perfil', 'menusperfil', 'menugeneral', 'usuario'));
+    }
 
+    public function actualizaMenus(Request $request)
+    {
+        //dd($request->menus);
+        // Si se actualizaran, primero borrar y luego agregar
+        $menususuario = MenusUser::where('user_id', $request->usuario_id)->get();
+        foreach($menususuario as $registro)
+        {
+            $registro->delete();
+        }
+        // Si existen datos en el checkbox
+        if($request->menus)
+        {
+            foreach($request->menus as $menu)
+            {
+                $menuuser = new MenusUser();
+                $menuuser->user_id = $request->usuario_id;
+                $menuuser->menu_id = $menu;
+                $menuuser->save();
+                $hijos = Menu::where('padre', $menu)->get();
+                if(count($hijos)>0)             // Si tiene algun hijo
+                {
+                    // Por cada hijo que tenga este menu
+                    foreach($hijos as $registro)
+                    {
+                        // Crearemos un registro de cada hijo del menu principal, asociandolo a ese perfil
+                        $menuuser = new MenusUser();
+                        $menuuser->user_id = $request->usuario_id;
+                        $menuuser->menu_id = $registro->id;
+                        $menuuser->save();
+                    }
+                }
+            }
+        }
+        return redirect('User/listado');
     }
 
     public function password(Request $request)
