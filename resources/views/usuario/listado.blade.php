@@ -378,6 +378,15 @@
         }
     }
 
+    function actualizar_perfil()
+    {
+        Swal.fire(
+            'Excelente!',
+            'Permisos de perfil actualizados correctamente.',
+            'success'
+        )
+    }
+
     function contrasena(id)
     {
         $("#id_password").val(id);
