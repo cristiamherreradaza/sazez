@@ -795,9 +795,10 @@
 
     function guardaAjaxCLienteEdicion()
     {
-        // console.log("entro");
+        // capturamos lo datos del formulario
         let datosFormularioAjaxEditaCliente = $("#formularioAjaxEditaCliente").serializeArray();
-        console.log(datosFormularioAjaxEditaCliente);
+
+        // verificamos que no existan errores en el formulario
         if ($("#formularioAjaxEditaCliente")[0].checkValidity()) {
             $.ajax({
                 url: "{{ url('Cliente/guardaAjaxClienteEdicion') }}",

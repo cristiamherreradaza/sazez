@@ -88,9 +88,7 @@
                                         <td class="text-right">{{ $p->importe }}</td>
                                         <td class="text-center">{{ $p->fecha }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-danger" title="Elimina Pago"
-                                                onclick="eliminar('{{ $p->id }}', '{{ $p->importe }}')"><i
-                                                    class="fas fa-trash-alt"></i></button>
+                                            <button type="button" class="btn btn-danger" title="Elimina Pago" onclick="eliminar('{{ $p->id }}', '{{ $p->importe }}')"><i class="fas fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
                                     @endforeach

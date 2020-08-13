@@ -200,7 +200,7 @@ class VentaController extends Controller
                     // vemos la cantida de stock en el almacen
                     $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
                         ->where('producto_id', $ppr->producto_id)
-                        ->where('almacene_id', auth()->user()->almacen_id)
+                        ->where('almacene_id', Auth::user()->almacen_id)
                         ->first();
                     $totalVerificar = $cantidadTotalProducto->total - $cantidadProductosPromo;
 
@@ -244,7 +244,7 @@ class VentaController extends Controller
                 // verificamos la cantidad de productos en el almancen
                 $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
                     ->where('producto_id', $ll)
-                    ->where('almacene_id', auth()->user()->almacen_id)
+                    ->where('almacene_id', Auth::user()->almacen_id)
                     ->first();
                 $totalVerificar = $cantidadTotalProducto->total - $request->cantidad[$ll];
 
@@ -290,9 +290,9 @@ class VentaController extends Controller
                 // verificamos la cantidad de productos en el almancen
                 $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
                     ->where('producto_id', $llm)
-                    ->where('almacene_id', auth()->user()->almacen_id)
+                    ->where('almacene_id', Auth::user()->almacen_id)
                     ->first();
-                $totalVerificar = $cantidadTotalProducto->total - $request->cantidad_m[$ll];
+                $totalVerificar = $cantidadTotalProducto->total - $request->cantidad_m[$llm];
 
                 if ($totalVerificar < 0) {
                     $errorVenta = 1;

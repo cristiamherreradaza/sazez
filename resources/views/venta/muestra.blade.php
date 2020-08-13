@@ -157,8 +157,13 @@
                                     <td>{{ $pv->producto->nombre }}</td>
                                     <td>{{ $pv->producto->marca->nombre }}</td>
                                     <td>{{ $pv->producto->tipo->nombre }}</td>
-                                    <td class="text-right"><span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>&nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
-                                    <td class="text-right">{{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor:$pv->precio_cobrado }}</td>
+                                    <td class="text-right">
+                                        <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
+                                        <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
+                                        &nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
+                                    <td class="text-right">
+                                        {{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor:$pv->precio_cobrado }}
+                                    </td>
                                     @php
                                         if ($pv->precio_cobrado_mayor>0) {
                                             $precio_costo = $pv->precio_cobrado_mayor;
