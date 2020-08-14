@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\Tipo;
 use App\Marca;
+use App\Venta;
 use App\Escala;
 use App\Precio;
-use App\Venta;
 use DataTables;
 use App\Almacene;
 use App\Producto;
 use App\Categoria;
 use App\Movimiento;
 use App\Caracteristica;
+use App\Configuracione;
 use App\ImagenesProducto;
 use App\CategoriasProducto;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Exports\ProductosExport;
 use App\Imports\ProductosImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\ProductosExport;
-use Session;
 
 class ProductoController extends Controller
 {
@@ -276,15 +277,20 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
-        $marcaProducto  = Marca::find($request->marca_id);
-        $tipoProducto   = Tipo::find($request->tipo_id);
-        $nombreProducto = $request->nombre;
+        $configuracion = Configuracione::where('descripcion', 'generacionCodigos')->first();
+        
+        if ($configuracion->valor == 'No') {
+            $codigoGenerado = $request->codigo;
+        } else {
+            $marcaProducto = Marca::find($request->marca_id);
+            $tipoProducto = Tipo::find($request->tipo_id);
+            $nombreProducto = $request->nombre;
 
-        $siglaMarca = $this->extraeCodigo($marcaProducto->nombre);
-        $siglaTipo = $this->extraeCodigo($tipoProducto->nombre);
-        $siglaNombre = $this->extraeCodigo($nombreProducto);
-        $codigoGenerado = $siglaMarca.'-'.$siglaTipo.'-'.$siglaNombre;
-        // fin generacion codigo
+            $siglaMarca = $this->extraeCodigo($marcaProducto->nombre);
+            $siglaTipo = $this->extraeCodigo($tipoProducto->nombre);
+            $siglaNombre = $this->extraeCodigo($nombreProducto);
+            $codigoGenerado = $siglaMarca . '-' . $siglaTipo . '-' . $siglaNombre;
+        }
 
         if ($request->producto_id) {
             $nuevoProducto = Producto::find($request->producto_id);
@@ -292,46 +298,51 @@ class ProductoController extends Controller
         }else{
             $nuevoProducto = new Producto();
         }
-        // dd($request->all());
-        $nuevoProducto->user_id        = Auth::user()->id;
-        $nuevoProducto->marca_id       = $request->marca_id;
-        $nuevoProducto->tipo_id        = $request->tipo_id;
-        $nuevoProducto->codigo         = $codigoGenerado;
-        $nuevoProducto->nombre         = $request->nombre;
-        $nuevoProducto->nombre_venta   = $request->nombre_venta;
-        $nuevoProducto->modelo         = $request->modelo;
-        $nuevoProducto->precio_compra  = $request->precio_compra;
-        $nuevoProducto->dias_garantia  = $request->dias_garantia;
-        $nuevoProducto->largo          = $request->largo;
-        $nuevoProducto->ancho          = $request->ancho;
-        $nuevoProducto->alto           = $request->alto;
-        $nuevoProducto->peso           = $request->peso;
-        $nuevoProducto->colores        = $request->colores;
-        $nuevoProducto->descripcion    = $request->descripcion;
-        $nuevoProducto->url_referencia = $request->url_referencia;
-        $nuevoProducto->video          = $request->video;
+        $nuevoProducto->user_id         = Auth::user()->id;
+        $nuevoProducto->marca_id        = $request->marca_id;
+        $nuevoProducto->tipo_id         = $request->tipo_id;
+        $nuevoProducto->codigo          = $codigoGenerado;
+        $nuevoProducto->nombre          = $request->nombre;
+        $nuevoProducto->nombre_venta    = $request->nombre_venta;
+        $nuevoProducto->modelo          = $request->modelo;
+        $nuevoProducto->precio_compra   = $request->precio_compra;
+        $nuevoProducto->cantidad_minima = $request->cantidad_minima;
+        $nuevoProducto->dias_garantia   = $request->dias_garantia;
+        $nuevoProducto->largo           = $request->largo;
+        $nuevoProducto->ancho           = $request->ancho;
+        $nuevoProducto->alto            = $request->alto;
+        $nuevoProducto->peso            = $request->peso;
+        $nuevoProducto->colores         = $request->colores;
+        $nuevoProducto->descripcion     = $request->descripcion;
+        $nuevoProducto->url_referencia  = $request->url_referencia;
+        $nuevoProducto->video           = $request->video;
         $nuevoProducto->save();
-        // $producto_id = $nuevoProducto->id;
 
         if ($request->has('producto_id')) 
         {
+            // borramos los las caracteristicas, categorias y precios para editar el producto
             $producto_id          = $request->producto_id;
             $borraCaracteristicas = Caracteristica::where('producto_id', $producto_id)->delete();
             $borraCategorias      = CategoriasProducto::where('producto_id', $producto_id)->delete();
             $borraPrecios         = Precio::where('producto_id', $producto_id)->delete();
-            
-            $cambia_codigo = Producto::find($producto_id);
-            $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
-            $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
-            $cambia_codigo->save();
 
-            // $borraImagenes        = ImagenesProducto::where('producto_id', $producto_id)->delete();
+            if ($configuracion->valor == 'Si') {
+                 // asignamos un numero al codigo
+                $cambia_codigo = Producto::find($producto_id);
+                $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
+                $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
+                $cambia_codigo->save();
+            }
+
         } else {
-            $producto_id = $nuevoProducto->id;
-            $cambia_codigo = Producto::find($producto_id);
-            $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
-            $cambia_codigo->codigo = $codigoGenerado.'-'.$numeroProducto;
-            $cambia_codigo->save();
+
+            if ($configuracion->valor == 'Si') {
+                $producto_id = $nuevoProducto->id;
+                $cambia_codigo = Producto::find($producto_id);
+                $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
+                $cambia_codigo->codigo = $codigoGenerado . '-' . $numeroProducto;
+                $cambia_codigo->save();
+            }
         }
 
         if ($request->has('caracteristica') != null) 

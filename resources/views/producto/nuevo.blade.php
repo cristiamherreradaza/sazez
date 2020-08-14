@@ -73,7 +73,24 @@
                                     <div class="card border-danger">
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-md-3">
+                                                @php
+                                                    $configuracion = App\Configuracione::where('descripcion', 'generacionCodigos')->first();
+                                                @endphp
+                                                @if ($configuracion->valor == 'No')
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label for="nombre">
+                                                                CODIGO
+                                                                <span class="text-danger">
+                                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                                </span>
+                                                            </label>
+                                                            <input type="text" class="form-control" name="codigo" id="validationTooltip01" autofocus required>
+                                                        </div>
+                                                    </div>
+                                                @endif
+
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label for="nombre">
                                                             NOMBRE
@@ -85,14 +102,14 @@
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-5">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>NOMBRE COMERCIAL</label>
                                                         <input type="text" class="form-control" name="nombre_venta" id="nombre_venta">
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-2">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>TIPOS </label>
                                                         <select name="tipo_id" class="form-control">
@@ -103,18 +120,14 @@
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-2">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>MODELO </label>
                                                         <input type="text" class="form-control" name="modelo" id="modelo">
                                                     </div>
                                                 </div>
-                                            
-                                            </div>
-                                            
-                                            <div class="row">
-                                            
-                                                <div class="col-md-2">
+
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>MARCA </label>
                                                         <select name="marca_id" class="form-control">
@@ -125,19 +138,23 @@
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-2">
+                                            </div>
+                                            
+                                            <div class="row">
+                                            
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>P/COMPRA
                                                             <span class="text-danger">
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
                                                         </label>
-                                                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any"
+                                                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" min="0" step="any" value="0"
                                                             required>
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-2">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>ALMACEN </label>
                                                         <select name="almacene_id" class="form-control">
@@ -148,31 +165,34 @@
                                                     </div>
                                                 </div>
                                             
-                                                <div class="col-md-1">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>
                                                             CANTIDAD
-                                                            <span class="text-danger">
-                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                            </span>
                                                         </label>
                                                         <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" required>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-1">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>
-                                                            DIAS DE GARANTIA
-                                                            <span class="text-danger">
-                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                            </span>
+                                                            CANT/MIN
                                                         </label>
-                                                        <input type="number" class="form-control" name="dias_garantia" id="dias_garantia" min="0" required>
+                                                        <input type="number" class="form-control" name="cantidad_minima" id="cantidad_minima" min="1" value="1" required>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-4">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            DIAS DE GARANTIA
+                                                        </label>
+                                                        <input type="number" class="form-control" name="dias_garantia" id="dias_garantia" value="30" min="0" required>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>CATEGORIAS
                                                             <span class="text-danger">
