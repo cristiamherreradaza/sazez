@@ -194,7 +194,7 @@
                                 <label class="control-label">ENVIO</label>
                                 <div class="input-group mb-3">
                                 <input name="envioMayorista" id="envioMayorista" type="checkbox" data-toggle="toggle" data-on="SI" data-off="NO"
-                                    data-onstyle="success" data-offstyle="danger" data-width="80" disabled>
+                                    data-onstyle="success" data-offstyle="danger" data-width="80">
                                 </div>
                             </div>
                         </div>

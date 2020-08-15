@@ -190,9 +190,9 @@
                                 <th></th>
                                 <th></th>
                                 <th class="text-right"></th>
-                                <th class="text-right"></th>
                                 <th class="text-right">TOTAL</th>
                                 <th class="text-right">{{ $sumaSubTotal }}</th>
+                                <th class="text-right"></th>
                                 <th></th>
                             </tr>
                         </tfoot>

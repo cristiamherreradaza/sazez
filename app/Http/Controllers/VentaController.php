@@ -159,6 +159,8 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
+        // dd($request->all());
+
         if ($request->pagoContado != "on") 
         {
             $pagoCredito = 'Si';
@@ -167,7 +169,6 @@ class VentaController extends Controller
             $pagoCredito = 'No';
             $saldoVenta = 0;
         }
-        // dd($request->all());
         $errorVenta = 0;
         $mensajeError = "";
         //cremaos la venta
@@ -190,12 +191,7 @@ class VentaController extends Controller
                 $productosPromocion = CombosProducto::where('combo_id', $llpr)->get();
                 foreach ($productosPromocion as $ppr) {
 
-                    if($ppr->cantidad > 1 ){
-                        $precioProductoCombo = intval($ppr->precio/$ppr->cantidad);
-                    }else{
-                        $precioProductoCombo = $ppr->precio;
-                    }
-
+                    $precioProductoCombo = $ppr->precio;
                     $cantidadProductosPromo = $request->cantidadPromo[$llpr] * $ppr->cantidad;
 
                     // vemos la cantida de stock en el almacen
@@ -231,6 +227,22 @@ class VentaController extends Controller
                         $movimientoPromocion->salida       = $cantidadProductosPromo;
                         $movimientoPromocion->estado       = 'Venta';
                         $movimientoPromocion->save();
+
+                        // pregutamos si se desea enviar los productos al mayorista
+                        if($request->has("envioMayorista")){
+                            $datosMayorista = User::find($request->cliente_id);
+                            // echo "si enviar";
+                            // enviamos productos al manyorista
+                            $movimientoPromocion               = new Movimiento();
+                            $movimientoPromocion->user_id      = Auth::user()->id;
+                            $movimientoPromocion->almacene_id  = $datosMayorista->almacen_id;
+                            $movimientoPromocion->venta_id     = $venta_id;
+                            $movimientoPromocion->producto_id  = $ppr->producto_id;
+                            $movimientoPromocion->precio_venta = $precioProductoCombo;
+                            $movimientoPromocion->ingreso      = $cantidadProductosPromo;
+                            $movimientoPromocion->estado       = 'Transferencia Mayorista';
+                            $movimientoPromocion->save();
+                        }
                     }
 
                 }
@@ -249,6 +261,7 @@ class VentaController extends Controller
                     ->first();
                 $totalVerificar = $cantidadTotalProducto->total - $request->cantidad[$ll];
 
+                // preguntamos si tiene productos para la venta
                 if ($totalVerificar < 0) {
                     $errorVenta = 1;
                     $mensajeError = 'No tienes suficientes productos para tu venta';
@@ -275,6 +288,22 @@ class VentaController extends Controller
                     $movimiento->salida       = $request->cantidad[$ll];
                     $movimiento->estado       = 'Venta';
                     $movimiento->save();
+
+                     // pregutamos si se desea enviar los productos al mayorista
+                    if($request->has("envioMayorista")){
+                        $datosMayorista = User::find($request->cliente_id);
+                        // echo "si enviar";
+                        // enviamos productos al manyorista
+                        $movimiento               = new Movimiento();
+                        $movimiento->user_id      = Auth::user()->id;
+                        $movimiento->almacene_id  = $datosMayorista->almacen_id;
+                        $movimiento->venta_id     = $venta_id;
+                        $movimiento->producto_id  = $ll;
+                        $movimiento->precio_venta = $request->precio[$ll];
+                        $movimiento->ingreso      = $request->cantidad[$ll];
+                        $movimiento->estado       = 'Transferencia Mayorista';
+                        $movimiento->save();
+                    }
                 }
             }
         }
@@ -322,6 +351,24 @@ class VentaController extends Controller
                     $movimientoMayor->salida       = $cantidadVendida;
                     $movimientoMayor->estado       = 'Venta';
                     $movimientoMayor->save();
+
+                    // pregutamos si se desea enviar los productos al mayorista
+                    if($request->has("envioMayorista")){
+                        $datosMayorista = User::find($request->cliente_id);
+                        // echo "si enviar";
+                        // enviamos productos al manyorista
+                        $movimientoMayor               = new Movimiento();
+                        $movimientoMayor->user_id      = Auth::user()->id;
+                        $movimientoMayor->almacene_id  = $datosMayorista->almacen_id;
+                        $movimientoMayor->venta_id     = $venta_id;
+                        $movimientoMayor->escala_id    = $request->escala_id_m[$llm];
+                        $movimientoMayor->producto_id  = $llm;
+                        $movimientoMayor->precio_venta = $request->precio_m[$llm];
+                        $movimientoMayor->ingreso      = $cantidadVendida;
+                        $movimientoMayor->estado       = 'Tranferencia Mayorista';
+                        $movimientoMayor->save();
+                    }
+
                 }
             }
 
