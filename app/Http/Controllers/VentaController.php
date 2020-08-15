@@ -102,6 +102,7 @@ class VentaController extends Controller
         $almacenes = Almacene::get();
         $grupos = Grupo::all();
         $clientes = User::where('rol', 'Cliente')
+                    ->orWhere('rol', 'Mayorista')
                     ->get();
 
         $promociones = Combo::where('fecha_inicio', '<=', $hoy) 
