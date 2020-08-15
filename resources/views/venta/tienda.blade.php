@@ -226,9 +226,6 @@
                                     <select name="promocione_id" id="promocione_id" class="select2 form-control custom-select" style="width: 100%; height:36px;" >
                                         <option value=""> Selecione una </option>
                                         @foreach($arrayPromociones as $p)
-                                            @php
-                                                
-                                            @endphp
                                             <option value="{{ $p['id'] }}" data-precio="{{ $p['total'] }}"> {{ $p['nombre'] }} </option>
                                         @endforeach
                                     </select>
@@ -865,8 +862,8 @@
     function adicionaPromocionCombo()
     {
         let promocionId = $("#promocione_id").val();
-        let nombre = $("#promocione_id").find(':selected').text();
-        let precio = $("#promocione_id").find(':selected').data('precio');
+        let nombre      = $("#promocione_id").find(':selected').text();
+        let precio      = $("#promocione_id").find(':selected').data('precio');
         adicionaPromocion(promocionId, nombre, precio);
     }
 

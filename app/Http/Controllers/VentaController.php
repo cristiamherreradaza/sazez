@@ -113,11 +113,11 @@ class VentaController extends Controller
             $totalPromocion = 0;
             $promocionProducto = CombosProducto::where('combo_id', $p->id)->get();
             foreach ($promocionProducto as $pp) {
-                $totalPromocion += $pp->precio;
+                $totalPromocion += $pp->precio*$pp->cantidad;
             }
-            $arrayPromociones[$key]['id']=$p->id;
-            $arrayPromociones[$key]['nombre']=$p->nombre;
-            $arrayPromociones[$key]['total']=$totalPromocion;
+            $arrayPromociones[$key]['id']       = $p->id;
+            $arrayPromociones[$key]['nombre']   = $p->nombre;
+            $arrayPromociones[$key]['total']    = $totalPromocion;
         }
         // dd($arrayPromociones);
 
