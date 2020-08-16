@@ -566,6 +566,7 @@
         });
         
         $("#resultadoSubTotales").val(sum);
+        $("#efectivo").attr({"min": sum});
         valorLiteral = numeroALetras(sum, {
             plural: 'Bolivianos',
             singular: 'Bolivianos',
@@ -912,8 +913,10 @@
         );
         if (texto == "CAMBIO") {
             $("#efectivo").attr({"max": montoTotalVenta});
+            $("#efectivo").removeAttr("min");
         }else{
             $("#efectivo").removeAttr("max");
+            $("#efectivo").attr({"min": montoTotalVenta});
         }
     }
 
