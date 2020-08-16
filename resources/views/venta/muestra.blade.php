@@ -61,7 +61,6 @@
                 
                 <form class="mt-3" action="" method="POST" id="formularioCambiaProducto">
                     @csrf
-
                     <div class="form-row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -71,6 +70,7 @@
                                 <input type="hidden" value="" name="ventaProductoCambia" id="ventaProductoCambia">
                                 <label>PRODUCTO </label>
                                 <input type="text" class="form-control" name="nombre_producto_cambio" id="nombre_producto_cambio" readonly>
+                                <small id="tagDiasGarantia" class="badge badge-default badge-primary form-text text-white float-left"></small>
                             </div>
                         </div>
                         <div class="col-md-1">
@@ -107,7 +107,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-success"
-                                onclick="enviaDatosCambia()">CAMBIAR PRODUCTO</button>
+                                onclick="enviaDatosCambia()" id="btnCambiaProducto">CAMBIAR PRODUCTO</button>
                         </div>
                         <div class="col-md-6">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-inverse"
@@ -140,6 +140,7 @@
                                 <th>NOMBRE</th>
                                 <th>MARCA</th>
                                 <th>TIPO</th>
+                                <th class="text-center">GARANTIA</th>
                                 <th class="text-right">CANTIDAD</th>
                                 <th class="text-right">PRECIO</th>
                                 <th class="text-right">IMPORTE</th>
@@ -157,6 +158,18 @@
                                     <td>{{ $pv->producto->nombre }}</td>
                                     <td>{{ $pv->producto->marca->nombre }}</td>
                                     <td>{{ $pv->producto->tipo->nombre }}</td>
+                                    @php
+                                        $fechaGarantia = Illuminate\Support\Carbon::createFromDate($pv->fecha_garantia);
+                                        $fechaHoy = Illuminate\Support\Carbon::now();
+                                        $diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
+                                        if($diferenciaDias > $pv->producto->dias_garantia)
+                                        {
+                                            $mensajeGarantia = 0;
+                                        }else{
+                                            $mensajeGarantia = $diferenciaDias;
+                                        }
+                                    @endphp
+                                    <td class="text-primary text-center"><b>{{ $pv->fecha_garantia }} <span class="text-success">({{ $mensajeGarantia }})</span></b></td>
                                     <td class="text-right">
                                         <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
                                         <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
@@ -175,9 +188,19 @@
                                     @endphp
                                     <td class="text-right"><b>{{ $subTotal }}</b></td>
                                     <td>
-                                        <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}')">
-                                            <i class="fas fa-exchange-alt"></i>
-                                        </button>
+                                        @php
+                                            $fechaGarantia = Illuminate\Support\Carbon::createFromDate($pv->fecha_garantia);
+                                            $fechaHoy = Illuminate\Support\Carbon::now();
+                                            $diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
+                                            if($diferenciaDias < $pv->producto->dias_garantia):
+                                        @endphp
+                                            
+                                            <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}', '{{ $pv->fecha_garantia }}')">
+                                                <i class="fas fa-exchange-alt"></i>
+                                            </button>
+                                        @php
+                                            endif;
+                                        @endphp
                                     </td>
                                 </tr>
                             @endforeach
@@ -193,7 +216,6 @@
                                 <th class="text-right">TOTAL</th>
                                 <th class="text-right">{{ $sumaSubTotal }}</th>
                                 <th class="text-right"></th>
-                                <th></th>
                             </tr>
                         </tfoot>
                     </table>
@@ -305,7 +327,7 @@
         $("#modalCambiaProducto").modal("hide");
     }
 
-    function cambiaProducto(productoId, ventaId, nombreProducto, cantidad, nombrePaquete)
+    function cambiaProducto(productoId, ventaId, nombreProducto, cantidad, nombrePaquete, diasGarantia)
     {
         $("#nombre_producto_cambio").val(nombreProducto);
         $("#cantidad_producto").val(parseInt(cantidad));

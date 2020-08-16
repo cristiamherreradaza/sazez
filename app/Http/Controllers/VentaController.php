@@ -18,6 +18,7 @@ use App\Configuracione;
 use App\VentasProducto;
 use Illuminate\Http\Request;
 use App\CotizacionesProducto;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -215,6 +216,7 @@ class VentaController extends Controller
                         $productosPr->precio_cobrado = $precioProductoCombo;
                         $productosPr->cantidad       = $cantidadProductosPromo;
                         $productosPr->fecha          = $request->fecha;
+                        $productosPr->fecha_garantia = Carbon::now()->addDay($ppr->producto->dias_garantia);
                         $productosPr->save();
 
                         // guardamos lo movimientos de la promocion
@@ -261,6 +263,9 @@ class VentaController extends Controller
                     ->first();
                 $totalVerificar = $cantidadTotalProducto->total - $request->cantidad[$ll];
 
+                // obtenemos datos del producto
+                $datosProductoUnidad = Producto::find($ll);
+
                 // preguntamos si tiene productos para la venta
                 if ($totalVerificar < 0) {
                     $errorVenta = 1;
@@ -276,6 +281,7 @@ class VentaController extends Controller
                     $productos->precio_cobrado = $request->precio[$ll];
                     $productos->cantidad       = $request->cantidad[$ll];
                     $productos->fecha          = $request->fecha;
+                    $productos->fecha_garantia = Carbon::now()->addDay($datosProductoUnidad->dias_garantia);
                     $productos->save();
 
                     // guardamos lo movimientos de la venta
@@ -317,6 +323,8 @@ class VentaController extends Controller
                 $cantidaMayor = $request->cantidad_m[$llm];
                 $cantidadEscala = $request->cantidad_escala_m[$llm];
 
+                $datosProductosMayor = Producto::find($llm);
+
                 // verificamos la cantidad de productos en el almancen
                 $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
                     ->where('producto_id', $llm)
@@ -337,6 +345,7 @@ class VentaController extends Controller
                     $productosMayor->precio_cobrado_mayor = $request->precio_m[$llm];
                     $productosMayor->cantidad             = $request->cantidad_m[$llm];
                     $productosMayor->fecha                = $request->fecha;
+                    $productosMayor->fecha_garantia       = Carbon::now()->addDay($datosProductosMayor->dias_garantia);
                     $productosMayor->save();
 
                     $cantidadVendida = $cantidaMayor * $cantidadEscala;
