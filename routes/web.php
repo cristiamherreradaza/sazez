@@ -251,6 +251,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     
     Route::get('Reporte/Ventas', 'ReporteController@Ventas');
     Route::get('Reporte/ajaxVentasListado', 'ReporteController@ajaxVentasListado');
+    Route::get('Reporte/Proveedores', 'ReporteController@Proveedores');
+    Route::get('Reporte/ajaxProveedoresListado', 'ReporteController@ajaxProveedoresListado');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');
