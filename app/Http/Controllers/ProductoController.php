@@ -277,6 +277,7 @@ class ProductoController extends Controller
 
     public function guarda(Request $request)
     {
+        // dd($request->all());
         $configuracion = Configuracione::where('descripcion', 'generacionCodigos')->first();
         
         if ($configuracion->valor == 'No') {
@@ -298,6 +299,7 @@ class ProductoController extends Controller
         }else{
             $nuevoProducto = new Producto();
         }
+
         $nuevoProducto->user_id         = Auth::user()->id;
         $nuevoProducto->marca_id        = $request->marca_id;
         $nuevoProducto->tipo_id         = $request->tipo_id;
@@ -317,6 +319,7 @@ class ProductoController extends Controller
         $nuevoProducto->url_referencia  = $request->url_referencia;
         $nuevoProducto->video           = $request->video;
         $nuevoProducto->save();
+        $producto_id = $nuevoProducto->id;
 
         if ($request->has('producto_id')) 
         {
@@ -337,7 +340,7 @@ class ProductoController extends Controller
         } else {
 
             if ($configuracion->valor == 'Si') {
-                $producto_id = $nuevoProducto->id;
+                // $producto_id = $nuevoProducto->id;
                 $cambia_codigo = Producto::find($producto_id);
                 $numeroProducto = str_pad($producto_id, 5, "0", STR_PAD_LEFT);
                 $cambia_codigo->codigo = $codigoGenerado . '-' . $numeroProducto;

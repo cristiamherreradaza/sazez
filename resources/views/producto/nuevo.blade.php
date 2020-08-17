@@ -504,7 +504,8 @@ $(document).ready(function() {
     
     $("#categorias").select2();
     $("#categorias").change(function(){
-        valores = $("#categorias").val();
+        let valores = $("#categorias").val();
+        // console.log(valores);
         $("#categorias_valores").val(valores);
     });
 
