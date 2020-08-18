@@ -25,12 +25,13 @@ class ReporteController extends Controller
                     ->whereNull('ventas.deleted_at')
                     ->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
                     ->leftJoin('users', 'ventas.user_id', '=', 'users.id')
+                    ->leftJoin('users as clientes', 'ventas.cliente_id', '=', 'clientes.id')
                     ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
                     ->select(
                             'ventas.id as nro_venta',
                             'almacenes.nombre as tienda',
                             'users.name as usuario_nombre',
-                            'ventas.cliente_id as cliente_id',
+                            'clientes.name as cliente_nombre',
                             'ventas.fecha as fecha',
                             'ventas.total as monto',
                             'ventas.saldo as saldo'

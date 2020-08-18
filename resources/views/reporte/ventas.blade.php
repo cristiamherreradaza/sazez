@@ -183,7 +183,7 @@
                 {data: 'nro_venta', name: 'ventas.id'},
                 {data: 'tienda', name: 'almacenes.nombre'},
                 {data: 'usuario_nombre', name: 'users.name'},
-                {data: 'cliente_id', name: 'ventas.cliente_id'},
+                {data: 'cliente_nombre', name: 'clientes.name'},
                 {data: 'fecha', name: 'ventas.fecha'},
                 {data: 'monto', name: 'ventas.total'},
                 {data: 'saldo', name: 'ventas.saldo'},
