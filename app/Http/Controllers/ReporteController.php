@@ -27,13 +27,13 @@ class ReporteController extends Controller
                     ->leftJoin('users', 'ventas.user_id', '=', 'users.id')
                     ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
                     ->select(
-                        'ventas.id as nro_venta',
-                        'almacenes.nombre as tienda',
-                        'users.name as usuario_nombre',
-                        'ventas.cliente_id as cliente_id',
-                        'ventas.fecha as fecha',
-                        'ventas.total as monto',
-                        'ventas.saldo as saldo'
+                            'ventas.id as nro_venta',
+                            'almacenes.nombre as tienda',
+                            'users.name as usuario_nombre',
+                            'ventas.cliente_id as cliente_id',
+                            'ventas.fecha as fecha',
+                            'ventas.total as monto',
+                            'ventas.saldo as saldo'
                     );
         // if($request->has('almacen_id')){
         //     $ventas->where('almacene_id', $request->almacen_id);
@@ -69,13 +69,13 @@ class ReporteController extends Controller
                     ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
                     ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
                     ->select(
-                        'movimientos.id as nro_envio',
-                        'almacenes.nombre as tienda',
-                        'proveedores.nombre as proveedor_nombre',
-                        'productos.codigo as codigo',
-                        'productos.nombre as producto_nombre',
-                        'movimientos.fecha as fecha',
-                        'movimientos.ingreso as cantidad'
+                            'movimientos.id as nro_envio',
+                            'almacenes.nombre as tienda',
+                            'proveedores.nombre as proveedor_nombre',
+                            'productos.codigo as codigo',
+                            'productos.nombre as producto_nombre',
+                            'movimientos.fecha as fecha',
+                            'movimientos.ingreso as cantidad'
                     );
         if($request->almacen_id){
             $productos->where('movimientos.almacene_id', $request->almacen_id);
@@ -84,5 +84,41 @@ class ReporteController extends Controller
             $productos->where('movimientos.user_id', $request->proveedor_id);
         }
         return Datatables::of($productos)->make(true);
+    }
+
+    public function transferencias()
+    {
+        $almacenes = Almacene::get();
+        return view('reporte.transferencias')->with(compact('almacenes'));
+    }
+
+    public function ajaxTransferenciasListado(Request $request)
+    {
+        $movimientos = DB::table('movimientos')
+        ->whereNull('movimientos.deleted_at')
+        ->where('movimientos.estado', 'Envio')
+        ->where('ingreso', '!=' , 0)
+        ->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+        ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+        ->leftJoin('almacenes as origen', 'movimientos.almacen_origen_id', '=', 'origen.id')
+        ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
+        ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+        ->select(
+                'movimientos.id as nro_transferencia',
+                'origen.nombre as tienda_salida',
+                'almacenes.nombre as tienda_llegada',
+                'users.name as usuario',
+                'productos.codigo as codigo',
+                'productos.nombre as producto_nombre',
+                'movimientos.ingreso as cantidad',
+                'movimientos.fecha as fecha'
+        );
+        if($request->almacen_origen_id){
+            $movimientos->where('movimientos.almacen_origen_id', $request->almacen_origen_id);
+        }
+        if($request->almacen_destino_id){
+            $movimientos->where('movimientos.almacene_id', $request->almacen_destino_id);
+        }
+        return Datatables::of($movimientos)->make(true);
     }
 }

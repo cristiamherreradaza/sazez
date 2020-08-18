@@ -12,6 +12,7 @@ class Movimiento extends Model
     protected $fillable = [
         'user_id',
         'producto_id',
+        'almacen_origen_id',
         'almacene_id',
         'pedido_id',
         'proveedor_id',
@@ -24,8 +25,8 @@ class Movimiento extends Model
         'fecha',
         'numero',
         'estado',
-        'devuelto',
         'descripcion',
+        'devuelto',
         'deleted_at',
     ];
 
@@ -39,6 +40,11 @@ class Movimiento extends Model
         return $this->belongsTo('App\Producto');
     }
 
+    public function almacen_origen()
+    {
+        return $this->belongsTo('App\Almacene', 'almacen_origen_id');
+    }
+    
     public function almacen()
     {
         return $this->belongsTo('App\Almacene');
@@ -49,6 +55,11 @@ class Movimiento extends Model
         return $this->belongsTo('App\Pedido');
     }
 
+    public function proveedor()
+    {
+        return $this->belongsTo('App\Proveedore', 'proveedor_id');
+    }
+
     public function venta()
     {
         return $this->belongsTo('App\Venta');
@@ -57,10 +68,5 @@ class Movimiento extends Model
     public function escala()
     {
         return $this->belongsTo('App\Escala');
-    }
-
-    public function proveedor()
-    {
-        return $this->belongsTo('App\Proveedore', 'proveedor_id');
     }
 }

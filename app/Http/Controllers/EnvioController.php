@@ -49,7 +49,8 @@ class EnvioController extends Controller
             $salida = new Movimiento();
             $salida->user_id = Auth::user()->id;
             $salida->producto_id = $ll;
-            $salida->almacene_id = 1;
+            //$salida->almacene_id = 1;
+            $salida->almacene_id = Auth::user()->almacen->id;
             $salida->salida = $request->item[$ll];
             $salida->fecha = $hoy;
             $salida->numero = $numero;
@@ -60,6 +61,7 @@ class EnvioController extends Controller
             $ingreso = new Movimiento();
             $ingreso->user_id = Auth::user()->id;
             $ingreso->producto_id = $ll;
+            $ingreso->almacen_origen_id = Auth::user()->almacen->id;
             $ingreso->almacene_id = $request->almacen_a_pedir;
             $ingreso->ingreso = $request->item[$ll];
             $ingreso->fecha = $hoy;
