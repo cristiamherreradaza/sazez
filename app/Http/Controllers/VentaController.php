@@ -325,12 +325,14 @@ class VentaController extends Controller
 
                 $datosProductosMayor = Producto::find($llm);
 
+                $cantidadParaVerificar = $cantidaMayor * $cantidadEscala;
+ 
                 // verificamos la cantidad de productos en el almancen
                 $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
                     ->where('producto_id', $llm)
                     ->where('almacene_id', Auth::user()->almacen_id)
                     ->first();
-                $totalVerificar = $cantidadTotalProducto->total - $request->cantidad_m[$llm];
+                $totalVerificar = $cantidadTotalProducto->total - $cantidadParaVerificar;
 
                 if ($totalVerificar < 0) {
                     $errorVenta = 1;
@@ -400,13 +402,14 @@ class VentaController extends Controller
         $pago->save();
 
         if ($errorVenta == 1) {
-                    // elimnamos la venta
+            // elimnamos la venta
             $venta = Venta::find($venta_id);
             $venta->delete();
 
-            // eliminamos los datos de la venta
+            // eliminamos los datos relacionados de la venta
             Movimiento::where('venta_id', $venta_id)->delete();
             VentasProducto::where('venta_id', $venta_id)->delete();
+            Pago::where('venta_id', $venta_id)->delete();
         }
 
         return response()->json([
@@ -479,6 +482,7 @@ class VentaController extends Controller
         // eliminamos los datos de la venta
         Movimiento::where('venta_id', $request->ventaId)->delete();
         VentasProducto::where('venta_id', $request->ventaId)->delete();
+        Pago::where('venta_id', $request->ventaId)->delete();
 
         return redirect('Venta/listado');
         // dd($request->all());

@@ -8,11 +8,7 @@
 
 @section('content')
 <div class="row">
-<<<<<<< HEAD
-    <div class="col-md-6">
-=======
     <div class="col-md-8">
->>>>>>> 234dbdac04cc512df11768858b202bbf44d1aa2d
         <div class="card text-center" id="printableArea">
             <div class="card-header">
                 SAZEZ
