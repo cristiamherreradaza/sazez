@@ -43,5 +43,4 @@ class Cupone extends Model
     {
         return $this->belongsTo('App\Combo', 'combo_id');
     }
-    
 }

@@ -17,6 +17,7 @@ class Movimiento extends Model
         'pedido_id',
         'proveedor_id',
         'venta_id',
+        'cupon_id',
         'escala_id',
         'precio_compra',
         'precio_venta',
@@ -68,5 +69,10 @@ class Movimiento extends Model
     public function escala()
     {
         return $this->belongsTo('App\Escala');
+    }
+
+    public function cupon()
+    {
+        return $this->belongsTo('App\Cupone', 'cupon_id');
     }
 }
