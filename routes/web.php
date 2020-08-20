@@ -255,6 +255,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/ajaxProveedoresListado', 'ReporteController@ajaxProveedoresListado');
     Route::get('Reporte/Transferencias', 'ReporteController@Transferencias');
     Route::get('Reporte/ajaxTransferenciasListado', 'ReporteController@ajaxTransferenciasListado');
+    Route::get('Reporte/Promos', 'ReporteController@Promos');
+    Route::get('Reporte/ajaxPromosListado', 'ReporteController@ajaxPromosListado');
+    Route::get('Reporte/Cupones', 'ReporteController@Cupones');
+    Route::get('Reporte/ajaxCuponesListado', 'ReporteController@ajaxCuponesListado');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');

@@ -9,6 +9,8 @@ use DataTables;
 use App\Almacene;
 use App\User;
 use App\Proveedore;
+use App\VentasProducto;
+use App\Venta;
 
 class ReporteController extends Controller
 {
@@ -121,5 +123,50 @@ class ReporteController extends Controller
             $movimientos->where('movimientos.almacene_id', $request->almacen_destino_id);
         }
         return Datatables::of($movimientos)->make(true);
+    }
+
+    public function promos()
+    {
+        $almacenes = Almacene::get();
+        return view('reporte.promos')->with(compact('almacenes'));
+    }
+
+    public function ajaxPromosListado(Request $request)
+    {
+        $ventas_id = VentasProducto::whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+        //$ventas_id = VentasProducto::whereBetween('fecha', ['2020-08-01', '2020-08-30'])
+                    ->whereNotNull('combo_id')
+                    ->groupBy('combo_id')
+                    ->get();
+        $array_ventas = array();
+        foreach($ventas_id as $row){
+            array_push($array_ventas, $row->venta_id);
+        }
+
+        // $consulta = Venta::whereIn('id', $array_ventas)->get();
+        // dd($consulta);
+
+        $ventas = DB::table('ventas')
+                    ->whereNull('ventas.deleted_at')
+                    ->whereIn('ventas.id', $array_ventas)
+                    ->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+                    ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
+                    ->leftJoin('users', 'ventas.user_id', '=', 'users.id')
+                    ->leftJoin('users as clientes', 'ventas.cliente_id', '=', 'clientes.id')
+                    //->leftJoin('almacenes as origen', 'ventas.almacen_origen_id', '=', 'origen.id')
+                    //->leftJoin('combos', 'ventas.producto_id', '=', 'combos.id')
+                    ->select(
+                        'ventas.id as nro_venta',
+                        //'origen.nombre as tienda_salida', NOMBRE DE COMBO
+                        'almacenes.nombre as tienda',
+                        'users.name as usuario',
+                        'ventas.fecha as fecha',
+                        'clientes.name as cliente',
+                        'ventas.total as total'
+                    );
+        if($request->almacen_id){
+            $ventas->where('ventas.almacen_id', $request->almacen_id);
+        }
+        return Datatables::of($ventas)->make(true);
     }
 }
