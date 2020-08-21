@@ -28,7 +28,7 @@ class EmpresaController extends Controller
         $monto_compra = '2500';
         $clave = '9rCB7Sv4X29d)5k7N%3ab89p-3(5[A';
         // dd(CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave));
-        dd($facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave));
+        // dd($facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave));
 
         return view('empresa.formulario');
     }
