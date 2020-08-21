@@ -249,12 +249,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Tienda/reporte_tienda', 'TiendaController@reporte_tienda');
     Route::get('Tienda/ajax_tienda_listado', 'TiendaController@ajax_tienda_listado');
     
-    Route::get('Reporte/Ventas', 'ReporteController@Ventas');
+    Route::get('Reporte/ventas', 'ReporteController@ventas');
     Route::get('Reporte/ajaxVentasListado', 'ReporteController@ajaxVentasListado');
-    Route::get('Reporte/Proveedores', 'ReporteController@Proveedores');
+    Route::get('Reporte/proveedores', 'ReporteController@proveedores');
     Route::get('Reporte/ajaxProveedoresListado', 'ReporteController@ajaxProveedoresListado');
-    Route::get('Reporte/Transferencias', 'ReporteController@Transferencias');
+    Route::get('Reporte/transferencias', 'ReporteController@transferencias');
     Route::get('Reporte/ajaxTransferenciasListado', 'ReporteController@ajaxTransferenciasListado');
+    Route::get('Reporte/promos', 'ReporteController@promos');
+    Route::get('Reporte/ajaxPromosListado', 'ReporteController@ajaxPromosListado');
+    Route::get('Reporte/cupones', 'ReporteController@cupones');
+    Route::get('Reporte/ajaxCuponesListado', 'ReporteController@ajaxCuponesListado');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');

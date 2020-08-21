@@ -14,11 +14,13 @@ class VentasProducto extends Model
         'cotizacione_id',
         'producto_id',
         'combo_id',
-        'venta_id',
+        'cupon_id',
         'escala_id',
+        'venta_id',
         'precio_venta',
         'cantidad',
         'fecha',
+        'fecha_garantia',
         'estado',
         'deleted_at',
     ];
@@ -51,5 +53,10 @@ class VentasProducto extends Model
     public function venta()
     {
         return $this->belongsTo('App\Venta');
+    }
+
+    public function cupon()
+    {
+        return $this->belongsTo('App\Cupone', 'cupon_id');
     }
 }
