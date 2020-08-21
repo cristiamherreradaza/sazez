@@ -271,6 +271,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Pago/guardaPago', 'PagoController@guardaPago');
     Route::get('Pago/eliminar/{pagoId}', 'PagoController@eliminar');
 
+    // FACTURACION Y EMPRESA
+    Route::get('Empresa/formulario', 'EmpresaController@formulario');
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');
