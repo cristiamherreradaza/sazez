@@ -227,6 +227,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Venta/elimina', 'VentaController@elimina');
     Route::post('Venta/ajaxCambiaProducto', 'VentaController@ajaxCambiaProducto');
     Route::get('Venta/imprimir/{id}', 'VentaController@imprimir');
+    Route::post('Venta/ajaxBuscaNitCliente', 'VentaController@ajaxBuscaNitCliente');
     
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');
@@ -277,6 +278,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Pago/guardaPago', 'PagoController@guardaPago');
     Route::get('Pago/eliminar/{pagoId}', 'PagoController@eliminar');
 
+    // FACTURACION Y EMPRESA
+    Route::get('Empresa/formulario', 'EmpresaController@formulario');
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');

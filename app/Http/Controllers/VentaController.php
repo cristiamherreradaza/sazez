@@ -547,9 +547,28 @@ class VentaController extends Controller
         // $productoVenta = VentasProducto::where('venta_id', $request->productoId);
     }
 
-    public function muestraPromoCombo(Request $request)
+    public function ajaxBuscaNitCliente(Request $request)
     {
+        $encontrado = 'No';
+        $cliente    = array();
+        $buscaNit   = User::where('nit', $request->nitCliente)->first();
 
+        if($buscaNit != null)
+        {
+            $encontrado = 'Si';
+            $cliente['id']=$buscaNit->id;
+            $cliente['nombre']=$buscaNit->name;
+            $cliente['almacene_id']=$buscaNit->almacen_id;
+            $cliente['nit']=$buscaNit->nit;
+            $cliente['razon_social']=$buscaNit->razon_social;
+
+        }else{
+            $encontrado = 'No';
+        }
+
+        return response()->json([
+            'encontrado'   => $encontrado,
+            'datosCliente' => json_encode($cliente),
+        ]);
     }
-
 }
