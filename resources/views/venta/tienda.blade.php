@@ -98,7 +98,7 @@
                     </div>
                     <div class="row">
 
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Contraseña</label>
                                 <span class="text-danger">
@@ -106,7 +106,7 @@
                                 </span>
                                 <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-6">
                             <div class="form-group">
@@ -385,6 +385,14 @@
                                     <td><input type="number" name="cambioVenta" id="cambioVenta"
                                             class="form-control text-right text-right" step="any" value="0"
                                             style="width: 120px;" readonly></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">NIT</td>
+                                    <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">NOMBRE</td>
+                                    <td><input type="text" name="razon_social_cliente" id="razon_social_cliente" class="form-control text-right text-right" style="width: 180px;" required></td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
@@ -919,6 +927,25 @@
             $("#efectivo").attr({"min": montoTotalVenta});
         }
     }
+
+
+    $(document).on('focusout', '#nit_cliente', function(e) {
+
+        let nitCliente = $('#nit_cliente').val();
+        $.ajax({
+            url: "{{ url('Venta/ajaxBuscaNitCliente') }}",
+            data: {nitCliente: nitCliente},
+            type: 'POST',
+            success: function(data) {
+                objetoCLiente = JSON.parse(data.datosCliente);
+                console.log(objetoCLiente);
+                document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
+            }
+        });
+
+    });
+
+
 
 </script>
 @endsection
