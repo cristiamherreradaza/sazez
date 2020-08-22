@@ -27,7 +27,7 @@ class Venta extends Model
 
     public function almacen()
     {
-        return $this->belongsTo('App\Almacene');
+        return $this->belongsTo('App\Almacene', 'almacene_id');
     }
 
     public function cotizacione()

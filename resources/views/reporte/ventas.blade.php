@@ -75,7 +75,7 @@
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
-                        </div>                    
+                        </div>
                     </div>
                 </div>
                 <div class="row">

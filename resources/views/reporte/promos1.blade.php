@@ -17,7 +17,7 @@
     <div class="col-md-12">
         <div class="card border-info">
             <div class="card-header bg-info">
-                <h4 class="mb-0 text-white">REPORTE DE CUPONES CANJEADOS</h4>
+                <h4 class="mb-0 text-white">REPORTE DE PROMOCIONES CANJEADAS</h4>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -70,12 +70,11 @@
 <div class="col-md-12" id="mostrar" style="display:none;">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">LISTA DE CUPONES CANJEADOS</h4>
+            <h4 class="card-title">LISTA DE PROMOCIONES CANJEADAS</h4>
             <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
                 <thead>
                     <tr>
                         <th>Id Venta</th>
-                        <th>Codigo</th>
                         <th>Tienda</th>
                         <th>Usuario</th>
                         <th>Fecha</th>
@@ -88,7 +87,6 @@
                 <tfoot>
                     <tr>
                         <th>Id Venta</th>
-                        <th>Codigo</th>
                         <th>Tienda</th>
                         <th>Usuario</th>
                         <th>Fecha</th>
@@ -141,7 +139,7 @@
             processing: true,
             serverSide: true,
             ajax: { 
-                url : "{{ url('Reporte/ajaxCuponesListado') }}",
+                url : "{{ url('Reporte/ajaxPromosListado') }}",
                 type: "GET",
                 data: {
                     fecha_inicial : fecha_inicial,
@@ -150,13 +148,13 @@
                     } 
                 },
             columns: [
-                {data: 'nro_movimiento', name: 'movimientos.id'},
-                {data: 'codigo_cupon', name: 'cupones.codigo'},
-                {data: 'tienda', name: 'almacenes.nombre'},
-                {data: 'usuario', name: 'users.name'},
-                {data: 'fecha', name: 'movimientos.fecha'},
+                {data: 'id', name: 'id'},
+                
+                {data: 'almacen', name: 'almacen'},
+                {data: 'user', name: 'user'},
+                {data: 'fecha', name: 'ventas.fecha'},
                 {data: 'cliente', name: 'clientes.name'},
-                {data: 'total', name: 'movimientos.precio_venta'},
+                {data: 'total', name: 'ventas.total'},
             ],
             language: {
                 url: '{{ asset('datatableEs.json') }}'
