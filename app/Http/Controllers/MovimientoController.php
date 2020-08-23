@@ -93,4 +93,33 @@ class MovimientoController extends Controller
         return view('movimiento.ajaxMuestraTotalesAlmacen')->with(compact('cantidadTotal', 'datosProducto'));
         // dd($cantidadTotal);
     }
+
+    public function reportar(Request $request)
+    {
+        //dd('hola');
+        $producto_reportado = new Movimiento();
+        $producto_reportado->user_id = Auth::user()->id;
+        $producto_reportado->producto_id = $request->id_producto_a_reportar;
+        $producto_reportado->almacene_id = Auth::user()->almacen->id;
+        $producto_reportado->salida = $request->cantidad_producto_a_reportar;
+        $producto_reportado->fecha = date('Y-m-d H:i:s');
+        $producto_reportado->estado = 'Defectuoso';
+        $producto_reportado->descripcion = $request->descripcion_producto_a_reportar;
+        $producto_reportado->save();
+        return redirect('Producto/listado');
+    }
+
+    public function habilitar(Request $request)
+    {
+        $producto_habilitado = new Movimiento();
+        $producto_habilitado->user_id = Auth::user()->id;
+        $producto_habilitado->producto_id = $request->id_producto_a_habilitar;
+        $producto_habilitado->almacene_id = Auth::user()->almacen->id;
+        $producto_habilitado->ingreso = $request->cantidad_producto_a_habilitar;
+        $producto_habilitado->fecha = date('Y-m-d H:i:s');
+        $producto_habilitado->estado = 'Reacondicionado';
+        $producto_habilitado->descripcion = $request->descripcion_producto_a_habilitar;
+        $producto_habilitado->save();
+        return redirect('Producto/listado');
+    }
 }

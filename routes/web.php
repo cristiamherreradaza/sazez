@@ -122,6 +122,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Movimiento/ingreso', 'MovimientoController@ingreso');
     Route::post('Movimiento/ajaxBuscaProducto', 'MovimientoController@ajaxBuscaProducto');
     Route::post('Movimiento/guarda', 'MovimientoController@guarda');
+    Route::post('Movimiento/reportar', 'MovimientoController@reportar');
+    Route::post('Movimiento/habilitar', 'MovimientoController@habilitar');
 
     // PERFILES
     Route::get('Perfil/listado', 'PerfilController@listado');

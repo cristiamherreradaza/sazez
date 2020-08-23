@@ -128,12 +128,13 @@ class ReporteController extends Controller
     public function promos()
     {
         $almacenes = Almacene::get();
-        return view('reporte.promos')->with(compact('almacenes'));
+        return view('reporte.promos1')->with(compact('almacenes'));
     }
 
     public function ajaxPromosListado(Request $request)
     {
-        $ventas_id = VentasProducto::whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+        $ventas_id = VentasProducto::whereBetween('fecha', ['2020-08-01', '2020-08-30'])
+        //$ventas_id = VentasProducto::whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
                     ->whereNotNull('combo_id')
                     ->groupBy('combo_id')
                     ->get();
@@ -141,6 +142,25 @@ class ReporteController extends Controller
         foreach($ventas_id as $row){
             array_push($array_ventas, $row->venta_id);
         }
+        //dd($array_ventas);
+
+        
+        $variable = Venta::whereBetween('fecha', ['2020-08-01', '2020-08-30'])
+        //$variable = Venta::whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+                        ->whereIn('id', $array_ventas)
+                        ->with('almacen', 'user', 'cliente');
+                        // ->select('id')
+                        // ->get();
+
+        //dd($variable);
+
+        return Datatables::of($variable)
+        ->addColumn('almacen', function (Venta $venta){ return $venta->almacen->nombre; })
+        ->addColumn('user', function (Venta $venta){ return $venta->user->name; })
+        ->addColumn('cliente', function (Venta $venta){ return $venta->cliente->name; })
+        ->make(true);
+
+        /*
         $ventas = DB::table('ventas')
                     ->whereNull('ventas.deleted_at')
                     ->whereIn('ventas.id', $array_ventas)
@@ -163,6 +183,7 @@ class ReporteController extends Controller
             $ventas->where('ventas.almacen_id', $request->almacen_id);
         }
         return Datatables::of($ventas)->make(true);
+        */
     }
 
     public function cupones()
@@ -181,26 +202,26 @@ class ReporteController extends Controller
         foreach($ventas_id as $row){
             array_push($array_ventas, $row->venta_id);
         }
-        $ventas = DB::table('ventas')
-                    ->whereNull('ventas.deleted_at')
-                    ->whereIn('ventas.id', $array_ventas)
-                    ->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
-                    ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
-                    ->leftJoin('users', 'ventas.user_id', '=', 'users.id')
-                    ->leftJoin('users as clientes', 'ventas.cliente_id', '=', 'clientes.id')
-                    //->leftJoin('almacenes as origen', 'ventas.almacen_origen_id', '=', 'origen.id')
-                    //->leftJoin('combos', 'ventas.producto_id', '=', 'combos.id')
+        $ventas = DB::table('movimientos')
+                    ->whereNull('movimientos.deleted_at')
+                    ->whereIn('movimientos.id', $array_ventas)
+                    //->whereBetween('movimientos.fecha', [$request->fecha_inicial, $request->fecha_final])
+                    ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                    ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+                    ->leftJoin('users as clientes', 'movimientos.cliente_id', '=', 'clientes.id')
+                    ->leftJoin('cupones', 'movimientos.cupon_id', '=', 'cupones.id')
+                    //->leftJoin('ventas', 'movimientos.venta_id', '=', 'ventas.id')
                     ->select(
-                        'ventas.id as nro_venta',
-                        //'origen.nombre as tienda_salida', NOMBRE DE COMBO         
+                        'movimientos.id as nro_movimiento',
+                        'cupones.codigo as codigo_cupon',
                         'almacenes.nombre as tienda',
                         'users.name as usuario',
-                        'ventas.fecha as fecha',
+                        'movimientos.fecha as fecha',
                         'clientes.name as cliente',
-                        'ventas.total as total'
+                        'movimientos.precio_venta as total'
                     );
         if($request->almacen_id){
-            $ventas->where('ventas.almacen_id', $request->almacen_id);
+            $ventas->where('movimientos.almacene_id', $request->almacen_id);
         }
         return Datatables::of($ventas)->make(true);
     }

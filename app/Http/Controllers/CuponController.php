@@ -577,7 +577,7 @@ class CuponController extends Controller
         $ventaProducto->producto_id = $request->cobro_producto_id;
         $ventaProducto->cupon_id = $request->cobro_cupon_id;
         $ventaProducto->venta_id = $venta->id;
-        $ventaProducto->precio_venta = $request->cobro_precio;
+        $ventaProducto->precio_venta = $request->cobro_total;
         $ventaProducto->precio_cobrado = $request->cobro_total;
         $ventaProducto->cantidad = 1;
         $ventaProducto->fecha = date('Y-m-d');
@@ -588,6 +588,7 @@ class CuponController extends Controller
         $movimiento->user_id = Auth::user()->id;
         $movimiento->producto_id = $request->cobro_producto_id;
         $movimiento->almacene_id = Auth::user()->almacen->id;
+        $movimiento->cliente_id = $request->cobro_cliente_id;
         $movimiento->venta_id = $venta->id;
         $movimiento->cupon_id = $request->cobro_cupon_id;
         $movimiento->precio_venta = $request->cobro_total;

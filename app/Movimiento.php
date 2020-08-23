@@ -16,7 +16,9 @@ class Movimiento extends Model
         'almacene_id',
         'pedido_id',
         'proveedor_id',
+        'cliente_id',
         'venta_id',
+        'combo_id',
         'cupon_id',
         'escala_id',
         'precio_compra',
@@ -61,18 +63,28 @@ class Movimiento extends Model
         return $this->belongsTo('App\Proveedore', 'proveedor_id');
     }
 
+    public function cliente()
+    {
+        return $this->belongsTo('App\User', 'cliente_id');
+    }
+
     public function venta()
     {
         return $this->belongsTo('App\Venta');
     }
 
-    public function escala()
+    public function combo()
     {
-        return $this->belongsTo('App\Escala');
+        return $this->belongsTo('App\Movimiento', 'combo_id');
     }
 
     public function cupon()
     {
         return $this->belongsTo('App\Cupone', 'cupon_id');
+    }
+
+    public function escala()
+    {
+        return $this->belongsTo('App\Escala');
     }
 }
