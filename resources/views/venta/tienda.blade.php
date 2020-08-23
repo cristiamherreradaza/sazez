@@ -938,7 +938,6 @@
             type: 'POST',
             success: function(data) {
                 objetoCLiente = JSON.parse(data.datosCliente);
-                console.log(objetoCLiente);
                 document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
             }
         });

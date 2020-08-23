@@ -1,168 +1,143 @@
-(function($) {
-	"use strict"
+jQuery(document).ready(function($) {
 
-	// Mobile Nav toggle
-	$('.menu-toggle > a').on('click', function (e) {
-		e.preventDefault();
-		$('#responsive-nav').toggleClass('active');
-	})
 
-	// Fix cart dropdown from closing
-	$('.cart-dropdown').on('click', function (e) {
-		e.stopPropagation();
-	});
+/*
+|--------------------------------------------------------------------------
+| Global myTheme Obj / Variable Declaration
+|--------------------------------------------------------------------------
+|
+|
+|
+*/
 
-	/////////////////////////////////////////
+	var myTheme = window.myTheme || {},
+    $win = $( window );
+	
 
-	// Products Slick
-	$('.products-slick').each(function() {
-		var $this = $(this),
-				$nav = $this.attr('data-nav');
 
-		$this.slick({
-			slidesToShow: 4,
-			slidesToScroll: 1,
-			autoplay: true,
-			infinite: true,
-			speed: 300,
-			dots: false,
-			arrows: true,
-			appendArrows: $nav ? $nav : false,
-			responsive: [{
-	        breakpoint: 991,
-	        settings: {
-	          slidesToShow: 2,
-	          slidesToScroll: 1,
-	        }
-	      },
-	      {
-	        breakpoint: 480,
-	        settings: {
-	          slidesToShow: 1,
-	          slidesToScroll: 1,
-	        }
-	      },
-	    ]
+/*
+|--------------------------------------------------------------------------
+| isotope
+|--------------------------------------------------------------------------
+|
+|
+|
+*/		
+
+	myTheme.Isotope = function () {
+	
+		// 4 column layout
+		var isotopeContainer = $('.isotopeContainer');
+		if( !isotopeContainer.length || !jQuery().isotope ) return;
+		$win.on('load', function(){
+			isotopeContainer.isotope({
+				itemSelector: '.isotopeSelector'
+			});
+		$('.isotopeFilters').on( 'click', 'a', function(e) {
+				$('.isotopeFilters').find('.active').removeClass('active');
+				$(this).parent().addClass('active');
+				var filterValue = $(this).attr('data-filter');
+				isotopeContainer.isotope({ filter: filterValue });
+				e.preventDefault();
+			});
 		});
-	});
-
-	// Products Widget Slick
-	$('.products-widget-slick').each(function() {
-		var $this = $(this),
-				$nav = $this.attr('data-nav');
-
-		$this.slick({
-			infinite: true,
-			autoplay: true,
-			speed: 300,
-			dots: false,
-			arrows: true,
-			appendArrows: $nav ? $nav : false,
+		
+		// 3 column layout
+		var isotopeContainer2 = $('.isotopeContainer2');
+		if( !isotopeContainer2.length || !jQuery().isotope ) return;
+		$win.on('load', function(){
+			isotopeContainer2.isotope({
+				itemSelector: '.isotopeSelector'
+			});
+		$('.isotopeFilters2').on( 'click', 'a', function(e) {
+				$('.isotopeFilters2').find('.active').removeClass('active');
+				$(this).parent().addClass('active');
+				var filterValue = $(this).attr('data-filter');
+				isotopeContainer2.isotope({ filter: filterValue });
+				e.preventDefault();
+			});
 		});
-	});
-
-	/////////////////////////////////////////
-
-	// Product Main img Slick
-	$('#product-main-img').slick({
-    infinite: true,
-    speed: 300,
-    dots: false,
-    arrows: true,
-    fade: true,
-    asNavFor: '#product-imgs',
-  });
-
-	// Product imgs Slick
-  $('#product-imgs').slick({
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    arrows: true,
-    centerMode: true,
-    focusOnSelect: true,
-		centerPadding: 0,
-		vertical: true,
-    asNavFor: '#product-main-img',
-		responsive: [{
-        breakpoint: 991,
-        settings: {
-					vertical: false,
-					arrows: false,
-					dots: true,
-        }
-      },
-    ]
-  });
-
-	// Product img zoom
-	var zoomMainProduct = document.getElementById('product-main-img');
-	if (zoomMainProduct) {
-		$('#product-main-img .product-preview').zoom();
-	}
-
-	/////////////////////////////////////////
-
-	// Input number
-	$('.input-number').each(function() {
-		var $this = $(this),
-		$input = $this.find('input[type="number"]'),
-		up = $this.find('.qty-up'),
-		down = $this.find('.qty-down');
-
-		down.on('click', function () {
-			var value = parseInt($input.val()) - 1;
-			value = value < 1 ? 1 : value;
-			$input.val(value);
-			$input.change();
-			updatePriceSlider($this , value)
-		})
-
-		up.on('click', function () {
-			var value = parseInt($input.val()) + 1;
-			$input.val(value);
-			$input.change();
-			updatePriceSlider($this , value)
-		})
-	});
-
-	var priceInputMax = document.getElementById('price-max'),
-			priceInputMin = document.getElementById('price-min');
-
-	priceInputMax.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
-
-	priceInputMin.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
-
-	function updatePriceSlider(elem , value) {
-		if ( elem.hasClass('price-min') ) {
-			console.log('min')
-			priceSlider.noUiSlider.set([value, null]);
-		} else if ( elem.hasClass('price-max')) {
-			console.log('max')
-			priceSlider.noUiSlider.set([null, value]);
-		}
-	}
-
-	// Price Slider
-	var priceSlider = document.getElementById('price-slider');
-	if (priceSlider) {
-		noUiSlider.create(priceSlider, {
-			start: [1, 999],
-			connect: true,
-			step: 1,
-			range: {
-				'min': 1,
-				'max': 999
-			}
+		
+		// 2 column layout
+		var isotopeContainer3 = $('.isotopeContainer3');
+		if( !isotopeContainer3.length || !jQuery().isotope ) return;
+		$win.on('load', function(){
+			isotopeContainer3.isotope({
+				itemSelector: '.isotopeSelector'
+			});
+		$('.isotopeFilters3').on( 'click', 'a', function(e) {
+				$('.isotopeFilters3').find('.active').removeClass('active');
+				$(this).parent().addClass('active');
+				var filterValue = $(this).attr('data-filter');
+				isotopeContainer3.isotope({ filter: filterValue });
+				e.preventDefault();
+			});
 		});
-
-		priceSlider.noUiSlider.on('update', function( values, handle ) {
-			var value = values[handle];
-			handle ? priceInputMax.value = value : priceInputMin.value = value
+		
+		// 1 column layout
+		var isotopeContainer4 = $('.isotopeContainer4');
+		if( !isotopeContainer4.length || !jQuery().isotope ) return;
+		$win.on('load', function(){
+			isotopeContainer4.isotope({
+				itemSelector: '.isotopeSelector'
+			});
+		$('.isotopeFilters4').on( 'click', 'a', function(e) {
+				$('.isotopeFilters4').find('.active').removeClass('active');
+				$(this).parent().addClass('active');
+				var filterValue = $(this).attr('data-filter');
+				isotopeContainer4.isotope({ filter: filterValue });
+				e.preventDefault();
+			});
 		});
-	}
+	
+	};
+	
+	
 
-})(jQuery);
+/*
+|--------------------------------------------------------------------------
+| Fancybox
+|--------------------------------------------------------------------------
+|
+|
+|
+*/		
+
+	// myTheme.Fancybox = function () {
+	//
+	// 	$(".fancybox-pop").fancybox({
+	// 		maxWidth	: 900,
+	// 		maxHeight	: 700,
+	// 		fitToView	: true,
+	// 		width		: '80%',
+	// 		height		: '80%',
+	// 		autoSize	: false,
+	// 		closeClick	: false,
+	// 		openEffect	: 'elastic',
+	// 		closeEffect	: 'none'
+	// 	});
+	//
+	// };
+	//
+		
+	
+	
+/*
+|--------------------------------------------------------------------------
+| Functions Initializers
+|--------------------------------------------------------------------------
+|
+|
+|
+*/
+	
+	myTheme.Isotope();
+	// myTheme.Fancybox();
+	
+	
+
+});
+
+
+
+
