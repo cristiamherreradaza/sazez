@@ -78,3 +78,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function () {
+        $('#tabla-usuarios').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
+    });
+
+</script>

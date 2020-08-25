@@ -200,11 +200,6 @@
         }
     });
 
-    $(document).ready(function() {
-        var table = $('#tabla-usuarios').DataTable();
-        table.destroy();
-    } );
-
     function buscar()
     {
         var codigo = $("#codigo").val();
