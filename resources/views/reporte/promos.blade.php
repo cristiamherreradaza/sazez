@@ -75,6 +75,7 @@
                 <thead>
                     <tr>
                         <th>Id Venta</th>
+                        <th>Combo</th>
                         <th>Tienda</th>
                         <th>Usuario</th>
                         <th>Fecha</th>
@@ -87,6 +88,7 @@
                 <tfoot>
                     <tr>
                         <th>Id Venta</th>
+                        <th>Combo</th>
                         <th>Tienda</th>
                         <th>Usuario</th>
                         <th>Fecha</th>
@@ -149,6 +151,8 @@
                 },
             columns: [
                 {data: 'nro_venta', name: 'ventas.id'},
+                //{data: 'combo', name: 'ventas_productos.combo_id'},
+                {data: 'combo', name: 'combos.nombre'},
                 {data: 'tienda', name: 'almacenes.nombre'},
                 {data: 'usuario', name: 'users.name'},
                 {data: 'fecha', name: 'ventas.fecha'},
