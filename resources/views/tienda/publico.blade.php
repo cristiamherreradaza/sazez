@@ -10,7 +10,7 @@
     <meta name="author" content="multikart">
     <link rel="icon" href="../assets/images/favicon/1.png" type="image/x-icon">
     <link rel="shortcut icon" href="../assets/images/favicon/1.png" type="image/x-icon">
-    <title>Multikart - Multi-purpopse E-commerce Html Template</title>
+    <title>Mi tienda</title>
 
     <!--Google font-->
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
@@ -80,7 +80,7 @@
                                     </a>
                                 </div>
                                 <div class="brand-logo">
-                                    <a href="index.html"><img src="../assets/images/icon/logo/18.png"
+                                    <a href="index.html"><img src="{{ asset('tienda/images/icon/logo/18.png') }}"
                                             class="img-fluid blur-up lazyload" alt=""></a>
                                 </div>
                             </div>

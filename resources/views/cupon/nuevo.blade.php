@@ -43,7 +43,7 @@
                                         <span class="text-danger">
                                             <i class="mr-2 mdi mdi-alert-circle"></i>
                                         </span>
-                                        <input type="text" class="form-control" placeholder="Inicio" id="fecha_inicio" name="fecha_inicio" required>
+                                        <input type="datetime-local" class="form-control" id="fecha_inicio" name="fecha_inicio" required>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -52,7 +52,7 @@
                                         <span class="text-danger">
                                             <i class="mr-2 mdi mdi-alert-circle"></i>
                                         </span>
-                                        <input type="text" class="form-control" placeholder="Fin" id="fecha_fin" name="fecha_fin" required>
+                                        <input type="datetime-local" class="form-control" id="fecha_fin" name="fecha_fin" required>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -80,10 +80,10 @@
                             <div class="row" id="detalle_promocion">
                                 <div class="col-md-12">
                                     <label class="control-label">Seleccione promoción</label>
-                                    <select name="promocion" id="promocion" class="form-control">
+                                    <select name="promocion" id="promocion" class="form-control" onchange="validaFechaPromo()">
                                         <option value="" selected></option>
                                         @foreach($promociones as $promocion)
-                                            <option value="{{ $promocion->id }}">{{ $promocion->nombre }}</option>
+                                            <option value="{{ $promocion->id }}" data-fechai="{{ $promocion->fecha_inicio }}" data-fechaf="{{ $promocion->fecha_final }}">{{ $promocion->nombre }} (Fecha Inicio: {{ $promocion->fecha_inicio }} - Fecha Final: {{ $promocion->fecha_final }})</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -217,8 +217,8 @@
 <script src="{{ asset('assets/libs/moment/min/moment-with-locales.js') }}"></script>
 <script src="{{ asset('assets/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
 <script>
-    $('#fecha_inicio').bootstrapMaterialDatePicker({ format: 'YYYY-MM-DD HH:mm', minDate: new Date(), lang: 'es' });
-    $('#fecha_fin').bootstrapMaterialDatePicker({ format: 'YYYY-MM-DD HH:mm', minDate: new Date(), lang: 'es' });
+    // $('#fecha_inicio').bootstrapMaterialDatePicker({ format: 'YYYY-MM-DD HH:mm', minDate: new Date(), lang: 'es' });
+    // let calendarioFinal = $('#fecha_fin').bootstrapMaterialDatePicker({ format: 'YYYY-MM-DD HH:mm', minDate: new Date(), maxDate: "2020-08-26 23:59:59", lang: 'es' });
 
     // MAterial Date picker    
     $('#mdate').bootstrapMaterialDatePicker({ weekStart: 0, time: false });
@@ -231,6 +231,7 @@
     $('#date-start').bootstrapMaterialDatePicker({ weekStart: 0 }).on('change', function(e, date) {
         $('#date-end').bootstrapMaterialDatePicker('setMinDate', date);
     });
+
 </script>
 <script>
     $.ajaxSetup({
@@ -378,6 +379,18 @@
         $("#producto_total").val(total);
         // sumaSubTotales();
     });
+
+    // funcion para validar las fechas y las horas de las promociones
+    function validaFechaPromo()
+    {
+        let fechaInicioPromocion = $("#promocion").find(':selected').data('fechai');
+        let fechaFinalPromocion = $("#promocion").find(':selected').data('fechaf');
+        let fechaHoraInicio = fechaInicioPromocion+"T00:00";
+        let fechaHoraFinal = fechaFinalPromocion+"T00:00";
+        $("#fecha_inicio").attr({"min": fechaHoraInicio, "max": fechaHoraFinal});
+        $("#fecha_fin").attr({"min": fechaHoraInicio, "max": fechaHoraFinal});
+    }
+
 </script>
 
 @endsection

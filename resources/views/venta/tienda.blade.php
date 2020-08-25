@@ -932,16 +932,19 @@
     $(document).on('focusout', '#nit_cliente', function(e) {
 
         let nitCliente = $('#nit_cliente').val();
-        $.ajax({
-            url: "{{ url('Venta/ajaxBuscaNitCliente') }}",
-            data: {nitCliente: nitCliente},
-            type: 'POST',
-            success: function(data) {
-                objetoCLiente = JSON.parse(data.datosCliente);
-                document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
-            }
-        });
-
+        if(nitCliente == 0){
+            document.getElementById('razon_social_cliente').value = "S/N";
+        }else{
+            $.ajax({
+                url: "{{ url('Venta/ajaxBuscaNitCliente') }}",
+                data: {nitCliente: nitCliente},
+                type: 'POST',
+                success: function(data) {
+                    objetoCLiente = JSON.parse(data.datosCliente);
+                    document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
+                }
+            });
+        }
     });
 
 
