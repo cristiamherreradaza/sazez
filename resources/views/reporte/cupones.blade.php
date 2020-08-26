@@ -3,9 +3,7 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
-
 <link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css" rel="stylesheet">
-
 @endsection
 
 @section('metadatos')
@@ -17,11 +15,11 @@
     <div class="col-md-12">
         <div class="card border-info">
             <div class="card-header bg-info">
-                <h4 class="mb-0 text-white">REPORTE DE CUPONES CANJEADOS</h4>
+                <h4 class="mb-0 text-white">REPORTE DE CUPONES</h4>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Fecha de inicio</label>
                             <span class="text-danger">
@@ -30,7 +28,7 @@
                             <input type="date" name="fecha_inicial" id="fecha_inicial" class="form-control" required>
                         </div>                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Fecha final</label>
                             <span class="text-danger">
@@ -39,7 +37,7 @@
                             <input type="date" name="fecha_final" id="fecha_final" class="form-control" required>
                         </div>                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Seleccionar Tienda</label>
                             <select name="almacen_id" id="almacen_id" class="form-control">
@@ -59,6 +57,28 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-danger text-center">
+                                <thead class="bg-danger text-white">
+                                    <tr>
+                                        <th scope="col">Cupones Creados</th>
+                                        <th scope="col">Cupones Cobrados</th>
+                                        <th scope="col">Cupones No Cobrados / Expirados</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $total }}</td>
+                                        <td>{{ $cobrados }}</td>
+                                        <td>{{ $expirados }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
                         <div id="listadoProductosAjax"></div>
                     </div>
                 </div>
@@ -71,32 +91,30 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">LISTA DE CUPONES CANJEADOS</h4>
-            <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
-                <thead>
-                    <tr>
-                        <th>Id Venta</th>
-                        <th>Codigo</th>
-                        <th>Tienda</th>
-                        <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Id Venta</th>
-                        <th>Codigo</th>
-                        <th>Tienda</th>
-                        <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                    </tr>
-                </tfoot>
-            </table>
+                <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
+                    <thead>
+                        <tr>
+                            <th>Id Venta</th>
+                            <th>Codigo</th>
+                            <th>Tienda</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Id Venta</th>
+                            <th>Codigo</th>
+                            <th>Tienda</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                        </tr>
+                    </tfoot>
+                </table>
         </div>
     </div>
 </div>
@@ -150,13 +168,12 @@
                     } 
                 },
             columns: [
-                {data: 'nro_movimiento', name: 'movimientos.id'},
+                {data: 'nro_cupon', name: 'cupones_cobrados.id'},
                 {data: 'codigo_cupon', name: 'cupones.codigo'},
                 {data: 'tienda', name: 'almacenes.nombre'},
                 {data: 'usuario', name: 'users.name'},
-                {data: 'fecha', name: 'movimientos.fecha'},
+                {data: 'fecha', name: 'cupones_cobrados.fecha'},
                 {data: 'cliente', name: 'clientes.name'},
-                {data: 'total', name: 'movimientos.precio_venta'},
             ],
             language: {
                 url: '{{ asset('datatableEs.json') }}'

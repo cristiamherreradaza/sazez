@@ -11,6 +11,8 @@ use App\User;
 use App\Proveedore;
 use App\VentasProducto;
 use App\Venta;
+use App\Cupone;
+use App\CuponesCobrado;
 
 class ReporteController extends Controller
 {
@@ -263,39 +265,34 @@ class ReporteController extends Controller
     public function cupones()
     {
         $almacenes = Almacene::get();
-        return view('reporte.cupones')->with(compact('almacenes'));
+        $creados_sin_almacen = Cupone::whereNull('almacene_id')->count();
+        $creados = Cupone::where('almacene_id', Auth::user()->almacen->id)->count();
+        $total = $creados_sin_almacen+$creados;
+        $cobrados = CuponesCobrado::where('almacene_id', Auth::user()->almacen->id)->count();;
+        $expirados = $total-$cobrados;
+        return view('reporte.cupones')->with(compact('almacenes', 'total', 'cobrados', 'expirados'));
     }
 
     public function ajaxCuponesListado(Request $request)
     {
-        $ventas_id = VentasProducto::whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
-                    ->whereNotNull('cupon_id')
-                    ->groupBy('cupon_id')
-                    ->get();
-        $array_ventas = array();
-        foreach($ventas_id as $row){
-            array_push($array_ventas, $row->venta_id);
-        }
-        $ventas = DB::table('movimientos')
-                    ->whereNull('movimientos.deleted_at')
-                    ->whereIn('movimientos.id', $array_ventas)
-                    //->whereBetween('movimientos.fecha', [$request->fecha_inicial, $request->fecha_final])
-                    ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
-                    ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                    ->leftJoin('users as clientes', 'movimientos.cliente_id', '=', 'clientes.id')
-                    ->leftJoin('cupones', 'movimientos.cupon_id', '=', 'cupones.id')
-                    //->leftJoin('ventas', 'movimientos.venta_id', '=', 'ventas.id')
+        $ventas = DB::table('cupones_cobrados')
+                    ->whereNull('cupones_cobrados.deleted_at')
+                    ->whereBetween('cupones_cobrados.fecha', [$request->fecha_inicial, $request->fecha_final])
+                    ->leftJoin('almacenes', 'cupones_cobrados.almacene_id', '=', 'almacenes.id')
+                    ->leftJoin('users', 'cupones_cobrados.cobrador_id', '=', 'users.id')
+                    ->leftJoin('cupones', 'cupones_cobrados.cupone_id', '=', 'cupones.id')
+                    //->leftJoin('ventas_productos', 'cupones_cobrados.cupone_id', '=', 'ventas_productos.cupon_id')
+                    ->join('users as clientes', 'cupones.cliente_id', '=', 'clientes.id')
                     ->select(
-                        'movimientos.id as nro_movimiento',
+                        'cupones_cobrados.id as nro_cupon',
                         'cupones.codigo as codigo_cupon',
                         'almacenes.nombre as tienda',
                         'users.name as usuario',
-                        'movimientos.fecha as fecha',
-                        'clientes.name as cliente',
-                        'movimientos.precio_venta as total'
+                        'cupones_cobrados.fecha as fecha',
+                        'clientes.name as cliente'
                     );
         if($request->almacen_id){
-            $ventas->where('movimientos.almacene_id', $request->almacen_id);
+            $ventas->where('cupones_cobrados.almacene_id', $request->almacen_id);
         }
         return Datatables::of($ventas)->make(true);
     }
