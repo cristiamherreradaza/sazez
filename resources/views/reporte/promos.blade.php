@@ -21,7 +21,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Fecha de inicio</label>
                             <span class="text-danger">
@@ -30,7 +30,7 @@
                             <input type="date" name="fecha_inicial" id="fecha_inicial" class="form-control" required>
                         </div>                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Fecha final</label>
                             <span class="text-danger">
@@ -39,7 +39,7 @@
                             <input type="date" name="fecha_final" id="fecha_final" class="form-control" required>
                         </div>                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label>Seleccionar Tienda</label>
                             <select name="almacen_id" id="almacen_id" class="form-control">
