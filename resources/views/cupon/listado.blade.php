@@ -90,14 +90,15 @@
         }
     });
 
-    function cobrar(cupon_id, cliente_id, producto_id)
+    function cobrar(cupon_id, cliente_id, producto_id, combo_id)
     {
         $.ajax({
             url: "{{ url('Cupon/ajaxMuestraCupon') }}",
             data: {
                 cupon_id: cupon_id,
                 cliente_id: cliente_id,
-                producto_id: producto_id
+                producto_id: producto_id,
+                combo_id: combo_id
                 },
             type: 'get',
             success: function(data) {

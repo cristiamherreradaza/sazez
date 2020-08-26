@@ -80,7 +80,7 @@ class CuponController extends Controller
                 if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final)){
                     return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
                 }else{
-                    return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                    return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\', \''.$cupones->combo_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
                     <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>
                     <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
                 }
@@ -90,10 +90,17 @@ class CuponController extends Controller
 
     public function ajaxMuestraCupon(Request $request)
     {
-        $producto = Producto::find($request->producto_id);
         $cupon = Cupone::find($request->cupon_id);
         $cliente = User::find($request->cliente_id);
-        return view('cupon.ajaxMuestraCupon')->with(compact('producto', 'cupon', 'cliente'));
+        if($request->producto_id){
+            $producto = Producto::find($request->producto_id);
+            return view('cupon.ajaxMuestraCupon')->with(compact('cupon', 'cliente', 'producto'));
+        }else{
+            $producto=NULL;
+            $combo = Combo::find($request->combo_id);
+            $productos_combo = CombosProducto::where('combo_id', $combo->id)->get();
+            return view('cupon.ajaxMuestraCupon')->with(compact('cupon', 'cliente', 'producto', 'combo', 'productos_combo'));
+        }
     }
 
     public function ver($id)

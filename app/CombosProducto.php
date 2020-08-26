@@ -30,7 +30,7 @@ class CombosProducto extends Model
 
     public function producto()
     {
-        return $this->belongsTo('App\Producto');
+        return $this->belongsTo('App\Producto', 'producto_id');
     }
 
     public function precios()

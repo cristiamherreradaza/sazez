@@ -8,7 +8,12 @@
         <div class="modal-body">
             <input type="hidden" name="cobro_cupon_id" id="cobro_cupon_id" value="{{ $cupon->id }}">
             <input type="hidden" name="cobro_cliente_id" id="cobro_cliente_id" value="{{ $cliente->id }}">
-            <input type="hidden" name="cobro_producto_id" id="cobro_producto_id" value="{{ $producto->id }}">
+            @if($producto)
+                <input type="hidden" name="cobro_producto_id" id="cobro_producto_id" value="{{ $producto->id }}">
+            @else
+                <input type="hidden" name="cobro_combo_id" id="cobro_combo_id" value="{{ $combo->id }}">
+            @endif
+            
             <div class="row">
                 <div class="col-md-4">
                     <div class="form-group">
@@ -61,59 +66,95 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Producto</label>
-                                <input name="cobro_producto" type="text" id="cobro_producto" value="{{ $producto->nombre }}" class="form-control" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
                                 <label class="control-label">Tienda</label>
                                 <input name="cobro_tienda" type="text" id="cobro_tienda" value="{{ auth()->user()->almacen->nombre }}" class="form-control" readonly>
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Stock</label>
-                                @php
-                                    $stock = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
-                                        ->where('producto_id', $producto->id)
-                                        ->where('almacene_id', auth()->user()->almacen_id)
-                                        ->first();
-                                    $stock=intval($stock->total);
-                                @endphp
-                                <input name="cobro_stock" type="text" id="cobro_stock" value="{{ $stock }}" class="form-control" readonly>
+                    @if($producto)
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Producto</label>
+                                    <input name="cobro_producto" type="text" id="cobro_producto" value="{{ $producto->nombre }}" class="form-control" readonly>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Precio</label>
-                                @php
-                                    $precio = App\Precio::where('producto_id', $producto->id)
-                                        ->where('escala_id', 1)
-                                        ->first();
-                                    $precio = $precio->precio;
-                                @endphp
-                                <input name="cobro_precio" type="text" id="cobro_precio" value="{{ $precio }}" class="form-control" readonly>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Stock</label>
+                                    @php
+                                        $stock = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                                            ->where('producto_id', $producto->id)
+                                            ->where('almacene_id', auth()->user()->almacen_id)
+                                            ->first();
+                                        $stock=intval($stock->total);
+                                    @endphp
+                                    <input name="cobro_stock" type="text" id="cobro_stock" value="{{ $stock }}" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Precio</label>
+                                    @php
+                                        $precio = App\Precio::where('producto_id', $producto->id)
+                                            ->where('escala_id', 1)
+                                            ->first();
+                                        $precio = $precio->precio;
+                                    @endphp
+                                    <input name="cobro_precio" type="text" id="cobro_precio" value="{{ $precio }}" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Descuento</label>
+                                    <input name="cobro_descuento" type="text" id="cobro_descuento" value="{{ $cupon->descuento }} %" class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Total</label>
+                                    <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $cupon->monto_total }}" class="form-control" readonly>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Descuento</label>
-                                <input name="cobro_descuento" type="text" id="cobro_descuento" value="{{ $cupon->descuento }} %" class="form-control" readonly>
+                    @else
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Nombre de la promo</label>
+                                    <input name="cobro_producto" type="text" id="cobro_producto" value="{{ $combo->nombre }}" class="form-control" readonly>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Total</label>
-                                <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $cupon->monto_total }}" class="form-control" readonly>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Productos en promocion</label>
+                                        @foreach($productos_combo as $productos)
+                                            <input name="cobro_descuento" type="text" value="{{ $productos->producto->nombre }} %" class="form-control" readonly>
+                                        @endforeach
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Precio</label>
+                                    @foreach($productos_combo as $productos)
+                                        <input name="cobro_precio" type="text" value="{{ $productos->precio }}" class="form-control" readonly>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Cantidad</label>
+                                    @foreach($productos_combo as $productos)
+                                        <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $productos->cantidad }}" class="form-control" readonly>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
                 <div class="col-md-4">
                     <h3 class="text-center"><strong>Detalle</strong></h3>
