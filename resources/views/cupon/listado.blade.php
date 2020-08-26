@@ -181,7 +181,8 @@
         //Validar que el boton se habilite una vez se efectue la compra
         //siempre que el stock sea 1 o mayor y el efectivo sea igual o mayor al totalVenta
         let stock = Number($("#cobro_stock").val());
-        if (efectivo >= totalVenta && stock >= 1) {
+        //if (efectivo >= totalVenta && stock >= 1) {
+        if (efectivo >= totalVenta) {
             $("#boton_compra").prop("disabled", false);
         }else{
             $("#boton_compra").prop("disabled", true);

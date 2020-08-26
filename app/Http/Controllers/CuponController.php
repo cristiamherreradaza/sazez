@@ -386,7 +386,13 @@ class CuponController extends Controller
                                     $sw=0;
                                 }
                             }
-                            
+                            //Almacenaremos el valor total de la promocion
+                            $promo = Combo::find($request->promocion);
+                            $productos_promo = CombosProducto::where('combo_id', $promo->id)->get();
+                            $precio_total_promocion = 0;
+                            foreach($productos_promo as $producto){
+                                $precio_total_promocion = $precio_total_promocion + ($producto->precio*$producto->cantidad);
+                            }
                             // Se crea el Cupon
                             $cupon = new Cupone();
                             $cupon->user_id = Auth::user()->id;
@@ -394,7 +400,7 @@ class CuponController extends Controller
                             $cupon->combo_id = $request->promocion;    //pendiente validar
                             $cupon->almacene_id = $request->tienda;
                             //$cupon->descuento = $request->producto_descuento;
-                            //$cupon->monto_total = $request->producto_total;
+                            $cupon->monto_total = $precio_total_promocion;
                             $cupon->codigo = $codigo;
                             $cupon->fecha_inicio = $request->fecha_inicio;
                             $cupon->fecha_final = $request->fecha_fin;
@@ -458,6 +464,13 @@ class CuponController extends Controller
                                 $sw=0;
                             }
                         }
+                        //Almacenaremos el valor total de la promocion
+                        $promo = Combo::find($request->promocion);
+                        $productos_promo = CombosProducto::where('combo_id', $promo->id)->get();
+                        $precio_total_promocion = 0;
+                        foreach($productos_promo as $producto){
+                            $precio_total_promocion = $precio_total_promocion + ($producto->precio*$producto->cantidad);
+                        }
                         // Se crea el Cupon
                         $cupon = new Cupone();
                         $cupon->user_id = Auth::user()->id;
@@ -465,7 +478,7 @@ class CuponController extends Controller
                         $cupon->combo_id = $request->promocion;    //pendiente validar
                         $cupon->almacene_id = $request->tienda;
                         // $cupon->descuento = $request->producto_descuento;
-                        // $cupon->monto_total = $request->producto_total;
+                        $cupon->monto_total = $precio_total_promocion;
                         $cupon->codigo = $codigo;
                         $cupon->fecha_inicio = $request->fecha_inicio;
                         $cupon->fecha_final = $request->fecha_fin;
@@ -527,6 +540,13 @@ class CuponController extends Controller
                                     $sw=0;
                                 }
                             }
+                            //Almacenaremos el valor total de la promocion
+                            $promo = Combo::find($request->promocion);
+                            $productos_promo = CombosProducto::where('combo_id', $promo->id)->get();
+                            $precio_total_promocion = 0;
+                            foreach($productos_promo as $producto){
+                                $precio_total_promocion = $precio_total_promocion + ($producto->precio*$producto->cantidad);
+                            }
                             //Se crea el Cupon
                             $cupon = new Cupone();
                             $cupon->user_id = Auth::user()->id;
@@ -535,7 +555,7 @@ class CuponController extends Controller
                             $cupon->combo_id = $request->promocion;    //pendiente validar
                             $cupon->almacene_id = $request->tienda;
                             //$cupon->descuento = $request->producto_descuento;
-                            //$cupon->monto_total = $request->producto_total;
+                            $cupon->monto_total = $precio_total_promocion;
                             $cupon->codigo = $codigo;
                             $cupon->fecha_inicio = $request->fecha_inicio;
                             $cupon->fecha_final = $request->fecha_fin;
@@ -578,32 +598,70 @@ class CuponController extends Controller
         $venta->estado = 'Cupon';
         $venta->save();
 
-        // Registramos en Ventas_producto
-        $ventaProducto = new VentasProducto();
-        $ventaProducto->user_id = Auth::user()->id;
-        $ventaProducto->producto_id = $request->cobro_producto_id;
-        $ventaProducto->cupon_id = $request->cobro_cupon_id;
-        $ventaProducto->venta_id = $venta->id;
-        $ventaProducto->precio_venta = $request->cobro_total;
-        $ventaProducto->precio_cobrado = $request->cobro_total;
-        $ventaProducto->cantidad = 1;
-        $ventaProducto->fecha = date('Y-m-d');
-        $ventaProducto->save();
+        if($request->cobro_producto_id){        //Si es cupon por un producto
+            // Registramos en Ventas_producto
+            $ventaProducto = new VentasProducto();
+            $ventaProducto->user_id = Auth::user()->id;
+            $ventaProducto->producto_id = $request->cobro_producto_id;
+            $ventaProducto->cupon_id = $request->cobro_cupon_id;
+            $ventaProducto->venta_id = $venta->id;
+            $ventaProducto->precio_venta = $request->cobro_total;
+            $ventaProducto->precio_cobrado = $request->cobro_total;
+            $ventaProducto->cantidad = 1;
+            $ventaProducto->fecha = date('Y-m-d');
+            $ventaProducto->save();
+        }else{                                  //Es cupon por una promocion
+            $productos_combo = CombosProducto::where('combo_id', $request->cobro_combo_id)->get();
+            foreach($productos_combo as $producto){
+                // Registramos en Ventas_producto
+                $ventaProducto = new VentasProducto();
+                $ventaProducto->user_id = Auth::user()->id;
+                $ventaProducto->producto_id = $producto->producto_id;
+                $ventaProducto->combo_id = $request->cobro_combo_id;
+                $ventaProducto->cupon_id = $request->cobro_cupon_id;
+                $ventaProducto->venta_id = $venta->id;
+                $ventaProducto->precio_venta = $producto->precio;
+                $ventaProducto->precio_cobrado = $producto->precio;
+                $ventaProducto->cantidad = $producto->cantidad;
+                $ventaProducto->fecha = date('Y-m-d');
+                $ventaProducto->save();
+            }
+        }
         
-        // Registrar en Movimientos
-        $movimiento = new Movimiento();
-        $movimiento->user_id = Auth::user()->id;
-        $movimiento->producto_id = $request->cobro_producto_id;
-        $movimiento->almacene_id = Auth::user()->almacen->id;
-        $movimiento->cliente_id = $request->cobro_cliente_id;
-        $movimiento->venta_id = $venta->id;
-        $movimiento->cupon_id = $request->cobro_cupon_id;
-        $movimiento->precio_venta = $request->cobro_total;
-        $movimiento->salida = 1;
-        $movimiento->fecha = date('Y-m-d H:i:s');
-        $movimiento->estado = 'Cupon';
-        $movimiento->save();
-
+        if($request->cobro_producto_id){
+            // Registrar en Movimientos
+            $movimiento = new Movimiento();
+            $movimiento->user_id = Auth::user()->id;
+            $movimiento->producto_id = $request->cobro_producto_id;
+            $movimiento->almacene_id = Auth::user()->almacen->id;
+            $movimiento->cliente_id = $request->cobro_cliente_id;
+            $movimiento->venta_id = $venta->id;
+            $movimiento->cupon_id = $request->cobro_cupon_id;
+            $movimiento->precio_venta = $request->cobro_total;
+            $movimiento->salida = 1;
+            $movimiento->fecha = date('Y-m-d H:i:s');
+            $movimiento->estado = 'Cupon';
+            $movimiento->save();
+        }else{
+            $productos_combo = CombosProducto::where('combo_id', $request->cobro_combo_id)->get();
+            foreach($productos_combo as $producto){
+                // Registrar en Movimientos
+                $movimiento = new Movimiento();
+                $movimiento->user_id = Auth::user()->id;
+                $movimiento->producto_id = $producto->producto_id;
+                $movimiento->almacene_id = Auth::user()->almacen->id;
+                $movimiento->cliente_id = $request->cobro_cliente_id;
+                $movimiento->venta_id = $venta->id;
+                $movimiento->combo_id = $request->cobro_combo_id;
+                $movimiento->cupon_id = $request->cobro_cupon_id;
+                $movimiento->precio_venta = $producto->precio;
+                $movimiento->salida = $producto->cantidad;
+                $movimiento->fecha = date('Y-m-d H:i:s');
+                $movimiento->estado = 'Cupon';
+                $movimiento->save();
+            }
+        }
+        
         // Actualizamos datos del cliente
         $cliente = User::find($request->cobro_cliente_id);
         $cliente->name = $request->cobro_nombre;

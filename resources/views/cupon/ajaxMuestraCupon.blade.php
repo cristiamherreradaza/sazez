@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="control-label">Productos en promocion</label>
                                         @foreach($productos_combo as $productos)
@@ -137,7 +137,7 @@
                                         @endforeach
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Precio</label>
                                     @foreach($productos_combo as $productos)
@@ -145,7 +145,7 @@
                                     @endforeach
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Cantidad</label>
                                     @foreach($productos_combo as $productos)
