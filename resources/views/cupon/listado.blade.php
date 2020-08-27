@@ -90,14 +90,15 @@
         }
     });
 
-    function cobrar(cupon_id, cliente_id, producto_id)
+    function cobrar(cupon_id, cliente_id, producto_id, combo_id)
     {
         $.ajax({
             url: "{{ url('Cupon/ajaxMuestraCupon') }}",
             data: {
                 cupon_id: cupon_id,
                 cliente_id: cliente_id,
-                producto_id: producto_id
+                producto_id: producto_id,
+                combo_id: combo_id
                 },
             type: 'get',
             success: function(data) {
@@ -180,7 +181,8 @@
         //Validar que el boton se habilite una vez se efectue la compra
         //siempre que el stock sea 1 o mayor y el efectivo sea igual o mayor al totalVenta
         let stock = Number($("#cobro_stock").val());
-        if (efectivo >= totalVenta && stock >= 1) {
+        //if (efectivo >= totalVenta && stock >= 1) {
+        if (efectivo >= totalVenta) {
             $("#boton_compra").prop("disabled", false);
         }else{
             $("#boton_compra").prop("disabled", true);
