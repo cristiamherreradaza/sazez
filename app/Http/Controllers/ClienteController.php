@@ -88,7 +88,7 @@ class ClienteController extends Controller
             $usuario->nit = $request->nit_usuario;
             $usuario->rol = 'Cliente';
             $usuario->razon_social = $request->razon_social_usuario;
-            $usuario->password = Hash::make($request->password_usuario);
+            $usuario->password = Hash::make('123456789');
             $usuario->save();
             $clienteId = $usuario->id;
 

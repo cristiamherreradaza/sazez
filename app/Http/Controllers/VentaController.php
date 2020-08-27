@@ -9,10 +9,13 @@ use App\Grupo;
 use App\Venta;
 use App\Precio;
 use DataTables;
+use App\Factura;
 use App\Almacene;
 use App\Producto;
 use App\Movimiento;
+use App\Parametros;
 use App\Cotizacione;
+use CodigoControlV7;
 use App\CombosProducto;
 use App\Configuracione;
 use App\VentasProducto;
@@ -21,6 +24,7 @@ use App\CotizacionesProducto;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class VentaController extends Controller
 {
@@ -98,6 +102,7 @@ class VentaController extends Controller
 
     public function tienda()
     {
+        // $nuevoNumero = $ultimoNumeroFactura->numero_factura+1;
         $hoy = date('Y-m-d');
         $arrayPromociones = [];
         $almacenes = Almacene::get();
@@ -160,8 +165,7 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-        // dd($request->all());
-
+        // preguntamos si el pago es al contado o credito
         if ($request->pagoContado != "on") 
         {
             $pagoCredito = 'Si';
@@ -172,7 +176,7 @@ class VentaController extends Controller
         }
         $errorVenta = 0;
         $mensajeError = "";
-        //cremaos la venta
+        // creamos la venta
         $venta              = new Venta();
         $venta->user_id     = Auth::user()->id;
         $venta->almacene_id = Auth::user()->almacen_id;
@@ -183,6 +187,68 @@ class VentaController extends Controller
         $venta->total       = $request->totalCompra;
         $venta->save();
         $venta_id = $venta->id;
+
+        // procesamos para el nit del cliente
+        $buscaNitCliente = User::where('nit', $request->nit_cliente)->first();
+
+        // verificamos si es publico general para guardar un nuevo cliente
+        if ($buscaNitCliente == null) {
+            // creamos un correo temporal
+            $correoTemporal = date("YmdHis").'@notiene.com';
+
+            $cliente               = new User();
+            $cliente->name         = $request->razon_social_cliente;
+            $cliente->rol          = 'Cliente';
+            $cliente->email        = $correoTemporal;
+            $cliente->password     = Hash::make('123456789');
+            $cliente->nit          = $request->nit_cliente;
+            $cliente->razon_social = $request->razon_social_cliente;
+            $cliente->save();
+        } else {
+            // modificamos el nity razon social del cliente
+            $cliente               = User::find($buscaNitCliente->id);
+            $cliente->nit          = $request->nit_cliente;
+            $cliente->razon_social = $request->razon_social_cliente;
+            $cliente->save();
+        }
+
+        // tramemos los parametros de la facturacion
+        $parametrosFactura = Parametros::where('estado', 'Activo')->first();
+
+        // obtenemos el ultimo numero de factura
+        $ultimoNumeroFactura = Factura::latest()->first();
+        // dd($ultimoNumeroFactura);
+        if($ultimoNumeroFactura == null){
+            $nuevoNumeroFactura = $parametrosFactura->numero_factura;
+        }else{
+            $nuevoNumeroFactura = $ultimoNumeroFactura->numero_factura+1;
+        }
+
+        $fechaParaCodigo = str_replace("-", "", $request->fecha);
+
+        // generamos el codigo de control
+        $facturador          = new CodigoControlV7();
+        $numero_autorizacion = $parametrosFactura->numero_autorizacion;
+        $numero_factura      = $nuevoNumeroFactura;
+        $nit_cliente         = $request->nit_cliente;
+        $fecha_compra        = $fechaParaCodigo;
+        $monto_compra        = round($request->totalCompra, 0, PHP_ROUND_HALF_UP);
+        $clave               = $parametrosFactura->llave_dosificacion;
+        $codigoControl       = $facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+
+        // creamos la factura
+        $nuevaFactura                      = new Factura();
+        $nuevaFactura->user_id             = Auth::user()->id;
+        $nuevaFactura->almacene_id         = Auth::user()->almacen_id;
+        $nuevaFactura->cliente_id          = $request->cliente_id;
+        $nuevaFactura->numero_autorizacion = $parametrosFactura->numero_autorizacion;
+        $nuevaFactura->numero_factura      = $nuevoNumeroFactura;
+        $nuevaFactura->nit_cliente         = $request->nit_cliente;
+        $nuevaFactura->monto_compra        = round($request->totalCompra, 0, PHP_ROUND_HALF_UP);
+        $nuevaFactura->clave               = $parametrosFactura->llave_dosificacion;
+        $nuevaFactura->codigo_control      = $codigoControl;
+        $nuevaFactura->save();
+        $facturaId = $nuevaFactura->id;
 
         // guardamos los datos de la promocion
         if($request->has('promoId'))
@@ -212,6 +278,7 @@ class VentaController extends Controller
                         $productosPr->producto_id    = $ppr->producto_id;
                         $productosPr->venta_id       = $venta_id;
                         $productosPr->combo_id       = $ppr->combo_id;
+                        $productosPr->factura_id     = $facturaId;
                         $productosPr->precio_venta   = $precioProductoCombo;
                         $productosPr->precio_cobrado = $precioProductoCombo;
                         $productosPr->cantidad       = $cantidadProductosPromo;
@@ -278,6 +345,7 @@ class VentaController extends Controller
                     $productos->producto_id    = $ll;
                     $productos->venta_id       = $venta_id;
                     $productos->precio_venta   = $request->precio_venta[$ll];
+                    $productos->factura_id     = $facturaId;
                     $productos->precio_cobrado = $request->precio[$ll];
                     $productos->cantidad       = $request->cantidad[$ll];
                     $productos->fecha          = $request->fecha;
@@ -343,6 +411,7 @@ class VentaController extends Controller
                     $productosMayor->producto_id          = $llm;
                     $productosMayor->venta_id             = $venta_id;
                     $productosMayor->escala_id            = $request->escala_id_m[$llm];
+                    $productosMayor->factura_id           = $facturaId;
                     $productosMayor->precio_venta_mayor   = $request->precio_venta_m[$llm];
                     $productosMayor->precio_cobrado_mayor = $request->precio_m[$llm];
                     $productosMayor->cantidad             = $request->cantidad_m[$llm];

@@ -182,7 +182,7 @@
                                     <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
                                         style="width: 100%; height:36px;" onchange="seleccionaCliente()">
                                         @foreach($clientes as $c)
-                                        <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}"> {{ $c->name }} </option>
+                                            <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}"> {{ $c->name }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -903,7 +903,6 @@
                     `<input type="number" class="form-control text-right subtotalPromocion" name="subtotalPromocion[`+promocionId+`]" id="subtotalPromocion_`+promocionId+`" value="`+precio+`" step="any" style="width: 120px;" readonly>`,
                     '<button type="button" class="btnEliminaPromo btn btn-danger" title="Elimina Promocion"><i class="fas fa-trash-alt"></i></button>'
                 ]).draw(false);
-
                 // calculamos el valor a totales
                 sumaSubTotales();
             }else{
@@ -941,7 +940,13 @@
                 type: 'POST',
                 success: function(data) {
                     objetoCLiente = JSON.parse(data.datosCliente);
-                    document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
+                    console.log(objetoCLiente);
+                    if(objetoCLiente.length === 0){
+                        // console.log('es vacio');
+                        document.getElementById('razon_social_cliente').value = "S/N";
+                    }else{
+                        document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
+                    }
                 }
             });
         }
