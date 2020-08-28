@@ -22,7 +22,7 @@ class UserController extends Controller
     public function listado()
     {
         $usuarios = User::get();
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $perfiles = Perfile::get();
         $menus = Menu::whereNull('padre')->get();
         return view('usuario.listado')->with(compact('usuarios', 'perfiles', 'almacenes', 'menus'));

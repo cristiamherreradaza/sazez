@@ -15,7 +15,7 @@ class PedidoController extends Controller
 {
     public function nuevo()
     {
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         return view('pedido.nuevo')->with(compact('almacenes'));
     }   
 

@@ -36,7 +36,7 @@ class CuponController extends Controller
     {
         $grupos = Grupo::get();
         $clientes = User::where('rol', 'Cliente')->get();
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $promociones = Combo::get();
         return view('cupon.nuevo')->with(compact('almacenes', 'clientes', 'promociones', 'grupos'));
     }

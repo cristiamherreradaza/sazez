@@ -40,7 +40,7 @@ class MovimientoController extends Controller
 
     public function ingreso()
     {
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $proveedores = Proveedore::get();
         return view('movimiento.ingreso')->with(compact('almacenes', 'proveedores'));
     }
