@@ -33,7 +33,7 @@
                             <td>{{ $usuario->name }}</td>
                             <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->celulares }}</td>
-                            <td>{{ $usuario->perfil['nombre'] }}</td>
+                            <td>{{ $usuario->rol }}</td>
                             <td>
                                 @if($usuario->almacen_id)
                                     {{ $usuario->almacen->nombre }}
@@ -110,7 +110,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Contraseña</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Perfil</label>
                                 <span class="text-danger">
@@ -124,13 +135,15 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row" id="ventana_almacen_existente">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Almacen</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <select name="almacen_usuario" id="almacen_usuario" class="form-control" required>
+                                <select name="almacen_usuario" id="almacen_usuario" class="form-control">
                                     <option value="" selected> Seleccione </option>
                                     @foreach($almacenes as $almacen)
                                         <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
@@ -139,14 +152,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                    <div class="row ventana_almacen_nuevo">
+                        <div class="col-md-7">
                             <div class="form-group">
-                                <label class="control-label">Contraseña</label>
+                                <label class="control-label">Nombre de Almacen</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
+                                <input name="nombre_nuevo_almacen" type="text" id="nombre_nuevo_almacen" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label class="control-label">Telefonos</label>
+                                <input name="telefonos_nuevo_almacen" type="text" id="telefonos_nuevo_almacen" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ventana_almacen_nuevo">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Dirección de Almacen</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="direccion_nuevo_almacen" type="text" id="direccion_nuevo_almacen" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -308,6 +338,42 @@
         });
     });
 
+    //Funcion para ocultar/mostrar y validar datos dependiendo del Tipo de perfil seleccionado
+    $( function() {
+        $("#ventana_almacen_existente").hide();
+        $(".ventana_almacen_nuevo").hide();
+        $("#perfil_usuario").val("");
+        $("#perfil_usuario").change( function() {
+            if($(this).val() == "") {                               // Si el select de Tipo de Perfil esta vacio (Seleccione), todo se oculta y sus valores se limpian
+                $("#almacen_usuario").val("");
+                $("#nombre_nuevo_almacen").val("");
+                $("#telefonos_nuevo_almacen").val("");
+                $("#direccion_nuevo_almacen").val("");
+
+                $("#almacen_usuario").prop('required',false);
+                $("#nombre_nuevo_almacen").prop('required',false);
+                $("#direccion_nuevo_almacen").prop('required',false);
+                
+                $("#ventana_almacen_existente").hide();
+                $(".ventana_almacen_nuevo").hide();
+            }
+            if ($(this).val() != "" && $(this).val() != "4") {      // Si el select de Tipo de Perfil es diferente de "" y de 4, mostrara select de un almacen existente
+                $("#almacen_usuario").prop('required',true);
+                $("#nombre_nuevo_almacen").prop('required',false);
+                $("#direccion_nuevo_almacen").prop('required',false);
+                $(".ventana_almacen_nuevo").hide();
+                $("#ventana_almacen_existente").show();
+                //$("#guarda_cupon").prop("disabled", false);
+            }
+            if ($(this).val() == "4") {                             // Si el select de Tipo de Perfil esta con 4 (Mayorista), mostrara los detalles para nuevo almacen
+                $("#nombre_nuevo_almacen").prop('required',true);
+                $("#direccion_nuevo_almacen").prop('required',true);
+                $("#almacen_usuario").prop('required',false);
+                $("#ventana_almacen_existente").hide();
+                $(".ventana_almacen_nuevo").show();
+            }
+        });
+    });
 </script>
 <script>
     function nuevo_usuario()
@@ -318,17 +384,34 @@
     function guardar_usuario()
     {
         var nombre_usuario = $("#nombre_usuario").val();
-        var perfil_usuario = $("#perfil_usuario").val();
         var email_usuario = $("#email_usuario").val();
         var password_usuario = $("#password_usuario").val();
+        var perfil_usuario = $("#perfil_usuario").val();
+        
         var almacen_usuario = $("#almacen_usuario").val();
 
-        if(nombre_usuario.length>0 && perfil_usuario.length>0 && almacen_usuario.length>0 &&email_usuario.length>0 && password_usuario.length>7){
-            Swal.fire(
-                'Excelente!',
-                'Una nuevo usuario fue registrado.',
-                'success'
-            )
+        var nombre_nuevo_almacen = $("#nombre_nuevo_almacen").val();
+        var telefonos_nuevo_almacen = $("#telefonos_nuevo_almacen").val();
+        var direccion_nuevo_almacen = $("#direccion_nuevo_almacen").val();
+
+        if(nombre_usuario.length>0 && email_usuario.length>0 && password_usuario.length>7 && perfil_usuario.length>0){
+            if(perfil_usuario != 4){
+                if(almacen_usuario.length>0){
+                    Swal.fire(
+                        'Excelente!',
+                        'Una nuevo usuario fue registrado.',
+                        'success'
+                    )
+                }
+            }else{
+                if(nombre_nuevo_almacen.length>0 && direccion_nuevo_almacen.length>0){
+                    Swal.fire(
+                        'Excelente!',
+                        'Una nuevo usuario fue registrado.',
+                        'success'
+                    )
+                }
+            }
         }
     }
 
