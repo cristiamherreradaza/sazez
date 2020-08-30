@@ -182,7 +182,7 @@
                                     <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
                                         style="width: 100%; height:36px;" onchange="seleccionaCliente()">
                                         @foreach($clientes as $c)
-                                            <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}"> {{ $c->name }} </option>
+                                            <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}" data-nit="{{ $c->nit }}" data-razon="{{ $c->razon_social }}"> {{ $c->name }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -720,14 +720,19 @@
     function seleccionaCliente()
     {
         let nombreCliente = $("#cliente_id").find(':selected').text();
-        let rolCliente = $("#cliente_id").find(':selected').data('tipo');
+        let rolCliente    = $("#cliente_id").find(':selected').data('tipo');
+        let nitCliente    = $("#cliente_id").find(':selected').data('nit');
+        let razonCliente  = $("#cliente_id").find(':selected').data('razon');
+
         if (rolCliente == 'Mayorista') {
             $("#bloqueEnvioMayorista").show("slow");
         }else{
             $("#bloqueEnvioMayorista").hide("slow");
         }
-        console.log(rolCliente);
+
         $("#tagCliente").html('EDITA -'+nombreCliente);
+        $("#nit_cliente").val(nitCliente);
+        $("#razon_social_cliente").val(razonCliente);
         $("#tag_edita_cliente").show();
     }
 

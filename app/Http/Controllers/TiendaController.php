@@ -8,6 +8,7 @@ use App\Categoria;
 use App\Producto;
 use App\Almacene;
 use App\Movimiento;
+use App\Tipo;
 use App\ImagenesProducto;
 use Illuminate\Support\Facades\DB;
 use DataTables;
@@ -16,7 +17,14 @@ class TiendaController extends Controller
 {
     public function publico(Request $request)
     {
-        return view('tienda.publico');
+    	$listadoProductos = Producto::where('pagina_principal', 'Si')
+    						->where('publicado', 'Si')
+    						->inRandomOrder()
+    						->limit(6)
+    						->get();
+		// dd($listadoProductos);    					
+        $listadoTipos = Tipo::limit(15)->get();
+        return view('tienda.publico')->with(compact('listadoTipos', 'listadoProductos'));
     }
 
 }
