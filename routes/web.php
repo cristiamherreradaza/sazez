@@ -279,6 +279,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // FACTURACION Y EMPRESA
     Route::get('Empresa/formulario', 'EmpresaController@formulario');
+    Route::post('Empresa/guarda', 'EmpresaController@guarda');
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');
