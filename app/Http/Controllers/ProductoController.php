@@ -317,24 +317,26 @@ class ProductoController extends Controller
             $nuevoProducto = new Producto();
         }
 
-        $nuevoProducto->user_id         = Auth::user()->id;
-        $nuevoProducto->marca_id        = $request->marca_id;
-        $nuevoProducto->tipo_id         = $request->tipo_id;
-        $nuevoProducto->codigo          = $codigoGenerado;
-        $nuevoProducto->nombre          = $request->nombre;
-        $nuevoProducto->nombre_venta    = $request->nombre_venta;
-        $nuevoProducto->modelo          = $request->modelo;
-        $nuevoProducto->precio_compra   = $request->precio_compra;
-        $nuevoProducto->cantidad_minima = $request->cantidad_minima;
-        $nuevoProducto->dias_garantia   = $request->dias_garantia;
-        $nuevoProducto->largo           = $request->largo;
-        $nuevoProducto->ancho           = $request->ancho;
-        $nuevoProducto->alto            = $request->alto;
-        $nuevoProducto->peso            = $request->peso;
-        $nuevoProducto->colores         = $request->colores;
-        $nuevoProducto->descripcion     = $request->descripcion;
-        $nuevoProducto->url_referencia  = $request->url_referencia;
-        $nuevoProducto->video           = $request->video;
+        $nuevoProducto->user_id          = Auth::user()->id;
+        $nuevoProducto->marca_id         = $request->marca_id;
+        $nuevoProducto->tipo_id          = $request->tipo_id;
+        $nuevoProducto->codigo           = $codigoGenerado;
+        $nuevoProducto->nombre           = $request->nombre;
+        $nuevoProducto->nombre_venta     = $request->nombre_venta;
+        $nuevoProducto->modelo           = $request->modelo;
+        $nuevoProducto->precio_compra    = $request->precio_compra;
+        $nuevoProducto->cantidad_minima  = $request->cantidad_minima;
+        $nuevoProducto->dias_garantia    = $request->dias_garantia;
+        $nuevoProducto->largo            = $request->largo;
+        $nuevoProducto->ancho            = $request->ancho;
+        $nuevoProducto->alto             = $request->alto;
+        $nuevoProducto->peso             = $request->peso;
+        $nuevoProducto->colores          = $request->colores;
+        $nuevoProducto->descripcion      = $request->descripcion;
+        $nuevoProducto->url_referencia   = $request->url_referencia;
+        $nuevoProducto->video            = $request->video;
+        $nuevoProducto->publicado        = "Si";
+        $nuevoProducto->pagina_principal = "No";
         $nuevoProducto->save();
         $producto_id = $nuevoProducto->id;
 

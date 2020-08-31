@@ -17,11 +17,18 @@ class TiendaController extends Controller
 {
     public function publico(Request $request)
     {
-    	$listadoProductos = Producto::where('pagina_principal', 'Si')
-    						->where('publicado', 'Si')
-    						->inRandomOrder()
-    						->limit(6)
-    						->get();
+		$listadoProductos = Producto::where('pagina_principal', 'Si')
+							->where('publicado', 'Si')
+							->inRandomOrder()
+							->limit(18)
+							->get();
+
+		$listadoRecomendados = Producto::where('pagina_principal', 'No')
+							->where('publicado', 'Si')
+							->inRandomOrder()
+							->limit(18)
+							->get();
+
 		// dd($listadoProductos);    					
         $listadoTipos = Tipo::limit(15)->get();
         return view('tienda.publico')->with(compact('listadoTipos', 'listadoProductos'));
