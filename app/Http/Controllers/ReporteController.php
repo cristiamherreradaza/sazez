@@ -16,6 +16,43 @@ use App\CuponesCobrado;
 
 class ReporteController extends Controller
 {
+    public function reporte_tienda()
+    {
+        $almacen = Almacene::get();
+        return view('reporte.reporte_tienda')->with(compact('almacen'));
+    }
+
+    public function ajax_tienda_listado(Request $request)
+    {   
+        $almacen_id = $request->tipo_id;
+        $fecha_ini = $request->tipo_fecha_ini;
+        $fecha_fin = $request->tipo_fecha_fin;
+        if ($almacen_id == 0) {
+            $productos = DB::select("SELECT alma.nombre as alma_nombre, tipo.nombre as tipo_nombre, prod.nombre as prod_nombre, marc.nombre as marc_nombre, prod.colores, (SUM(movi.ingreso) - SUM(movi.salida)) as stock
+                                    FROM movimientos movi, almacenes alma, productos prod, tipos tipo, marcas marc
+                                    WHERE movi.almacene_id = alma.id
+                                    AND movi.producto_id = prod.id
+                                    AND prod.tipo_id = tipo.id
+                                    AND prod.marca_id = marc.id
+                                    AND fecha BETWEEN '$fecha_ini' AND '$fecha_fin'
+                                    AND movi.deleted_at IS NULL
+                                    GROUP BY movi.producto_id, alma.id");
+        } else {
+            $productos = DB::select("SELECT alma.nombre as alma_nombre, tipo.nombre as tipo_nombre, prod.nombre as prod_nombre, marc.nombre as marc_nombre, prod.colores, (SUM(movi.ingreso) - SUM(movi.salida)) as stock
+                                    FROM movimientos movi, almacenes alma, productos prod, tipos tipo, marcas marc
+                                    WHERE movi.almacene_id = '$almacen_id'
+                                    AND movi.almacene_id = alma.id
+                                    AND movi.producto_id = prod.id
+                                    AND prod.tipo_id = tipo.id
+                                    AND prod.marca_id = marc.id
+                                    AND fecha BETWEEN '$fecha_ini' AND '$fecha_fin'
+                                    AND movi.deleted_at IS NULL
+                                    GROUP BY movi.producto_id, alma.id");
+        }
+         return Datatables::of($productos)
+                ->make(true);
+    }
+
     public function ventas()
     {
         $almacenes = Almacene::whereNull('estado')->get();
