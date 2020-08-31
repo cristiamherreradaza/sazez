@@ -251,6 +251,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //REPORTE DE TIENDA
     Route::get('Tienda/publico', 'TiendaController@publico');
     
+    Route::get('Reporte/reporte_tienda', 'ReporteController@reporte_tienda');
+    Route::get('Reporte/ajax_tienda_listado', 'ReporteController@ajax_tienda_listado');
     Route::get('Reporte/ventas', 'ReporteController@ventas');
     Route::get('Reporte/ajaxVentasListado', 'ReporteController@ajaxVentasListado');
     Route::get('Reporte/proveedores', 'ReporteController@proveedores');
