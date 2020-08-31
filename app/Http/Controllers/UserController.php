@@ -22,7 +22,7 @@ class UserController extends Controller
     public function listado()
     {
         $usuarios = User::get();
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $perfiles = Perfile::get();
         $menus = Menu::whereNull('padre')->get();
         return view('usuario.listado')->with(compact('usuarios', 'perfiles', 'almacenes', 'menus'));
@@ -30,6 +30,10 @@ class UserController extends Controller
 
     public function guardar(Request $request)
     {
+        // Encontramos el perfil
+        $perfil = Perfile::find($request->perfil_usuario);
+
+        // Creamos usuario
         $usuario = new User();
         $usuario->name = $request->nombre_usuario;
         $usuario->email = $request->email_usuario;
@@ -37,11 +41,27 @@ class UserController extends Controller
         $usuario->nit = $request->nit_usuario;
         $usuario->razon_social = $request->razon_social_usuario;
         $usuario->perfil_id = $request->perfil_usuario;
-        //$usuario->rol = $request->rol_usuario;
-        $usuario->almacen_id = $request->almacen_usuario;
+        $usuario->rol = $perfil->nombre;
+        if($request->perfil_usuario != 4){      // Si el perfil de usuario no es de mayorista, entra
+            $usuario->almacen_id = $request->almacen_usuario;
+        }
         $usuario->password = Hash::make($request->password_usuario);
         $usuario->save();
+
+        if($request->perfil_usuario == 4){      // Si el perfil es de usuario mayorista, crea almacen y adiciona estado en usuario
+            $almacen = new Almacene();
+            $almacen->user_id = Auth::user()->id;
+            $almacen->nombre = $request->nombre_nuevo_almacen;
+            $almacen->direccion = $request->telefonos_nuevo_almacen;
+            $almacen->telefonos = $request->direccion_nuevo_almacen;
+            $almacen->estado = 'Mayorista';
+            $almacen->save();
+            // Actualizamos datos de usuario creado
+            $usuario->almacen_id = $almacen->id;
+            $usuario->save();
+        }
         
+        // Asignaremos permisos del perfil correspondiente
         if($request->perfil_usuario)
         {
             $menus = MenusPerfile::where('perfil_id', $request->perfil_usuario)->get();

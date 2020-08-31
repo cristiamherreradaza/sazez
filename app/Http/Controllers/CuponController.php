@@ -25,6 +25,7 @@ use Illuminate\Http\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Exception;
+use Illuminate\Support\Carbon;
 
 use Illuminate\Support\Facades\DB;
 use DataTables;
@@ -35,7 +36,7 @@ class CuponController extends Controller
     {
         $grupos = Grupo::get();
         $clientes = User::where('rol', 'Cliente')->get();
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $promociones = Combo::get();
         return view('cupon.nuevo')->with(compact('almacenes', 'clientes', 'promociones', 'grupos'));
     }
@@ -599,6 +600,7 @@ class CuponController extends Controller
         $venta->save();
 
         if($request->cobro_producto_id){        //Si es cupon por un producto
+            $producto = Producto::find($request->cobro_producto_id);
             // Registramos en Ventas_producto
             $ventaProducto = new VentasProducto();
             $ventaProducto->user_id = Auth::user()->id;
@@ -609,6 +611,7 @@ class CuponController extends Controller
             $ventaProducto->precio_cobrado = $request->cobro_total;
             $ventaProducto->cantidad = 1;
             $ventaProducto->fecha = date('Y-m-d');
+            $ventaProducto->fecha_garantia = Carbon::now()->addDay($producto->dias_garantia);
             $ventaProducto->save();
         }else{                                  //Es cupon por una promocion
             $productos_combo = CombosProducto::where('combo_id', $request->cobro_combo_id)->get();
@@ -624,6 +627,7 @@ class CuponController extends Controller
                 $ventaProducto->precio_cobrado = $producto->precio;
                 $ventaProducto->cantidad = $producto->cantidad;
                 $ventaProducto->fecha = date('Y-m-d');
+                $ventaProducto->fecha_garantia = Carbon::now()->addDay($producto->producto->dias_garantia);
                 $ventaProducto->save();
             }
         }

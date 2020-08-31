@@ -18,7 +18,7 @@ class ReporteController extends Controller
 {
     public function ventas()
     {
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $usuarios = User::where('rol', 'not like', 'Cliente')->get();
         return view('reporte.ventas')->with(compact('almacenes', 'usuarios'));
     }
@@ -58,7 +58,7 @@ class ReporteController extends Controller
 
     public function proveedores()
     {
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $proveedores = Proveedore::get();
         return view('reporte.proveedores')->with(compact('almacenes', 'proveedores'));
     }
@@ -93,7 +93,7 @@ class ReporteController extends Controller
 
     public function transferencias()
     {
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         return view('reporte.transferencias')->with(compact('almacenes'));
     }
 
@@ -129,7 +129,7 @@ class ReporteController extends Controller
 
     public function promos()
     {
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         return view('reporte.promos')->with(compact('almacenes'));
     }
 
@@ -264,7 +264,7 @@ class ReporteController extends Controller
 
     public function cupones()
     {
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         $creados_sin_almacen = Cupone::whereNull('almacene_id')->count();
         $creados = Cupone::where('almacene_id', Auth::user()->almacen->id)->count();
         $total = $creados_sin_almacen+$creados;

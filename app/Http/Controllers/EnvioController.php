@@ -17,7 +17,7 @@ class EnvioController extends Controller
     public function nuevo()
     {
         // $pedido = Pedido::find();
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         return view('envio.nuevo')->with(compact('almacenes'));
     }
 
