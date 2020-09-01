@@ -26,12 +26,12 @@ class TiendaController extends Controller
 		$listadoRecomendados = Producto::where('pagina_principal', 'No')
 							->where('publicado', 'Si')
 							->inRandomOrder()
-							->limit(18)
+							->limit(12)
 							->get();
 
 		// dd($listadoProductos);    					
         $listadoTipos = Tipo::limit(15)->get();
-        return view('tienda.publico')->with(compact('listadoTipos', 'listadoProductos'));
+        return view('tienda.publico')->with(compact('listadoTipos', 'listadoRecomendados', 'listadoProductos'));
     }
 
 }

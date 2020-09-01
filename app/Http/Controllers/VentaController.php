@@ -111,7 +111,7 @@ class VentaController extends Controller
                     ->orWhere('rol', 'Mayorista')
                     ->get();
 
-        $promociones = Combo::where('fecha_inicio', '<=', $hoy) 
+        $promociones = Combo::where('fecha_inicio', '<=', $hoy)
         ->where('fecha_final', '>=', $hoy)
         ->get();
 
@@ -166,7 +166,7 @@ class VentaController extends Controller
     public function guardaVenta(Request $request)
     {
         // preguntamos si el pago es al contado o credito
-        if ($request->pagoContado != "on") 
+        if ($request->pagoContado != "on")
         {
             $pagoCredito = 'Si';
             $saldoVenta = $request->cambioVenta;
@@ -394,7 +394,7 @@ class VentaController extends Controller
                 $datosProductosMayor = Producto::find($llm);
 
                 $cantidadParaVerificar = $cantidaMayor * $cantidadEscala;
- 
+
                 // verificamos la cantidad de productos en el almancen
                 $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
                     ->where('producto_id', $llm)
@@ -454,7 +454,7 @@ class VentaController extends Controller
 
         }
 
-        if ($request->pagoContado != "on") 
+        if ($request->pagoContado != "on")
         {
             $pagoARegistrar = $request->efectivo;
         }else{
@@ -497,9 +497,9 @@ class VentaController extends Controller
     {
         $almacen = Auth::user()->almacen_id;
         $ventas = Venta::select(
-                'ventas.id', 
-                'almacenes.nombre as almacene', 
-                'users.name as user', 
+                'ventas.id',
+                'almacenes.nombre as almacene',
+                'users.name as user',
                 'ventas.total',
                 'ventas.saldo',
                 'ventas.fecha'
@@ -514,7 +514,7 @@ class VentaController extends Controller
                         <button onclick="imprimir(' .$ventas->id. ')" class="btn btn-primary" title="Imprimir garantia"><i class="fas fa-print"></i> </button>
                         <button onclick="pagos(' .$ventas->id. ')" class="btn btn-success" title="Imprimir garantia"><i class="fas fa-donate"></i> </button>';
             })
-            ->make(true);    
+            ->make(true);
     }
 
     public function muestra(Request $request, $ventaId)
@@ -569,7 +569,7 @@ class VentaController extends Controller
         }
         $cantidadMultiplicada = $cantidadPaquete*$request->cantidad;
 
-        $consultaMovimiento = Movimiento::where('venta_id', $request->ventaId) 
+        $consultaMovimiento = Movimiento::where('venta_id', $request->ventaId)
                                 ->where('producto_id', $request->productoId)
                                 ->where('escala_id', $ventaProducto->escala_id)
                                 ->first();
