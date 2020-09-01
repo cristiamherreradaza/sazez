@@ -529,79 +529,6 @@
     </section>
     <!-- Home slider end -->
 
-    <!-- collection banner -->
-    {{-- <section class="banner-padding banner-furniture ratio2_1">
-        <div class="container-fluid">
-            <div class="row partition4">
-                <div class="col-lg-3 col-md-6">
-                    <a href="#">
-                        <div class="collection-banner p-right text-right">
-                            <div class="img-part">
-                                <img src="../assets/images/fashion/banner/5.jpg"
-                                    class="img-fluid blur-up lazyload bg-img">
-                            </div>
-                            <div class="contain-banner banner-4">
-                                <div>
-                                    <h4>save 30%</h4>
-                                    <h2>women</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <a href="#">
-                        <div class="collection-banner p-right text-right">
-                            <div class="img-part">
-                                <img src="../assets/images/fashion/banner/10.jpg"
-                                    class="img-fluid blur-up lazyload bg-img">
-                            </div>
-                            <div class="contain-banner banner-4">
-                                <div>
-                                    <h4>save 60%</h4>
-                                    <h2>headsets</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <a href="#">
-                        <div class="collection-banner p-right">
-                            <div class="img-part">
-                                <img src="../assets/images/fashion/banner/8.jpg"
-                                    class="img-fluid blur-up lazyload bg-img">
-                            </div>
-                            <div class="contain-banner banner-4">
-                                <div>
-                                    <h4>save 60%</h4>
-                                    <h2>women</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <a href="#">
-                        <div class="collection-banner p-left">
-                            <div class="img-part">
-                                <img src="../assets/images/fashion/banner/9.jpg"
-                                    class="img-fluid blur-up lazyload bg-img">
-                            </div>
-                            <div class="contain-banner banner-4">
-                                <div>
-                                    <h4>save 60%</h4>
-                                    <h2>jewellery</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section> --}}
-    <!-- collection banner end -->
-
     <!-- Paragraph-->
     <div class="title1 section-t-space">
         <h2 class="title-inner1">PRODUCTOS DESTACADOS</h2>
@@ -632,17 +559,16 @@
                             <div class="front">
                                 <a href="product-page(no-sidebar).html">
                                     @if (!blank($imagenesProducto))
-                                        <img src="{{ asset('imagenesProductos')."/".$imagenesProducto->imagen }}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                        <img src="{{ asset('imagenesProductos')."/".$imagenesProducto->imagen }}" class="img-fluid blur-up lazyload bg-img" alt="" id="{{ $imagenesProductos->id }}">
                                     @else
-                                        <img src="{{ asset('tienda/images/sin_imagen.jpg') }}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                        <img src="{{ asset('tienda/images/sin_imagen.jpg') }}" class="img-fluid blur-up lazyload bg-img" alt="" id="{{ $imagenesProductos->id }}">
                                     @endif
                                 </a>
                             </div>
                             <div class="cart-info cart-wrap">
                                 <a href="javascript:void(0)" title="Add to Wishlist" tabindex="0"><i class="ti-heart"
                                         aria-hidden="true"></i></a>
-                                <a href="#" data-toggle="modal" data-target="#quick-view" title="Quick View" tabindex="0"><i
-                                        class="ti-search" aria-hidden="true"></i></a>
+                                <a href="#" data-toggle="modal" title="Vista" tabindex="0" onclick="vistaRapida('{{ $p->id }}', '{{ $imagenesProducto->id }}', '{{ $p->nombre }}', '{{ $p->descripcion }}');"><i class="ti-search" aria-hidden="true"></i></a>
                                 <a href="compare.html" title="Compare" tabindex="0"><i class="ti-reload"
                                         aria-hidden="true"></i></a>
                             </div>
@@ -1137,6 +1063,11 @@
         function closeSearch() {
             document.getElementById("search-overlay").style.display = "none";
         }
+
+        function vistaRapida(){
+            $("#quick-view").modal('show');
+        }
+
     </script>
 
 </body>
