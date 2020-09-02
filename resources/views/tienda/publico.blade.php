@@ -559,16 +559,16 @@
                             <div class="front">
                                 <a href="product-page(no-sidebar).html">
                                     @if (!blank($imagenesProducto))
-                                        <img src="{{ asset('imagenesProductos')."/".$imagenesProducto->imagen }}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                        <img src="{{ asset('imagenesProductos')."/".$imagenesProducto->imagen }}" class="img-fluid blur-up lazyload bg-img" alt="" id="imagen_{{ $p->id }}">
                                     @else
-                                        <img src="{{ asset('tienda/images/sin_imagen.jpg') }}" class="img-fluid blur-up lazyload bg-img" alt="">
+                                        <img src="{{ asset('tienda/images/sin_imagen.jpg') }}" class="img-fluid blur-up lazyload bg-img" alt="" id="imagen_{{ $p->id }}">
                                     @endif
                                 </a>
                             </div>
                             <div class="cart-info cart-wrap">
                                 <a href="javascript:void(0)" title="Add to Wishlist" tabindex="0"><i class="ti-heart"
                                         aria-hidden="true"></i></a>
-                                <a href="#" data-toggle="modal" title="Vista" tabindex="0" onclick="vistaRapida('{{ $p->id }}', '{{ $p->nombre }}', '{{ $p->descripcion }}');"><i class="ti-search" aria-hidden="true"></i></a>
+                                <a href="#" data-toggle="modal" title="Vista" tabindex="0" onclick="vistaRapida('{{ $p->id }}', '{{ $p->nombre }}', '{{ $p->descripcion }}', '{{ $precioTienda->precio }}');"><i class="ti-search" aria-hidden="true"></i></a>
                                 <a href="compare.html" title="Compare" tabindex="0"><i class="ti-reload"
                                         aria-hidden="true"></i></a>
                             </div>
@@ -1064,8 +1064,10 @@
             document.getElementById("search-overlay").style.display = "none";
         }
 
-        function vistaRapida(){
+        function vistaRapida(id , nombre, descripcion, precio){
             $("#quick-view").modal('show');
+            let imagen = $("#imagen_"+id);
+            console.log(imagen);
         }
 
     </script>
