@@ -20,13 +20,13 @@ class TiendaController extends Controller
 		$listadoProductos = Producto::where('pagina_principal', 'Si')
 							->where('publicado', 'Si')
 							->inRandomOrder()
-							->limit(18)
+							->limit(12)
 							->get();
 
 		$listadoRecomendados = Producto::where('pagina_principal', 'No')
 							->where('publicado', 'Si')
 							->inRandomOrder()
-							->limit(12)
+							->limit(10)
 							->get();
 
 		// dd($listadoProductos);    					

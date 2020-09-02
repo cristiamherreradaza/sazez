@@ -14,7 +14,7 @@ class AddPaginaPrincipalToProductosTable extends Migration
     public function up()
     {
         Schema::table('productos', function (Blueprint $table) {
-            $table->string('pagina_principal', 10)->nullable()->after('estado');
+            $table->string('pagina_principal', 10)->default('No')->after('estado');
         });
     }
 

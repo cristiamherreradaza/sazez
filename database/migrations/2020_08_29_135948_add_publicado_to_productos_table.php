@@ -14,7 +14,7 @@ class AddPublicadoToProductosTable extends Migration
     public function up()
     {
         Schema::table('productos', function (Blueprint $table) {
-            $table->string('publicado', 10)->nullable()->after('estado');
+            $table->string('publicado', 10)->default("Si")->after('estado');
         });
     }
 

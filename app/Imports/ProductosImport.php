@@ -165,7 +165,11 @@ class ProductosImport implements ToModel, WithStartRow
         $busca_proveedor = Proveedore::where('nombre', 'like', "%$row[12]%")
             ->first();
         if ($busca_proveedor == null) {
-            $proveedorId = 1;
+            $proveedor = new Proveedore();
+            $proveedor->user_id = Auth::user()->id;
+            $proveedor->nombre = $row[12];
+            $proveedor->save();
+            $proveedorId = $proveedor->id;
         } else {
             $proveedorId = $busca_proveedor->id;
         }
