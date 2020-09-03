@@ -365,7 +365,7 @@
                                     <div class="toggle-nav"><i class="fa fa-bars sidebar-bar"></i></div>
                                     <ul id="main-menu" class="sm pixelstrap sm-horizontal">
                                         <li>
-                                            <div class="mobile-back text-right">Back<i class="fa fa-angle-right pl-2"
+                                            <div class="mobile-back text-right">Atras<i class="fa fa-angle-right pl-2"
                                                     aria-hidden="true"></i></div>
                                         </li>
                                         <li>
@@ -959,33 +959,20 @@
                             aria-hidden="true">&times;</span></button>
                     <div class="row">
                         <div class="col-lg-6 col-xs-12">
-                            <div class="quick-view-img"><img src="../assets/images/pro3/1.jpg" alt=""
-                                    class="img-fluid blur-up lazyload"></div>
+                            <div class="quick-view-img"><img src="" alt="" class="img-fluid blur-up lazyload" id="imagenModalVistaRapida"></div>
                         </div>
                         <div class="col-lg-6 rtl-text">
                             <div class="product-right">
-                                <h2>Women Pink Shirt</h2>
-                                <h3>$32.96</h3>
-                                <ul class="color-variant">
-                                    <li class="bg-light0"></li>
-                                    <li class="bg-light1"></li>
-                                    <li class="bg-light2"></li>
-                                </ul>
+                                <h2 id="nombreModalProducto"></h2>
+                                <h3 id="precioModalProducto"></h3>
+                                <span class="badge badge-info">DISPONIBLE</span>
+                                <span class="badge badge-danger">PROMOCION</span>
                                 <div class="border-product">
-                                    <h6 class="product-title">product details</h6>
-                                    <p>Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium
-                                        doloremque laudantium</p>
+                                    <h6 class="product-title">Detalle Producto</h6>
+                                    <p id="detalleModalProducto"></p>
                                 </div>
                                 <div class="product-description border-product">
-                                    <div class="size-box">
-                                        <ul>
-                                            <li class="active"><a href="#">s</a></li>
-                                            <li><a href="#">m</a></li>
-                                            <li><a href="#">l</a></li>
-                                            <li><a href="#">xl</a></li>
-                                        </ul>
-                                    </div>
-                                    <h6 class="product-title">quantity</h6>
+                                    <h6 class="product-title">Cantidad</h6>
                                     <div class="qty-box">
                                         <div class="input-group"><span class="input-group-prepend"><button type="button"
                                                     class="btn quantity-left-minus" data-type="minus" data-field=""><i
@@ -996,8 +983,8 @@
                                                         class="ti-angle-right"></i></button></span></div>
                                     </div>
                                 </div>
-                                <div class="product-buttons"><a href="#" class="btn btn-solid">add to cart</a> <a
-                                        href="#" class="btn btn-solid">view detail</a></div>
+                                <div class="product-buttons"><a href="#" class="btn btn-solid">adicionar pedido</a> <a
+                                        href="#" class="btn btn-solid">ver detalle</a></div>
                             </div>
                         </div>
                     </div>
@@ -1066,7 +1053,14 @@
 
         function vistaRapida(id , nombre, descripcion, precio){
             $("#quick-view").modal('show');
-            let imagen = $("#imagen_"+id);
+            let imagen = document.getElementById("imagen_"+id).getAttribute('src');
+            let descripcionCorta = descripcion.substring(0, 200);
+            // console.log(descripcionCorta);
+            // colocamos los datos en el modal
+            document.getElementById("imagenModalVistaRapida").src = imagen;
+            document.getElementById("nombreModalProducto").innerHTML = nombre;
+            document.getElementById("precioModalProducto").innerHTML = "Bs." + precio;
+            document.getElementById("detalleModalProducto").innerHTML = descripcionCorta;
             console.log(imagen);
         }
 
