@@ -212,6 +212,11 @@ class VentaController extends Controller
             $cliente->save();
         }
 
+        // verficamos si la configuracion del sistema esta con factura
+        
+        // fin verficamos si la configuracion del sistema esta con factura
+
+
         // tramemos los parametros de la facturacion
         $parametrosFactura = Parametros::where('estado', 'Activo')->first();
 
