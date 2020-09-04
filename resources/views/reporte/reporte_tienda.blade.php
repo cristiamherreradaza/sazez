@@ -20,46 +20,45 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label>Sucursal </label>
-                                <select name="almacen_id" id="almacen_id" class="form-control">
-                                    <option value="0">Seleccionar</option>
-                                    @php
-                                        foreach ($almacen as $alm) {
-                                    @endphp
-                                    <option value="{{ $alm->id }}">{{ $alm->nombre }}</option>
-                                    @php
-                                        }
-                                    @endphp
-                                    <option value="0">Todos</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Desde la Fecha</label>
+                                <label class="control-label">Fecha de Inicio</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="date" name="fecha_ini" id="fecha_ini" class="form-control" required>
                             </div>                    
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Hasta la Fecha</label>
+                                <label class="control-label">Fecha Final</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required>
                             </div>                    
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">.</label>
+                                <label>Seleccionar Tienda</label>
+                                <select name="almacen_id" id="almacen_id" class="form-control">
+                                    @if(auth()->user()->rol == 'Administrador')
+                                        <option value="0">Todos</option>
+                                        @foreach($almacenes as $almacen)
+                                            <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="{{ auth()->user()->almacen->id }}">{{ auth()->user()->almacen->nombre }}</option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
                                 {{-- <input type="date" name="fecha_final" id="fecha_final" class="form-control" required> --}}
                                 <button type="button" onclick="consultar()"
-                                    class="btn btn-block btn-success">Consultar
+                                    class="btn btn-block btn-primary">Buscar
                                 </button>
                             </div>                    
                         </div>

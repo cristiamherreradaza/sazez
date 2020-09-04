@@ -43,10 +43,14 @@
                         <div class="form-group">
                             <label>De </label>
                             <select name="almacen_origen_id" id="almacen_origen_id" class="form-control">
-                            <option value="" selected>Todos</option>
-                                @foreach($almacenes as $almacen)
-                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                @endforeach
+                                @if(auth()->user()->rol == 'Administrador')
+                                    <option value="" selected>Todos</option>
+                                    @foreach($almacenes as $almacen)
+                                        <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
+                                    @endforeach
+                                @else
+                                    <option value="{{ auth()->user()->almacen->id }}">{{ auth()->user()->almacen->nombre }}</option>
+                                @endif
                             </select>
                         </div>
                     </div>

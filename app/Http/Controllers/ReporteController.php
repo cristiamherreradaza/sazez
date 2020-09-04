@@ -18,8 +18,8 @@ class ReporteController extends Controller
 {
     public function reporte_tienda()
     {
-        $almacen = Almacene::get();
-        return view('reporte.reporte_tienda')->with(compact('almacen'));
+        $almacenes = Almacene::whereNull('estado')->get();
+        return view('reporte.reporte_tienda')->with(compact('almacenes'));
     }
 
     public function ajax_tienda_listado(Request $request)
