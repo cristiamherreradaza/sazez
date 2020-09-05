@@ -156,6 +156,7 @@
             iDisplayLength: 10,
             processing: true,
             serverSide: true,
+            scrollX: true,
             ajax: { 
                 url : "{{ url('Reporte/ajaxProveedoresListado') }}",
                 type: "GET",

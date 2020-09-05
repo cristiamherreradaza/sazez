@@ -145,8 +145,9 @@
     function buscar()
     {
         $("#mostrar").show('slow');
-        var table = $('#tabla-tienda').DataTable();
+        //var table = $('#tabla-tienda').DataTable();
         table.destroy();
+        
         // var almacen_id = $("#almacen_id").val();
         // var fecha_ini = $("#fecha_ini").val();
         // var fecha_fin = $("#fecha_fin").val();
@@ -172,6 +173,7 @@
             iDisplayLength: 10,
             processing: true,
             serverSide: true,
+            scrollX: true,
             ajax: { 
                 url : "{{ url('Reporte/ajaxVentasListado') }}",
                 type: "GET",

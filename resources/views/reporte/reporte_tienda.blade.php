@@ -10,8 +10,6 @@
 @endsection
 
 @section('content')
-<!-- inicio modal editar almacen -->
-<!-- fin modal editar almacen -->
 <div class="row">
         <div class="col-md-12">
             <div class="card border-info">
@@ -142,7 +140,7 @@
         table = $('#tabla-tienda').DataTable( {
             "iDisplayLength": 10,
             "processing": true,
-            // "scrollX": true,
+            "scrollX": true,
             "serverSide": true,
             "ajax": { 
                 url : "{{ url('Reporte/ajax_tienda_listado') }}",
