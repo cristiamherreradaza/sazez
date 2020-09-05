@@ -88,7 +88,11 @@ class ReporteController extends Controller
             //leftJoin('users', 'ventas.user_id', '=', $request->usuario_id);
         }
         if($request->deudores){
-            $ventas->where('credito', $request->deudores);
+            if($request->deudores == 'Si'){
+                $ventas->where('saldo', '>', 0);
+            }else{
+                $ventas->where('saldo', 0);
+            }
         }
         return Datatables::of($ventas)->make(true);
     }
