@@ -116,31 +116,33 @@
                                                                             ->take(5)
                                                                             ->get();
                                                     @endphp
-                                                    @foreach($cupones as $key => $cupon)
-                                                        <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                            @php
-                                                                if($cupon->producto_id){
-                                                                    $icono = 'cube';
-                                                                    $item = $cupon->producto->nombre;
-                                                                }else{
-                                                                    $icono = 'cubes';
-                                                                    $item = $cupon->combo->nombre;
-                                                                }
-                                                            @endphp
-                                                            <span class="btn btn-info rounded-circle btn-circle">
-                                                                <i class="fas fa-{{ $icono }}"></i>
-                                                            </span>
-                                                            <div class="w-75 d-inline-block v-middle pl-2">
-                                                                <h5 class="message-title mb-0 mt-1 text-info">{{ $cupon->user->name }}</h5>
-                                                                <span class="font-12 text-nowrap d-block text-muted text-truncate">
-                                                                    {{ $item }}
+                                                    @if($cupones)
+                                                        @foreach($cupones as $key => $cupon)
+                                                            <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
+                                                                @php
+                                                                    if($cupon->producto_id){
+                                                                        $icono = 'cube';
+                                                                        $item = $cupon->producto->nombre;
+                                                                    }else{
+                                                                        $icono = 'cubes';
+                                                                        $item = $cupon->combo->nombre;
+                                                                    }
+                                                                @endphp
+                                                                <span class="btn btn-info rounded-circle btn-circle">
+                                                                    <i class="fas fa-{{ $icono }}"></i>
                                                                 </span>
-                                                                <span class="font-12 text-nowrap d-block text-danger">
-                                                                    Valido hasta {{ $cupon->fecha_final }}
-                                                                </span>
-                                                            </div>
-                                                        </a>
-                                                    @endforeach
+                                                                <div class="w-75 d-inline-block v-middle pl-2">
+                                                                    <h5 class="message-title mb-0 mt-1 text-info">{{ $cupon->user->name }}</h5>
+                                                                    <span class="font-12 text-nowrap d-block text-muted text-truncate">
+                                                                        {{ $item }}
+                                                                    </span>
+                                                                    <span class="font-12 text-nowrap d-block text-danger">
+                                                                        Valido hasta {{ $cupon->fecha_final }}
+                                                                    </span>
+                                                                </div>
+                                                            </a>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </li>
                                             <li>
@@ -175,23 +177,25 @@
                                                         $combos = App\Combo::whereDate('fecha_final', '>=', date('Y-m-d'))
                                                                             ->get();
                                                     @endphp
-                                                    @foreach($combos as $combo)
-                                                        <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                            <span class="btn btn-success rounded-circle btn-circle">
-                                                                <i class="fas fa-star"></i>
-                                                            </span>
-                                                            <div class="w-75 d-inline-block v-middle pl-2">
-                                                                <h5 class="message-title mb-0 mt-1">{{ $combo->nombre }}</h5>
-                                                                @php
-                                                                    $cantidad = App\CombosProducto::where('combo_id', $combo->id)->count();
-                                                                @endphp
-                                                                <span class="font-12 text-nowrap d-block text-muted text-truncate">
-                                                                    {{ $cantidad }} Producto(s) en promocion
+                                                    @if($combos)
+                                                        @foreach($combos as $combo)
+                                                            <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
+                                                                <span class="btn btn-success rounded-circle btn-circle">
+                                                                    <i class="fas fa-star"></i>
                                                                 </span>
-                                                                <span class="font-12 text-nowrap d-block text-danger">Vigente hasta {{ $combo->fecha_final }}</span>
-                                                            </div>
-                                                        </a>
-                                                    @endforeach
+                                                                <div class="w-75 d-inline-block v-middle pl-2">
+                                                                    <h5 class="message-title mb-0 mt-1">{{ $combo->nombre }}</h5>
+                                                                    @php
+                                                                        $cantidad = App\CombosProducto::where('combo_id', $combo->id)->count();
+                                                                    @endphp
+                                                                    <span class="font-12 text-nowrap d-block text-muted text-truncate">
+                                                                        {{ $cantidad }} Producto(s) en promocion
+                                                                    </span>
+                                                                    <span class="font-12 text-nowrap d-block text-danger">Vigente hasta {{ $combo->fecha_final }}</span>
+                                                                </div>
+                                                            </a>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </li>
                                             <li>
