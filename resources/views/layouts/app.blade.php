@@ -125,7 +125,7 @@
                                                                         $item = $cupon->producto->nombre;
                                                                     }else{
                                                                         $icono = 'cubes';
-                                                                        $item = $cupon->combo['nombre'];
+                                                                        $item = $cupon->combo_id;
                                                                     }
                                                                 @endphp
                                                                 <span class="btn btn-info rounded-circle btn-circle">
