@@ -9,6 +9,7 @@ use App\CombosProducto;
 use App\Producto;
 use App\Precio;
 use App\Marca;
+use App\Cupone;
 use DataTables;
 use App\Movimiento;
 
@@ -138,6 +139,12 @@ class ComboController extends Controller
 
     public function listado()
     {
+        $cupones = Cupone::where('almacene_id', Auth::user()->almacen->id)
+                            ->orWhere('almacene_id', NULL)
+                            ->orderBy('id', 'desc')
+                            ->take(5)
+                            ->get();
+        dd($cupones);
         $combos = Combo::get();
         return view('combo.listado')->with(compact('combos'));
     }

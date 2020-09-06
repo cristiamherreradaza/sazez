@@ -116,7 +116,7 @@
                                                                             ->take(5)
                                                                             ->get();
                                                     @endphp
-                                                    @if($cupones)
+                                                    @if(count($cupones) > 0)
                                                         @foreach($cupones as $key => $cupon)
                                                             <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                                 @php
@@ -125,7 +125,7 @@
                                                                         $item = $cupon->producto->nombre;
                                                                     }else{
                                                                         $icono = 'cubes';
-                                                                        $item = $cupon->combo->nombre;
+                                                                        $item = $cupon->combo['nombre'];
                                                                     }
                                                                 @endphp
                                                                 <span class="btn btn-info rounded-circle btn-circle">
@@ -177,7 +177,7 @@
                                                         $combos = App\Combo::whereDate('fecha_final', '>=', date('Y-m-d'))
                                                                             ->get();
                                                     @endphp
-                                                    @if($combos)
+                                                    @if(count($combos)>0)
                                                         @foreach($combos as $combo)
                                                             <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                                 <span class="btn btn-success rounded-circle btn-circle">
