@@ -431,13 +431,12 @@
                                         </li>
                                         <li class="onhover-div mobile-cart">
                                             <div><img src="{{ asset('tienda/images/icon/cart.png') }}"
-                                                    class="img-fluid blur-up lazyload" alt=""> <i
-                                                    class="ti-shopping-cart"></i></div>
+                                                    class="img-fluid blur-up lazyload" alt=""> <i class="ti-shopping-cart"></i></div>
                                             <ul class="show-div shopping-cart">
                                                 <li>
                                                     <div class="media">
                                                         <a href="#"><img alt="" class="mr-3"
-                                                                src="../assets/images/fashion/product/1.jpg"></a>
+                                                                src="lv:ass ../assets/images/fashion/product/1.jpg"></a>
                                                         <div class="media-body">
                                                             <a href="#">
                                                                 <h4>item name</h4>
@@ -507,7 +506,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            {{-- <div>
                 <div class="home text-center">
                     <img src="../assets/images/home-banner/12.jpg" alt="" class="bg-img blur-up lazyload">
                     <div class="container-fluid custom-container">
@@ -524,7 +523,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </section>
     <!-- Home slider end -->
@@ -965,8 +964,8 @@
                             <div class="product-right">
                                 <h2 id="nombreModalProducto"></h2>
                                 <h3 id="precioModalProducto"></h3>
-                                <span class="badge badge-info">DISPONIBLE</span>
-                                <span class="badge badge-danger">PROMOCION</span>
+                                <span class="badge badge-success">&nbsp;DISPONIBLE&nbsp;</span>
+                                <span class="badge badge-danger">&nbsp;PROMOCION&nbsp;</span>
                                 <div class="border-product">
                                     <h6 class="product-title">Detalle Producto</h6>
                                     <p id="detalleModalProducto"></p>
@@ -1054,13 +1053,13 @@
         function vistaRapida(id , nombre, descripcion, precio){
             $("#quick-view").modal('show');
             let imagen = document.getElementById("imagen_"+id).getAttribute('src');
-            let descripcionCorta = descripcion.substring(0, 200);
+            // let descripcionCorta = descripcion.substring(0, 200);
             // console.log(descripcionCorta);
             // colocamos los datos en el modal
             document.getElementById("imagenModalVistaRapida").src = imagen;
             document.getElementById("nombreModalProducto").innerHTML = nombre;
             document.getElementById("precioModalProducto").innerHTML = "Bs." + precio;
-            document.getElementById("detalleModalProducto").innerHTML = descripcionCorta;
+            document.getElementById("detalleModalProducto").innerHTML = descripcion;
             console.log(imagen);
         }
 
