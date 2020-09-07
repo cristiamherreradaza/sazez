@@ -139,12 +139,6 @@ class ComboController extends Controller
 
     public function listado()
     {
-        $cupones = Cupone::where('almacene_id', Auth::user()->almacen->id)
-                            ->orWhere('almacene_id', NULL)
-                            ->orderBy('id', 'desc')
-                            ->take(5)
-                            ->get();
-        dd($cupones);
         $combos = Combo::get();
         return view('combo.listado')->with(compact('combos'));
     }
