@@ -110,8 +110,11 @@
                                             <li>
                                                 <div class="message-center notifications position-relative" style="height:250px;">
                                                     @php
-                                                        $cupones = App\Cupone::where('almacene_id', auth()->user()->almacen->id)
-                                                                            ->orWhere('almacene_id', NULL)
+                                                        $cupones = App\Cupone::where(function ($query) {
+                                                                                $query->where('almacene_id', auth()->user()->almacen->id)
+                                                                                    ->orWhere('almacene_id', NULL);
+                                                                            })->whereDate('fecha_final', '>=', date('Y-m-d'))
+                                                                            ->where('estado', 'Vigente')
                                                                             ->orderBy('id', 'desc')
                                                                             ->take(5)
                                                                             ->get();
@@ -125,7 +128,7 @@
                                                                         $item = $cupon->producto->nombre;
                                                                     }else{
                                                                         $icono = 'cubes';
-                                                                        $item = $cupon->combo_id;
+                                                                        $item = $cupon->combo->nombre;
                                                                     }
                                                                 @endphp
                                                                 <span class="btn btn-info rounded-circle btn-circle">

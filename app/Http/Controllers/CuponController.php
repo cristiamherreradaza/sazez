@@ -37,7 +37,7 @@ class CuponController extends Controller
         $grupos = Grupo::get();
         $clientes = User::where('rol', 'Cliente')->get();
         $almacenes = Almacene::whereNull('estado')->get();
-        $promociones = Combo::get();
+        $promociones = Combo::whereDate('fecha_final', '>=', date('Y-m-d'))->get();
         return view('cupon.nuevo')->with(compact('almacenes', 'clientes', 'promociones', 'grupos'));
     }
 
@@ -598,6 +598,11 @@ class CuponController extends Controller
         $venta->fecha = date('Y-m-d');
         $venta->estado = 'Cupon';
         $venta->save();
+
+        // Cambiamos su estado de 'Vigente' a 'Cobrado'
+        $cupon = Cupone::find($request->cobro_cupon_id);
+        $cupon->estado = 'Cobrado';
+        $cupon->save();
 
         if($request->cobro_producto_id){        //Si es cupon por un producto
             $producto = Producto::find($request->cobro_producto_id);
