@@ -170,6 +170,9 @@
     // }
 
     $(document).on('keyup change', '#cobro_efectivo', function () {
+        let producto_id = $("#cobro_producto_id").val();
+        let combo_id = $("#cobro_combo_id").val();
+
         let totalVenta = Number($("#cobro_total").val());
         let efectivo = Number($("#cobro_efectivo").val());
         let cambio = efectivo - totalVenta; 
@@ -177,16 +180,45 @@
             $("#cobro_cambio").val(cambio);
         }else{
             $("#cobro_cambio").val(0);
-        }        
+        }
+        
+        if(producto_id != null){
+            //alert ('existe producto');
+            //Validar que el boton se habilite una vez se efectue la compra
+            //siempre que el stock sea 1 o mayor y el efectivo sea igual o mayor al totalVenta
+            let stock = Number($("#cobro_stock").val());
+            if (efectivo >= totalVenta && stock >= 1) {
+                $("#boton_compra").prop("disabled", false);
+            }else{
+                $("#boton_compra").prop("disabled", true);
+            }
+        }else{
+            let cantidad_productos = Number($("#cantidad_productos_promo").val());
+            let valida = 1;     // 1 todo en orden, 0 producto con stock insuficiente
+            let cantidad = 0;
+            let stock = 0;
+            for(i = 1; i <= cantidad_productos; i++) {
+                cantidad = Number($("#cantidad_promo_producto-"+i).val());
+                stock = Number($("#stock_promo_producto-"+i).val());
+                if(stock < cantidad){
+                    valida = 0;
+                }
+            }
+            if(efectivo >= totalVenta && valida == 1){
+                $("#boton_compra").prop("disabled", false);
+            }else{
+                $("#boton_compra").prop("disabled", true);
+            }
+        }
         //Validar que el boton se habilite una vez se efectue la compra
         //siempre que el stock sea 1 o mayor y el efectivo sea igual o mayor al totalVenta
-        let stock = Number($("#cobro_stock").val());
+        //let stock = Number($("#cobro_stock").val());
         //if (efectivo >= totalVenta && stock >= 1) {
-        if (efectivo >= totalVenta) {
-            $("#boton_compra").prop("disabled", false);
-        }else{
-            $("#boton_compra").prop("disabled", true);
-        }
+        // if (efectivo >= totalVenta) {
+        //     $("#boton_compra").prop("disabled", false);
+        // }else{
+        //     $("#boton_compra").prop("disabled", true);
+        // }
     });
 
     function cobra_cupon()

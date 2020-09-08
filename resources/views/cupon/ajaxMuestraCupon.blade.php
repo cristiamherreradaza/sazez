@@ -120,6 +120,9 @@
                             </div>
                         </div>
                     @else
+                        @php
+                            $cantidad_de_productos = App\CombosProducto::where('combo_id', $combo->id)->count();
+                        @endphp
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -129,9 +132,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label">Productos en promocion</label>
+                                    <label class="control-label">Productos en promocion {{ $cantidad_de_productos }}</label>
                                         @foreach($productos_combo as $productos)
                                             <input name="cobro_descuento" type="text" value="{{ $productos->producto->nombre }} %" class="form-control" readonly>
                                         @endforeach
@@ -148,8 +151,24 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Cantidad</label>
-                                    @foreach($productos_combo as $productos)
-                                        <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $productos->cantidad }}" class="form-control" readonly>
+                                    @foreach($productos_combo as $key => $productos)
+                                        <input name="cantidad_promo_producto-{{ ($key+1) }}" type="text" id="cantidad_promo_producto-{{ ($key+1) }}" value="{{ $productos->cantidad }}" class="form-control" readonly>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <input type="hidden" name="cantidad_productos_promo" id="cantidad_productos_promo" value="{{ $cantidad_de_productos }}">
+                                    <label class="control-label">Stock</label>
+                                    @foreach($productos_combo as $key => $productos)
+                                        @php
+                                            $stock = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                                                ->where('producto_id', $productos->producto_id)
+                                                ->where('almacene_id', auth()->user()->almacen_id)
+                                                ->first();
+                                            $stock=intval($stock->total);
+                                        @endphp
+                                        <input name="stock_promo_producto-{{ ($key+1) }}" type="text" id="stock_promo_producto-{{ ($key+1) }}" value="{{ $stock }}" class="form-control" readonly>
                                     @endforeach
                                 </div>
                             </div>
