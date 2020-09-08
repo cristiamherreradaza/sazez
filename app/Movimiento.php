@@ -35,12 +35,12 @@ class Movimiento extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     public function producto()
     {
-        return $this->belongsTo('App\Producto');
+        return $this->belongsTo('App\Producto', 'producto_id');
     }
 
     public function almacen_origen()
@@ -50,7 +50,7 @@ class Movimiento extends Model
     
     public function almacen()
     {
-        return $this->belongsTo('App\Almacene');
+        return $this->belongsTo('App\Almacene', 'almacene_id');
     }
 
     public function pedido()

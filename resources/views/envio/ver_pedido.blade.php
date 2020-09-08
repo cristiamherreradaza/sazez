@@ -6,114 +6,114 @@
 
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/lobilist.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/jquery-ui.min.css') }}">
 @endsection
 
 @section('content')
-<div class="card border-info">
-    <div class="card-header bg-info">
-        <h4 class="mb-0 text-white">PRODUCTOS ENVIADOS</h4>
-    </div>  
-    <div class="row">
-        <div class="col-12">
-            <div class="card-body">
-                <br>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Almacen:</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static"> {{ $datos[0]->nombre }} </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Encargado de Almacen:</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static"> {{ $datos[0]->name }} </p>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/span-->
-                    
-                    <!--/span-->
-                </div>
-                <!--/row-->
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Numero de Pedido:</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static"> {{ $datos[0]->numero }} </p>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/span-->
-                    <div class="col-md-6">
-                        <div class="form-group row">
-                            <label class="control-label text-right col-md-6" style="color: green; font-weight: normal;">Fecha de Entrega:</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static"> {{ $datos[0]->fecha }} </p>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/span-->
-                </div>
-            </div>
-                
-            </div>
+<div class="card border-primary">
+    <div class="card-header bg-primary">
+        <h4 class="mb-0 text-white">DETALLE DE ENVIO</h4>
     </div>
-    <div class="row">
-        <div class="col-md-12 m-auto">
-            <div class="card card-outline-primary">                                
-                <div class="card-header bg-secondary">
-                    <h4 class="mb-0 text-white">PRODUCTOS</h4>
-                </div>
-                <form action="{{ url('Entrega/store') }}" method="POST">
-                @csrf
-                    <br>
-                    <div class="table-responsive m-t-40 col-md-11 m-auto">
-                        <table id="config-table" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>N°</th>
-                                    <th>Codigo</th>
-                                    <th>Nombre</th>
-                                    <th>Marca</th>
-                                    <th>Tipo</th>
-                                    <th>Modelo</th>
-                                    <th>Colores</th>
-                                    <th>Cantidad</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                $n = 1;
-                                @endphp
-                                @foreach ($productos as $prod)
-                                    <tr>
-                                        <td>{{ $n++ }}</td>
-                                        <td>{{ $prod->codigo }}</td>
-                                        <td>{{ $prod->nombre }}</td>
-                                        <td>{{ $prod->nombre_marca }}</td>
-                                        <td>{{ $prod->nombre_tipo }}</td>
-                                        <td>{{ $prod->modelo }}</td>
-                                        <td>{{ $prod->colores }}</td>
-                                        <td>{{ $prod->ingreso }}</td>
-                                    </tr>
-                                @endforeach
-                                
-                            </tbody>
-
-                        </table>
-                        {{-- <div class="modal-footer">
-                                <button type="submit" onclick="enviar()" class="btn waves-effect waves-light btn-block btn-success">ENTREGAR PRODUCTOS</button>
-                        </div> --}}
+    <div class="card-body" id="printableArea">
+        <div class="row">
+            <form class="form-horizontal col-md-12">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group row">
+                                <label for="fname2" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Sucursal de Salida</label>
+                                <div class="col-sm-9">
+                                    <h4 class="form-control">{{ $datos->almacen_origen->nombre }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group row">
+                                <label for="lname2" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Usuario que Envia</label>
+                                <div class="col-sm-9">
+                                    <h4 class="form-control">{{ $datos->user->name }}</h4>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </form> 
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group row">
+                                <label for="uname1" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Sucursal de Ingreso</label>
+                                <div class="col-sm-9">
+                                    <h4 class="form-control">{{ $datos->almacen->nombre }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group row">
+                                <label for="nname" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Fecha de Emision</label>
+                                <div class="col-sm-9">
+                                    <h4 class="form-control">{{ $datos->fecha }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group row">
+                                <label for="uname1" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Numero de Pedido</label>
+                                <div class="col-sm-9">
+                                    <h4 class="form-control">{{ $datos->numero }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-6">
+                            <div class="form-group row">
+                                <label for="nname" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Cantidad de productos</label>
+                                <div class="col-sm-9">
+                                    <h4 class="form-control">{{ count($productos) }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead class="bg-inverse text-white">
+                            <tr>
+                                <th>#</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Marca</th>
+                                <th>Tipo</th>
+                                <th>Modelo</th>
+                                <th>Colores</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($productos as $key => $producto)
+                                <tr>
+                                    <td>{{ ($key+1) }}</td>
+                                    <td>{{ $producto->producto->codigo }}</td>
+                                    <td>{{ $producto->producto->nombre }}</td>
+                                    <td>{{ $producto->producto->marca->nombre }}</td>
+                                    <td>{{ $producto->producto->tipo->nombre }}</td>
+                                    <td>{{ $producto->producto->modelo }}</td>
+                                    <td>{{ $producto->producto->colores }}</td>
+                                    <td>{{ round($producto->ingreso) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+    </div>
+    
+    <div class="card-footer">
+        <button id="botonImprimir" class="btn btn-inverse btn-block col-md-12 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
     </div>
 </div>
 @stop
@@ -121,6 +121,12 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+
+<script src="{{ asset('assets/extra-libs/taskboard/js/jquery.ui.touch-punch-improved.js') }}"></script>
+<script src="{{ asset('assets/extra-libs/taskboard/js/jquery-ui.min.js') }}"></script>
+<script src="{{ asset('assets/extra-libs/sparkline/sparkline.js') }}"></script>
+<script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
+<script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
 <script>
     $(function () {
         $('#config-table').DataTable({
@@ -133,5 +139,15 @@
             },
         });
     });
+
+    $("#botonImprimir").click(function() {
+		var mode = 'iframe'; //popup
+		var close = mode == "popup";
+		var options = {
+				mode: mode,
+				popClose: close
+		};
+		$("div#printableArea").printArea(options);
+	});
 </script>
 @endsection

@@ -107,23 +107,25 @@ class EnvioController extends Controller
 
     public function ver_pedido($id)
     {
-        $datos = DB::table('movimientos')
-                ->where('movimientos.numero', '=', $id)
-                ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
-                ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                ->distinct()->select('movimientos.numero', 'almacenes.nombre', 'users.name', 'movimientos.fecha')
-                ->get();
-        // dd($datos);
-        // $entrega = Pedido::find($id);
-
-        $productos = Movimiento::where('movimientos.numero', '=', $id)
-                ->where('movimientos.ingreso', '>', 0)
-                ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
-                ->join('marcas', 'productos.marca_id', '=', 'marcas.id')
-                ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-                ->select('movimientos.*', 'productos.codigo', 'productos.nombre', 'marcas.nombre as nombre_marca', 'tipos.nombre as nombre_tipo', 'productos.modelo', 'productos.colores')
-                ->get();
-        // dd($productos);
+        // $datos = DB::table('movimientos')
+        //         ->where('movimientos.numero', '=', $id)
+        //         ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+        //         ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+        //         ->distinct()->select('movimientos.numero', 'almacenes.nombre', 'users.name', 'movimientos.fecha')
+        //         ->get();
+        $datos = Movimiento::where('numero', $id)
+                            ->where('ingreso', '>', 0)
+                            ->first();
+        // $productos = Movimiento::where('movimientos.numero', '=', $id)
+        //         ->where('movimientos.ingreso', '>', 0)
+        //         ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
+        //         ->join('marcas', 'productos.marca_id', '=', 'marcas.id')
+        //         ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+        //         ->select('movimientos.*', 'productos.codigo', 'productos.nombre', 'marcas.nombre as nombre_marca', 'tipos.nombre as nombre_tipo', 'productos.modelo', 'productos.colores')
+        //         ->get();
+        $productos = Movimiento::where('numero', $id)
+                                ->where('ingreso', '>', 0)
+                                ->get();
         return view('envio.ver_pedido')->with(compact('datos', 'productos'));
     }
 }
