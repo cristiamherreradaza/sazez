@@ -56,24 +56,66 @@ class MovimientoController extends Controller
 
     public function guarda(Request $request)
     {
-        if($request->precio)
-        {
-            $fecha = date("Y-m-d H:i:s");
-            $llaves = array_keys($request->precio);
-            foreach ($llaves as $key => $ll) 
+        if($request->incluye_almacen == 'Si'){
+            // Crear 3 registros
+            if($request->precio)        // Si existen items
             {
-                // Creación de Movimiento
-                $ingreso = new Movimiento();
-                $ingreso->user_id = Auth::user()->id;
-                $ingreso->producto_id = $ll;
-                $ingreso->almacene_id = $request->almacen;
-                $ingreso->proveedor_id = $request->proveedor;
-                $ingreso->ingreso = $request->subtotal[$ll];
-                $ingreso->estado = 'Ingreso';
-                $ingreso->fecha = $fecha;
-                $ingreso->save();
+                $fecha = date("Y-m-d H:i:s");
+                $llaves = array_keys($request->precio);     // Sacamos los items
+                foreach ($llaves as $key => $ll) 
+                {
+                    // Creación de Movimiento - Ingresa a Almacen Central
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $ll;
+                    $ingreso->almacene_id =  1;             // Siempre sera 1?
+                    $ingreso->proveedor_id = $request->proveedor;
+                    $ingreso->ingreso = $request->subtotal[$ll];
+                    $ingreso->estado = 'Ingreso';           //Ingreso
+                    $ingreso->fecha = $fecha;
+                    $ingreso->save();
+                    // Creación de Movimiento - Sale de Almacen Central
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $ll;
+                    $ingreso->almacene_id = 1;              // Siempre sera 1?
+                    $ingreso->salida = $request->subtotal[$ll];
+                    $ingreso->estado = 'Ingreso';           //Ingreso/Envio/Salida
+                    $ingreso->fecha = $fecha;
+                    $ingreso->save();
+                    // Creación de Movimiento - Ingresa a la Sucursal
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $ll;
+                    $ingreso->almacen_origen_id = 1;        // Siempre sera 1?
+                    $ingreso->almacene_id = $request->almacen;
+                    $ingreso->ingreso = $request->subtotal[$ll];
+                    $ingreso->estado = 'Ingreso';           //Ingreso/Envio
+                    $ingreso->fecha = $fecha;
+                    $ingreso->save();
+                }
             }
-        }   
+        }else{
+            // Crear 1 registro
+            if($request->precio)
+            {
+                $fecha = date("Y-m-d H:i:s");
+                $llaves = array_keys($request->precio);
+                foreach ($llaves as $key => $ll) 
+                {
+                    // Creación de Movimiento
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $ll;
+                    $ingreso->almacene_id = $request->almacen;
+                    $ingreso->proveedor_id = $request->proveedor;
+                    $ingreso->ingreso = $request->subtotal[$ll];
+                    $ingreso->estado = 'Ingreso';
+                    $ingreso->fecha = $fecha;
+                    $ingreso->save();
+                }
+            }
+        }
         return redirect('Producto/listado');
     }
 

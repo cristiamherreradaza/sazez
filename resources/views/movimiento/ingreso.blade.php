@@ -19,10 +19,22 @@
                     <h4 class="mb-0 text-white">NUEVO INGRESO</h4>
                 </div>
                 <div class="card-body">
+
                     <div class="row">
-                        <div class="col-md-4">
+
+                        <div class="col-md-2" id="ventana_almacen">
                             <div class="form-group">
-                                <label class="control-label">Almacen</label>
+                                <label class="control-label">Incluir Central</label>
+                                <select name="incluye_almacen" id="incluye_almacen" class="form-control">
+                                    <option value="No" selected> No </option>
+                                    <option value="Si"> Si </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Sucursal</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
@@ -34,7 +46,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Proveedor</label>
                                 <span class="text-danger">
@@ -115,6 +127,20 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('js/NumeroALetras.js') }}"></script>
 <script>
+    // Funcion para habilitar/deshabilitar el input de Incluir Almacen Central
+    $( function() {
+        $("#incluye_almacen").prop('disabled', true);
+        $("#incluye_almacen").val("No");
+        $("#almacen").change( function() {
+            if($(this).val() != 1){
+                $("#incluye_almacen").prop('disabled', false);
+            }else{
+                $("#incluye_almacen").prop('disabled', true);
+                $("#incluye_almacen").val("No");
+            }
+        });
+    });
+
     var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
