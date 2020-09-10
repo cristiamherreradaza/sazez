@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 use App\Almacene;
-use App\User;
-use App\Proveedore;
-use App\VentasProducto;
-use App\Venta;
 use App\Cupone;
 use App\CuponesCobrado;
+use App\Movimiento;
+use App\Proveedore;
+use App\Producto;
+use App\User;
+use App\VentasProducto;
+use App\Venta;
 
 class ReporteController extends Controller
 {
@@ -336,5 +338,191 @@ class ReporteController extends Controller
             $ventas->where('cupones_cobrados.almacene_id', $request->almacen_id);
         }
         return Datatables::of($ventas)->make(true);
+    }
+
+    public function saldos()
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        return view('reporte.saldos')->with(compact('almacenes'));
+    }
+
+    public function ajaxSaldosListado(Request $request)
+    {
+        $id_producto = Producto::where('nombre', $request->nombre_producto)->first();
+        if($id_producto){
+            $id_prod = $id_producto->id;
+            // $saldos = DB::table('movimientos')
+            //             //->whereNull('movimientos.deleted_at')
+            //             ->where('movimientos.producto_id', $id_prod)
+            //             ->join('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+            //             ->select(
+            //                 'almacenes.nombre as tienda',
+            //                 DB::raw('SUM(movimientos.ingreso) as ingresos'),
+            //                 DB::raw('SUM(movimientos.salida) as salidas'),
+            //                 DB::raw('SUM(movimientos.ingreso-movimientos.salida) as total')
+            //             )
+            //             ->groupBy('movimientos.almacene_id')
+            //             ->get();
+
+            $saldos = DB::table('almacenes')
+                        //->whereNull('almacenes.deleted_at')
+                        ->leftJoin('movimientos', 'almacenes.id', '=', 'movimientos.almacene_id')
+                        ->where('movimientos.producto_id', $id_prod)
+                        ->select(
+                            'almacenes.nombre as tienda',
+                            DB::raw('SUM(movimientos.ingreso) as ingresos'),
+                            DB::raw('SUM(movimientos.salida) as salidas'),
+                            DB::raw('SUM(movimientos.ingreso-movimientos.salida) as total')
+                        )
+                        ->groupBy('movimientos.almacene_id')
+                        ->get();
+                        //dd($saldos);
+            if($request->almacen_id){
+                $saldos->where('movimientos.almacene_id', $request->almacen_id);
+            }
+            return Datatables::of($saldos)->make(true);
+
+        }
+
+        // $row = DB::table('ventas_productos')
+        //     ->select(
+        //         'ventas_productos.*',
+        //         'contacts.name',
+        //         DB::raw('SUM(precio_cobrado*cantidad) as total')
+        //         )
+        //     ->leftJoin('ventas', 'ventas_productos.supplier', '=', 'ventas.id')
+        //     ->leftJoin('inventory_has_warehouses', 'ventas_productos.id', '=', 'inventory_has_warehouses.inventory_id')
+        //     ->where('ventas_productos.subscriber_id',$id)
+        //     ->groupBy('inventory_has_warehouses.inventory_id');
+
+        // return Datatables::of($row)->make(true);
+
+
+        // Capturamos todos los registros que tengan combo_id en el rango de fechas x-y de la tabla ventas_productos
+        // $ventas_id = VentasProducto::whereBetween('fecha', ['2020-08-01', '2020-08-30'])
+        // $ventas_id = VentasProducto::whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+        //             ->whereNotNull('combo_id')
+        //             ->groupBy('combo_id')
+        //             ->get();
+        // // En un array guardaremos el atributo venta_id de los registros capturados
+        // $array_ventas = array();
+        // foreach($ventas_id as $row){
+        //     array_push($array_ventas, $row->venta_id);
+        // }
+
+        //dd($array_ventas);
+        
+        // En $variable almacenaremos los registros a mostrar en interfaz
+        //$variable = Venta::whereBetween('fecha', ['2020-08-01', '2020-08-30'])
+        // $variable = Venta::whereIn('id', $array_ventas)
+        //                 ->with('almacen', 'user', 'cliente');
+
+        /*          OPCION 1
+        $variable = VentasProducto::whereIn('venta_id', $array_ventas)
+                        ->with('almacen', 'user', 'cliente')
+                        ->select(DB::raw('SUM(precio_cobrado*cantidad) as total'))
+                        ->groupBy('combo_id')
+                        ->get();
+
+                        dd($variable);
+        // Envio de los datos a la vista
+        return Datatables::of($variable)
+        ->addColumn('almacen', function (Venta $venta){ return $venta->almacen->nombre; })
+        ->addColumn('user', function (Venta $venta){ return $venta->user->name; })
+        ->addColumn('cliente', function (Venta $venta){ return $venta->cliente->name; })
+        ->make(true);
+        */
+
+        /* opcion 2
+        $variable = VentasProducto::whereIn('venta_id', $array_ventas)
+                        ->with('almacen', 'user', 'cliente', 'total')
+                        ->select(DB::raw('SUM(precio_cobrado*cantidad) as total'))
+                        ->groupBy('combo_id');
+                        //->get();
+
+                        //dd($variable);
+        // Envio de los datos a la vista
+        return Datatables::of($variable)
+        ->addColumn('almacen', function (Venta $venta){ return $venta->almacen->nombre; })
+        ->addColumn('user', function (Venta $venta){ return $venta->user->name; })
+        ->addColumn('cliente', function (Venta $venta){ return $venta->cliente->name; })
+        ->addColumn('cliente', function (Venta $venta){ return $venta->cliente->name; })
+        ->make(true);
+        */
+
+        /*
+        $ventas = DB::table('movimientos')
+                    ->whereNull('movimientos.deleted_at')
+                    ->whereIn('movimientos.venta_id', $array_ventas)
+                    //->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+                    ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                    ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+                    ->leftJoin('users as clientes', 'movimientos.cliente_id', '=', 'clientes.id')
+                    //->leftJoin('almacenes as origen', 'movimientos.almacen_origen_id', '=', 'origen.id')
+                    //->leftJoin('combos', 'movimientos.producto_id', '=', 'combos.id')
+                    ->select(
+                        'movimientos.id as nro_venta',
+                        //'origen.nombre as tienda_salida', NOMBRE DE COMBO     Como desde movimientos puedo sacar el codigo del cupon?
+                        'almacenes.nombre as tienda',
+                        'users.name as usuario',
+                        'movimientos.fecha as fecha',
+                        'clientes.name as cliente',
+                        DB::raw('SUM(movimientos.precio_venta*movimientos.ingreso) as total')
+                    )
+                    ->groupBy('movimientos.combo_id')
+                    ->get();
+
+                    dd($ventas);
+        if($request->almacen_id){
+            $ventas->where('movimientos.almacene_id', $request->almacen_id);
+        }
+        return Datatables::of($ventas)->make(true);
+        */
+
+        
+        // $ventas = DB::table('ventas')
+        //             ->whereNull('ventas.deleted_at')
+        //             ->whereIn('ventas.id', $array_ventas)
+        //             //->where('ventas_productos.combo_id', '=', 'combos.id')
+        //             //->whereBetween('ventas.fecha', [$request->fecha_inicial, $request->fecha_final])
+        //             ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
+        //             ->leftJoin('users', 'ventas.user_id', '=', 'users.id')
+        //             ->leftJoin('users as clientes', 'ventas.cliente_id', '=', 'clientes.id')
+        //             ->join('ventas_productos', 'ventas.id', '=', 'ventas_productos.venta_id')
+        //             ->join('combos', 'ventas_productos.combo_id', '=', 'combos.id')
+        //             //->leftJoin('almacenes as origen', 'ventas.almacen_origen_id', '=', 'origen.id')
+        //             //->leftJoin('combos', 'ventas.producto_id', '=', 'combos.id')
+        //             ->select(
+        //                 'ventas.id as nro_venta',
+        //                 //'origen.nombre as tienda_salida', NOMBRE DE COMBO     Como desde ventas puedo sacar el codigo del cupon?
+        //                 //'ventas_productos.combo_id as combo',
+        //                 'combos.nombre as combo',
+        //                 'almacenes.nombre as tienda',
+        //                 'users.name as usuario',
+        //                 'ventas.fecha as fecha',
+        //                 'clientes.name as cliente',
+        //                 'ventas.total as total'
+        //             )
+        //             ->groupBy('ventas_productos.combo_id');
+        // if($request->almacen_id){
+        //     $ventas->where('ventas.almacene_id', $request->almacen_id);
+        // }
+        // return Datatables::of($ventas)->make(true);
+        
+    }
+
+    public function ajaxAutocompletaNombre(Request $request)
+    {
+        if($request->termino){
+            $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                                ->get();
+            $salida = '<div class="list-group" role="tablist" style="height:200px; overflow-y: scroll;">';
+            foreach($productos as $producto)
+            {
+                $salida .= '<a class="list-group-item list-group-item-action" data-toggle="list" href="" role="tab" aria-selected="false">'.$producto->nombre.'</a>';
+            }
+            $salida .= '</div>';
+            echo $salida;
+        }
     }
 }
