@@ -88,8 +88,8 @@
                                 <th>Marca</th>
                                 <th>Tipo</th>
                                 <th>Modelo</th>
-                                <th>Cantidad</th>
-                                <th>Saldo Total</th>
+                                <th class="text-center">Cantidad</th>
+                                <th class="text-center">Saldo Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,7 +101,7 @@
                                     <td>{{ $producto->producto->marca->nombre }}</td>
                                     <td>{{ $producto->producto->tipo->nombre }}</td>
                                     <td>{{ $producto->producto->modelo }}</td>
-                                    <td>{{ round($producto->ingreso) }}</td>
+                                    <td class="text-center">{{ round($producto->ingreso) }}</td>
                                     @php
                                         $stock = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
                                                 ->where('producto_id', $producto->producto_id)
@@ -109,7 +109,7 @@
                                                 ->first();
                                         $stock=intval($stock->total);
                                     @endphp
-                                    <td>{{ $stock }}</td>
+                                    <td class="text-center">{{ $stock }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
