@@ -116,6 +116,8 @@ class EnvioController extends Controller
         $datos = Movimiento::where('numero', $id)
                             ->where('ingreso', '>', 0)
                             ->first();
+
+        // dd($datos->almacen_origen->nombre);
         // $productos = Movimiento::where('movimientos.numero', '=', $id)
         //         ->where('movimientos.ingreso', '>', 0)
         //         ->join('productos', 'movimientos.producto_id', '=', 'productos.id')
@@ -128,4 +130,23 @@ class EnvioController extends Controller
                                 ->get();
         return view('envio.ver_pedido')->with(compact('datos', 'productos'));
     }
+
+    public function eliminaProducto($id)
+    {
+        $datosMovimiento = Movimiento::find($id);
+        Movimiento::destroy($id);
+        return redirect("Envio/ver_pedido/$datosMovimiento->numero");
+
+    }
+
+    public function ajaxBuscaProducto(Request $request)
+    {
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                            ->orWhere('codigo', 'like', "%$request->termino%")
+                            ->limit(8)
+                            ->get();
+
+        return view('envio.ajaxBuscaProducto')->with(compact('productos'));
+    }
+
 }
