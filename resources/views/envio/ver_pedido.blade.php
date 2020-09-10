@@ -20,7 +20,7 @@
             <form class="form-horizontal col-md-12">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-12 col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <label for="fname2" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Sucursal de Salida</label>
                                 <div class="col-sm-9">
@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <label for="lname2" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Usuario que Envia</label>
                                 <div class="col-sm-9">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <label for="uname1" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Sucursal de Ingreso</label>
                                 <div class="col-sm-9">
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <label for="nname" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Fecha de Emision</label>
                                 <div class="col-sm-9">
@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <label for="uname1" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Numero de Pedido</label>
                                 <div class="col-sm-9">
@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-lg-6">
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <label for="nname" class="col-sm-3 text-right control-label col-form-label text-dark-primary">Cantidad de productos</label>
                                 <div class="col-sm-9">
@@ -88,8 +88,8 @@
                                 <th>Marca</th>
                                 <th>Tipo</th>
                                 <th>Modelo</th>
-                                <th>Colores</th>
                                 <th>Cantidad</th>
+                                <th>Saldo Total</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,8 +101,15 @@
                                     <td>{{ $producto->producto->marca->nombre }}</td>
                                     <td>{{ $producto->producto->tipo->nombre }}</td>
                                     <td>{{ $producto->producto->modelo }}</td>
-                                    <td>{{ $producto->producto->colores }}</td>
                                     <td>{{ round($producto->ingreso) }}</td>
+                                    @php
+                                        $stock = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                                                ->where('producto_id', $producto->producto_id)
+                                                ->where('almacene_id', $datos->almacen->id)
+                                                ->first();
+                                        $stock=intval($stock->total);
+                                    @endphp
+                                    <td>{{ $stock }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
