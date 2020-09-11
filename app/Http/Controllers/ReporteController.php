@@ -358,6 +358,7 @@ class ReporteController extends Controller
                                 //->whereDate('fecha', '<=', $fecha)
                                 ->get();
             return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos', 'tipo'));
+            // comentario de prueba
     }
 
     public function saldos_tiendas()
