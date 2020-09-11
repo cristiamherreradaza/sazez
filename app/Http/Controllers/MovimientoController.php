@@ -80,7 +80,8 @@ class MovimientoController extends Controller
                     $ingreso->producto_id = $ll;
                     $ingreso->almacene_id = 1;              // Siempre sera 1?
                     $ingreso->salida = $request->subtotal[$ll];
-                    $ingreso->estado = 'Ingreso';           //Ingreso/Envio/Salida
+                    $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
+                    //Adicionar  numero correlativo
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                     // Creación de Movimiento - Ingresa a la Sucursal
@@ -90,7 +91,8 @@ class MovimientoController extends Controller
                     $ingreso->almacen_origen_id = 1;        // Siempre sera 1?
                     $ingreso->almacene_id = $request->almacen;
                     $ingreso->ingreso = $request->subtotal[$ll];
-                    $ingreso->estado = 'Ingreso';           //Ingreso/Envio
+                    $ingreso->estado = 'Envio';           //Ingreso/Envio
+                    //Adicionar numero correlativo
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                 }
@@ -116,6 +118,7 @@ class MovimientoController extends Controller
                 }
             }
         }
+        //Generar su reporte de envio
         return redirect('Producto/listado');
     }
 

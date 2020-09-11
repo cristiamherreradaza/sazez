@@ -12,6 +12,7 @@ use App\CuponesCobrado;
 use App\Movimiento;
 use App\Proveedore;
 use App\Producto;
+use App\Tipo;
 use App\User;
 use App\VentasProducto;
 use App\Venta;
@@ -343,60 +344,35 @@ class ReporteController extends Controller
     public function saldos()
     {
         $almacenes = Almacene::whereNull('estado')->get();
-        return view('reporte.saldos')->with(compact('almacenes'));
+        $tipos = Tipo::get();
+        return view('reporte.saldos')->with(compact('almacenes', 'tipos'));
     }
 
-    public function ajaxSaldosListado(Request $request)
+    public function ajax_listado_saldos(Request $request)
     {
-        $id_producto = Producto::where('nombre', $request->nombre_producto)->first();
-        if($id_producto){
-            $id_prod = $id_producto->id;
-            // $saldos = DB::table('movimientos')
-            //             //->whereNull('movimientos.deleted_at')
-            //             ->where('movimientos.producto_id', $id_prod)
-            //             ->join('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
-            //             ->select(
-            //                 'almacenes.nombre as tienda',
-            //                 DB::raw('SUM(movimientos.ingreso) as ingresos'),
-            //                 DB::raw('SUM(movimientos.salida) as salidas'),
-            //                 DB::raw('SUM(movimientos.ingreso-movimientos.salida) as total')
-            //             )
-            //             ->groupBy('movimientos.almacene_id')
-            //             ->get();
-
-            $saldos = DB::table('almacenes')
-                        //->whereNull('almacenes.deleted_at')
-                        ->leftJoin('movimientos', 'almacenes.id', '=', 'movimientos.almacene_id')
-                        ->where('movimientos.producto_id', $id_prod)
-                        ->select(
-                            'almacenes.nombre as tienda',
-                            DB::raw('SUM(movimientos.ingreso) as ingresos'),
-                            DB::raw('SUM(movimientos.salida) as salidas'),
-                            DB::raw('SUM(movimientos.ingreso-movimientos.salida) as total')
-                        )
-                        ->groupBy('movimientos.almacene_id')
-                        ->get();
-                        //dd($saldos);
-            if($request->almacen_id){
-                $saldos->where('movimientos.almacene_id', $request->almacen_id);
-            }
-            return Datatables::of($saldos)->make(true);
-
-        }
-    }
-
-    public function ajaxAutocompletaNombre(Request $request)
-    {
-        if($request->termino){
-            $productos = Producto::where('nombre', 'like', "%$request->termino%")
+            $fecha = $request->fecha;
+            $almacen = Almacene::find($request->almacen_id);
+            $tipo = Tipo::where('id', $request->tipo_id)->value('nombre');
+            $productos = Producto::where('tipo_id', $request->tipo_id)
+                                ->whereNull('estado')
+                                //->whereDate('fecha', '<=', $fecha)
                                 ->get();
-            $salida = '<div class="list-group" role="tablist" style="height:200px; overflow-y: scroll;">';
-            foreach($productos as $producto)
-            {
-                $salida .= '<a class="list-group-item list-group-item-action" data-toggle="list" href="" role="tab" aria-selected="false">'.$producto->nombre.'</a>';
-            }
-            $salida .= '</div>';
-            echo $salida;
-        }
+            return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos', 'tipo'));
+    }
+
+    public function saldos_tiendas()
+    {
+        $tipos = Tipo::get();
+        return view('reporte.saldos_tiendas')->with(compact('tipos'));
+    }
+
+    public function ajax_listado_saldos_tiendas(Request $request)
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        $tipo = Tipo::where('id', $request->tipo_id)->value('nombre');
+        $productos = Producto::where('tipo_id', $request->tipo_id)
+                            ->whereNull('estado')
+                            ->get();
+        return view('reporte.ajax_listado_saldos_tiendas')->with(compact('almacenes', 'productos', 'tipo'));
     }
 }

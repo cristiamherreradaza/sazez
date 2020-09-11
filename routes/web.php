@@ -251,7 +251,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //REPORTE DE TIENDA
     Route::get('Tienda/publico', 'TiendaController@publico');
     
-    Route::post('Reporte/ajaxAutocompletaNombre', 'ReporteController@ajaxAutocompletaNombre');
     Route::get('Reporte/reporte_tienda', 'ReporteController@reporte_tienda');
     Route::get('Reporte/ajax_tienda_listado', 'ReporteController@ajax_tienda_listado');
     Route::get('Reporte/ventas', 'ReporteController@ventas');
@@ -265,7 +264,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/cupones', 'ReporteController@cupones');
     Route::get('Reporte/ajaxCuponesListado', 'ReporteController@ajaxCuponesListado');
     Route::get('Reporte/saldos', 'ReporteController@saldos');
-    Route::get('Reporte/ajaxSaldosListado', 'ReporteController@ajaxSaldosListado');
+    Route::get('Reporte/ajax_listado_saldos', 'ReporteController@ajax_listado_saldos');
+    Route::get('Reporte/saldos_tiendas', 'ReporteController@saldos_tiendas');
+    Route::get('Reporte/ajax_listado_saldos_tiendas', 'ReporteController@ajax_listado_saldos_tiendas');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');

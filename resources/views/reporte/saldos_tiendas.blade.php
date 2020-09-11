@@ -17,40 +17,30 @@
     <div class="col-md-12">
         <div class="card border-info">
             <div class="card-header bg-info">
-                <h4 class="mb-0 text-white">REPORTE DE PROMOCIONES CANJEADAS</h4>
+                <h4 class="mb-0 text-white">REPORTE DE SALDOS DE TIENDAS POR PRODUCTO</h4>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">Fecha de inicio</label>
-                            <span class="text-danger">
-                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                            </span>
-                            <input type="date" name="fecha_inicial" id="fecha_inicial" class="form-control" required>
-                        </div>                    
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="control-label">Fecha final</label>
-                            <span class="text-danger">
-                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                            </span>
-                            <input type="date" name="fecha_final" id="fecha_final" class="form-control" required>
-                        </div>                    
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Seleccionar Tienda</label>
-                            <select name="almacen_id" id="almacen_id" class="form-control">
-                            <option value="" selected>Todos</option>
-                                @foreach($almacenes as $almacen)
-                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                @endforeach
+                            <label>Tipo</label>
+                            <select name="tipo_id" id="tipo_id" class="form-control">
+                                    @foreach($tipos as $tipo)
+                                        <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                    @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Productos Continuos</label>
+                            <select name="continuo" id="continuo" class="form-control">
+                                    <option value="" selected>Si</option>
+                                    <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
@@ -58,47 +48,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
-                        <div id="listadoProductosAjax"></div>
+                    <div class="col-md-12" id="mostrar" style="display:none;">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="col-md-12" id="mostrar" style="display:none;">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">LISTA DE PROMOCIONES CANJEADAS</h4>
-            <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
-                <thead>
-                    <tr>
-                        <th>Id Venta</th>
-                        <th>Tienda</th>
-                        <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Id Venta</th>
-                        <th>Tienda</th>
-                        <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-</div>
-
 @stop
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
@@ -115,6 +71,32 @@
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
 
 <script>
+    $.ajaxSetup({
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    
+    function buscar()
+    {
+        var tipo_id = $("#tipo_id").val();
+        var continuo = $("#continuo").val();
+        $.ajax({
+            url: "{{ url('Reporte/ajax_listado_saldos_tiendas') }}",
+            data: {
+                tipo_id: tipo_id,
+                continuo: continuo
+                },
+            type: 'get',
+            success: function(data) {
+                $("#mostrar").html(data);
+                $("#mostrar").show('slow');
+            }
+        });
+    }
+
+    /*
     function buscar()
     {
         $("#mostrar").show('slow');
@@ -138,6 +120,7 @@
             iDisplayLength: 10,
             processing: true,
             serverSide: true,
+            scrollX: true,
             ajax: { 
                 url : "{{ url('Reporte/ajaxPromosListado') }}",
                 type: "GET",
@@ -148,10 +131,11 @@
                     } 
                 },
             columns: [
-                {data: 'id', name: 'id'},
-                
-                {data: 'almacen', name: 'almacen'},
-                {data: 'user', name: 'user'},
+                {data: 'nro_venta', name: 'ventas.id'},
+                //{data: 'combo', name: 'ventas_productos.combo_id'},
+                {data: 'combo', name: 'combos.nombre'},
+                {data: 'tienda', name: 'almacenes.nombre'},
+                {data: 'usuario', name: 'users.name'},
                 {data: 'fecha', name: 'ventas.fecha'},
                 {data: 'cliente', name: 'clientes.name'},
                 {data: 'total', name: 'ventas.total'},
@@ -177,6 +161,8 @@
             });
           });
     }
+    */
+    
 </script>
 
 @endsection
