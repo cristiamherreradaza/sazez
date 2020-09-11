@@ -235,6 +235,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Envio/guarda', 'EnvioController@guarda');
     Route::get('Envio/listado', 'EnvioController@listado');
     Route::get('Envio/ajax_listados', 'EnvioController@ajax_listados');
+    Route::get('Envio/eliminaProducto/{id}', 'EnvioController@eliminaProducto');
+    Route::post('Envio/ajaxBuscaProducto', 'EnvioController@ajaxBuscaProducto');
     
     //MOVIMIENTOS   
     Route::get('Movimiento/registraDatos', 'MovimientoController@registraDatos');

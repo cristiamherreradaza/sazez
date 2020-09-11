@@ -20,10 +20,10 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col"><h3><span class="text-info">VENTA:</span>  {{ $datosVenta->id }}</h3></th>
-                        <th scope="col"><h3><span class="text-info">CLIENTE:</span> {{ $datosVenta->cliente->name }}</h3></th>
-                        <th scope="col"><h3><span class="text-info">FECHA:</span> {{ $datosVenta->fecha }}</h3></th>
-                        <th scope="col"><h3><span class="text-info">TOTAL:</span> {{ $datosVenta->total }}</h3></th>
+                        <th scope="col"><h4><span class="text-info">VENTA:</span>  {{ $datosVenta->id }}</h4></th>
+                        <th scope="col"><h4><span class="text-info">CLIENTE:</span> {{ $datosVenta->cliente->name }}</h4></th>
+                        <th scope="col"><h4><span class="text-info">FECHA:</span> {{ $datosVenta->fecha }}</h4></th>
+                        <th scope="col"><h4><span class="text-info">TOTAL:</span> {{ $datosVenta->total }}</h4></th>
                     </tr>
                 </thead>
             </table>
