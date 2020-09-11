@@ -357,6 +357,18 @@ class ReporteController extends Controller
                                 ->whereNull('estado')
                                 //->whereDate('fecha', '<=', $fecha)
                                 ->get();
+            // Guardamos en un array todos los id de los productos
+            // $id_productos = array();
+            // foreach($productos as $producto){
+            //     array_push($id_productos, $producto->id);
+            // }
+            // //dd($id_productos);
+            // $movimiento = Movimiento::whereIn('producto_id', $id_productos)
+            //                         ->groupBy('producto_id')
+            //                         ->selectRaw('sum(ingreso) as sum, producto_id')
+            //                         ->pluck('sum', 'producto_id');
+            // var_dump($movimiento);
+            // dd($movimiento);
             return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos', 'tipo'));
             // comentario de prueba
     }

@@ -87,4 +87,9 @@ class Movimiento extends Model
     {
         return $this->belongsTo('App\Escala');
     }
+
+    public function getIngresoTotalAttribute()
+    {
+        return $this->ingreso;
+    }
 }

@@ -20,9 +20,9 @@
                     <td>{{ $producto->marca->nombre }}</td>
                     @php
                     $ingreso = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) as total'))
-                            ->where('producto_id', $producto->id)
-                            ->where('almacene_id', $almacen->id)
-                            ->first();
+                                            ->where('producto_id', $producto->id)
+                                            ->where('almacene_id', $almacen->id)
+                                            ->first();
                     $salida = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(salida) as total'))
                                             ->where('producto_id', $producto->id)
                                             ->where('almacene_id', $almacen->id)

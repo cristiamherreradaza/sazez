@@ -42,4 +42,9 @@ class Almacene extends Model
     {
         return $this->hasMany('App\Cupone');
     }
+
+    public function empresas()
+    {
+        return $this->hasMany('App\Empresa');
+    }
 }
