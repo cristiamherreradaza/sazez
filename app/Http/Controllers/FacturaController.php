@@ -7,6 +7,9 @@ use App\Empresa;
 use App\Factura;
 use App\Parametros;
 use CodigoControlV7;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use DataTables;
 use Illuminate\Http\Request;
 
 class FacturaController extends Controller
@@ -200,6 +203,32 @@ class FacturaController extends Controller
         }
         //return redirect('Empresa/formulario');
     }
+
+    public function reporte()
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        return view('factura.reporte')->with(compact('almacenes'));
+    }
+
+    public function ajax_listado(Request $request)
+    {
+        $facturas = DB::table('facturas')
+                        ->whereNull('facturas.deleted_at')
+                        ->where('facturas.almacene_id', $request->almacen_id)
+                        //->whereBetween('facturas.fecha_compra', [$request->fecha_inicial, $request->fecha_final])
+                        ->leftJoin('almacenes', 'facturas.almacene_id', '=', 'almacenes.id')
+                        ->leftJoin('users', 'facturas.cliente_id', '=', 'users.id')
+                        ->select(
+                            'almacenes.nombre as tienda',
+                            'users.name as cliente',
+                            'facturas.numero_factura as numero_factura',
+                            'facturas.nit_cliente as nit_cliente',
+                            'facturas.fecha_compra as fecha_compra',
+                            'facturas.monto_compra as monto_compra'
+                        );
+        return Datatables::of($facturas)->make(true);
+    }
+    
     /**
      * Display a listing of the resource.
      *
