@@ -289,6 +289,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Empresa/formulario', 'EmpresaController@formulario');
     Route::post('Empresa/guarda', 'EmpresaController@guarda');
     Route::get('Factura/examenImpuestos', 'FacturaController@examenImpuestos');
+    Route::get('Factura/almacenes', 'FacturaController@almacenes');
+    Route::get('Factura/formulario_empresa/{id}', 'FacturaController@formulario_empresa');
+    Route::post('Factura/guarda_formulario', 'FacturaController@guarda_formulario');
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');

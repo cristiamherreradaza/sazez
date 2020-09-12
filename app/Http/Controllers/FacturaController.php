@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Almacene;
+use App\Empresa;
 use App\Factura;
+use App\Parametros;
 use CodigoControlV7;
 use Illuminate\Http\Request;
 
@@ -137,6 +140,66 @@ class FacturaController extends Controller
 
     }
 
+    public function almacenes()
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        return view('factura.listado')->with(compact('almacenes'));   
+    }
+
+    public function formulario_empresa($id)
+    {
+        $almacen = Almacene::whereNull('estado')
+                            ->where('id', $id)
+                            ->first();
+        $empresa = Empresa::where('almacene_id', $id)->first();
+        $parametros = Parametros::where('estado', 'Activo')
+                                ->where('almacene_id', $id)
+                                ->get();
+                                //->first();
+        if(!$empresa){                      // Si no tiene empresa
+            $empresa = new Empresa();       // La creamos
+            $empresa->almacene_id = $almacen->id;
+            $empresa->nombre = $almacen->nombre;
+            $empresa->direccion = $almacen->direccion;
+            $empresa->telefono = $almacen->telefonos;
+            $empresa->save();
+        }
+        return view('factura.formulario_empresa')->with(compact('empresa', 'parametros'));
+    }
+
+    public function guarda_formulario(Request $request)
+    {
+        // Guardamos datos de la empresa
+        $empresa = Empresa::find($request->empresa_id);
+        $empresa->almacene_id        = $request->almacene_id;
+        $empresa->nombre             = $request->nombre;
+        $empresa->direccion          = $request->direccion;
+        $empresa->actividad          = $request->actividad;
+        $empresa->leyenda_consumidor = $request->leyenda_consumidor;
+        $empresa->telefono           = $request->telefono;
+        $empresa->fax                = $request->fax;
+        $empresa->email              = $request->email;
+        $empresa->telefono_fijo      = $request->telefono_fijo;
+        $empresa->nit                = $request->nit;
+        $empresa->save();
+        // Guardamos parametros de la factura
+        if($request->numero_autorizacion && $request->llave_dosificacion && $request->numero_factura && $request->fecha_limite)
+        {
+            $parametro = Parametros::where('almacene_id', $request->almacene_id)
+                                    ->first();
+            if(!$parametro){
+                $parametro = new Parametros();
+            }
+            $parametro->almacene_id = $request->almacene_id;
+            $parametro->numero_autorizacion = $request->numero_autorizacion;
+            $parametro->llave_dosificacion = $request->llave_dosificacion;
+            $parametro->numero_factura = $request->numero_factura;
+            $parametro->fecha_limite = $request->fecha_limite;
+            $parametro->estado = 'Activo';
+            $parametro->save();
+        }
+        //return redirect('Empresa/formulario');
+    }
     /**
      * Display a listing of the resource.
      *
