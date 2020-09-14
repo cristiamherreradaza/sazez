@@ -387,17 +387,13 @@
                                             style="width: 120px;" readonly></td>
                                 </tr>
                                 @php
-
-                                    // dd(auth()->user()->almacen_id);
-                                    $hoy = date('Y-m-d');
                                     $parametrosFactura = App\Parametros::where('almacene_id', auth()->user()->almacen_id)
-                                                        ->where('fecha_limite', '<=', $hoy)
-                                                        ->where('estado', 'Activo')
-                                                        ->count();
+                                                            ->latest()
+                                                            ->first();
                                 @endphp
-                                @if ($parametrosFactura > 0)
+                                @if ($parametrosFactura->estado == 'Activo')
                                     <tr>
-                                        <td class="text-right">NIT {{ $hoy }}</td>
+                                        <td class="text-right">NIT</td>
                                         <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>
                                     </tr>
                                     <tr>

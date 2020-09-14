@@ -22,7 +22,7 @@
                     <thead>
                         <tr>
                             <th>N°</th>
-                            <th>Almacen Enviado</th>
+                            <th>Almacen</th>
                             <th>Personal </th>
                             <th>Fecha y Hora de Envio</th>
                             <th>Estado</th>
