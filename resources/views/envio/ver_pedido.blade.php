@@ -53,7 +53,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" onclick="buscar()" class="btn btn-block btn-primary">CONFIRMAR</button>
+                            <button type="submit" onclick="buscar()" class="btn btn-block btn-primary">ADICIONAR</button>
                         </div>
                     </div>
                 </div>
