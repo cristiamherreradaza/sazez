@@ -10,91 +10,6 @@
 @endsection
 
 @section('content')
-<!-- inicio modal editar almacen -->
-<div id="entrega_excel" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Importar Envio</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            {{-- <div class="row">
-                <div class="col-lg-12 col-md-6">
-                    <div class="card">
-                        <form method="post" enctype="multipart/form-data" id="upload_form" class="upload_form float-left dropzone">
-                            <div class="card-body">
-                                @csrf
-                                <label for="input-file-disable-remove">Seleccione un archivo en formato EXCEL.</label>
-                                <input type="file" name="select_file" id="select_file" class="dropify" data-show-remove="true" />
-                                <input type="hidden" name="pedido_id" id="pedido_id">
-                                <br>
-                                <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
-                            </div>
-                        </form>
-
-                    </div>
-                </div>
-            </div> --}}
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title">Seleccione un archivo en formato EXCEL.</h4>
-                            <form method="post" enctype="multipart/form-data" id="upload_form" class="upload_form">
-                                @csrf
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">ARCHIVO</span>
-                                                </div>
-                                                <div class="custom-file">
-                                                    <input type="file" name="select_file" id="select_file"
-                                                        class="custom-file-input" accept=".xlsx" required>
-                                                    <input type="hidden" name="pedido_id" id="pedido_id">
-                                                    <label class="custom-file-label"
-                                                        for="inputGroupFile01">Seleccione...</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 m-auto">
-                                        <div class="form-group">
-                                            <input type="submit" name="upload" id="upload"
-                                                class="btn btn-rounded btn-success float-lg-right" value="Importar">
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- <div class="row">
-
-                                    <div class="col-md-10">
-                                        <button type="submit" id="btnEnviaExcel" onclick="enviaExcel();"
-                                            class="btn waves-effect waves-light btn-block btn-success">Importar archivo
-                                            excel</button>
-                                        <button class="btn btn-primary btn-block" type="button" id="btnTrabajandoExcel"
-                                            disabled style="display: none;">
-                                            <span class="spinner-border spinner-border-sm" role="status"
-                                                aria-hidden="true"></span>
-                                            &nbsp;&nbsp;Estamos trabajando, ten pasciencia ;-)
-                                        </button>
-
-                                    </div>
-                                </div> --}}
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- fin modal editar almacen -->
-
 <div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
 <div class="row">
     <!-- Column -->
@@ -102,8 +17,7 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">LISTA DE ENVIOS </h4>
-                {{-- <div class="table-responsive m-t-40"> --}}
+                <h4 class="card-title">LISTA DE INGRESOS </h4>
                 <table id="tabla-usuarios" class="table table-bordered table-striped no-wrap">
                     <thead>
                         <tr>
@@ -118,7 +32,6 @@
                     <tbody>
                     </tbody>
                 </table>
-                {{-- </div> --}}
             </div>
         </div>
     </div>
@@ -164,7 +77,7 @@
 
     function ver_pedido(id)
     {
-        window.location.href = "{{ url('Envio/ver_pedido') }}/"+id;
+        window.location.href = "{{ url('Producto/ver_ingreso') }}/"+id;
     }
 </script>
 <script>

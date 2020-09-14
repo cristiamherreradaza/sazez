@@ -17,7 +17,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <form action="{{ url('Envio/adicionaProducto') }}" method="POST" class="form-horizontal col-md-12" >
+            <form action="{{ url('Producto/adicionaProducto') }}" method="POST" class="form-horizontal col-md-12" >
                 @csrf
                 <div class="row">
                     <div class="col-md-3">
@@ -32,8 +32,9 @@
                         </div>
                     </div>
                     <input type="hidden" name="producto_id" id="producto_id" value="">
-                    <input type="hidden" name="numero_pedido" id="numero_pedido" value="{{ $datos->numero }}">
-                    <input type="hidden" name="almacen_destino" id="almacen_destino" value="{{ $datos->almacen->id }}">
+                    <input type="hidden" name="numero_ingreso" id="numero_ingreso" value="{{ $datos->numero_ingreso }}">
+                    <input type="hidden" name="proveedor_id" id="proveedor_id" value="{{ $datos->proveedor_id }}">
+                    <input type="hidden" name="almacen_ingreso" id="almacen_ingreso" value="{{ $datos->almacene_id }}">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Nombre de Producto</label>
@@ -44,24 +45,16 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label class="control-label">Stock</label>
+                            <label class="control-label">Cantidad a Ingresar</label>
                             <div class="input-group mb-3">
-                                <input type="number" class="form-control" id="producto_stock" name="producto_stock" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="control-label">Cantidad a Enviar</label>
-                            <div class="input-group mb-3">
-                                <input type="number" class="form-control" id="producto_cantidad" name="producto_cantidad" value="1" min="1" max="" required>
+                                <input type="number" class="form-control" id="producto_cantidad" name="producto_cantidad" value="1" min="1" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn btn-block btn-primary">ADICIONAR</button>
+                            <button type="submit" class="btn btn-block btn-primary">INGRESAR</button>
                         </div>
                     </div>
                 </div>
@@ -78,7 +71,7 @@
 
 <div class="card border-primary">
     <div class="card-header bg-primary">
-        <h4 class="mb-0 text-white">DETALLE DE ENVIO</h4>
+        <h4 class="mb-0 text-white">DETALLE DE INGRESO</h4>
     </div>
     <div class="card-body" id="printableArea">
         <div class="row">
@@ -86,9 +79,9 @@
                 <div class="table-responsve">
                     <table class="table">
                         <tr>
-                            <td><h4><span class="text-info">Numero:</span> {{ $datos->numero }}</h4></td>
-                            <td><h4><span class="text-info">Desde:</span> {{ $datos->almacen_origen->nombre }}</h4></td>
-                            <td><h4><span class="text-info">Hasta:</span> {{ $datos->almacen->nombre }}</h4></td>
+                            <td><h4><span class="text-info">Numero:</span> {{ $datos->numero_ingreso }}</h4></td>
+                            <td><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></td>
+                            <td><h4><span class="text-info">Proveedor:</span> {{ $datos->proveedor->nombre }}</h4></td>
                             <td><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></td>
                         </tr>
                     </table>
@@ -155,7 +148,7 @@
                 <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
             </div>
             <div class="col-md-6">
-                <button class="btn btn-danger btn-block" onclick="elimina_envio()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR ENVIO </span></button>
+                <button class="btn btn-danger btn-block" onclick="elimina_ingreso()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR INGRESO </span></button>
             </div>
         </div>
     </div>
@@ -219,17 +212,17 @@
                     'El producto fue eliminado',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Envio/eliminaProducto') }}/"+id;
+                    window.location.href = "{{ url('Producto/eliminaProducto') }}/"+id;
                 });
             }
         })
     }
 
-    function elimina_envio()
+    function elimina_ingreso()
     {
-        let numero_pedido = $('#numero_pedido').val();
+        let numero_ingreso = $('#numero_ingreso').val();
         Swal.fire({
-            title: 'Quieres borrar el envio # ' + numero_pedido + '?',
+            title: 'Quieres borrar el envio # ' + numero_ingreso + '?',
             text: "Luego no podras recuperarlo!",
             type: 'warning',
             showCancelButton: true,
@@ -244,7 +237,7 @@
                     'El envio fue eliminado',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Envio/eliminaEnvio') }}/"+numero_pedido;
+                    window.location.href = "{{ url('Producto/eliminaIngreso') }}/"+numero_ingreso;
                 });
             }
         })
@@ -254,7 +247,7 @@
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
-                url: "{{ url('Envio/ajaxBuscaProducto') }}",
+                url: "{{ url('Producto/ajaxBuscaIngresoProducto') }}",
                 data: {termino: termino_busqueda},
                 type: 'POST',
                 success: function(data) {

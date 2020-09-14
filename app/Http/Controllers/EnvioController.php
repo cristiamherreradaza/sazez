@@ -186,7 +186,17 @@ class EnvioController extends Controller
             $registro->delete();
         }
         return redirect("Envio/ver_pedido/$numero_envio");
+    }
 
+    public function eliminaEnvio($id)
+    {
+        $registros_envio = Movimiento::where('estado', 'Envio')
+                                    ->where('numero', $id)
+                                    ->get();
+        foreach($registros_envio as $registro){
+            $registro->delete();
+        }
+        return redirect('Envio/listado');
     }
 
     public function ajaxBuscaProducto(Request $request)
