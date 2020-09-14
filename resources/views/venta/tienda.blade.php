@@ -391,7 +391,7 @@
                                                             ->latest()
                                                             ->first();
                                 @endphp
-                                @if ($parametrosFactura->estado == 'Activo')
+                                @if ($parametrosFactura != null && $parametrosFactura->estado == 'Activo')
                                     <tr>
                                         <td class="text-right">NIT</td>
                                         <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>

@@ -165,6 +165,7 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
+        $facturaId = null;
         // preguntamos si el pago es al contado o credito
         if ($request->pagoContado != "on")
         {
