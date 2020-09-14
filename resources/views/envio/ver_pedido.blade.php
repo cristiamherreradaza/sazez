@@ -172,6 +172,7 @@
             confirmButtonText: 'Si, estoy seguro!',
             cancelButtonText: "Cancelar",
         }).then((result) => {
+            // hay aque corregir
             window.location.href = "{{ url('Envio/eliminaProducto') }}/"+id;
             if (result.value) {
                 Swal.fire(

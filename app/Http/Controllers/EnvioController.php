@@ -134,6 +134,8 @@ class EnvioController extends Controller
     public function eliminaProducto($id)
     {
         $datosMovimiento = Movimiento::find($id);
+        $productoId = $datosMovimiento->producto_id;
+        
         Movimiento::destroy($id);
         return redirect("Envio/ver_pedido/$datosMovimiento->numero");
 

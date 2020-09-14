@@ -386,14 +386,25 @@
                                             class="form-control text-right text-right" step="any" value="0"
                                             style="width: 120px;" readonly></td>
                                 </tr>
-                                <tr>
-                                    <td class="text-right">NIT</td>
-                                    <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right">NOMBRE</td>
-                                    <td><input type="text" name="razon_social_cliente" id="razon_social_cliente" class="form-control text-right text-right" style="width: 180px;" required></td>
-                                </tr>
+                                @php
+
+                                    // dd(auth()->user()->almacen_id);
+                                    $hoy = date('Y-m-d');
+                                    $parametrosFactura = App\Parametros::where('almacene_id', auth()->user()->almacen_id)
+                                                        ->where('fecha_limite', '<=', $hoy)
+                                                        ->where('estado', 'Activo')
+                                                        ->count();
+                                @endphp
+                                @if ($parametrosFactura > 0)
+                                    <tr>
+                                        <td class="text-right">NIT {{ $hoy }}</td>
+                                        <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">NOMBRE</td>
+                                        <td><input type="text" name="razon_social_cliente" id="razon_social_cliente" class="form-control text-right text-right" style="width: 180px;" required></td>
+                                    </tr>
+                                @endif
                                 <tr>
                                     <td colspan="2">
                                         <h6 class="text-info" id="montoLiteral"></h6>

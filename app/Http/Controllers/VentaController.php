@@ -104,6 +104,14 @@ class VentaController extends Controller
     {
         // $nuevoNumero = $ultimoNumeroFactura->numero_factura+1;
         $hoy = date('Y-m-d');
+
+        $ultimoParametro = Parametros::lastest()->first();
+
+        $parametrosFactura = Parametros::where('almacene_id', Authuser()->almacen_id)
+            ->where('fecha_limite', '<=', $hoy)
+            ->where('estado', 'Activo')
+            ->count();
+
         $arrayPromociones = [];
         $almacenes = Almacene::get();
         $grupos = Grupo::all();
@@ -215,8 +223,12 @@ class VentaController extends Controller
         // verficamos si la configuracion del sistema esta con factura
         
         // fin verficamos si la configuracion del sistema esta con factura
+        $parametrosFactura = Parametros::where('almacene_id', auth()->user()->almacen_id)
+                    ->where('fecha_limite', '<=', $hoy)
+                    ->where('estado', 'Activo')
+                    ->count();
 
-
+        
         // tramemos los parametros de la facturacion
         $parametrosFactura = Parametros::where('estado', 'Activo')->first();
 
