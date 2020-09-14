@@ -24,10 +24,11 @@
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
                     @php
+                        $almacen_id = Auth::user()->almacen->id;
                         $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
                                                                     FROM movimientos
                                                                     WHERE producto_id = '$p->id'
-                                                                    AND almacene_id = 1
+                                                                    AND almacene_id = '$almacen_id'
                                                                     GROUP BY producto_id");
                         $cantidad_disponible = $total[0]->total;
                     @endphp

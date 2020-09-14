@@ -24,10 +24,11 @@
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
                     @php
+                        $almacen_id = Auth::user()->almacen->id;
                         $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
                                             FROM movimientos
                                             WHERE producto_id = '$p->id'
-                                            AND almacene_id = 1
+                                            AND almacene_id = '$almacen_id'
                                             GROUP BY producto_id");
                         $cantidad_disponible = $total[0]->total;
                     @endphp
@@ -50,6 +51,7 @@
 
             $("#producto_id").val("");
             $("#producto_nombre").val("");
+            $("#producto_stock").val("");
             $("#producto_cantidad").val(1);
 
             var currentRow = $(this).closest("tr");
@@ -66,6 +68,7 @@
             // agregaremos los atributos: id, nombre, y cantidad (max->stock)
             $("#producto_id").val(id);
             $("#producto_nombre").val(nombre);
+            $("#producto_stock").val(stock);
             $("#producto_cantidad").attr({ "max" : stock });
 
             // let buscaItem = itemsPedidoArray.lastIndexOf(id);

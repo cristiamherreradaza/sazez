@@ -38,11 +38,19 @@
                         <div class="form-group">
                             <label class="control-label">Nombre de Producto</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="producto_nombre" name="producto_nombre">
+                                <input type="text" class="form-control" id="producto_nombre" name="producto_nombre" readonly>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="control-label">Stock</label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="producto_stock" name="producto_stock" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
                         <div class="form-group">
                             <label class="control-label">Cantidad a Enviar</label>
                             <div class="input-group mb-3">
