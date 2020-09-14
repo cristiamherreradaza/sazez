@@ -17,9 +17,10 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <form class="form-horizontal col-md-12">
+            <form action="{{ url('Envio/adicionaProducto') }}" method="POST" class="form-horizontal col-md-12" >
+                @csrf
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Buscar Producto</label>
                             <div class="input-group mb-3">
@@ -28,6 +29,31 @@
                                     <span class="input-group-text"><i class="ti-search"></i></span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="producto_id" id="producto_id" value="">
+                    <input type="hidden" name="numero_pedido" id="numero_pedido" value="{{ $datos->numero }}">
+                    <input type="hidden" name="almacen_destino" id="almacen_destino" value="{{ $datos->almacen->id }}">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Nombre de Producto</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="producto_nombre" name="producto_nombre">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Cantidad a Enviar</label>
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" id="producto_cantidad" name="producto_cantidad" value="1" min="1" max="" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="submit" onclick="buscar()" class="btn btn-block btn-primary">CONFIRMAR</button>
                         </div>
                     </div>
                 </div>
@@ -209,7 +235,7 @@
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
-                url: "{{ url('Movimiento/ajaxBuscaProducto') }}",
+                url: "{{ url('Envio/ajaxBuscaProducto') }}",
                 data: {termino: termino_busqueda},
                 type: 'POST',
                 success: function(data) {

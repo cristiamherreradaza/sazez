@@ -25,10 +25,10 @@
                     <td>{{ $p->colores }}</td>
                     @php
                         $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
-                                                                    FROM movimientos
-                                                                    WHERE producto_id = '$p->id'
-                                                                    AND almacene_id = 1
-                                                                    GROUP BY producto_id");
+                                            FROM movimientos
+                                            WHERE producto_id = '$p->id'
+                                            AND almacene_id = 1
+                                            GROUP BY producto_id");
                         $cantidad_disponible = $total[0]->total;
                     @endphp
                     <td>{{ $cantidad_disponible }}</td>
@@ -48,6 +48,10 @@
             $("#termino").val("");
             $("#termino").focus();
 
+            $("#producto_id").val("");
+            $("#producto_nombre").val("");
+            $("#producto_cantidad").val(1);
+
             var currentRow = $(this).closest("tr");
 
             var id      = currentRow.find("td:eq(0)").text();
@@ -58,26 +62,30 @@
             var modelo  = currentRow.find("td:eq(5)").text();
             var colores = currentRow.find("td:eq(6)").text();
             var stock   = currentRow.find("td:eq(7)").text();
-            
-            let buscaItem = itemsPedidoArray.lastIndexOf(id);
-            if(buscaItem < 0)
-            {
-                itemsPedidoArray.push(id);  
-                t.row.add([
-                    id,
-                    codigo,
-                    nombre,
-                    marca,
-                    tipo,
-                    modelo,
-                    colores,
-                    stock,
-                    `<input type="number" class="form-control" value="1" min="1" max="`+stock+`" name="item[` + id + `]">`,
-                    '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash-alt"></i></button>'
-                ]).draw(false);
-            }
+
+            // agregaremos los atributos: id, nombre, y cantidad (max->stock)
+            $("#producto_id").val(id);
+            $("#producto_nombre").val(nombre);
+            $("#producto_cantidad").attr({ "max" : stock });
+
+            // let buscaItem = itemsPedidoArray.lastIndexOf(id);
+            // if(buscaItem < 0)
+            // {
+            //     itemsPedidoArray.push(id);  
+            //     t.row.add([
+            //         id,
+            //         codigo,
+            //         nombre,
+            //         marca,
+            //         tipo,
+            //         modelo,
+            //         colores,
+            //         stock,
+            //         `<input type="number" class="form-control" value="1" min="1" max="`+stock+`" name="item[` + id + `]">`,
+            //         '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash-alt"></i></button>'
+            //     ]).draw(false);
+            // }
         });
 
     });
-    </script>
-    {{-- <input type="hidden" name="item[`+id+`][]" value="`+id+`"> --}}
+</script>

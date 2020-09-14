@@ -239,6 +239,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Envio/ajax_listados', 'EnvioController@ajax_listados');
     Route::get('Envio/eliminaProducto/{id}', 'EnvioController@eliminaProducto');
     Route::post('Envio/ajaxBuscaProducto', 'EnvioController@ajaxBuscaProducto');
+    Route::post('Envio/adicionaProducto', 'EnvioController@adicionaProducto');
     
     //MOVIMIENTOS   
     Route::get('Movimiento/registraDatos', 'MovimientoController@registraDatos');

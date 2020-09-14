@@ -106,6 +106,40 @@ class EnvioController extends Controller
         
     }
 
+    public function adicionaProducto(Request $request)
+    {
+        //dd($request->numero_pedido);
+        if($request->producto_id){
+            //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN CENTRAL
+            $salida = new Movimiento();
+            $salida->user_id = Auth::user()->id;
+            $salida->producto_id = $request->producto_id;
+            $salida->almacene_id = Auth::user()->almacen->id;
+            $salida->salida = $request->producto_cantidad;
+            $salida->fecha = date('Y-m-d H:i:s');
+            $salida->numero = $request->numero_pedido;
+            $salida->estado = 'Envio';
+            $salida->save();
+
+            //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
+            $ingreso = new Movimiento();
+            $ingreso->user_id = Auth::user()->id;
+            $ingreso->producto_id = $request->producto_id;
+            $ingreso->almacen_origen_id = Auth::user()->almacen->id;
+            $ingreso->almacene_id = $request->almacen_destino;
+            $ingreso->ingreso = $request->producto_cantidad;
+            $ingreso->fecha = date('Y-m-d H:i:s');
+            $ingreso->numero = $request->numero_pedido;
+            $ingreso->estado = 'Envio';
+            $ingreso->save();
+        }
+        // $request->producto_id;
+        // $request->producto_nombre;
+        // $request->producto_cantidad;
+        // $request->numero_pedido;
+        return redirect("Envio/ver_pedido/$request->numero_pedido");
+    }
+
     public function ver_pedido($id)
     {
         // $datos = DB::table('movimientos')
@@ -154,7 +188,6 @@ class EnvioController extends Controller
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-
         return view('envio.ajaxBuscaProducto')->with(compact('productos'));
     }
 
