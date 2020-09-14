@@ -613,7 +613,7 @@ class ProductoController extends Controller
                             ->whereNotNull('numero_ingreso')
                             ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
                             ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                            ->distinct()
+                            //->distinct()
                             ->select(
                                 'movimientos.numero_ingreso',
                                 'almacenes.nombre',
@@ -621,6 +621,7 @@ class ProductoController extends Controller
                                 'movimientos.fecha',
                                 'movimientos.estado'
                             )
+                            ->groupBy('movimientos.numero_ingreso')
                             ->orderBy('movimientos.id', 'desc');
         return Datatables::of($ingresos)
                 ->addColumn('action', function ($ingresos) {
