@@ -95,7 +95,8 @@ class EnvioController extends Controller
                 ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
                 ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
                 ->distinct()->select('movimientos.numero', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado'
-                );
+                )
+                ->orderBy('movimientos.id', 'desc');
 
          return Datatables::of($productos)
                 ->addColumn('action', function ($productos) {
@@ -134,8 +135,16 @@ class EnvioController extends Controller
     public function eliminaProducto($id)
     {
         $datosMovimiento = Movimiento::find($id);
-        Movimiento::destroy($id);
-        return redirect("Envio/ver_pedido/$datosMovimiento->numero");
+        $id_producto = $datosMovimiento->producto_id;
+        $numero_envio = $datosMovimiento->numero;
+        $registros = Movimiento::where('producto_id', $id_producto)
+                                ->where('numero', $numero_envio)
+                                ->where('estado', 'Envio')
+                                ->get();
+        foreach($registros as $registro){
+            $registro->delete();
+        }
+        return redirect("Envio/ver_pedido/$numero_envio");
 
     }
 

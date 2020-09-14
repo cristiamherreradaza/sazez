@@ -172,15 +172,37 @@
             confirmButtonText: 'Si, estoy seguro!',
             cancelButtonText: "Cancelar",
         }).then((result) => {
-            window.location.href = "{{ url('Envio/eliminaProducto') }}/"+id;
             if (result.value) {
                 Swal.fire(
                     'Excelente!',
                     'El producto fue eliminado',
                     'success'
-                );
+                ).then(function() {
+                    window.location.href = "{{ url('Envio/eliminaProducto') }}/"+id;
+                });
             }
         })
+
+
+        // Swal.fire({
+        //     title: 'Quieres borrar ' + nombre + '?',
+        //     text: "Luego no podras recuperarlo!",
+        //     type: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Si, estoy seguro!',
+        //     cancelButtonText: "Cancelar",
+        // }).then((result) => {
+        //     window.location.href = "{{ url('Envio/eliminaProducto') }}/"+id;
+        //     if (result.value) {
+        //         Swal.fire(
+        //             'Excelente!',
+        //             'El producto fue eliminado',
+        //             'success'
+        //         );
+        //     }
+        // })
     }
 
     $(document).on('keyup', '#termino', function(e) {

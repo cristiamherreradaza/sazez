@@ -88,7 +88,6 @@ class MovimientoController extends Controller
                     $ingreso->almacene_id = 1;              // Siempre sera 1?
                     $ingreso->salida = $request->subtotal[$ll];
                     $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
-                    //Adicionar  numero correlativo
                     $ingreso->numero = $numero;
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
@@ -100,7 +99,6 @@ class MovimientoController extends Controller
                     $ingreso->almacene_id = $request->almacen;
                     $ingreso->ingreso = $request->subtotal[$ll];
                     $ingreso->estado = 'Envio';           //Ingreso/Envio
-                    //Adicionar numero correlativo
                     $ingreso->numero = $numero;
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
