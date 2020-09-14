@@ -607,26 +607,104 @@ class ProductoController extends Controller
 
     public function ajaxListaIngresos()
     {
-                // $lista_personal = Producto::all();
         $ingresos = Movimiento::where('movimientos.estado', '=', 'Ingreso')
-                ->where('movimientos.ingreso', '>', 0)
-                ->whereNotNull('numero_ingreso')
-                ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
-                ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                ->distinct()->select('movimientos.numero_ingreso', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado')
-                ->orderBy('movimientos.id', 'desc');
-
+                            ->whereNull('movimientos.deleted_at')
+                            ->where('movimientos.ingreso', '>', 0)
+                            ->whereNotNull('numero_ingreso')
+                            ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                            ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+                            //->distinct()
+                            ->select(
+                                'movimientos.numero_ingreso',
+                                'almacenes.nombre',
+                                'users.name',
+                                'movimientos.fecha',
+                                'movimientos.estado'
+                            )
+                            ->groupBy('movimientos.numero_ingreso')
+                            ->orderBy('movimientos.id', 'desc');
         return Datatables::of($ingresos)
                 ->addColumn('action', function ($ingresos) {
-                    return '<button onclick="ver_pedido(' . $ingresos->numero . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                    return '<button onclick="ver_pedido(' . $ingresos->numero_ingreso . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>';
                 })
                 ->make(true); 
-
     }
 
     public function listadoIngresos()
     {
         return view('producto.listadoIngresos');
 
+    }
+
+    public function ver_ingreso($id)
+    {
+        $datos = Movimiento::where('numero_ingreso', $id)
+                            ->where('ingreso', '>', 0)
+                            ->first();
+        $productos = Movimiento::where('numero_ingreso', $id)
+                                ->where('ingreso', '>', 0)
+                                ->get();
+        return view('producto.ver_ingreso')->with(compact('datos', 'productos'));
+    }
+
+    public function ajaxBuscaIngresoProducto(Request $request)
+    {
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                            ->orWhere('codigo', 'like', "%$request->termino%")
+                            ->limit(8)
+                            ->get();
+        return view('producto.listadoIngresoProductosAjax')->with(compact('productos'));
+    }
+
+    public function adicionaProducto(Request $request)
+    {
+        //dd($request->numero_pedido);
+        if($request->producto_id){
+            // Buscaremos si ya existe ese producto en ese ingreso
+            $producto_lista = Movimiento::where('numero_ingreso', $request->numero_ingreso)
+                                        ->where('producto_id', $request->producto_id)
+                                        ->where('estado', 'Ingreso')
+                                        ->first();
+            if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese ingreso/producto
+                //AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
+                $ingreso = new Movimiento();
+                $ingreso->user_id = Auth::user()->id;
+                $ingreso->producto_id = $request->producto_id;
+                $ingreso->almacene_id = $request->almacen_ingreso;
+                $ingreso->proveedor_id = $request->proveedor_id;
+                $ingreso->ingreso = $request->producto_cantidad;
+                $ingreso->fecha = date('Y-m-d H:i:s');
+                $ingreso->numero_ingreso = $request->numero_ingreso;
+                $ingreso->estado = 'Ingreso';
+                $ingreso->save();
+            }
+        }
+        return redirect("Producto/ver_ingreso/$request->numero_ingreso");
+    }
+
+    public function eliminaProducto($id)
+    {
+        $datosMovimiento = Movimiento::find($id);
+        $id_producto = $datosMovimiento->producto_id;
+        $numero_ingreso = $datosMovimiento->numero_ingreso;
+        $registros = Movimiento::where('producto_id', $id_producto)
+                                ->where('numero_ingreso', $numero_ingreso)
+                                ->where('estado', 'Ingreso')
+                                ->get();
+        foreach($registros as $registro){
+            $registro->delete();
+        }
+        return redirect("Producto/ver_ingreso/$numero_ingreso");
+    }
+
+    public function eliminaIngreso($id)
+    {
+        $registros_ingreso = Movimiento::where('estado', 'Ingreso')
+                                    ->where('numero_ingreso', $id)
+                                    ->get();
+        foreach($registros_ingreso as $registro){
+            $registro->delete();
+        }
+        return redirect('Producto/listadoIngresos');
     }
 }

@@ -69,6 +69,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Producto/guardaGarantia', 'ProductoController@guardaGarantia');
     Route::get('Producto/listadoIngresos','ProductoController@listadoIngresos');
     Route::get('Producto/ajaxListaIngresos','ProductoController@ajaxListaIngresos');
+    Route::get('Producto/ver_ingreso/{id}', 'ProductoController@ver_ingreso');
+    Route::post('Producto/ajaxBuscaIngresoProducto', 'ProductoController@ajaxBuscaIngresoProducto');
+    Route::post('Producto/adicionaProducto', 'ProductoController@adicionaProducto');
+    Route::get('Producto/eliminaProducto/{id}', 'ProductoController@eliminaProducto');
+    Route::get('Producto/eliminaIngreso/{id}', 'ProductoController@eliminaIngreso');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
@@ -240,6 +245,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Envio/eliminaProducto/{id}', 'EnvioController@eliminaProducto');
     Route::post('Envio/ajaxBuscaProducto', 'EnvioController@ajaxBuscaProducto');
     Route::post('Envio/adicionaProducto', 'EnvioController@adicionaProducto');
+    Route::get('Envio/eliminaEnvio/{id}', 'EnvioController@eliminaEnvio');
     
     //MOVIMIENTOS   
     Route::get('Movimiento/registraDatos', 'MovimientoController@registraDatos');

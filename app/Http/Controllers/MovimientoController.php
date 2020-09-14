@@ -113,6 +113,7 @@ class MovimientoController extends Controller
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                 }
+                return redirect('Envio/listado');
             }
         }else{
             // Crear 1 registro
@@ -142,6 +143,7 @@ class MovimientoController extends Controller
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                 }
+                return redirect('Producto/listadoIngresos');
             }
         }
         //Generar su reporte de envio
