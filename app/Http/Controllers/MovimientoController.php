@@ -67,6 +67,15 @@ class MovimientoController extends Controller
                 } else {
                     $numero = 1;
                 }
+
+                $num_ingreso = DB::select("SELECT MAX(numero_ingreso) as nroi
+                FROM movimientos");
+                if (!empty($num_ingreso)) {
+                    $numeroi = $num_ingreso[0]->nroi + 1;
+                } else {
+                    $numeroi = 1;
+                }
+
                 $fecha = date("Y-m-d H:i:s");
                 $llaves = array_keys($request->precio);     // Sacamos los items
                 foreach ($llaves as $key => $ll) 
@@ -79,6 +88,7 @@ class MovimientoController extends Controller
                     $ingreso->proveedor_id = $request->proveedor;
                     $ingreso->ingreso = $request->subtotal[$ll];
                     $ingreso->estado = 'Ingreso';           //Ingreso
+                    $ingreso->numero_ingreso = $numeroi;           //Ingreso
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                     // Creación de Movimiento - Sale de Almacen Central
@@ -108,6 +118,14 @@ class MovimientoController extends Controller
             // Crear 1 registro
             if($request->precio)
             {
+                $num_ingreso = DB::select("SELECT MAX(numero_ingreso) as nroi
+                FROM movimientos");
+                if (!empty($num_ingreso)) {
+                    $numeroi = $num_ingreso[0]->nroi + 1;
+                } else {
+                    $numeroi = 1;
+                }
+
                 $fecha = date("Y-m-d H:i:s");
                 $llaves = array_keys($request->precio);
                 foreach ($llaves as $key => $ll) 
@@ -120,6 +138,7 @@ class MovimientoController extends Controller
                     $ingreso->proveedor_id = $request->proveedor;
                     $ingreso->ingreso = $request->subtotal[$ll];
                     $ingreso->estado = 'Ingreso';
+                    $ingreso->numero_ingreso = $numeroi; //Ingreso
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                 }

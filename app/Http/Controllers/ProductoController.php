@@ -589,4 +589,29 @@ class ProductoController extends Controller
         Session::flash('success','Se guardo correctamente!');
         return back();
     }
+
+    public function ajaxListaIngresos()
+    {
+                // $lista_personal = Producto::all();
+        $ingresos = Movimiento::where('movimientos.estado', '=', 'Ingreso')
+                ->where('movimientos.ingreso', '>', 0)
+                ->whereNotNull('numero_ingreso')
+                ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+                ->distinct()->select('movimientos.numero_ingreso', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado'
+                );
+
+        return Datatables::of($ingresos)
+                ->addColumn('action', function ($ingresos) {
+                    return '<button onclick="ver_pedido(' . $ingresos->numero . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                })
+                ->make(true); 
+
+    }
+
+    public function listadoIngresos()
+    {
+        return view('producto.listadoIngresos');
+
+    }
 }
