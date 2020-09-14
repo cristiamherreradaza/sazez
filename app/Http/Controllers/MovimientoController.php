@@ -60,6 +60,13 @@ class MovimientoController extends Controller
             // Crear 3 registros
             if($request->precio)        // Si existen items
             {
+                $num = DB::select("SELECT MAX(numero) as nro
+                                FROM movimientos");
+                if (!empty($num)) {
+                    $numero = $num[0]->nro + 1;
+                } else {
+                    $numero = 1;
+                }
                 $fecha = date("Y-m-d H:i:s");
                 $llaves = array_keys($request->precio);     // Sacamos los items
                 foreach ($llaves as $key => $ll) 
@@ -82,6 +89,7 @@ class MovimientoController extends Controller
                     $ingreso->salida = $request->subtotal[$ll];
                     $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
                     //Adicionar  numero correlativo
+                    $ingreso->numero = $numero;
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                     // Creación de Movimiento - Ingresa a la Sucursal
@@ -93,6 +101,7 @@ class MovimientoController extends Controller
                     $ingreso->ingreso = $request->subtotal[$ll];
                     $ingreso->estado = 'Envio';           //Ingreso/Envio
                     //Adicionar numero correlativo
+                    $ingreso->numero = $numero;
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                 }
