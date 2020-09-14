@@ -145,7 +145,7 @@ class MovimientoController extends Controller
             }
         }
         //Generar su reporte de envio
-        return redirect('Producto/listado');
+        return redirect('Producto/listadoIngresos');
     }
 
     public function ajaxMuestraTotalesAlmacen(Request $request)

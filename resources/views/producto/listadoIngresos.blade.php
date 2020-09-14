@@ -102,13 +102,13 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">LISTA DE ENVIOS </h4>
+                <h4 class="card-title">INGRESOS ALMACEN CENTRAL </h4>
                 {{-- <div class="table-responsive m-t-40"> --}}
                 <table id="tabla-usuarios" class="table table-bordered table-striped no-wrap">
                     <thead>
                         <tr>
                             <th>N°</th>
-                            <th>Almacen Enviado</th>
+                            <th>Almacen</th>
                             <th>Personal </th>
                             <th>Fecha y Hora de Envio</th>
                             <th>Estado</th>

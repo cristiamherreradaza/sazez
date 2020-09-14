@@ -13,6 +13,7 @@ use App\Almacene;
 use App\Producto;
 use App\Categoria;
 use App\Movimiento;
+use App\Parametros;
 use App\Caracteristica;
 use App\Configuracione;
 use App\ImagenesProducto;
@@ -30,6 +31,20 @@ class ProductoController extends Controller
 {
     public function panelControl(Request $request)
     {
+        // validamos la fecha de la facturacion vigente
+        $hoy = date('Y-m-d');
+
+        $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
+                            ->latest()
+                            ->first();
+        if($ultimoParametro->fecha_limite < $hoy)
+        {
+            $parametro = Parametros::find($ultimoParametro->id);
+            $parametro->estado = 'Expirado';
+            $parametro->save();
+        }
+        // fin validamos la fecha de la facturacion vigente
+
         $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
         $fecha_actual = $fecha->format('Y-m-d');//obtenes la fecha actual
         $mes = $fecha->format('m');//obtenes la fecha actual
@@ -598,8 +613,8 @@ class ProductoController extends Controller
                 ->whereNotNull('numero_ingreso')
                 ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
                 ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                ->distinct()->select('movimientos.numero_ingreso', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado'
-                );
+                ->distinct()->select('movimientos.numero_ingreso', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado')
+                ->orderBy('movimientos.id', 'desc');
 
         return Datatables::of($ingresos)
                 ->addColumn('action', function ($ingresos) {
