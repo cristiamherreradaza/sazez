@@ -48,6 +48,7 @@
                         <div class="form-group">
                             <label>Tipo</label>
                             <select name="tipo_id" id="tipo_id" class="form-control">
+                                <option value="" selected>Todos</option>
                                     @foreach($tipos as $tipo)
                                         <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
                                     @endforeach

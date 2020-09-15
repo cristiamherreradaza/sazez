@@ -17,7 +17,7 @@
                     @php
                         $total = 0;
                     @endphp
-                    <td>{{ $tipo }}</td>
+                    <td>{{ $producto->tipo->nombre }}</td>
                     <td>{{ $producto->nombre }}</td>
                     <td>{{ $producto->marca->nombre }}</td>
                     @foreach($almacenes as $almacen)
