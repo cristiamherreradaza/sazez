@@ -352,40 +352,34 @@ class ReporteController extends Controller
     {
             $fecha = $request->fecha;
             $almacen = Almacene::find($request->almacen_id);
-            $tipo = Tipo::where('id', $request->tipo_id)->value('nombre');
-            $productos = Producto::where('tipo_id', $request->tipo_id)
-                                ->whereNull('estado')
-                                //->whereDate('fecha', '<=', $fecha)
-                                ->get();
-            // Guardamos en un array todos los id de los productos
-            // $id_productos = array();
-            // foreach($productos as $producto){
-            //     array_push($id_productos, $producto->id);
+            $query = Producto::orderBy('tipo_id');
+            if ($request->tipo_id) {
+                $query = $query->where('tipo_id', $request->tipo_id);
+            }
+            // if($request->continuo){
+            //     $query = $query->whereNotNull('estado');
             // }
-            // //dd($id_productos);
-            // $movimiento = Movimiento::whereIn('producto_id', $id_productos)
-            //                         ->groupBy('producto_id')
-            //                         ->selectRaw('sum(ingreso) as sum, producto_id')
-            //                         ->pluck('sum', 'producto_id');
-            // var_dump($movimiento);
-            // dd($movimiento);
-            return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos', 'tipo'));
-            // comentario de prueba
+            $productos = $query->get();
+            return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos'));
     }
 
     public function saldos_tiendas()
     {
-        $tipos = Tipo::get();
+        $tipos = Tipo::orderBy('id', 'asc')->get();
         return view('reporte.saldos_tiendas')->with(compact('tipos'));
     }
 
     public function ajax_listado_saldos_tiendas(Request $request)
     {
         $almacenes = Almacene::whereNull('estado')->get();
-        $tipo = Tipo::where('id', $request->tipo_id)->value('nombre');
-        $productos = Producto::where('tipo_id', $request->tipo_id)
-                            ->whereNull('estado')
-                            ->get();
-        return view('reporte.ajax_listado_saldos_tiendas')->with(compact('almacenes', 'productos', 'tipo'));
+        $query = Producto::orderBy('tipo_id');
+            if ($request->tipo_id) {
+                $query = $query->where('tipo_id', $request->tipo_id);
+            }
+            // if($request->continuo){
+            //     $query = $query->whereNotNull('estado');
+            // }
+            $productos = $query->get();
+        return view('reporte.ajax_listado_saldos_tiendas')->with(compact('almacenes', 'productos'));
     }
 }
