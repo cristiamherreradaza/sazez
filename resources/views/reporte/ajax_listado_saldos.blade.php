@@ -19,22 +19,18 @@
                     <td>{{ $producto->nombre }}</td>
                     <td>{{ $producto->marca->nombre }}</td>
                     @php
-                        $total = DB::select("SELECT SUM(ingreso) as total
-                                            FROM movimientos
-                                            WHERE producto_id = $producto->id
-                                            AND almacene_id = $almacen->id
-                                            GROUP BY producto_id");
-                        $ingreso = $total[0]->total;
-                        $total = DB::select("SELECT SUM(salida) as total
-                                            FROM movimientos
-                                            WHERE producto_id = $producto->id
-                                            AND almacene_id = $almacen->id
-                                            GROUP BY producto_id");
-                        $salida = $total[0]->total;
-                        $resultado = $ingreso-$salida;
+                    $ingreso = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) as total'))
+                                            ->where('producto_id', $producto->id)
+                                            ->where('almacene_id', $almacen->id)
+                                            ->first();
+                    $salida = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(salida) as total'))
+                                            ->where('producto_id', $producto->id)
+                                            ->where('almacene_id', $almacen->id)
+                                            ->first();
+                    $resultado = $ingreso->total - $salida->total;
                     @endphp
-                    <td>{{ round($ingreso) }}</td>
-                    <td>{{ round($salida) }}</td>
+                    <td>{{ round($ingreso->total) }}</td>
+                    <td>{{ round($salida->total) }}</td>
                     <td>{{ $resultado }}</td>
                 </tr>
             @endforeach
