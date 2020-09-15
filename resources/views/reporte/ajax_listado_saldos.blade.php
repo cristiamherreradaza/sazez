@@ -19,31 +19,24 @@
                     <td>{{ $producto->nombre }}</td>
                     <td>{{ $producto->marca->nombre }}</td>
                     @php
-
                     $input = $fecha.' 23:59:59';
                     $date = strtotime($input);
-                    $fecha_cambiada = date('Y-m-d h:i:s', $date); 
-                    dd($fecha_cambiada);
+                    $fecha_cambiada = date('Y-m-d h:i:s', $date);
 
-                        $totali = DB::select("SELECT SUM(ingreso) as total
-                                            FROM movimientos
-                                            WHERE producto_id = $producto->id
-                                            AND almacene_id = $almacen->id
-                                            AND fecha <= $fecha_cambiada
-                                            GROUP BY producto_id");
-                        dd($totali);
-                        $ingreso = $totali[0]->total;
-                        $total = DB::select("SELECT SUM(salida) as total
-                                            FROM movimientos
-                                            WHERE producto_id = $producto->id
-                                            AND almacene_id = $almacen->id
-                                            AND fecha <= $fecha_cambiada
-                                            GROUP BY producto_id");
-                        $salida = $total[0]->total;
-                        $resultado = $ingreso-$salida;
+                    $ingreso = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) as total'))
+                                            ->where('producto_id', $producto->id)
+                                            ->where('almacene_id', $almacen->id)
+                                            ->where('fecha', "<=",$fecha)
+                                            ->first();
+                    $salida = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(salida) as total'))
+                                            ->where('producto_id', $producto->id)
+                                            ->where('almacene_id', $almacen->id)
+                                            ->where('fecha', "<=",$fecha)
+                                            ->first();
+                    $resultado = $ingreso->total - $salida->total;
                     @endphp
-                    <td>{{ round($ingreso) }}</td>
-                    <td>{{ round($salida) }}</td>
+                    <td>{{ round($ingreso->total) }}</td>
+                    <td>{{ round($salida->total) }}</td>
                     <td>{{ $resultado }}</td>
                 </tr>
             @endforeach
