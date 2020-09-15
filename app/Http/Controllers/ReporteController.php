@@ -350,7 +350,21 @@ class ReporteController extends Controller
 
     public function ajax_listado_saldos(Request $request)
     {
-            $fecha = $request->fecha;
+        $datosMovimientos = Movimiento::where('fecha', '<=', $request->fecha)
+                            ->select('producto_id', DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                            ->where('almacene_id', $request->almacen_id)
+                            ->groupBy('producto_id')
+                            ->get();
+        
+        return Datatables::of($datosMovimientos)->make(true);
+
+        // foreach ($datosMovimientos as $p) {
+        //     echo $p->producto->nombre."-".$p->total.'<br />';
+        // }
+
+        // dd($datosMovimientos);
+
+    /*        $fecha = $request->fecha;
             $almacen = Almacene::find($request->almacen_id);
             $query = Producto::orderBy('tipo_id');
             if ($request->tipo_id) {
@@ -359,8 +373,8 @@ class ReporteController extends Controller
             // if($request->continuo){
             //     $query = $query->whereNotNull('estado');
             // }
-            $productos = $query->get();
-            return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos'));
+            $productos = $query->get();*/
+            // return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos'));
     }
 
     public function saldos_tiendas()
