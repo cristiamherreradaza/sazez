@@ -37,7 +37,7 @@ class ProductoController extends Controller
         $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
                             ->latest()
                             ->first();
-        if($ultimoParametro->fecha_limite < $hoy)
+        if($ultimoParametro != null && $ultimoParametro->fecha_limite < $hoy)
         {
             $parametro = Parametros::find($ultimoParametro->id);
             $parametro->estado = 'Expirado';
