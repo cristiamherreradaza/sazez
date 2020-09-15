@@ -19,16 +19,25 @@
                     <td>{{ $producto->nombre }}</td>
                     <td>{{ $producto->marca->nombre }}</td>
                     @php
-                        $total = DB::select("SELECT SUM(ingreso) as total
+
+                    $input = $fecha.' 23:59:59';
+                    $date = strtotime($input);
+                    $fecha_cambiada = date('Y-m-d h:i:s', $date); 
+                    dd($fecha_cambiada);
+
+                        $totali = DB::select("SELECT SUM(ingreso) as total
                                             FROM movimientos
                                             WHERE producto_id = $producto->id
                                             AND almacene_id = $almacen->id
+                                            AND fecha <= $fecha_cambiada
                                             GROUP BY producto_id");
-                        $ingreso = $total[0]->total;
+                        dd($totali);
+                        $ingreso = $totali[0]->total;
                         $total = DB::select("SELECT SUM(salida) as total
                                             FROM movimientos
                                             WHERE producto_id = $producto->id
                                             AND almacene_id = $almacen->id
+                                            AND fecha <= $fecha_cambiada
                                             GROUP BY producto_id");
                         $salida = $total[0]->total;
                         $resultado = $ingreso-$salida;
