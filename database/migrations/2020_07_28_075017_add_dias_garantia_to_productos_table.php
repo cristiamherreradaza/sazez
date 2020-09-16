@@ -14,7 +14,7 @@ class AddDiasGarantiaToProductosTable extends Migration
     public function up()
     {
         Schema::table('productos', function (Blueprint $table) {
-            $table->integer('dias_garantia')->nullable()->after('video');
+            $table->integer('dias_garantia')->default('0')->after('video');
         });
     }
 

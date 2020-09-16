@@ -98,7 +98,7 @@ class EnvioController extends Controller
                 )
                 ->orderBy('movimientos.id', 'desc');
 
-         return Datatables::of($productos)
+        return Datatables::of($productos)
                 ->addColumn('action', function ($productos) {
                     return '<button onclick="ver_pedido(' . $productos->numero . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
                 })
