@@ -608,7 +608,6 @@ class ProductoController extends Controller
     public function ajaxListaIngresos()
     {
         $ingresos = Movimiento::where('movimientos.estado', '=', 'Ingreso')
-                            ->whereNull('movimientos.deleted_at')
                             ->where('movimientos.ingreso', '>', 0)
                             ->whereNotNull('numero_ingreso')
                             ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
@@ -623,6 +622,9 @@ class ProductoController extends Controller
                             )
                             ->groupBy('movimientos.numero_ingreso')
                             ->orderBy('movimientos.id', 'desc');
+        if(Auth::user()->perfil_id != 1){
+            $ingresos->where('movimientos.almacene_id', Auth::user()->almacen->id);
+        }
         return Datatables::of($ingresos)
                 ->addColumn('action', function ($ingresos) {
                     return '<button onclick="ver_pedido(' . $ingresos->numero_ingreso . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>';
