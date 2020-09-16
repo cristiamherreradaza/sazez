@@ -709,4 +709,20 @@ class ProductoController extends Controller
         }
         return redirect('Producto/listadoIngresos');
     }
+
+    public function discontinua($id)
+    {
+        $producto = Producto::find($id);
+        $producto->estado = 'Discontinuo';
+        $producto->save();
+        return redirect('Producto/listado');
+    }
+
+    public function continua($id)
+    {
+        $producto = Producto::find($id);
+        $producto->estado = NULL;
+        $producto->save();
+        return redirect('Producto/listado');
+    }
 }
