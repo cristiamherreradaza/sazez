@@ -27,48 +27,62 @@ class EnvioController extends Controller
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-        return view('envio.ajaxBuscaProductos')->with(compact('productos'));
+        
+        if($request->almacen_origen){
+            $almacen_id = $request->almacen_origen;
+        }else{
+            $almacen_id = Auth::user()->almacen_id;
+        }
+        //dd($almacen_id);
+        return view('envio.ajaxBuscaProductos')->with(compact('productos', 'almacen_id'));
     }
 
     public function guarda(Request $request)
     {
-        //arraykeys guarda ids de prod
-        $hoy = date("Y-m-d H:i:s");
-        $num = DB::select("SELECT MAX(numero) as nro
-                                FROM movimientos");
-        if (!empty($num)) {
-            $numero = $num[0]->nro + 1;
-        } else {
-            $numero = 1;
-        }
+        if($request->item){
+            //Preguntaremos si almacen_origen es null
+            if($request->almacen_origen){
+                $almacen_origen = $request->almacen_origen;
+            }else{
+                $almacen_origen = Auth::user()->almacen_id;
+            }
+            
+            //arraykeys guarda ids de prod
+            $hoy = date("Y-m-d H:i:s");
+            $num = DB::select("SELECT MAX(numero) as nro
+                                    FROM movimientos");
+            if (!empty($num)) {
+                $numero = $num[0]->nro + 1;
+            } else {
+                $numero = 1;
+            }
 
-        $llaves = array_keys($request->item);
-        foreach ($llaves as $key => $ll) 
-        {
-            //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN CENTRAL
-            $salida = new Movimiento();
-            $salida->user_id = Auth::user()->id;
-            $salida->producto_id = $ll;
-            //$salida->almacene_id = 1;
-            $salida->almacene_id = Auth::user()->almacen->id;
-            $salida->salida = $request->item[$ll];
-            $salida->fecha = $hoy;
-            $salida->numero = $numero;
-            $salida->estado = 'Envio';
-            $salida->save();
+            $llaves = array_keys($request->item);
+            foreach ($llaves as $key => $ll) 
+            {
+                //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
+                $salida = new Movimiento();
+                $salida->user_id = Auth::user()->id;
+                $salida->producto_id = $ll;
+                $salida->almacene_id = $almacen_origen;
+                $salida->salida = $request->item[$ll];
+                $salida->fecha = $hoy;
+                $salida->numero = $numero;
+                $salida->estado = 'Envio';
+                $salida->save();
 
-            //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
-            $ingreso = new Movimiento();
-            $ingreso->user_id = Auth::user()->id;
-            $ingreso->producto_id = $ll;
-            $ingreso->almacen_origen_id = Auth::user()->almacen->id;
-            $ingreso->almacene_id = $request->almacen_a_pedir;
-            $ingreso->ingreso = $request->item[$ll];
-            $ingreso->fecha = $hoy;
-            $ingreso->numero = $numero;
-            $ingreso->estado = 'Envio';
-            $ingreso->save();
-
+                //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
+                $ingreso = new Movimiento();
+                $ingreso->user_id = Auth::user()->id;
+                $ingreso->producto_id = $ll;
+                $ingreso->almacen_origen_id = $almacen_origen;
+                $ingreso->almacene_id = $request->almacen_a_pedir;
+                $ingreso->ingreso = $request->item[$ll];
+                $ingreso->fecha = $hoy;
+                $ingreso->numero = $numero;
+                $ingreso->estado = 'Envio';
+                $ingreso->save();
+            }
         }
         return redirect('Envio/listado');
     }
@@ -114,7 +128,6 @@ class EnvioController extends Controller
 
     public function adicionaProducto(Request $request)
     {
-        //dd($request->numero_pedido);
         if($request->producto_id){
             // Buscaremos si ya existe ese producto en ese envio
             $producto_lista = Movimiento::where('numero', $request->numero_pedido)
@@ -122,11 +135,11 @@ class EnvioController extends Controller
                                         ->where('estado', 'Envio')
                                         ->first();
             if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese envio/producto
-                //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN CENTRAL
+                //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
                 $salida = new Movimiento();
                 $salida->user_id = Auth::user()->id;
                 $salida->producto_id = $request->producto_id;
-                $salida->almacene_id = Auth::user()->almacen->id;
+                $salida->almacene_id = $request->almacen_origen;
                 $salida->salida = $request->producto_cantidad;
                 $salida->fecha = date('Y-m-d H:i:s');
                 $salida->numero = $request->numero_pedido;
@@ -137,7 +150,7 @@ class EnvioController extends Controller
                 $ingreso = new Movimiento();
                 $ingreso->user_id = Auth::user()->id;
                 $ingreso->producto_id = $request->producto_id;
-                $ingreso->almacen_origen_id = Auth::user()->almacen->id;
+                $ingreso->almacen_origen_id = $request->almacen_origen;
                 $ingreso->almacene_id = $request->almacen_destino;
                 $ingreso->ingreso = $request->producto_cantidad;
                 $ingreso->fecha = date('Y-m-d H:i:s');
@@ -164,7 +177,7 @@ class EnvioController extends Controller
         $datos = Movimiento::where('numero', $id)
                             ->where('ingreso', '>', 0)
                             ->first();
-
+        //dd($datos);
         // dd($datos->almacen_origen->nombre);
         // $productos = Movimiento::where('movimientos.numero', '=', $id)
         //         ->where('movimientos.ingreso', '>', 0)
@@ -211,7 +224,8 @@ class EnvioController extends Controller
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-        return view('envio.ajaxBuscaProducto')->with(compact('productos'));
+        $almacen_id = $request->almacen_origen;
+        return view('envio.ajaxBuscaProducto')->with(compact('productos', 'almacen_id'));
     }
 
     public function vista_previa_envio($id)

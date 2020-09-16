@@ -33,7 +33,8 @@
                     </div>
                     <input type="hidden" name="producto_id" id="producto_id" value="">
                     <input type="hidden" name="numero_pedido" id="numero_pedido" value="{{ $datos->numero }}">
-                    <input type="hidden" name="almacen_destino" id="almacen_destino" value="{{ $datos->almacen->id }}">
+                    <input type="hidden" name="almacen_origen" id="almacen_origen" value="{{ $datos->almacen_origen_id }}">
+                    <input type="hidden" name="almacen_destino" id="almacen_destino" value="{{ $datos->almacene_id }}">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Nombre de Producto</label>
@@ -158,7 +159,7 @@
         <div class="row">
             <div class="col">
                 <!-- <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button> -->
-                <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$datos->numero) }}"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
+                <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$datos->numero) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
             </div>
             @if(auth()->user()->perfil_id == 1)
                 <div class="col-md-6">
@@ -309,11 +310,15 @@
     }
 
     $(document).on('keyup', '#termino', function(e) {
+        almacen_origen = $('#almacen_origen').val();
         termino_busqueda = $('#termino').val();
         if (termino_busqueda.length > 3) {
             $.ajax({
                 url: "{{ url('Envio/ajaxBuscaProducto') }}",
-                data: {termino: termino_busqueda},
+                data: {
+                    almacen_origen: almacen_origen,
+                    termino: termino_busqueda
+                    },
                 type: 'POST',
                 success: function(data) {
                     $("#listadoProductosAjax").show('slow');
