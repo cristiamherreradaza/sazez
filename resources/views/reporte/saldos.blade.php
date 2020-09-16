@@ -85,39 +85,29 @@
     </div>
 </div>
 
-<!-- <div class="col-md-12" id="mostrar" style="display:none;">
+<div class="col-md-12" id="mostrar" style="display:none;">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">LISTA DE PROMOCIONES CANJEADAS</h4>
             <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
                 <thead>
                     <tr>
-                        <th>Id Venta</th>
-                        <th>Combo</th>
-                        <th>Tienda</th>
-                        <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                    </tr>
+                        <th>Almacen</th>
+                        <th>Tipo</th>
+                        <th>Producto</th>
                 </thead>
                 <tbody>
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Id Venta</th>
-                        <th>Combo</th>
-                        <th>Tienda</th>
-                        <th>Usuario</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Total</th>
-                    </tr>
+                        <th>Almacen</th>
+                        <th>Tipo</th>
+                        <th>Producto</th>
                 </tfoot>
             </table>
         </div>
     </div>
-</div> -->
+</div>
 
 @stop
 @section('js')
@@ -142,6 +132,7 @@
         }
     });
     
+    /*
     function buscar()
     {
         var fecha = $("#fecha").val();
@@ -163,16 +154,17 @@
             }
         });
     }
+    */
 
-    /*
+    
     function buscar()
     {
         $("#mostrar").show('slow');
         var table = $('#tabla-tienda').DataTable();
         table.destroy();
-        var fecha_inicial = $("#fecha_inicial").val();
-        var fecha_final = $("#fecha_final").val();
+        var fecha = $("#fecha").val();
         var almacen_id = $("#almacen_id").val();
+        var tipo_id = $("#tipo_id").val();
 
         $("#tabla-tienda thead th").each(function() {
             var title = $(this).text();
@@ -190,23 +182,18 @@
             serverSide: true,
             scrollX: true,
             ajax: { 
-                url : "{{ url('Reporte/ajaxPromosListado') }}",
+                url : "{{ url('Reporte/ajax_listado_saldos') }}",
                 type: "GET",
                 data: {
-                    fecha_inicial : fecha_inicial,
-                    fecha_final : fecha_final,
-                    almacen_id : almacen_id
+                    fecha : fecha,
+                    almacen_id : almacen_id,
+                    tipo_id : tipo_id
                     } 
                 },
             columns: [
-                {data: 'nro_venta', name: 'ventas.id'},
-                //{data: 'combo', name: 'ventas_productos.combo_id'},
-                {data: 'combo', name: 'combos.nombre'},
-                {data: 'tienda', name: 'almacenes.nombre'},
-                {data: 'usuario', name: 'users.name'},
-                {data: 'fecha', name: 'ventas.fecha'},
-                {data: 'cliente', name: 'clientes.name'},
-                {data: 'total', name: 'ventas.total'},
+                {data: 'almacen_nombre', name: 'almacenes.nombre'},
+                {data: 'tipo_nombre', name: 'productos.tipo_id'},
+                {data: 'producto_nombre', name: 'productos.nombre'},
             ],
             language: {
                 url: '{{ asset('datatableEs.json') }}'
@@ -229,7 +216,7 @@
             });
           });
     }
-    */
+    
     
 </script>
 

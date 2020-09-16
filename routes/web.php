@@ -246,6 +246,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Envio/ajaxBuscaProducto', 'EnvioController@ajaxBuscaProducto');
     Route::post('Envio/adicionaProducto', 'EnvioController@adicionaProducto');
     Route::get('Envio/eliminaEnvio/{id}', 'EnvioController@eliminaEnvio');
+    Route::get('Envio/vista_previa_envio/{id}', 'EnvioController@vista_previa_envio');
     
     //MOVIMIENTOS   
     Route::get('Movimiento/registraDatos', 'MovimientoController@registraDatos');

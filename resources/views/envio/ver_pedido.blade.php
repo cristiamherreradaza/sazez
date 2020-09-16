@@ -152,7 +152,8 @@
     <div class="card-footer">
         <div class="row">
             <div class="col-md-6">
-                <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
+                <!-- <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button> -->
+                <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$datos->numero) }}"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
             </div>
             <div class="col-md-6">
                 <button class="btn btn-danger btn-block" onclick="elimina_envio()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR ENVIO </span></button>

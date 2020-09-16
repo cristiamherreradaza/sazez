@@ -208,4 +208,21 @@ class EnvioController extends Controller
         return view('envio.ajaxBuscaProducto')->with(compact('productos'));
     }
 
+    public function vista_previa_envio($id)
+    {
+        $productos_envio = Movimiento::where('estado', 'Envio')
+                                    ->where('numero', $id)
+                                    ->where('ingreso', '>', 0)
+                                    ->get();
+        $cantidad_producto = Movimiento::where('estado', 'Envio')
+                                        ->where('numero', $id)
+                                        ->where('ingreso', '>', 0)
+                                        ->count();
+        $detalle = Movimiento::where('estado', 'Envio')
+                            ->where('numero', $id)
+                            ->where('ingreso', '>', 0)
+                            ->first();
+        return view('envio.vista_previa_envio')->with(compact('productos_envio', 'detalle', 'cantidad_producto'));
+    }
+
 }

@@ -350,17 +350,43 @@ class ReporteController extends Controller
 
     public function ajax_listado_saldos(Request $request)
     {
-            $fecha = $request->fecha;
-            $almacen = Almacene::find($request->almacen_id);
-            $query = Producto::orderBy('tipo_id');
-            if ($request->tipo_id) {
-                $query = $query->where('tipo_id', $request->tipo_id);
-            }
-            // if($request->continuo){
-            //     $query = $query->whereNotNull('estado');
+        // Primer filto de tipo_id
+        $productos = DB::table('movimientos')
+                    ->whereNull('movimientos.deleted_at')
+                    ->where('movimientos.almacene_id', $request->almacen_id)        // Del almacen X
+                    ->whereDate('movimientos.fecha', '<=', $request->fecha)         // Todos los anteriores a la fecha X
+                    ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                    ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
+                    //->Join('tipos', 'productos.tipo_id', '=', 'tipos.id')
+                    ->select(
+                            'almacenes.nombre as almacen_nombre',
+                            'productos.tipo_id as tipo_nombre',
+                            'productos.nombre as producto_nombre'
+                            // 'movimientos.fecha as fecha',
+                            // 'movimientos.ingreso as cantidad'
+                    )
+                    ->groupBy('movimientos.producto_id');
+        if($request->tipo_id){
+            $productos->where('productos.tipo_id', $request->tipo_id);
+        }
+        dd($productos);
+        return Datatables::of($productos)->make(true);
+
+
+
+
+
+            // $fecha = $request->fecha;
+            // $almacen = Almacene::find($request->almacen_id);
+            // $query = Producto::orderBy('tipo_id');
+            // if ($request->tipo_id) {
+            //     $query = $query->where('tipo_id', $request->tipo_id);
             // }
-            $productos = $query->get();
-            return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos'));
+            // // if($request->continuo){
+            // //     $query = $query->whereNotNull('estado');
+            // // }
+            // $productos = $query->get();
+            // return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos'));
     }
 
     public function saldos_tiendas()
