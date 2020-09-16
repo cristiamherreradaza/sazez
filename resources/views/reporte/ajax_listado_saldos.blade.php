@@ -3,41 +3,20 @@
         <thead>
             <tr>
                 <th>Tienda</th>
-                <th>Tipo</th>
                 <th>Producto</th>
+                <th>Tipo</th>
                 <th>Marca</th>
-                <th>Ingresos</th>
-                <th>Egresos</th>
                 <th>Saldo Total</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($productos as $producto)
+            @foreach($datosMovimientos as $producto)
                 <tr>
-                    <td>{{ $almacen->nombre }}</td>
-                    <td>{{ $producto->tipo->nombre }}</td>
+                    <td>{{ $producto->almacen->nombre }}</td>
                     <td>{{ $producto->nombre }}</td>
-                    <td>{{ $producto->marca->nombre }}</td>
-                    @php
-                    $input = $fecha.' 23:59:59';
-                    $date = strtotime($input);
-                    $fecha_cambiada = date('Y-m-d h:i:s', $date);
-
-                    $ingreso = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) as total'))
-                                            ->where('producto_id', $producto->id)
-                                            ->where('almacene_id', $almacen->id)
-                                            ->where('fecha', "<=",$fecha)
-                                            ->first();
-                    $salida = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(salida) as total'))
-                                            ->where('producto_id', $producto->id)
-                                            ->where('almacene_id', $almacen->id)
-                                            ->where('fecha', "<=",$fecha)
-                                            ->first();
-                    $resultado = $ingreso->total - $salida->total;
-                    @endphp
-                    <td>{{ round($ingreso->total) }}</td>
-                    <td>{{ round($salida->total) }}</td>
-                    <td>{{ $resultado }}</td>
+                    <td>{{ $producto->nombre_tipo }}</td>
+                    <td>{{ $producto->nombre_marca }}</td>
+                    <td>{{ round($producto->total) }}</td>
                 </tr>
             @endforeach
         </tbody>

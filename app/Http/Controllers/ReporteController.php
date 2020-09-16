@@ -350,33 +350,19 @@ class ReporteController extends Controller
 
     public function ajax_listado_saldos(Request $request)
     {
-        $datosMovimientos = Movimiento::where('fecha', '<=', $request->fecha)
-                            ->select('producto_id', DB::raw('SUM(ingreso) - SUM(salida) as total'), 'almacene_id')
-                            ->where('almacene_id', $request->almacen_id)
+        $datosMovimientos = Movimiento::where('movimientos.fecha', '<=', $request->fecha)
+                            ->select('movimientos.producto_id', 'productos.nombre', 'tipos.nombre as nombre_tipo', 'marcas.nombre as nombre_marca', DB::raw('SUM(movimientos.ingreso) - SUM(movimientos.salida) as total'), 'almacene_id')
+                            ->where('movimientos.almacene_id', $request->almacen_id)
+                            ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
+                            ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
+                            ->leftJoin('marcas', 'productos.marca_id', '=', 'marcas.id')
+                            ->whereNull('productos.estado')
                             // ->where('estado', 'Ingreso')
                             // ->orWhere('estado', 'Envio')
-                            ->groupBy('producto_id')
+                            ->groupBy('movimientos.producto_id')
                             ->get();
-        
-        // return Datatables::of($datosMovimientos)->make(true);
 
-        foreach ($datosMovimientos as $p) {
-            echo $p->producto->nombre." - ".$p->total.'<br />';
-        }
-
-        dd($datosMovimientos);
-
-    /*        $fecha = $request->fecha;
-            $almacen = Almacene::find($request->almacen_id);
-            $query = Producto::orderBy('tipo_id');
-            if ($request->tipo_id) {
-                $query = $query->where('tipo_id', $request->tipo_id);
-            }
-            // if($request->continuo){
-            //     $query = $query->whereNotNull('estado');
-            // }
-            $productos = $query->get();*/
-            // return view('reporte.ajax_listado_saldos')->with(compact('almacen', 'fecha', 'productos'));
+        return view('reporte.ajax_listado_saldos')->with(compact('datosMovimientos'));
     }
 
     public function saldos_tiendas()
