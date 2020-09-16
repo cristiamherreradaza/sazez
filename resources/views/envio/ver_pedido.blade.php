@@ -138,7 +138,12 @@
                                         </h4>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" title="Eliminar marca" onclick="eliminar('{{ $producto->id }}', '{{ $producto->producto->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                        @if(auth()->user()->perfil_id == 1)
+                                            <button type="button" class="btn btn-danger" title="Eliminar producto" onclick="eliminar('{{ $producto->id }}', '{{ $producto->producto->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                        @endif
+                                        @if($total > 0)
+                                            <button class="btn btn-dark" onclick="reporta_producto('{{ $producto->producto->id }}', '{{ $producto->producto->nombre }}')" title="Reportar producto"><i class="fas fa-sort-amount-down"></i></button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -151,16 +156,68 @@
     
     <div class="card-footer">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col">
                 <!-- <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button> -->
                 <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$datos->numero) }}"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
             </div>
-            <div class="col-md-6">
-                <button class="btn btn-danger btn-block" onclick="elimina_envio()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR ENVIO </span></button>
-            </div>
+            @if(auth()->user()->perfil_id == 1)
+                <div class="col-md-6">
+                        <button class="btn btn-danger btn-block" onclick="elimina_envio()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR ENVIO </span></button>
+                </div>
+            @endif
         </div>
     </div>
 </div>
+
+<!-- inicio modal reportar producto -->
+<div id="reportar_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-dark">
+                <h4 class="modal-title text-white" id="myModalLabel">REPORTAR PRODUCTO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Movimiento/reportar') }}"  method="POST" >
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="id_producto_a_reportar" id="id_producto_a_reportar" value="">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <input name="nombre_producto_a_reportar" type="text" id="nombre_producto_a_reportar" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Cantidad</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="cantidad_producto_a_reportar" type="number" id="cantidad_producto_a_reportar" min="1" class="form-control" value="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Descripcion</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="descripcion_producto_a_reportar" type="text" id="descripcion_producto_a_reportar" minlength="4" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-dark" onclick="reportar()">ENVIAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal reportar producto -->
 @stop
 
 @section('js')
@@ -267,6 +324,24 @@
 
     });
 
+    function reporta_producto(id_producto, nombre)
+    {
+        $("#id_producto_a_reportar").val(id_producto);
+        $("#nombre_producto_a_reportar").val(nombre);
+        $("#reportar_producto").modal('show');
+    }
 
+    function reportar()
+    {
+        //var cantidad = $("#cantidad_producto_a_reportar").val();
+        var descripcion = $("#descripcion_producto_a_reportar").val();
+        if(descripcion.length>3){
+            Swal.fire(
+                'Excelente!',
+                'Producto reportado correctamente.',
+                'success'
+            )
+        }
+    }
 </script>
 @endsection
