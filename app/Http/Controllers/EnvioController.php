@@ -88,22 +88,28 @@ class EnvioController extends Controller
     }
 
     public function ajax_listados()
-    {
-        // $lista_personal = Producto::all();
+    {        
         $productos = Movimiento::where('movimientos.estado', '=', 'Envio')
                 ->where('movimientos.ingreso', '>', 0)
                 ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
                 ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
-                ->distinct()->select('movimientos.numero', 'almacenes.nombre', 'users.name', 'movimientos.fecha', 'movimientos.estado'
+                ->groupBy('movimientos.numero')
+                ->select(
+                    'movimientos.numero', 
+                    'almacenes.nombre', 
+                    'users.name', 
+                    'movimientos.fecha', 
+                    'movimientos.estado'
                 )
                 ->orderBy('movimientos.id', 'desc');
-
+        if(Auth::user()->perfil_id != 1){
+            $productos->where('movimientos.almacene_id', Auth::user()->almacen->id);
+        }
         return Datatables::of($productos)
                 ->addColumn('action', function ($productos) {
                     return '<button onclick="ver_pedido(' . $productos->numero . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
                 })
                 ->make(true); 
-        
     }
 
     public function adicionaProducto(Request $request)
