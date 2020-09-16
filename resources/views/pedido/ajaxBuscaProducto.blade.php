@@ -14,26 +14,31 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($productos as $key => $p)
-                <tr class="item_{{ $p->id }}">
-                    <td>{{ $p->id }}</td>
-                    <td>{{ $p->codigo }}</td>
-                    <td>{{ $p->nombre }}</td>
-                    <td>{{ $p->marca->nombre }}</td>
-                    <td>{{ $p->tipo->nombre }}</td>
-                    <td>{{ $p->modelo }}</td>
-                    <td>{{ $p->colores }}</td>
+            @foreach ($productos as $key => $producto)
+                <tr class="item_{{ $producto->id }}">
+                    <td>{{ $producto->id }}</td>
+                    <td>{{ $producto->codigo }}</td>
+                    <td>{{ $producto->nombre }}</td>
+                    <td>{{ $producto->marca->nombre }}</td>
+                    <td>{{ $producto->tipo->nombre }}</td>
+                    <td>{{ $producto->modelo }}</td>
+                    <td>{{ $producto->colores }}</td>
                     @php
-                        $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
-                                                                    FROM movimientos
-                                                                    WHERE producto_id = '$p->id'
-                                                                    AND almacene_id = '$almacen_id'
-                                                                    GROUP BY producto_id");
-                        $cantidad_disponible = $total[0]->total;
+                        $ingreso = App\Movimiento::where('producto_id', $producto->id)
+                                                ->where('almacene_id', $almacen_id)
+                                                ->where('ingreso', '>', 0)
+                                                ->sum('ingreso');
+                        $salida = App\Movimiento::where('producto_id', $producto->id)
+                                                ->where('almacene_id', $almacen_id)
+                                                ->where('salida', '>', 0)
+                                                ->sum('salida');
+                        $total = $ingreso - $salida;
                     @endphp
-                    <td>{{ $cantidad_disponible }}</td>
+                    <td>{{ $total }}</td>
                     <td>
-                        <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        @if($total > 0)
+                            <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
+                        @endif
                     </td>
                 </tr>    
             @endforeach

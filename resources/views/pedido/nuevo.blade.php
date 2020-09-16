@@ -34,7 +34,9 @@
                                 <label class="control-label">Almacen a solicitar</label>
                                 <select name="almacen_a_pedir" id="almacen_a_pedir" class="form-control">
                                     @foreach($almacenes as $almacen)
-                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
+                                        @if($almacen->id != auth()->user()->almacen_id)
+                                            <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -141,7 +143,10 @@
         if (termino_busqueda.length > 3) {
             $.ajax({
                 url: "{{ url('Pedido/ajaxBuscaProducto') }}",
-                data: {termino: termino_busqueda, almacen : almacen_id},
+                data: {
+                    termino: termino_busqueda,
+                    almacen : almacen_id
+                    },
                 type: 'POST',
                 success: function(data) {
                     $("#listadoProductosAjax").show('slow');

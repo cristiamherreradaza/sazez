@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Pedido;
 use DataTables;
 use App\Almacene;
 use App\Producto;
+use App\Pedido;
 use App\PedidosProducto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -81,33 +81,34 @@ class PedidoController extends Controller
 
     public function guarda(Request $request)
     {
-        $num = DB::select("SELECT MAX(numero) as nro
-                                FROM pedidos");
-        if (!empty($num)) {
-            $numero = $num[0]->nro + 1;
-        } else {
-            $numero = 1;
-        }
+        if($request->item){
+            $ultimo_numero = Pedido::max('numero');     // Sacamos el ultimo numero
+            if($ultimo_numero){                         // Si Existen valores
+                $numero = $ultimo_numero+1;             // Sumar 1 al ultimo numero
+            }else{                                      // Si no existen valores en la tabla
+                $numero = 1;                            // Creara el primero
+            }
+    
+            $pedido                          = new Pedido();
+            $pedido->almacene_solicitante_id = Auth::user()->almacen_id;
+            $pedido->solicitante_id          = Auth::user()->id;
+            $pedido->almacene_id             = $request->almacen_a_pedir;
+            $pedido->numero                  = $numero;
+            $pedido->fecha                   = $request->fecha_pedido;
+            $pedido->save();
 
-        $pedido                          = new Pedido();
-        $pedido->almacene_solicitante_id = Auth::user()->almacen_id;
-        $pedido->solicitante_id          = Auth::user()->id;
-        $pedido->almacene_id             = $request->almacen_a_pedir;
-        $pedido->numero                  = $numero;
-        $pedido->fecha                   = $request->fecha_pedido;
-        $pedido->save();
-        $pedido_id = $pedido->id;
-
-        //arraykeys guarda ids de prod
-        $llaves = array_keys($request->item);
-        foreach ($llaves as $key => $ll) 
-        {
-            $productosPedido              = new PedidosProducto();
-            $productosPedido->pedido_id   = $pedido_id;
-            $productosPedido->user_id     = Auth::user()->id;
-            $productosPedido->producto_id = $ll;
-            $productosPedido->cantidad    = $request->item[$ll];
-            $productosPedido->save();
+            $pedido_id = $pedido->id;
+            //arraykeys guarda ids de prod
+            $llaves = array_keys($request->item);
+            foreach ($llaves as $key => $ll) 
+            {
+                $productosPedido              = new PedidosProducto();
+                $productosPedido->pedido_id   = $pedido_id;
+                $productosPedido->user_id     = Auth::user()->id;
+                $productosPedido->producto_id = $ll;
+                $productosPedido->cantidad    = $request->item[$ll];
+                $productosPedido->save();
+            }
         }
         return redirect('Pedido/listado');
     }
@@ -147,16 +148,21 @@ class PedidoController extends Controller
     public function ajax_listado()
     {
         // $lista_personal = Producto::all();
-        $pedidos = Pedido::leftJoin('almacenes', 'pedidos.almacene_solicitante_id', '=', 'almacenes.id')
-            ->select(
-                'pedidos.id',
-                'pedidos.numero', 
-                'almacenes.nombre', 
-                'pedidos.solicitante_id', 
-                'pedidos.fecha', 
-                'pedidos.estado'
-            );
-
+        $pedidos = DB::table('pedidos')
+                        ->whereNull('pedidos.deleted_at')
+                        ->leftJoin('almacenes', 'pedidos.almacene_solicitante_id', '=', 'almacenes.id')
+                        ->leftJoin('almacenes as origen', 'pedidos.almacene_id', '=', 'origen.id')
+                        ->leftJoin('users', 'pedidos.solicitante_id', '=', 'users.id')
+                        ->orderBy('pedidos.id', 'desc')
+                        ->select(
+                            'pedidos.id',
+                            'pedidos.numero as numero_pedido',
+                            'origen.nombre as almacen_origen',
+                            'almacenes.nombre as almacen_destino',
+                            'users.name as nombre_usuario', 
+                            'pedidos.fecha as fecha', 
+                            'pedidos.estado as estado'
+                        );
          return Datatables::of($pedidos)
                 ->addColumn('action', function ($pedidos) {
                     if ($pedidos->estado == 'Entregado') {

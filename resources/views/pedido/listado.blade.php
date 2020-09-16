@@ -100,11 +100,11 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">LISTADO DE PEDIDOS </h4>
-                {{-- <div class="table-responsive m-t-40"> --}}
                 <table id="tabla-usuarios" class="table table-bordered table-striped no-wrap">
                     <thead>
                         <tr>
                             <th>N&uacute;mero de Pedido</th>
+                            <th>Almacen Origen</th>
                             <th>Almacen Solicitante</th>
                             <th>Persona Solicitante</th>
                             <th>Fecha</th>
@@ -134,17 +134,18 @@ $(document).ready(function() {
     // DataTable
     var table = $('#tabla-usuarios').DataTable( {
         
-        "iDisplayLength": 10,
-        "processing": true,
-        // "scrollX": true,
-        "serverSide": true,
-        "ajax": "{{ url('Pedido/ajax_listado') }}",
-        "columns": [
-            {data: 'numero', name: 'numero'},
-            {data: 'nombre', name: 'nombre'},
-            {data: 'solicitante_id', name: 'solicitante_id'},
-            {data: 'fecha', name: 'fecha'},
-            {data: 'estado', name: 'estado'},
+        iDisplayLength: 10,
+        processing: true,
+        // scrollX: true,
+        serverSide: true,
+        ajax: "{{ url('Pedido/ajax_listado') }}",
+        columns: [
+            {data: 'numero_pedido', name: 'pedidos.numero'},
+            {data: 'almacen_origen', name: 'origen.nombre'},
+            {data: 'almacen_destino', name: 'almacenes.nombre'},
+            {data: 'nombre_usuario', name: 'users.name'},
+            {data: 'fecha', name: 'pedidos.fecha'},
+            {data: 'estado', name: 'pedidos.estado'},
             {data: 'action'},
         ],
         language: {
