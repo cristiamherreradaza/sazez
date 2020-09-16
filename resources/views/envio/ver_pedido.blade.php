@@ -126,7 +126,7 @@
                                                 ->where('producto_id', $producto->producto_id)
                                                 ->where('almacene_id', $datos->almacen->id)
                                                 ->first();
-                                        $stock=intval($stock->total);
+                                        $stock=intval($stock->total - $producto->ingreso);
                                     @endphp
                                     <td class="text-center">{{ $stock }}</td>
                                     <td class="text-right">
