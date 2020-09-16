@@ -259,7 +259,8 @@ class VentaController extends Controller
             $facturaId = $nuevaFactura->id;
         }
 
-        // guardamos los datos de la promocion
+        $fechaHoraVenta = date("Y-m-d H:i:s");
+        // guardamos los productos de la promcion
         if($request->has('promoId'))
         {
             $llavesPromos = array_keys($request->promoId);
@@ -304,6 +305,7 @@ class VentaController extends Controller
                         $movimientoPromocion->precio_venta = $precioProductoCombo;
                         $movimientoPromocion->salida       = $cantidadProductosPromo;
                         $movimientoPromocion->estado       = 'Venta';
+                        $movimientoPromocion->fecha        = $fechaHoraVenta;
                         $movimientoPromocion->save();
 
                         // pregutamos si se desea enviar los productos al mayorista
@@ -319,6 +321,7 @@ class VentaController extends Controller
                             $movimientoPromocion->precio_venta = $precioProductoCombo;
                             $movimientoPromocion->ingreso      = $cantidadProductosPromo;
                             $movimientoPromocion->estado       = 'Transferencia Mayorista';
+                            $movimientoPromocion->fecha        = $fechaHoraVenta;
                             $movimientoPromocion->save();
                         }
                     }
@@ -370,6 +373,7 @@ class VentaController extends Controller
                     $movimiento->precio_venta = $request->precio[$ll];
                     $movimiento->salida       = $request->cantidad[$ll];
                     $movimiento->estado       = 'Venta';
+                    $movimiento->fecha        = $fechaHoraVenta;
                     $movimiento->save();
 
                      // pregutamos si se desea enviar los productos al mayorista
@@ -385,6 +389,7 @@ class VentaController extends Controller
                         $movimiento->precio_venta = $request->precio[$ll];
                         $movimiento->ingreso      = $request->cantidad[$ll];
                         $movimiento->estado       = 'Transferencia Mayorista';
+                        $movimiento->fecha        = $fechaHoraVenta;
                         $movimiento->save();
                     }
                 }
@@ -439,6 +444,7 @@ class VentaController extends Controller
                     $movimientoMayor->precio_venta = $request->precio_m[$llm];
                     $movimientoMayor->salida       = $cantidadVendida;
                     $movimientoMayor->estado       = 'Venta';
+                    $movimientoMayor->fecha        = $fechaHoraVenta;
                     $movimientoMayor->save();
 
                     // pregutamos si se desea enviar los productos al mayorista
@@ -455,6 +461,7 @@ class VentaController extends Controller
                         $movimientoMayor->precio_venta = $request->precio_m[$llm];
                         $movimientoMayor->ingreso      = $cantidadVendida;
                         $movimientoMayor->estado       = 'Tranferencia Mayorista';
+                        $movimientoMayor->fecha        = $fechaHoraVenta;
                         $movimientoMayor->save();
                     }
 

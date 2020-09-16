@@ -351,18 +351,20 @@ class ReporteController extends Controller
     public function ajax_listado_saldos(Request $request)
     {
         $datosMovimientos = Movimiento::where('fecha', '<=', $request->fecha)
-                            ->select('producto_id', DB::raw('SUM(ingreso) - SUM(salida) as total'))
+                            ->select('producto_id', DB::raw('SUM(ingreso) - SUM(salida) as total'), 'almacene_id')
                             ->where('almacene_id', $request->almacen_id)
+                            // ->where('estado', 'Ingreso')
+                            // ->orWhere('estado', 'Envio')
                             ->groupBy('producto_id')
                             ->get();
         
-        return Datatables::of($datosMovimientos)->make(true);
+        // return Datatables::of($datosMovimientos)->make(true);
 
-        // foreach ($datosMovimientos as $p) {
-        //     echo $p->producto->nombre."-".$p->total.'<br />';
-        // }
+        foreach ($datosMovimientos as $p) {
+            echo $p->producto->nombre." - ".$p->total.'<br />';
+        }
 
-        // dd($datosMovimientos);
+        dd($datosMovimientos);
 
     /*        $fecha = $request->fecha;
             $almacen = Almacene::find($request->almacen_id);
