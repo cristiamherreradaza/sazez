@@ -60,7 +60,19 @@
                             <td>
                                 <button class="btn btn-warning" onclick="edita_producto('{{ $producto->id }}')" title="Editar producto"><i class="fas fa-edit"></i> </button>
                                 <button class="btn btn-info" onclick="muestra_producto('{{ $producto->id }}')" title="Ver producto"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-danger" onclick="elimina_producto('{{ $producto->id }}', '{{ $producto->codigo }}')" title="Eliminar producto"><i class="fas fa-trash-alt"></i></button>
+                                @if($producto->estado == 'Discontinuo')
+                                    <button class="btn btn-primary" onclick="continua_producto('{{ $producto->id }}', '{{ $producto->nombre }}')" title="Continuar producto"><i class="fas fa-check-circle"></i></button>
+                                @else
+                                    <button class="btn btn-primary" onclick="discontinua_producto('{{ $producto->id }}', '{{ $producto->nombre }}')" title="Discontinuar producto"><i class="fas fa-ban"></i></button>
+                                @endif
+                                @php
+                                    $movimiento = App\Movimiento::where('producto_id', $producto->id)
+                                                                ->groupBy('producto_id')
+                                                                ->count();
+                                @endphp
+                                @if($movimiento <= 1)
+                                    <button class="btn btn-danger" onclick="elimina_producto('{{ $producto->id }}', '{{ $producto->codigo }}')" title="Eliminar producto"><i class="fas fa-trash-alt"></i></button>
+                                @endif
                                 @if($estado == 'Defectuoso')
                                     @if($resultado > 0)
                                         <button class="btn btn-success" onclick="habilita_producto('{{ $producto->id }}', '{{ $producto->nombre }}')" title="Habilitar producto"><i class="fas fa-sort-amount-up"></i></button>

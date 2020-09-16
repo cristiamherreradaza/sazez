@@ -533,7 +533,7 @@ class ProductoController extends Controller
     {
         $producto = Producto::find($id);
         $categorias = Categoria::get();
-        $almacenes = Almacene::orderBy('nombre', 'asc')->get();
+        $almacenes = Almacene::orderBy('nombre', 'asc')->whereNull('estado')->get();
         $categorias_productos = CategoriasProducto::where('producto_id', $id)->get();
         return view('producto.muestra')->with(compact('producto', 'categorias', 'categorias_productos', 'almacenes'));
     }
@@ -608,7 +608,6 @@ class ProductoController extends Controller
     public function ajaxListaIngresos()
     {
         $ingresos = Movimiento::where('movimientos.estado', '=', 'Ingreso')
-                            ->whereNull('movimientos.deleted_at')
                             ->where('movimientos.ingreso', '>', 0)
                             ->whereNotNull('numero_ingreso')
                             ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
@@ -623,6 +622,9 @@ class ProductoController extends Controller
                             )
                             ->groupBy('movimientos.numero_ingreso')
                             ->orderBy('movimientos.id', 'desc');
+        if(Auth::user()->perfil_id != 1){
+            $ingresos->where('movimientos.almacene_id', Auth::user()->almacen->id);
+        }
         return Datatables::of($ingresos)
                 ->addColumn('action', function ($ingresos) {
                     return '<button onclick="ver_pedido(' . $ingresos->numero_ingreso . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>';
@@ -706,5 +708,21 @@ class ProductoController extends Controller
             $registro->delete();
         }
         return redirect('Producto/listadoIngresos');
+    }
+
+    public function discontinua($id)
+    {
+        $producto = Producto::find($id);
+        $producto->estado = 'Discontinuo';
+        $producto->save();
+        return redirect('Producto/listado');
+    }
+
+    public function continua($id)
+    {
+        $producto = Producto::find($id);
+        $producto->estado = NULL;
+        $producto->save();
+        return redirect('Producto/listado');
     }
 }

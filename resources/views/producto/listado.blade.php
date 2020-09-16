@@ -297,6 +297,52 @@
             )
         }
     }
+
+    function discontinua_producto(id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres discontinuar ' + nombre + '?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'El producto ha sido discontinuado',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Producto/discontinua') }}/"+id;
+                });
+            }
+        })
+    }
+
+    function continua_producto(id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres cambiar a continuo a ' + nombre + '?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'El producto vuelve a ser continuo',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Producto/continua') }}/"+id;
+                });
+            }
+        })
+    }
 </script>
 
 @endsection
