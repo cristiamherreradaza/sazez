@@ -278,7 +278,7 @@
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 3) {
+        if (termino_busqueda.length > 2) {
             $.ajax({
                 url: "{{ url('Cupon/ajaxBuscaProducto') }}",
                 data: {termino: termino_busqueda},
