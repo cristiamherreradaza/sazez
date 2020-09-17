@@ -51,7 +51,7 @@ class Producto extends Model
 
     public function caracteristica()
     {
-        return $this->hasMany('App\caracteristica');
+        return $this->hasMany('App\Caracteristica');
     }
 
     public function precio()
