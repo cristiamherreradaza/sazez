@@ -77,7 +77,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/discontinua/{id}', 'ProductoController@discontinua');
     Route::get('Producto/continua/{id}', 'ProductoController@continua');
     Route::get('Producto/vista_previa_ingreso/{id}', 'ProductoController@vista_previa_ingreso');
-
+    Route::post('Producto/ajaxInformacion', 'ProductoController@ajaxInformacion');
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
 

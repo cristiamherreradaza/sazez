@@ -152,7 +152,6 @@ class MovimientoController extends Controller
 
     public function ajaxMuestraTotalesAlmacen(Request $request)
     {
-        // echo "desde movimientos";
         $producto_id = $request->producto_id;
         $datosProducto = Producto::find($producto_id);
         $cantidadTotal = Movimiento::select(

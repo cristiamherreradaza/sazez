@@ -744,4 +744,24 @@ class ProductoController extends Controller
         //dd($complemento);
         return view('producto.vista_previa_ingreso')->with(compact('productos_envio', 'detalle', 'cantidad_producto', 'complemento'));
     }
+
+    public function ajaxInformacion(Request $request)
+    {
+        $producto_id = $request->producto_id;
+        $datosProducto = Producto::find($producto_id);
+        $cantidadTotal = Movimiento::select(
+            DB::raw('SUM(movimientos.ingreso) - SUM(movimientos.salida) as total'),
+            'almacenes.nombre as almacen'
+        )
+        ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+        ->where('movimientos.producto_id', $producto_id)
+        ->groupBy('movimientos.almacene_id')
+        ->get();
+
+        $precios = Precio::where('producto_id', $producto_id)
+                    ->get();
+        
+        return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios'));
+    }
+
 }

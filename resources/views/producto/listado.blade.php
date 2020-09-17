@@ -135,6 +135,22 @@
 </div>
 <!-- fin modal reportar producto -->
 
+<!-- inicio modal informacion producto -->
+<div id="detalle_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">DETALLE PRODUCTO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body" id="ajaxDetalleProducto">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal informacion producto -->
+
 <!-- inicio modal habilitar producto -->
 <div id="habilitar_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -343,6 +359,24 @@
             }
         })
     }
+
+    function muestraInformacion(productoId)
+    {
+        $.ajax({
+            url: "{{ url('Producto/ajaxInformacion') }}",
+            data: {producto_id: productoId},
+            type: 'POST',
+            success: function(data) {
+                $("#ajaxDetalleProducto").html(data);
+            }
+        });
+
+        // $("#danger-header-modal").modal("show");
+
+        $("#detalle_producto").modal("show");
+        //ajaxMuestraTotalesAlmacenes
+    }
+
 </script>
 
 @endsection
