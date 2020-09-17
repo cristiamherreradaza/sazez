@@ -100,7 +100,7 @@ class VentaController extends Controller
 
     }
 
-    public functio123n tienda()
+    public function tienda()
     {
         $hoy = date('Y-m-d');
 

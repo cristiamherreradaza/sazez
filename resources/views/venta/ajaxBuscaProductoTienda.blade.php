@@ -92,6 +92,9 @@
     </table>
 </div>
 <script>
+    @php
+        
+    @endphp
     $(document).ready(function () {
     
         // ponemos el evento de hacer click en los botones del listado ajax
