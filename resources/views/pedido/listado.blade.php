@@ -104,9 +104,9 @@
                     <thead>
                         <tr>
                             <th>N&uacute;mero de Pedido</th>
-                            <th>Almacen Origen</th>
                             <th>Almacen Solicitante</th>
                             <th>Persona Solicitante</th>
+                            <th>Almacen Solicitado</th>
                             <th>Fecha</th>
                             <th>Estado</th>
                             <th>Opciones</th>
@@ -140,9 +140,9 @@ $(document).ready(function() {
         ajax: "{{ url('Pedido/ajax_listado') }}",
         columns: [
             {data: 'numero_pedido', name: 'pedidos.numero'},
-            {data: 'almacen_origen', name: 'origen.nombre'},
             {data: 'almacen_destino', name: 'almacenes.nombre'},
             {data: 'nombre_usuario', name: 'users.name'},
+            {data: 'almacen_origen', name: 'origen.nombre'},
             {data: 'fecha', name: 'pedidos.fecha'},
             {data: 'estado', name: 'pedidos.estado'},
             {data: 'action'},

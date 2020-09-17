@@ -164,7 +164,11 @@ class PedidoController extends Controller
                             'pedidos.estado as estado'
                         );
         if(Auth::user()->perfil_id != 1){
-            $productos->where('movimientos.almacene_id', Auth::user()->almacen->id);
+            //$pedidos->where('pedidos.almacene_id', Auth::user()->almacen->id);
+            $pedidos->where(function ($query) {
+                $query->where('pedidos.almacene_id', Auth::user()->almacen->id)
+                    ->orWhere('pedidos.almacene_solicitante_id', Auth::user()->almacen->id);
+            });
         }
         return Datatables::of($pedidos)
                 ->addColumn('action', function ($pedidos) {
@@ -177,10 +181,8 @@ class PedidoController extends Controller
                                 <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>
                                 <button type="button" class="btn btn-secondary" title="Entregar pedido por Excel"  onclick="entrega_excel(' .  $pedidos->id . ')"><i class="fas fa-shipping-fast"></i></button>';
                     }
-                    
                 })
                 ->make(true); 
-        
     }
 
 }
