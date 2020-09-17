@@ -725,4 +725,23 @@ class ProductoController extends Controller
         $producto->save();
         return redirect('Producto/listado');
     }
+
+    public function vista_previa_ingreso($id)
+    {
+        $productos_envio = Movimiento::where('estado', 'Ingreso')
+                                    ->where('numero_ingreso', $id)
+                                    ->where('ingreso', '>', 0)
+                                    ->get();
+        $cantidad_producto = Movimiento::where('estado', 'Ingreso')
+                                        ->where('numero_ingreso', $id)
+                                        ->where('ingreso', '>', 0)
+                                        ->count();
+        $detalle = Movimiento::where('estado', 'Ingreso')
+                            ->where('numero_ingreso', $id)
+                            ->where('ingreso', '>', 0)
+                            ->first();
+        $complemento = 20 - $cantidad_producto;
+        //dd($complemento);
+        return view('producto.vista_previa_ingreso')->with(compact('productos_envio', 'detalle', 'cantidad_producto', 'complemento'));
+    }
 }

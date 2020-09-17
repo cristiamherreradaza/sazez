@@ -131,7 +131,9 @@
                                         </h4>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" title="Eliminar marca" onclick="eliminar('{{ $producto->id }}', '{{ $producto->producto->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                        @if(auth()->user()->perfil_id == 1)
+                                            <button type="button" class="btn btn-danger" title="Eliminar marca" onclick="eliminar('{{ $producto->id }}', '{{ $producto->producto->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -144,12 +146,15 @@
     
     <div class="card-footer">
         <div class="row">
-            <div class="col-md-6">
-                <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
+            <div class="col">
+                <a class="btn btn-inverse btn-block " href="{{ url('Producto/vista_previa_ingreso/'.$datos->numero_ingreso) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
+                <!-- <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button> -->
             </div>
-            <div class="col-md-6">
-                <button class="btn btn-danger btn-block" onclick="elimina_ingreso()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR INGRESO </span></button>
-            </div>
+            @if(auth()->user()->perfil_id == 1)
+                <div class="col-md-6">
+                    <button class="btn btn-danger btn-block" onclick="elimina_ingreso()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR INGRESO </span></button>
+                </div>
+            @endif
         </div>
     </div>
 </div>

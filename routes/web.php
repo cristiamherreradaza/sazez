@@ -76,6 +76,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/eliminaIngreso/{id}', 'ProductoController@eliminaIngreso');
     Route::get('Producto/discontinua/{id}', 'ProductoController@discontinua');
     Route::get('Producto/continua/{id}', 'ProductoController@continua');
+    Route::get('Producto/vista_previa_ingreso/{id}', 'ProductoController@vista_previa_ingreso');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
