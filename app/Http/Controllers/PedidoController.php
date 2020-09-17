@@ -163,7 +163,10 @@ class PedidoController extends Controller
                             'pedidos.fecha as fecha', 
                             'pedidos.estado as estado'
                         );
-         return Datatables::of($pedidos)
+        if(Auth::user()->perfil_id != 1){
+            $productos->where('movimientos.almacene_id', Auth::user()->almacen->id);
+        }
+        return Datatables::of($pedidos)
                 ->addColumn('action', function ($pedidos) {
                     if ($pedidos->estado == 'Entregado') {
                         return '<button onclick="ver_pedido(' . $pedidos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';

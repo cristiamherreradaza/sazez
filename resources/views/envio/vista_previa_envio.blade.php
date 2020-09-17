@@ -162,6 +162,18 @@
                     </td>
                 </tr>
             @endforeach
+            @if($complemento > 0)
+                @for($i=1; $i<=$complemento; $i++)
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endfor
+            @endif
         </tbody>
     </table>
     <table class="firmas">
@@ -225,6 +237,18 @@
                     </td>
                 </tr>
             @endforeach
+            @if($complemento > 0)
+                @for($i=1; $i<=$complemento; $i++)
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endfor
+            @endif
         </tbody>
     </table>
     <table class="firmas">
