@@ -147,7 +147,7 @@ class EntregaController extends Controller
         if($efectuado == 'Si'){
             $pedido->estado = 'Entregado';
             $pedido->save();
-            return reditect('Entrega/ver_pedido/'.$pedido->numero);
+            return redirect('Entrega/ver_pedido/'.$pedido->numero);
         }
         return redirect('Pedido/listado');
     }
@@ -280,11 +280,6 @@ class EntregaController extends Controller
         {
             return view('entrega.ver_pedido')->with(compact('pedido', 'pedido_productos'));
         }
-
-        //return view('entrega.ver_pedido')->with(compact('pedido', 'pedido_productos'));
-
-
-        dd('hola');
         /*
         $pedidos = DB::table('pedidos')
                 ->where('pedidos.id', '=', $id)
