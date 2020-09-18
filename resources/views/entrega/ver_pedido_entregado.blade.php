@@ -11,7 +11,7 @@
 @section('content')
 <div class="card border-info">
     <div class="card-header bg-info">
-        <h4 class="mb-0 text-white">ENTREGA DE PEDIDO DE PRODUCTOS</h4>
+        <h4 class="mb-0 text-white">DETALLE DE PRODUCTOS ENVIADOS</h4>
     </div>
     <div class="card-body">
         <div class="row">
@@ -25,7 +25,7 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Almacen a enviar</label>
+                    <label class="control-label">Almacen enviado</label>
                     <div class="input-group mb-3">
                         <h5 class="form-control">{{ $pedido->almacen->nombre }}</h5>
                     </div>
@@ -33,9 +33,14 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Usuario que envia</label>
+                    <label class="control-label">Usuario que envio</label>
                     <div class="input-group mb-3">
-                        <h5 class="form-control">{{ auth()->user()->name }}</h5>
+                        <h5 class="form-control">
+                            @php
+                                $usuario = App\Movimiento::where('pedido_id', $pedido->id)->first();
+                            @endphp
+                            {{ $usuario->user->name }}
+                        </h5>
                     </div>
                 </div>
             </div>
@@ -55,12 +60,9 @@
     <div class="col-md-12">
         <div class="card border-dark">
             <div class="card-header bg-dark">
-                <h4 class="mb-0 text-white">PRODUCTOS PARA ENVIO</h4>
+                <h4 class="mb-0 text-white">PRODUCTOS ENVIADOS</h4>
             </div>
             <div class="card-body">
-                <form action="{{ url('Entrega/store') }}" method="POST">
-                @csrf
-                <input type="text" id="pedido_id" name="pedido_id" value="{{ $pedido->id }}" hidden>
                 <div class="table-responsive m-t-40">
                     <table class="table table-bordered table-striped">
                         <thead>
@@ -71,15 +73,11 @@
                                 <th>Marca</th>
                                 <th>Tipo</th>
                                 <th>Modelo</th>
-                                <th>Stock</th>
                                 <th>Cantidad Solicitada</th>
-                                <th>Cantidad</th>
+                                <th>Cantidad Enviada</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                            $n = 1;
-                            @endphp
                             @foreach ($pedido_productos as $key => $producto)
                                 <tr>
                                     <td>{{ $key+1 }}</td>
@@ -99,23 +97,30 @@
                                                                 ->sum('salida');
                                         $cantidad_disponible = $ingreso - $salida;
                                     @endphp
-                                    <td style="text-align:center;">{{ $cantidad_disponible }}</td>
+                                    <!-- <td style="text-align:center;">{{ $cantidad_disponible }}</td> -->
                                     <td style="text-align:center;">{{ $producto->cantidad }}</td>
-                                    <td>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" id="cantidad_{{ $producto->producto->id }}" name="cantidad_{{ $producto->producto->id }}" value="0" min="0" max="{{ $cantidad_disponible }}">
-                                        </div>
-                                    </td>  
+                                    @php
+                                        $cantidad = App\Movimiento::where('pedido_id', $pedido->id)
+                                                                ->where('ingreso', '>', 0)
+                                                                ->where('producto_id', $producto->producto_id)
+                                                                ->first();
+                                    @endphp
+                                    <td style="text-align:center;">{{ round($cantidad->ingreso) }}</td>
                                 </tr>
-                            @endforeach
-                            
+                            @endforeach   
                         </tbody>
                     </table>
-                    <div class="modal-footer">
+                    <!-- <div class="modal-footer">
                         <button type="submit" class="btn waves-effect waves-light btn-block btn-success">ENTREGAR PRODUCTOS</button>
+                    </div> -->
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$cantidad->numero) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
                     </div>
                 </div>
-                </form>
             </div>
         </div>
     </div>
