@@ -18,6 +18,7 @@
             @php
                 $hoy = date('Y-m-d');
                 $arrayPreciosProductos = [];
+                $esMayorista = App\Almacene::find(auth()->user()->almacen_id);
             @endphp
             @foreach ($productos as $key => $p)
             @php
@@ -46,10 +47,10 @@
                 $contadorPrecios = 0;
                 foreach ($preciosProductos as $pep) {
                     $arrayPreciosProductos[$contadorPrecios]["escala_id"] = $pep->escala->id;
-                    $arrayPreciosProductos[$contadorPrecios]["nombre"] = $pep->escala->nombre;
-                    $arrayPreciosProductos[$contadorPrecios]["minimo"] = $pep->escala->minimo;
-                    $arrayPreciosProductos[$contadorPrecios]["maximo"] = $pep->escala->maximo;
-                    $arrayPreciosProductos[$contadorPrecios]["precio"] = $pep->precio;
+                    $arrayPreciosProductos[$contadorPrecios]["nombre"]    = $pep->escala->nombre;
+                    $arrayPreciosProductos[$contadorPrecios]["minimo"]    = $pep->escala->minimo;
+                    $arrayPreciosProductos[$contadorPrecios]["maximo"]    = $pep->escala->maximo;
+                    $arrayPreciosProductos[$contadorPrecios]["precio"]    = $pep->precio;
                     $contadorPrecios++;
                 }
                 $arrayPreciosProductosJson = json_encode($arrayPreciosProductos);
@@ -83,7 +84,9 @@
                     <td>
                         @if ($cantidadTotal->total > 0)
                             <button type="button" class="btnSelecciona btn btn-info" data-venta="tienda" title="VENTA POR UNIDADES"><i class="fas fa-plus"></i></button>
-                            <button type="button" class="btnSeleccionaMayor btn btn-danger" data-venta="mayor" title="VENTA POR MAYOR"><i class="fas fa-plus"></i></button>
+                            @if ($esMayorista->mayorista == 'Si')
+                                <button type="button" class="btnSeleccionaMayor btn btn-danger" data-venta="mayor" title="VENTA POR MAYOR"><i class="fas fa-plus"></i></button>
+                            @endif
                         @endif
                     </td>
                 </tr>    
@@ -92,11 +95,7 @@
     </table>
 </div>
 <script>
-    @php
-        
-    @endphp
     $(document).ready(function () {
-    
         // ponemos el evento de hacer click en los botones del listado ajax
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona, .btnSeleccionaMayor', function () {
 
