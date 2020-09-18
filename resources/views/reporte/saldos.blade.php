@@ -44,7 +44,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    {{-- <div class="col-md-2">
                         <div class="form-group">
                             <label>Tipo</label>
                             <select name="tipo_id" id="tipo_id" class="form-control">
@@ -63,7 +63,7 @@
                                     <option value="No">No</option>
                             </select>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
@@ -132,20 +132,20 @@
         }
     });
     
-    /*
+    
     function buscar()
     {
         var fecha = $("#fecha").val();
         var almacen_id = $("#almacen_id").val();
-        var tipo_id = $("#tipo_id").val();
-        var continuo = $("#continuo").val();
+        // var tipo_id = $("#tipo_id").val();
+        // var continuo = $("#continuo").val();
         $.ajax({
             url: "{{ url('Reporte/ajax_listado_saldos') }}",
             data: {
                 fecha: fecha,
                 almacen_id: almacen_id,
-                tipo_id: tipo_id,
-                continuo: continuo
+                // tipo_id: tipo_id,
+                // continuo: continuo
                 },
             type: 'get',
             success: function(data) {
@@ -154,10 +154,10 @@
             }
         });
     }
-    */
+    
 
     
-    function buscar()
+    /*function buscar()
     {
         $("#mostrar").show('slow');
         var table = $('#tabla-tienda').DataTable();
@@ -216,7 +216,7 @@
             });
           });
     }
-    
+    */
     
 </script>
 

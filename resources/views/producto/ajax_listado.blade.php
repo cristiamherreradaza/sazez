@@ -82,6 +82,7 @@
                                         <button class="btn btn-dark" onclick="reporta_producto('{{ $producto->id }}', '{{ $producto->nombre }}')" title="Reportar producto"><i class="fas fa-sort-amount-down"></i></button>
                                     @endif
                                 @endif
+                                <button class="btn waves-effect waves-light btn-light" onclick="muestraInformacion('{{ $producto->id }}')" title="Muestra Informacion"><i class="fas fa-th-list"></i></button>
                             </td>
                         </tr>
                     @endforeach

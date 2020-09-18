@@ -274,7 +274,7 @@ function muestra_formulario_importacion()
     $(document).on('keyup', '#termino', function(e) {
         almacen_origen = $('#almacen_origen').val();
         termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 3) {
+        if (termino_busqueda.length > 2) {
             $.ajax({
                 url: "{{ url('Envio/ajaxBuscaProductos') }}",
                 data: {
