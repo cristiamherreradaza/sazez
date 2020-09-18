@@ -250,7 +250,7 @@ class PedidoController extends Controller
 
     public function eliminaPedido($id)
     {
-        $pedido = Pedido::find($id);
+        $pedido = Pedido::find($id);        //Pedido
         $productos_pedido = PedidosProducto::where('pedido_id', $pedido->id)
                                             ->get();
         foreach($productos_pedido as $producto){
