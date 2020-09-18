@@ -211,16 +211,20 @@ class EntregaController extends Controller
 
     public function importar_envio(Request $request)
     {
-        $num = DB::select("SELECT MAX(numero) as nro
-                                FROM movimientos");
-        if (!empty($num)) {
-            $numero = $num[0]->nro + 1;
+        $pedido = Pedido::find($request->pedido_id);
+        // $num = DB::select("SELECT MAX(numero) as nro
+        //                         FROM movimientos");
+        $maximo = Movimiento::max('numero');
+        if ($maximo) {
+            $numero = $maximo + 1;
         } else {
             $numero = 1;
         }
+        //dd($numero);
 
-        $pedido = $request->all('pedido_id');
-        $pedido_id = $pedido['pedido_id'];
+        $sw=0;
+        //$pedido = $request->all('pedido_id');
+        //$pedido_id = $pedido['pedido_id'];
         // dd($pedido_id);
         // Excel::import(new MovimientosImport, $file);
         $validation = Validator::make($request->all(), [
@@ -228,21 +232,28 @@ class EntregaController extends Controller
         ]);
         if($validation->passes())
         {
-            session(['pedido_id' => $pedido_id]);
+            // Creamos variables de sesión para pasar al import
+            session(['pedido' => $pedido]);
             session(['numero' => $numero]);
             $file = $request->file('select_file');
-            // dd($file);
             Excel::import(new MovimientosImport, $file);
-            session()->forget('pedido_id');
+            // Eliminarmos variables de sesión
+            session()->forget('pedido');
             session()->forget('numero');
+
+            // Verificamos si hubo algun envio
+            $pedido = Pedido::find($request->pedido_id);
+            if($pedido->estado == 'Entregado'){
+                $sw=1;
+            }
             //ACTUALIZAMOS EL PEDIDO A ENTREGADO
-            $pedidos = Pedido::find($pedido_id);
-            $pedidos->estado = 'Entregado';
-            $pedidos->save();
-        
+            // $pedidos = Pedido::find($pedido_id);
+            // $pedidos->estado = 'Entregado';
+            // $pedidos->save();
             return response()->json([
                 'message' => 'Importacion realizada con exito',
-                'sw' => 1
+                'numero' => $pedido->id,
+                'sw' => $sw
             ]);
         }
         else

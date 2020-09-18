@@ -39,7 +39,17 @@ class PedidosProductosExport implements FromCollection, WithMapping, WithHeading
                 ->join('productos', 'pedidos_productos.producto_id', '=', 'productos.id')
                 ->join('marcas', 'productos.marca_id', '=', 'marcas.id')
                 ->join('tipos', 'productos.tipo_id', '=', 'tipos.id')
-                ->select('almacenes.nombre as nombre_almacen', 'productos.codigo', 'productos.nombre as nombre_producto', 'marcas.nombre as nombre_marca', 'tipos.nombre as nombre_tipo', 'productos.modelo', 'productos.colores', 'pedidos_productos.cantidad')
+                ->select(
+                    'pedidos.numero as numero_pedido',
+                    'almacenes.nombre as nombre_almacen',
+                    'productos.codigo',
+                    'productos.nombre as nombre_producto',
+                    'marcas.nombre as nombre_marca',
+                    'tipos.nombre as nombre_tipo',
+                    'productos.modelo',
+                    'productos.colores',
+                    'pedidos_productos.cantidad'
+                    )
                 ->get();
         return $pedidos;
     }
@@ -50,28 +60,28 @@ class PedidosProductosExport implements FromCollection, WithMapping, WithHeading
         * @var Invoice $invoice
         */
         return [
+            $pedidos->numero_pedido,
             $pedidos->nombre_almacen,
             $pedidos->codigo,
             $pedidos->nombre_producto,
             $pedidos->nombre_marca,
             $pedidos->nombre_tipo,
-            $pedidos->modelo,
-            $pedidos->colores,
             $pedidos->cantidad,
+            '0',
         ];
     }
 
     public function headings() : array
     {
         return [
+            'Pedido Nro',
             'Almacen Solicitante',
             'Codigo',
             'Nombre',
             'Marca',
             'Tipo',
-            'Modelo',
-            'Color',
-            'Cantidad',
+            'Cantidad solicitada',
+            'Cantidad a enviar'
         ];
     }
 
@@ -89,7 +99,7 @@ class PedidosProductosExport implements FromCollection, WithMapping, WithHeading
         ];
         return [
             AfterSheet::class => function(AfterSheet $event) use ($styleArray) {
-                $event->sheet->getStyle('A1:I1')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A1:H1')->applyFromArray($styleArray);
                 $event->sheet->getDelegate()->freezePane('B1');
             },
         ];

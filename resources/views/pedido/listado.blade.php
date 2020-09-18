@@ -190,7 +190,7 @@ $(document).ready(function() {
                     'success'
                     )
                     .then(function() {
-                        window.location.href = "{{ url('Pedido/listado') }}";
+                        window.location.href = "{{ url('Entrega/ver_pedido') }}/"+data.numero;
                     });
                 }else{
                     Swal.fire(
