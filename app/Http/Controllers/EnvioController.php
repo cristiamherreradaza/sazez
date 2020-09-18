@@ -117,7 +117,11 @@ class EnvioController extends Controller
                 )
                 ->orderBy('movimientos.id', 'desc');
         if(Auth::user()->perfil_id != 1){
-            $productos->where('movimientos.almacene_id', Auth::user()->almacen->id);
+            //$pedidos->where('pedidos.almacene_id', Auth::user()->almacen->id);
+            $productos->where(function ($query) {
+                $query->where('movimientos.almacene_id', Auth::user()->almacen->id)
+                    ->orWhere('movimientos.almacen_origen_id', Auth::user()->almacen->id);
+            });
         }
         return Datatables::of($productos)
                 ->addColumn('action', function ($productos) {

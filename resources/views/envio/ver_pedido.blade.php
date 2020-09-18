@@ -84,7 +84,7 @@
     <div class="card-body" id="printableArea">
         <div class="row">
             <div class="col-md-12">
-                <div class="table-responsve">
+                <div class="table-responsive">
                     <table class="table">
                         <tr>
                             <td><h4><span class="text-info">Numero:</span> {{ $datos->numero }}</h4></td>

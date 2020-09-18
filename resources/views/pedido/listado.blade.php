@@ -166,6 +166,7 @@ $(document).ready(function() {
     {
         window.location.href = "{{ url('Entrega/ver_pedido') }}/"+id;
     }
+    
 </script>
 <script>
 // Script de importacion de excel
@@ -233,6 +234,7 @@ $(document).ready(function() {
             }
         })
     }
+    
     function entrega(id)
     {
         window.location.href = "{{ url('Entrega/entrega') }}/"+id;

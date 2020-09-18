@@ -147,7 +147,6 @@ class PedidoController extends Controller
 
     public function ajax_listado()
     {
-        // $lista_personal = Producto::all();
         $pedidos = DB::table('pedidos')
                         ->whereNull('pedidos.deleted_at')
                         ->leftJoin('almacenes', 'pedidos.almacene_solicitante_id', '=', 'almacenes.id')
@@ -161,7 +160,9 @@ class PedidoController extends Controller
                             'almacenes.nombre as almacen_destino',
                             'users.name as nombre_usuario', 
                             'pedidos.fecha as fecha', 
-                            'pedidos.estado as estado'
+                            'pedidos.estado as estado',
+                            'pedidos.almacene_solicitante_id as almacen_origen_id',
+                            'pedidos.almacene_id as almacen_destino_id'
                         );
         if(Auth::user()->perfil_id != 1){
             //$pedidos->where('pedidos.almacene_id', Auth::user()->almacen->id);
@@ -170,19 +171,92 @@ class PedidoController extends Controller
                     ->orWhere('pedidos.almacene_solicitante_id', Auth::user()->almacen->id);
             });
         }
-        return Datatables::of($pedidos)
-                ->addColumn('action', function ($pedidos) {
-                    if ($pedidos->estado == 'Entregado') {
-                        return '<button onclick="ver_pedido(' . $pedidos->id . ')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
-                    } else {
-                        return '<button type="button" class="btn btn-warning" title="Editar pedido"  onclick="editar(' . $pedidos->id . ')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar pedido"  onclick="eliminar(' .  $pedidos->id . ')"><i class="fas fa-trash"></i></button>
-                                <button type="button" class="btn btn-dark" title="Entregar pedido"  onclick="entrega(' .  $pedidos->id . ')"><i class="fas fa-reply"></i></button>
-                                <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>
-                                <button type="button" class="btn btn-secondary" title="Entregar pedido por Excel"  onclick="entrega_excel(' .  $pedidos->id . ')"><i class="fas fa-shipping-fast"></i></button>';
+        return Datatables::of($pedidos)->addColumn('action', function ($pedidos) {
+                    // Si es el usuario tiene perfil de administrador, muestra todo 4 botones
+                    if(Auth::user()->perfil_id == 1)
+                    {
+                        if($pedidos->estado == 'Entregado'){
+                            return '<button type="button" class="btn btn-info" title="Ver pedido" onclick="ver_pedido(' . $pedidos->id . ')"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>';
+                        }else{
+                            return '<button type="button" class="btn btn-info" title="Ver pedido" onclick="ver_pedido(' . $pedidos->id . ')"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-dark" title="Entregar pedido" onclick="entrega(' .  $pedidos->id . ')"><i class="fas fa-reply"></i></button>
+                                    <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>
+                                    <button type="button" class="btn btn-secondary" title="Entregar pedido por Excel"  onclick="entrega_excel(' .  $pedidos->id . ')"><i class="fas fa-shipping-fast"></i></button>';
+                        }
+                    }
+                    // Si es usuario no tiene perfil de administrador y pertenece al almacen origen mostrar ver y descargar
+                    elseif($pedidos->almacen_origen_id == Auth::user()->almacen->id)
+                    {
+                        return '<button type="button" class="btn btn-info" title="Ver pedido" onclick="ver_pedido(' . $pedidos->id . ')"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>';
+                    }
+                    // Si el usuario no tiene perfil de administrador y pertenece al almacen destino mostrar todo 4 botones
+                    elseif($pedidos->almacen_destino_id == Auth::user()->almacen->id)
+                    {
+                        if($pedidos->estado == 'Entregado'){
+                            return '<button type="button" class="btn btn-info" title="Ver pedido" onclick="ver_pedido(' . $pedidos->id . ')"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>';
+                        }else{
+                            return '<button type="button" class="btn btn-info" title="Ver pedido" onclick="ver_pedido(' . $pedidos->id . ')"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-dark" title="Entregar pedido" onclick="entrega(' .  $pedidos->id . ')"><i class="fas fa-reply"></i></button>
+                                    <button type="button" class="btn btn-success" title="Bajar pedido en Excel"  onclick="excel(' .  $pedidos->id . ')"><i class="fas fa-file-excel"></i></button>
+                                    <button type="button" class="btn btn-secondary" title="Entregar pedido por Excel"  onclick="entrega_excel(' .  $pedidos->id . ')"><i class="fas fa-shipping-fast"></i></button>';
+                        }
                     }
                 })
                 ->make(true); 
     }
 
+    public function adicionaProducto(Request $request)
+    {
+        $pedido = Pedido::find($request->pedido_id);
+        
+        if($request->producto_id){
+            // Buscaremos si ya existe ese producto en ese pedido
+            $producto_lista = PedidosProducto::where('pedido_id', $request->pedido_id)
+                                            ->where('producto_id', $request->producto_id)
+                                            ->first();
+            //dd($producto_lista);
+            if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese pedido/producto
+                $producto = new PedidosProducto();
+                $producto->user_id = Auth::user()->id;
+                $producto->pedido_id = $pedido->id;
+                $producto->producto_id = $request->producto_id;
+                $producto->cantidad = $request->producto_cantidad;
+                $producto->save();
+            }
+        }
+        return redirect("Entrega/ver_pedido/$pedido->numero");
+    }
+
+    public function ajaxBuscaProductos(Request $request)
+    {
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                            ->orWhere('codigo', 'like', "%$request->termino%")
+                            ->limit(8)
+                            ->get();
+        $almacen_id = $request->almacen_solicitado;
+        return view('envio.ajaxBuscaProducto')->with(compact('productos', 'almacen_id'));
+    }
+
+    public function eliminaProducto($id)
+    {
+        $producto = PedidosProducto::find($id);
+        $pedido = Pedido::find($producto->pedido_id);
+        $producto->delete();
+        return redirect("Entrega/ver_pedido/$pedido->numero");
+    }
+
+    public function eliminaPedido($id)
+    {
+        $pedido = Pedido::find($id);
+        $productos_pedido = PedidosProducto::where('pedido_id', $pedido->id)
+                                            ->get();
+        foreach($productos_pedido as $producto){
+            $producto->delete();
+        }
+        $pedido->delete();
+        return redirect('Pedido/listado');
+    }
 }

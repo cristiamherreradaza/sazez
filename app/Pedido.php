@@ -21,7 +21,12 @@ class Pedido extends Model
 
     public function almacen()
     {
-        return $this->belongsTo('App\Almacene');
+        return $this->belongsTo('App\Almacene', 'almacene_solicitante_id');
+    }
+
+    public function almacen_destino()
+    {
+        return $this->belongsTo('App\Almacene', 'almacene_id');
     }
 
     public function encargado()
