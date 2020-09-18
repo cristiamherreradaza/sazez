@@ -25,20 +25,24 @@ class MovimientosImport implements ToModel
         // ]);
         $hoy = date("Y-m-d H:i:s");
         
+        // Si es numerico la columna 7 (contando desde el 0)
         if( is_numeric($row[7]) ){
+            // Busca si el codigo, nombre y modelo coinciden con la fila del excel
             $producto = Producto::where('codigo', $row[1])
-                                        ->where('nombre', $row[2])
-                                        ->where('modelo', $row[5])
-                                        ->firstOrFail();
+                                ->where('nombre', $row[2])
+                                ->where('modelo', $row[5])
+                                ->firstOrFail();
 
+            // Busca si el nombre del almacen coincide con la fila del excel
             $almacen = Almacene::where('nombre', $row[0])
-                                        ->firstOrFail();
+                                ->firstOrFail();
 
+            // Busca el total del producto X en el almacen central
             $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
-                                                                FROM movimientos
-                                                                WHERE producto_id = '$producto->id'
-                                                                AND almacene_id = 1
-                                                                GROUP BY producto_id");
+                                FROM movimientos
+                                WHERE producto_id = '$producto->id'
+                                AND almacene_id = 1
+                                GROUP BY producto_id");
 
             $pedido_id = session('pedido_id');
             $numero = session('numero');
@@ -58,7 +62,7 @@ class MovimientosImport implements ToModel
                     $salida->salida = $row[7];
                     $salida->fecha = $hoy;
                     $salida->numero = $numero;
-                    $salida->estado = 'Pedido';
+                    $salida->estado = 'Envio';
                     $salida->save();
 
                     //aqui ingresamos al alamacen solicitante el producto   
@@ -70,7 +74,7 @@ class MovimientosImport implements ToModel
                     $entrada->ingreso = $row[7];
                     $entrada->fecha = $hoy;
                     $entrada->numero = $numero;
-                    $entrada->estado = 'Pedido';
+                    $entrada->estado = 'Envio';
                     $entrada->save();
                 }
                 
