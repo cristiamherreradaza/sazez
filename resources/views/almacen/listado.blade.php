@@ -19,6 +19,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
+                        <th>Mayorista</th>
                         <th>Dirección</th>
                         <th>Teléfonos</th>
                         <th>Opciones</th>
@@ -29,10 +30,11 @@
                         <tr>
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $almacen->nombre }}</td>
+                            <td>{{ $almacen->mayorista }}</td>
                             <td>{{ $almacen->direccion }}</td>
                             <td>{{ $almacen->telefonos }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar almacen"  onclick="editar('{{ $almacen->id }}', '{{ $almacen->nombre }}', '{{ $almacen->telefonos }}', '{{ $almacen->direccion }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar almacen"  onclick="editar('{{ $almacen->id }}', '{{ $almacen->nombre }}', '{{ $almacen->telefonos }}', '{{ $almacen->direccion }}', '{{ $almacen->mayorista }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar almacen"  onclick="eliminar('{{ $almacen->id }}', '{{ $almacen->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -73,13 +75,25 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="control-label">Dirección</label>
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                     <input name="direccion_almacen" type="text" id="direccion_almacen" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Mayorista</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <select name="mayorista" id="mayorista" class="form-control" required>
+                                        <option value="No">No</option>
+                                        <option value="Si">Si</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -123,13 +137,25 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label class="control-label">Dirección</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input name="direccion" type="text" id="direccion" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mayorista</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="mayorista" id="mayoristaEdita" class="form-control" required>
+                                    <option value="No">No</option>
+                                    <option value="Si">Si</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -179,12 +205,13 @@
         }
     }
 
-    function editar(id, nombre, telefonos, direccion)
+    function editar(id, nombre, telefonos, direccion, mayorista)
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
         $("#telefonos").val(telefonos);
         $("#direccion").val(direccion);
+        $("#mayoristaEdita").val(mayorista);
         $("#editar_almacenes").modal('show');
     }
 

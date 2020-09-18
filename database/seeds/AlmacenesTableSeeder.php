@@ -17,18 +17,22 @@ class AlmacenesTableSeeder extends Seeder
             [
                 'nombre' => 'Almacen Central',
                 'direccion' => 'Calle Uno',
+                'mayorista' => 'No'
             ],
             [
                 'nombre' => 'El Prado',
                 'direccion' => 'Calle Uno',
+                'mayorista' => 'No'
             ],
             [
                 'nombre' => 'Villa Fatima',
                 'direccion' => 'Calle Uno',
+                'mayorista' => 'No'
             ],
             [
                 'nombre' => 'Buenos Aires',
                 'direccion' => 'Calle Uno',
+                'mayorista' => 'No'
             ],
         ]);
 

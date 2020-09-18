@@ -16,11 +16,13 @@ class AlmacenController extends Controller
 
     public function guardar(Request $request)
     {
+        dd($request->all());
         $almacen = new Almacene();
         $almacen->user_id = Auth::user()->id;
         $almacen->nombre = $request->nombre_almacen;
         $almacen->direccion = $request->direccion_almacen;
         $almacen->telefonos = $request->telefonos_almacen;
+        $almacen->mayorista = $request->mayorista;
         $almacen->save();
         return redirect('Almacen/listado');
     }
@@ -32,6 +34,7 @@ class AlmacenController extends Controller
         $almacen->nombre = $request->nombre;
         $almacen->direccion = $request->direccion;
         $almacen->telefonos = $request->telefonos;
+        $almacen->mayorista = $request->mayorista;
         $almacen->save();
         return redirect('Almacen/listado');
     }
