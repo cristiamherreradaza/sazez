@@ -16,7 +16,7 @@ class AlmacenController extends Controller
 
     public function guardar(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $almacen = new Almacene();
         $almacen->user_id = Auth::user()->id;
         $almacen->nombre = $request->nombre_almacen;
