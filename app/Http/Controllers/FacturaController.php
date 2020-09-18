@@ -215,7 +215,7 @@ class FacturaController extends Controller
         $facturas = DB::table('facturas')
                         ->whereNull('facturas.deleted_at')
                         ->where('facturas.almacene_id', $request->almacen_id)
-                        //->whereBetween('facturas.fecha_compra', [$request->fecha_inicial, $request->fecha_final])
+                        ->whereBetween('facturas.fecha_compra', [$request->fecha_inicial, $request->fecha_final])
                         ->leftJoin('almacenes', 'facturas.almacene_id', '=', 'almacenes.id')
                         ->leftJoin('users', 'facturas.cliente_id', '=', 'users.id')
                         ->select(
