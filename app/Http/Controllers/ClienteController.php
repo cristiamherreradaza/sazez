@@ -36,6 +36,7 @@ class ClienteController extends Controller
     {
         $usuario = new User();
         $usuario->name = $request->nombre_usuario;
+        $usuario->ci = $request->ci_usuario;
         $usuario->email = $request->email_usuario;
         $usuario->celulares = $request->celular_usuario;
         $usuario->nit = $request->nit_usuario;
@@ -50,6 +51,7 @@ class ClienteController extends Controller
     {
         $usuario = User::find($request->id);
         $usuario->name = $request->nombre;
+        $usuario->ci = $request->ci;
         $usuario->email = $request->email;
         $usuario->celulares = $request->celular;
         $usuario->razon_social = $request->razon_social;

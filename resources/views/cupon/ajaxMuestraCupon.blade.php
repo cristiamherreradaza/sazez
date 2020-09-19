@@ -27,10 +27,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label class="control-label">Cedula de Identidad</label>
-                        <span class="text-danger">
-                            <i class="mr-2 mdi mdi-alert-circle"></i>
-                        </span>
-                        <input name="cobro_ci" type="text" id="cobro_ci" value="{{ $cliente->ci }}" class="form-control" required>
+                        <input name="cobro_ci" type="text" id="cobro_ci" value="{{ $cliente->ci }}" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-4">

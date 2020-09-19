@@ -36,6 +36,7 @@ class UserController extends Controller
         // Creamos usuario
         $usuario = new User();
         $usuario->name = $request->nombre_usuario;
+        $usuario->ci = $request->ci_usuario;
         $usuario->email = $request->email_usuario;
         $usuario->celulares = $request->celular_usuario;
         $usuario->nit = $request->nit_usuario;
@@ -54,7 +55,8 @@ class UserController extends Controller
             $almacen->nombre = $request->nombre_nuevo_almacen;
             $almacen->direccion = $request->telefonos_nuevo_almacen;
             $almacen->telefonos = $request->direccion_nuevo_almacen;
-            $almacen->estado = 'Mayorista';
+            $almacen->mayorista = 'Si';
+            //$almacen->estado = 'Mayorista';
             $almacen->save();
             // Actualizamos datos de usuario creado
             $usuario->almacen_id = $almacen->id;
@@ -83,14 +85,17 @@ class UserController extends Controller
     {
         $usuario = User::find($request->id);
         $usuario->name = $request->nombre;
+        $usuario->ci = $request->ci;
         $usuario->email = $request->email;
         $usuario->celulares = $request->celular;
-        $usuario->razon_social = $request->razon_social;
         $usuario->nit = $request->nit;
+        $usuario->razon_social = $request->razon_social;
         // if($request->rol){
         //     $usuario->rol = $request->rol;
         // }
         if($request->perfil){
+            $perfil = Perfile::find($request->perfil);
+            $usuario->rol = $perfil->nombre;
             // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
             $menuusers = MenusUser::where('user_id', $usuario->id)->get();
             if(count($menuusers) > 0)
@@ -178,7 +183,14 @@ class UserController extends Controller
 
     public function eliminar(Request $request)
     {
+        // Busca/encuentra al usuario con id X
         $usuario = User::find($request->id);
+        // Tambien Busca/elimina sus permisos correspondientes
+        $permisos = MenusUser::where('user_id', $request->id)->get();
+        foreach($permisos as $permiso){
+            $permiso->delete();
+        }
+        // Elimina al usuario
         $usuario->delete();
         return redirect('User/listado');
     }

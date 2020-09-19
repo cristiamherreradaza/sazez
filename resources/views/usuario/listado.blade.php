@@ -19,6 +19,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
+                        <th>CI</th>
                         <th>Correo Electronico</th>
                         <th>Celular</th>
                         <th>Perfil</th>
@@ -31,6 +32,7 @@
                         <tr>
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->ci }}</td>
                             <td>{{ $usuario->email }}</td>
                             <td>{{ $usuario->celulares }}</td>
                             <td>{{ $usuario->rol }}</td>
@@ -42,7 +44,7 @@
                                 @endif
                             </td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->celulares }}', '{{ $usuario->nit }}', '{{ $usuario->razon_social }}', '{{ $usuario->perfil_id }}', '{{ $usuario->almacen_id }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->name }}', '{{ $usuario->ci }}', '{{ $usuario->email }}', '{{ $usuario->celulares }}', '{{ $usuario->nit }}', '{{ $usuario->razon_social }}', '{{ $usuario->perfil_id }}', '{{ $usuario->almacen_id }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-primary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $usuario->id }})"><i class="fas fa-key"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar usuario"  onclick="eliminar('{{ $usuario->id }}', '{{ $usuario->name }}')"><i class="fas fa-trash-alt"></i></button>
@@ -79,6 +81,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label class="control-label">Cedula de Identidad</label>
+                                <input name="ci_usuario" type="text" id="ci_usuario" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
@@ -86,23 +96,21 @@
                                 <input name="email_usuario" type="email" id="email_usuario" class="form-control" required>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Celular(es)</label>
                                 <input name="celular_usuario" type="text" id="celular_usuario" class="form-control">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nit</label>
                                 <input name="nit_usuario" type="text" id="nit_usuario" class="form-control">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Razón Social</label>
                                 <input name="razon_social_usuario" type="text" id="razon_social_usuario" class="form-control">
@@ -214,6 +222,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label class="control-label">Cedula de Identidad</label>
+                                <input name="ci" type="text" id="ci" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
@@ -221,23 +237,21 @@
                                 <input name="email" type="email" id="email" class="form-control" required>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Celular(es)</label>
                                 <input name="celular" type="text" id="celular" class="form-control">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nit</label>
                                 <input name="nit" type="text" id="nit" class="form-control">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Razón Social</label>
                                 <input name="razon_social" type="text" id="razon_social" class="form-control">
@@ -374,13 +388,14 @@
             }
         });
     });
-</script>
-<script>
+
+    // Funcion para mostrar modal de nuevo usuario
     function nuevo_usuario()
     {
         $("#modal_usuarios").modal('show');
     }
 
+    // Funcion que comprueba que existen ciertos valores en el formulario y si estan muestra una alerta de exito
     function guardar_usuario()
     {
         var nombre_usuario = $("#nombre_usuario").val();
@@ -415,6 +430,7 @@
         }
     }
 
+    // Funcion que muestra los datos referentes a los permisos de un usuario
     function permisos(usuario_id, perfil_id)
     {
         $.ajax({
@@ -432,10 +448,12 @@
         });
     }
 
-    function editar(id, nombre, email, celular, nit, razon_social, perfil, almacen)
+    // Funcion que despliega el modal de edicion de usuario, mandando todos sus datos al mismo
+    function editar(id, nombre, ci, email, celular, nit, razon_social, perfil, almacen)
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
+        $("#ci").val(ci);
         $("#email").val(email);
         $("#celular").val(celular);
         $("#nit").val(nit);
@@ -445,6 +463,7 @@
         $("#editar_usuarios").modal('show');
     }
 
+    // Funcion que emite una alerta de exito en caso de encontrarse ciertos valores
     function actualizar_usuario()
     {
         var id = $("#id").val();
@@ -461,6 +480,7 @@
         }
     }
 
+    // Al presionar el boton de actualizar perfil emite una alerta de exito
     function actualizar_perfil()
     {
         Swal.fire(
@@ -470,12 +490,14 @@
         )
     }
 
+    // Funcion que muestra un modal para cambio de contrasena
     function contrasena(id)
     {
         $("#id_password").val(id);
         $("#password_usuarios").modal('show');
     }
 
+    // Funcion que emite una alerta de exito al presionar el boton de actualizar el password
     function actualizar_password()
     {
         var password = $("#password").val();
@@ -488,6 +510,7 @@
         }
     }
 
+    // Funcion que elimina un usuario
     function eliminar(id, nombre)
     {
         Swal.fire({

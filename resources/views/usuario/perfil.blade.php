@@ -193,6 +193,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="example-email" class="col-md-12">Cedula de Identidad</label>
+                                    <div class="col-md-12">
+                                        <input name="email" id="ci" type="ci" value="{{ auth()->user()->ci }}" class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label for="example-email" class="col-md-12">Correo Electrónico</label>
                                     <div class="col-md-12">
                                         <input name="email" id="email" type="email" value="{{ auth()->user()->email }}" class="form-control form-control-line" required>
@@ -205,15 +211,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-12">Razón Social</label>
-                                    <div class="col-md-12">
-                                        <input name="razon_social" id="razon_social" type="text" value="{{ auth()->user()->razon_social }}" class="form-control form-control-line">
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label class="col-md-12">Nit</label>
                                     <div class="col-md-12">
                                         <input name="nit" id="nit" type="text" value="{{ auth()->user()->nit }}" class="form-control form-control-line">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-12">Razón Social</label>
+                                    <div class="col-md-12">
+                                        <input name="razon_social" id="razon_social" type="text" value="{{ auth()->user()->razon_social }}" class="form-control form-control-line">
                                     </div>
                                 </div>
                                 <div class="form-group">

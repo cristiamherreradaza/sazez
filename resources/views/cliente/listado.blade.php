@@ -19,6 +19,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
+                        <th>CI</th>
                         <th>Correo Electronico</th>
                         <th>Celular</th>
                         <th>Razón Social</th>
@@ -31,12 +32,13 @@
                         <tr>
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $cliente->name }}</td>
+                            <td>{{ $cliente->ci }}</td>
                             <td>{{ $cliente->email }}</td>
                             <td>{{ $cliente->celulares }}</td>
                             <td>{{ $cliente->razon_social }}</td>
                             <td>{{ $cliente->nit }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar cliente"  onclick="editar('{{ $cliente->id }}', '{{ $cliente->name }}', '{{ $cliente->email }}', '{{ $cliente->celulares }}', '{{ $cliente->nit }}', '{{ $cliente->razon_social }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar cliente"  onclick="editar('{{ $cliente->id }}', '{{ $cliente->name }}', '{{ $cliente->ci }}', '{{ $cliente->email }}', '{{ $cliente->celulares }}', '{{ $cliente->nit }}', '{{ $cliente->razon_social }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $cliente->id }})"><i class="fas fa-key"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar cliente"  onclick="eliminar('{{ $cliente->id }}', '{{ $cliente->name }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
@@ -71,6 +73,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label class="control-label">Cedula de Identidad</label>
+                                <input name="ci_usuario" type="text" id="ci_usuario" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
@@ -78,23 +88,21 @@
                                 <input name="email_usuario" type="email" id="email_usuario" class="form-control" required>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Celular(es)</label>
                                 <input name="celular_usuario" type="text" id="celular_usuario" class="form-control">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nit</label>
                                 <input name="nit_usuario" type="text" id="nit_usuario" class="form-control">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Razón Social</label>
                                 <input name="razon_social_usuario" type="text" id="razon_social_usuario" class="form-control">
@@ -147,6 +155,14 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                <label class="control-label">Cedula de Identidad</label>
+                                <input name="ci" type="text" id="ci" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
@@ -154,23 +170,21 @@
                                 <input name="email" type="email" id="email" class="form-control" required>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Celular(es)</label>
                                 <input name="celular" type="text" id="celular" class="form-control">
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nit</label>
                                 <input name="nit" type="text" id="nit" class="form-control">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Razón Social</label>
                                 <input name="razon_social" type="text" id="razon_social" class="form-control">
@@ -255,10 +269,11 @@
         }
     }
 
-    function editar(id, nombre, email, celular, nit, razon_social)
+    function editar(id, nombre, ci, email, celular, nit, razon_social)
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
+        $("#ci").val(ci);
         $("#email").val(email);
         $("#celular").val(celular);
         $("#nit").val(nit);
