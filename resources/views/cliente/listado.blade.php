@@ -58,7 +58,7 @@
                 <h4 class="modal-title" id="myModalLabel">NUEVO CLIENTE</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Cliente/guardar') }}"  method="POST" >
+            <form action="{{ url('Cliente/guardar') }}"  method="POST"  id="formularioAjaxNuevoCliente">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -85,7 +85,8 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="email_usuario" type="email" id="email_usuario" class="form-control" required>
+                                <input name="email_usuario" type="email" id="email_usuario" onchange="validaEmail()" class="form-control" required>
+                                <small id="msgValidaEmail" class="badge badge-default badge-danger form-text text-white float-left" style="display: none;">El correo ya existe, el cliente ya esta registrado</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -279,6 +280,28 @@
         $("#nit").val(nit);
         $("#razon_social").val(razon_social);
         $("#editar_usuarios").modal('show');
+    }
+
+    function validaEmail()
+    {
+        let correo_cliente = $("#email_usuario").val();
+        $.ajax({
+            url: "{{ url('Cliente/ajaxVerificaCorreo') }}",
+            data: { correo: correo_cliente },
+            type: 'POST',
+            success: function(data) {
+                if (data.valida == 1) {
+                    alert('hola');
+                    $("#msgValidaEmail").show();
+                    // $("#btnGuardaCliente").hide();
+                }else{
+                    alert('normal');
+                    $("#msgValidaEmail").hide();
+                    $("#btnGuardaCliente").show();
+                }
+            }
+        });
+        // console.log($("#email_usuario").val());
     }
 
     function actualizar_usuario()

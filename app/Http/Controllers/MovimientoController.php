@@ -60,6 +60,7 @@ class MovimientoController extends Controller
             // Crear 3 registros
             if($request->precio)        // Si existen items
             {
+                // Numero maximo de Envio
                 $num = DB::select("SELECT MAX(numero) as nro
                                 FROM movimientos");
                 if (!empty($num)) {
@@ -68,12 +69,21 @@ class MovimientoController extends Controller
                     $numero = 1;
                 }
 
+                // Numero maximo de Ingreso
                 $num_ingreso = DB::select("SELECT MAX(numero_ingreso) as nroi
                 FROM movimientos");
                 if (!empty($num_ingreso)) {
                     $numeroi = $num_ingreso[0]->nroi + 1;
                 } else {
                     $numeroi = 1;
+                }
+
+                // Numero maximo de Ingreso-Envio
+                $maximo_ingreso_envio = Movimiento::max('numero_ingreso_envio');
+                if ($maximo_ingreso_envio) {
+                    $numero_ingreso_envio = $maximo_ingreso_envio + 1;
+                } else {
+                    $numero_ingreso_envio = 1;
                 }
 
                 $fecha = date("Y-m-d H:i:s");
@@ -89,6 +99,7 @@ class MovimientoController extends Controller
                     $ingreso->ingreso = $request->subtotal[$ll];
                     $ingreso->estado = 'Ingreso';           //Ingreso
                     $ingreso->numero_ingreso = $numeroi;           //Ingreso
+                    $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                     // Creación de Movimiento - Sale de Almacen Central
@@ -99,6 +110,7 @@ class MovimientoController extends Controller
                     $ingreso->salida = $request->subtotal[$ll];
                     $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
                     $ingreso->numero = $numero;
+                    $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                     // Creación de Movimiento - Ingresa a la Sucursal
@@ -110,9 +122,11 @@ class MovimientoController extends Controller
                     $ingreso->ingreso = $request->subtotal[$ll];
                     $ingreso->estado = 'Envio';           //Ingreso/Envio
                     $ingreso->numero = $numero;
+                    $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                 }
+                // Redireccionar a detalle de ingreso/envio
                 return redirect('Envio/listado');
             }
         }else{

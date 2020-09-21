@@ -166,6 +166,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Escala/ajax_producto', 'EscalaController@ajax_producto');
     Route::post('Escala/guarda_multiple', 'EscalaController@guarda_multiple');
 
+    // CLASIFICACION DE CLIENTES
+    Route::get('Grupo/listado', 'GrupoController@listado');
+    Route::post('Grupo/guardar', 'GrupoController@guardar');
+    Route::post('Grupo/actualizar', 'GrupoController@actualizar');
+    Route::get('Grupo/eliminar/{id}', 'GrupoController@eliminar');
 
     // MARCAS
     Route::get('Marca/listado', 'MarcaController@listado');

@@ -71,22 +71,22 @@
 
 <div class="card border-primary">
     <div class="card-header bg-primary">
-        <h4 class="mb-0 text-white">DETALLE DE INGRESO</h4>
+        <h4 class="mb-0 text-white">DETALLE DE INGRESO - ENVIO</h4>
     </div>
     <div class="card-body" id="printableArea">
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsve">
-                    <table class="table">
-                        <tr>
-                            <td><h4><span class="text-info">Numero:</span> {{ $datos->numero_ingreso }}</h4></td>
-                            <td><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></td>
-                            <td><h4><span class="text-info">Proveedor:</span> {{ $datos->proveedor->nombre }}</h4></td>
-                            <td><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></td>
-                        </tr>
-                    </table>
-                    
                     <table class="table table-hover">
+                        <thead>
+                            <h4><span class="text-danger">PRODUCTOS PARA INGRESO</span></h4>
+                            <tr>
+                                <td colspan="2"><h4><span class="text-info">Numero de ingreso:</span> {{ $datos->numero_ingreso }}</h4></td>
+                                <td colspan="2"><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></td>
+                                <td colspan="2"><h4><span class="text-info">Proveedor:</span> {{ $datos->proveedor->nombre }}</h4></td>
+                                <td colspan="2"><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></td>
+                            </tr>
+                        </thead>
                         <thead class="bg-inverse text-white">
                             <tr>
                                 <th>#</th>
@@ -121,6 +121,58 @@
                             @endforeach
                         </tbody>
                     </table>
+                    
+                    <table class="table table-hover">
+                        <thead>
+                            <h4><span class="text-danger">PRODUCTOS PARA ENVIO</span></h4>
+                            <tr>
+                                <td colspan="2"><h4><span class="text-info">Numero de envio:</span> {{ $datos_envio->numero }}</h4></td>
+                                <td colspan="2"><h4><span class="text-info">Origen:</span> {{ $datos_envio->almacen_origen->nombre }}</h4></td>
+                                <td colspan="2"><h4><span class="text-info">Destino:</span> {{ $datos_envio->almacen->nombre }}</h4></td>
+                                <td colspan="2"><h4><span class="text-info">Fecha:</span> {{ $datos_envio->fecha }}</h4></td>
+                            </tr>
+                        </thead>
+                        <thead class="bg-inverse text-white">
+                            <tr>
+                                <th>#</th>
+                                <th>Codigo</th>
+                                <th>Nombre</th>
+                                <th>Marca</th>
+                                <th>Tipo</th>
+                                <th class="text-center">Ingreso</th>
+                                <th class="text-center">Stock</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($productos_envio as $key => $producto)
+                            @php
+                                $total = 0;
+                            @endphp
+                                <tr>
+                                    <td>{{ ($key+1) }}</td>
+                                    <td>{{ $producto->producto->codigo }}</td>
+                                    <td>{{ $producto->producto->nombre }}</td>
+                                    <td>{{ $producto->producto->marca->nombre }}</td>
+                                    <td>{{ $producto->producto->tipo->nombre }}</td>
+                                    <td class="text-center">{{ round($producto->ingreso) }}</td>
+                                    @php
+                                        $ingreso = App\Movimiento::where('producto_id', $producto->producto_id)
+                                                                ->where('almacene_id', $producto->almacene_id)
+                                                                ->where('ingreso', '>', 0)
+                                                                ->sum('ingreso');
+                                        $salida = App\Movimiento::where('producto_id', $producto->producto_id)
+                                                                ->where('almacene_id', $producto->almacene_id)
+                                                                ->where('salida', '>', 0)
+                                                                ->sum('salida');
+                                        $total = $ingreso - $salida;
+                                    @endphp
+                                    <td class="text-center">{{ ($total-$producto->ingreso) }}</td>
+                                    <td class="text-center">{{ $total }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -129,11 +181,13 @@
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                <a class="btn btn-inverse btn-block " href="{{ url('Producto/vista_previa_ingreso/'.$datos->numero_ingreso) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
-                <!-- <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button> -->
+                <a class="btn btn-inverse btn-block " href="{{ url('Producto/vista_previa_ingreso/'.$datos->numero_ingreso) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA IMPRESION INGRESO </span></a>
+            </div>
+            <div class="col">
+                <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$datos_envio->numero) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA IMPRESION ENVIO </span></a>
             </div>
             @if(auth()->user()->perfil_id == 1)
-                <div class="col-md-6">
+                <div class="col">
                     <button class="btn btn-danger btn-block" onclick="elimina_ingreso()" type="button"> <span><i class="fa fa-print"></i> ELIMINAR INGRESO </span></button>
                 </div>
             @endif

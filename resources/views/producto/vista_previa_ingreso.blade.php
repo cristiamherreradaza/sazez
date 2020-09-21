@@ -132,10 +132,8 @@
                 <th>#</th>
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
-                <!-- <th class="text-right">Tipo</th> -->
+                <th class="text-right">Tipo</th>
                 <th class="text-right">Cantidad</th>
-                <th class="text-right">Stock</th>
-                <th class="text-right">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -144,28 +142,13 @@
                     <td>{{ ($key+1) }}</td>
                     <td class="text-right">{{ $producto->producto->codigo }}</td>
                     <td class="text-right">{{ $producto->producto->nombre }}</td>
-                    <!-- <td class="text-right">{{ $producto->producto->tipo->nombre }}</td> -->
+                    <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
                     <td class="text-right">{{ round($producto->ingreso) }}</td>
-                    @php
-                        $stock = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
-                                ->where('producto_id', $producto->producto_id)
-                                ->where('almacene_id', $producto->almacen->id)
-                                ->first();
-                        $stock=intval($stock->total - $producto->ingreso);
-                    @endphp
-                    <td class="text-right">{{ $stock }}</td>
-                    <td class="text-right">
-                        @php
-                            $total = $stock + round($producto->ingreso);
-                            echo $total;
-                        @endphp
-                    </td>
                 </tr>
             @endforeach
             @if($complemento > 0)
                 @for($i=1; $i<=$complemento; $i++)
                     <tr>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -207,10 +190,8 @@
                 <th>#</th>
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
-                <!-- <th class="text-right">Tipo</th> -->
+                <th class="text-right">Tipo</th>
                 <th class="text-right">Cantidad</th>
-                <th class="text-right">Stock</th>
-                <th class="text-right">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -219,28 +200,13 @@
                     <td>{{ ($key+1) }}</td>
                     <td class="text-right">{{ $producto->producto->codigo }}</td>
                     <td class="text-right">{{ $producto->producto->nombre }}</td>
-                    <!-- <td class="text-right">{{ $producto->producto->tipo->nombre }}</td> -->
+                    <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
                     <td class="text-right">{{ round($producto->ingreso) }}</td>
-                    @php
-                        $stock = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
-                                ->where('producto_id', $producto->producto_id)
-                                ->where('almacene_id', $producto->almacen->id)
-                                ->first();
-                        $stock=intval($stock->total - $producto->ingreso);
-                    @endphp
-                    <td class="text-right">{{ $stock }}</td>
-                    <td class="text-right">
-                        @php
-                            $total = $stock + round($producto->ingreso);
-                            echo $total;
-                        @endphp
-                    </td>
                 </tr>
             @endforeach
             @if($complemento > 0)
                 @for($i=1; $i<=$complemento; $i++)
                     <tr>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

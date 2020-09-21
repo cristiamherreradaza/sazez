@@ -17,11 +17,11 @@ class GruposUser extends Model
 
     public function grupo()
     {
-        return $this->belongsTo('App\Grupo');
+        return $this->belongsTo('App\Grupo', 'grupo_id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
     }
 }

@@ -646,7 +646,26 @@ class ProductoController extends Controller
         $productos = Movimiento::where('numero_ingreso', $id)
                                 ->where('ingreso', '>', 0)
                                 ->get();
-        return view('producto.ver_ingreso')->with(compact('datos', 'productos'));
+        
+        if($datos->numero_ingreso_envio){
+            // Redirecciona a la pagina con detalle del ingreso y envio
+            //dd('Ingreso con envio');
+            $datos_envio = Movimiento::where('numero_ingreso_envio', $datos->numero_ingreso_envio)
+                                    ->where('ingreso', '>', 0)
+                                    ->where('estado', 'Envio')
+                                    ->whereNotNull('almacen_origen_id')
+                                    ->first();
+            $productos_envio = Movimiento::where('numero_ingreso_envio', $datos->numero_ingreso_envio)
+                                        ->where('estado', 'Envio')
+                                        ->where('ingreso', '>', 0)
+                                        ->get();
+            return view('producto.ver_ingreso_envio')->with(compact('datos', 'datos_envio', 'productos', 'productos_envio'));
+        }else{
+            // Redirecciona a la pagina con detalle del ingreso
+            //dd('Solo Ingreso');
+            return view('producto.ver_ingreso')->with(compact('datos', 'productos'));
+        }
+        
     }
 
     public function ajaxBuscaIngresoProducto(Request $request)
