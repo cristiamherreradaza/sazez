@@ -4,6 +4,10 @@
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
+@section('metadatos')
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
+
 @section('content')
 <div class="card border-info">
     <div class="card-header bg-info">
@@ -93,7 +97,8 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="email_usuario" type="email" id="email_usuario" class="form-control" required>
+                                <input name="email_usuario" type="email" id="email_usuario" onchange="validaEmail()" class="form-control" required>
+                                <small id="msgValidaEmail" class="badge badge-default badge-danger form-text text-white float-left" style="display: none;">El correo ya existe, introduzca otro.</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -190,7 +195,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_usuario()">GUARDAR USUARIO</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" id="botonGuardaNuevoUsuario" onclick="guardar_usuario()">GUARDAR USUARIO</button>
                 </div>
             </form>
         </div>
@@ -234,7 +239,8 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="email" type="email" id="email" class="form-control" required>
+                                <input name="email" type="email" id="email" onchange="validaEmailEdicion()" class="form-control" required>
+                                <small id="msgValidaEmailEdicion" class="badge badge-default badge-danger form-text text-white float-left" style="display: none;">El correo ya existe, introduzca otro.</small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -290,7 +296,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_usuario()">ACTUALIZAR USUARIO</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" id="botonGuardaEdicionUsuario" onclick="actualizar_usuario()">ACTUALIZAR USUARIO</button>
                 </div>
             </form>
         </div>
@@ -345,11 +351,21 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
     $(function () {
+        $("#botonGuardaNuevoUsuario").prop("disabled", false);
+        $("#botonGuardaEdicionUsuario").prop("disabled", false);
+
         $('#myTable').DataTable({
             language: {
                 url: '{{ asset('datatableEs.json') }}'
             },
         });
+    });
+
+    $.ajaxSetup({
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 
     //Funcion para ocultar/mostrar y validar datos dependiendo del Tipo de perfil seleccionado
@@ -428,6 +444,46 @@
                 }
             }
         }
+    }
+
+    // Funcion para validar el email en Nuevo usuario
+    function validaEmail()
+    {
+        let correo_cliente = $("#email_usuario").val();
+        $.ajax({
+            url: "{{ url('Cliente/ajaxVerificaCorreo') }}",
+            data: { correo: correo_cliente },
+            type: 'POST',
+            success: function(data) {
+                if (data.valida == 1) {
+                    $("#msgValidaEmail").show();
+                    $("#botonGuardaNuevoUsuario").prop("disabled", true);
+                }else{
+                    $("#botonGuardaNuevoUsuario").prop("disabled", false);
+                    $("#msgValidaEmail").hide();
+                }
+            }
+        });
+    }
+
+    // Funcion para validar el email en Edicion de usuario
+    function validaEmailEdicion()
+    {
+        let correo_cliente = $("#email").val();
+        $.ajax({
+            url: "{{ url('Cliente/ajaxVerificaCorreo') }}",
+            data: { correo: correo_cliente },
+            type: 'POST',
+            success: function(data) {
+                if (data.valida == 1) {
+                    $("#msgValidaEmailEdicion").show();
+                    $("#botonGuardaEdicionUsuario").prop("disabled", true);
+                }else{
+                    $("#botonGuardaEdicionUsuario").prop("disabled", false);
+                    $("#msgValidaEmailEdicion").hide();
+                }
+            }
+        });
     }
 
     // Funcion que muestra los datos referentes a los permisos de un usuario

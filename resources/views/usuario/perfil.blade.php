@@ -201,7 +201,7 @@
                                 <div class="form-group">
                                     <label for="example-email" class="col-md-12">Correo Electrónico</label>
                                     <div class="col-md-12">
-                                        <input name="email" id="email" type="email" value="{{ auth()->user()->email }}" class="form-control form-control-line" required>
+                                        <input name="email" id="email" type="email" value="{{ auth()->user()->email }}" class="form-control form-control-line" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group">

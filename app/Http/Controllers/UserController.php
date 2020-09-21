@@ -86,7 +86,9 @@ class UserController extends Controller
         $usuario = User::find($request->id);
         $usuario->name = $request->nombre;
         $usuario->ci = $request->ci;
-        $usuario->email = $request->email;
+        if($request->email){
+            $usuario->email = $request->email;
+        }
         $usuario->celulares = $request->celular;
         $usuario->nit = $request->nit;
         $usuario->razon_social = $request->razon_social;
