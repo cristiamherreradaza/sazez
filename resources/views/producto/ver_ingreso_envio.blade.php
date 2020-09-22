@@ -35,6 +35,7 @@
                     <input type="hidden" name="numero_ingreso" id="numero_ingreso" value="{{ $datos->numero_ingreso }}">
                     <input type="hidden" name="proveedor_id" id="proveedor_id" value="{{ $datos->proveedor_id }}">
                     <input type="hidden" name="almacen_ingreso" id="almacen_ingreso" value="{{ $datos->almacene_id }}">
+                    <input type="hidden" name="numero_ingreso_envio" id="numero_ingreso_envio" value="{{ $datos_envio->numero_ingreso_envio }}">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Nombre de Producto</label>

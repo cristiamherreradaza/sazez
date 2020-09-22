@@ -127,7 +127,7 @@ class MovimientoController extends Controller
                     $ingreso->save();
                 }
                 // Redireccionar a detalle de ingreso/envio
-                return redirect('Envio/listado');
+                return redirect('Producto/ver_ingreso/'.$numeroi);
             }
         }else{
             // Crear 1 registro

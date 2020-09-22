@@ -679,25 +679,70 @@ class ProductoController extends Controller
 
     public function adicionaProducto(Request $request)
     {
-        //dd($request->numero_pedido);
+        //dd($request->numero_ingreso_envio);
         if($request->producto_id){
             // Buscaremos si ya existe ese producto en ese ingreso
             $producto_lista = Movimiento::where('numero_ingreso', $request->numero_ingreso)
                                         ->where('producto_id', $request->producto_id)
                                         ->where('estado', 'Ingreso')
                                         ->first();
+            
             if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese ingreso/producto
-                //AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
-                $ingreso = new Movimiento();
-                $ingreso->user_id = Auth::user()->id;
-                $ingreso->producto_id = $request->producto_id;
-                $ingreso->almacene_id = $request->almacen_ingreso;
-                $ingreso->proveedor_id = $request->proveedor_id;
-                $ingreso->ingreso = $request->producto_cantidad;
-                $ingreso->fecha = date('Y-m-d H:i:s');
-                $ingreso->numero_ingreso = $request->numero_ingreso;
-                $ingreso->estado = 'Ingreso';
-                $ingreso->save();
+                if($request->numero_ingreso_envio){
+                    //dd($producto_lista);
+                    $dato = Movimiento::where('numero_ingreso_envio', $request->numero_ingreso_envio)
+                                    ->whereNotNull('almacen_origen_id')
+                                    ->where('estado', 'Envio')
+                                    ->first();
+                    //dd($dato->numero);
+                    // AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $request->producto_id;
+                    $ingreso->almacene_id = $request->almacen_ingreso;
+                    $ingreso->proveedor_id = $request->proveedor_id;
+                    $ingreso->ingreso = $request->producto_cantidad;
+                    $ingreso->fecha = date('Y-m-d H:i:s');
+                    $ingreso->numero_ingreso = $request->numero_ingreso;
+                    $ingreso->numero_ingreso_envio = $request->numero_ingreso_envio;
+                    $ingreso->estado = 'Ingreso';
+                    $ingreso->save();
+                    // Creación de Movimiento - Sale de Almacen Central
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $request->producto_id;
+                    $ingreso->almacene_id = $request->almacen_ingreso;              // Siempre sera 1?
+                    $ingreso->salida = $request->producto_cantidad;
+                    $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
+                    $ingreso->numero = $dato->numero;
+                    $ingreso->numero_ingreso_envio = $request->numero_ingreso_envio;
+                    $ingreso->fecha = date('Y-m-d H:i:s');
+                    $ingreso->save();
+                    // Creación de Movimiento - Ingresa a la Sucursal
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $request->producto_id;
+                    $ingreso->almacen_origen_id = $request->almacen_ingreso;        // Siempre sera 1?
+                    $ingreso->almacene_id = $dato->almacene_id;
+                    $ingreso->ingreso = $request->producto_cantidad;
+                    $ingreso->estado = 'Envio';           //Ingreso/Envio
+                    $ingreso->numero = $dato->numero;
+                    $ingreso->numero_ingreso_envio = $request->numero_ingreso_envio;
+                    $ingreso->fecha = date('Y-m-d H:i:s');
+                    $ingreso->save();
+                }else{
+                    //AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $request->producto_id;
+                    $ingreso->almacene_id = $request->almacen_ingreso;
+                    $ingreso->proveedor_id = $request->proveedor_id;
+                    $ingreso->ingreso = $request->producto_cantidad;
+                    $ingreso->fecha = date('Y-m-d H:i:s');
+                    $ingreso->numero_ingreso = $request->numero_ingreso;
+                    $ingreso->estado = 'Ingreso';
+                    $ingreso->save();
+                }
             }
         }
         return redirect("Producto/ver_ingreso/$request->numero_ingreso");
@@ -708,23 +753,44 @@ class ProductoController extends Controller
         $datosMovimiento = Movimiento::find($id);
         $id_producto = $datosMovimiento->producto_id;
         $numero_ingreso = $datosMovimiento->numero_ingreso;
-        $registros = Movimiento::where('producto_id', $id_producto)
+        if($datosMovimiento->numero_ingreso_envio){
+            $numero_ingreso_envio = $datosMovimiento->numero_ingreso_envio;
+            $registros = Movimiento::where('producto_id', $id_producto)
+                                ->where('numero_ingreso_envio', $numero_ingreso_envio)
+                                ->get();
+            foreach($registros as $registro){
+                $registro->delete();
+            }
+        }else{
+            $registros = Movimiento::where('producto_id', $id_producto)
                                 ->where('numero_ingreso', $numero_ingreso)
                                 ->where('estado', 'Ingreso')
                                 ->get();
-        foreach($registros as $registro){
-            $registro->delete();
+            foreach($registros as $registro){
+                $registro->delete();
+            }
         }
         return redirect("Producto/ver_ingreso/$numero_ingreso");
     }
 
     public function eliminaIngreso($id)
     {
-        $registros_ingreso = Movimiento::where('estado', 'Ingreso')
-                                    ->where('numero_ingreso', $id)
-                                    ->get();
-        foreach($registros_ingreso as $registro){
-            $registro->delete();
+        $datos = Movimiento::where('estado', 'Ingreso')
+                            ->where('numero_ingreso', $id)
+                            ->first();
+        if($datos->numero_ingreso_envio){
+            $registros_ingreso = Movimiento::where('numero_ingreso_envio', $datos->numero_ingreso_envio)
+                                            ->get();
+            foreach($registros_ingreso as $registro){
+                $registro->delete();
+            }
+        }else{
+            $registros_ingreso = Movimiento::where('estado', 'Ingreso')
+                                            ->where('numero_ingreso', $id)
+                                            ->get();
+            foreach($registros_ingreso as $registro){
+                $registro->delete();
+            }
         }
         return redirect('Producto/listadoIngresos');
     }
