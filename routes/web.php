@@ -247,6 +247,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Venta/ajaxCambiaProducto', 'VentaController@ajaxCambiaProducto');
     Route::get('Venta/imprimir/{id}', 'VentaController@imprimir');
     Route::post('Venta/ajaxBuscaNitCliente', 'VentaController@ajaxBuscaNitCliente');
+    Route::get('Venta/imprimeFactura/{ventaId}', 'VentaController@imprimeFactura');
 
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');

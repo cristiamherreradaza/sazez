@@ -206,57 +206,11 @@ class VentaController extends Controller
             $cliente->razon_social = $request->razon_social_cliente;
             $cliente->save();
         } else {
-            // modificamos el nity razon social del cliente
+            // modificamos el nit y razon social del cliente
             $cliente               = User::find($buscaNitCliente->id);
             $cliente->nit          = $request->nit_cliente;
             $cliente->razon_social = $request->razon_social_cliente;
             $cliente->save();
-        }
-
-        // verficamos si tiene datos para facturar
-        $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
-            ->latest()
-            ->first();
-
-        if($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
-        {
-            // tramemos los parametros de la facturacion
-            $parametrosFactura = Parametros::where('estado', 'Activo')->first();
-
-            // obtenemos el ultimo numero de factura
-            $ultimoNumeroFactura = Factura::latest()->first();
-            // dd($ultimoNumeroFactura);
-            if($ultimoNumeroFactura == null){
-                $nuevoNumeroFactura = $parametrosFactura->numero_factura;
-            }else{
-                $nuevoNumeroFactura = $ultimoNumeroFactura->numero_factura+1;
-            }
-
-            $fechaParaCodigo = str_replace("-", "", $request->fecha);
-
-            // generamos el codigo de control
-            $facturador          = new CodigoControlV7();
-            $numero_autorizacion = $parametrosFactura->numero_autorizacion;
-            $numero_factura      = $nuevoNumeroFactura;
-            $nit_cliente         = $request->nit_cliente;
-            $fecha_compra        = $fechaParaCodigo;
-            $monto_compra        = round($request->totalCompra, 0, PHP_ROUND_HALF_UP);
-            $clave               = $parametrosFactura->llave_dosificacion;
-            $codigoControl       = $facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
-
-            // creamos la factura
-            $nuevaFactura                      = new Factura();
-            $nuevaFactura->user_id             = Auth::user()->id;
-            $nuevaFactura->almacene_id         = Auth::user()->almacen_id;
-            $nuevaFactura->cliente_id          = $request->cliente_id;
-            $nuevaFactura->numero_autorizacion = $parametrosFactura->numero_autorizacion;
-            $nuevaFactura->numero_factura      = $nuevoNumeroFactura;
-            $nuevaFactura->nit_cliente         = $request->nit_cliente;
-            $nuevaFactura->monto_compra        = round($request->totalCompra, 0, PHP_ROUND_HALF_UP);
-            $nuevaFactura->clave               = $parametrosFactura->llave_dosificacion;
-            $nuevaFactura->codigo_control      = $codigoControl;
-            $nuevaFactura->save();
-            $facturaId = $nuevaFactura->id;
         }
 
         $fechaHoraVenta = date("Y-m-d H:i:s");
@@ -659,5 +613,61 @@ class VentaController extends Controller
             'encontrado'   => $encontrado,
             'datosCliente' => json_encode($cliente),
         ]);
+    }
+
+    public function imprimeFactura($ventaId = null)
+    {
+        $datosVenta = Venta::find($ventaId);
+        $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
+
+        // verficamos si tiene datos para facturar
+        $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
+            ->latest()
+            ->first();
+
+        // if($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
+        // {
+        //     // tramemos los parametros de la facturacion
+        //     $parametrosFactura = Parametros::where('estado', 'Activo')->first();
+
+        //     // obtenemos el ultimo numero de factura
+        //     $ultimoNumeroFactura = Factura::latest()->first();
+        //     // dd($ultimoNumeroFactura);
+        //     if($ultimoNumeroFactura == null){
+        //         $nuevoNumeroFactura = $parametrosFactura->numero_factura;
+        //     }else{
+        //         $nuevoNumeroFactura = $ultimoNumeroFactura->numero_factura+1;
+        //     }
+
+        //     $fechaParaCodigo = str_replace("-", "", $request->fecha);
+
+        //     // generamos el codigo de control
+        //     $facturador          = new CodigoControlV7();
+        //     $numero_autorizacion = $parametrosFactura->numero_autorizacion;
+        //     $numero_factura      = $nuevoNumeroFactura;
+        //     $nit_cliente         = $request->nit_cliente;
+        //     $fecha_compra        = $fechaParaCodigo;
+        //     $monto_compra        = round($request->totalCompra, 0, PHP_ROUND_HALF_UP);
+        //     $clave               = $parametrosFactura->llave_dosificacion;
+        //     $codigoControl       = $facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+
+        //     // creamos la factura
+        //     $nuevaFactura                      = new Factura();
+        //     $nuevaFactura->user_id             = Auth::user()->id;
+        //     $nuevaFactura->almacene_id         = Auth::user()->almacen_id;
+        //     $nuevaFactura->cliente_id          = $request->cliente_id;
+        //     $nuevaFactura->numero_autorizacion = $parametrosFactura->numero_autorizacion;
+        //     $nuevaFactura->numero_factura      = $nuevoNumeroFactura;
+        //     $nuevaFactura->nit_cliente         = $request->nit_cliente;
+        //     $nuevaFactura->monto_compra        = round($request->totalCompra, 0, PHP_ROUND_HALF_UP);
+        //     $nuevaFactura->clave               = $parametrosFactura->llave_dosificacion;
+        //     $nuevaFactura->codigo_control      = $codigoControl;
+        //     $nuevaFactura->save();
+        //     $facturaId = $nuevaFactura->id;
+        // }
+
+        // dd($datosVenta);
+
+        return view('venta.imprimeFactura')->with(compact('datosVenta', 'productosVenta'));
     }
 }
