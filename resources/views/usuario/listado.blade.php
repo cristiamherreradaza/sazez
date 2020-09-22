@@ -22,12 +22,12 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nombre</th>
-                        <th>CI</th>
-                        <th>Correo Electronico</th>
-                        <th>Celular</th>
-                        <th>Perfil</th>
                         <th>Almacen</th>
+                        <th>Perfil</th>
+                        <th>Nombre</th>
+                        <th>Correo Electronico</th>
+                        <th>CI</th>
+                        <th>Celular</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -35,11 +35,6 @@
                     @foreach($usuarios as $key => $usuario)
                         <tr>
                             <td>{{ ($key+1) }}</td>
-                            <td>{{ $usuario->name }}</td>
-                            <td>{{ $usuario->ci }}</td>
-                            <td>{{ $usuario->email }}</td>
-                            <td>{{ $usuario->celulares }}</td>
-                            <td>{{ $usuario->rol }}</td>
                             <td>
                                 @if($usuario->almacen_id)
                                     {{ $usuario->almacen->nombre }}
@@ -47,6 +42,11 @@
                                     {{ $usuario->almacen_id }}
                                 @endif
                             </td>
+                            <td>{{ $usuario->rol }}</td>
+                            <td>{{ $usuario->name }}</td>
+                            <td>{{ $usuario->email }}</td>
+                            <td>{{ $usuario->ci }}</td>
+                            <td>{{ $usuario->celulares }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->name }}', '{{ $usuario->ci }}', '{{ $usuario->email }}', '{{ $usuario->celulares }}', '{{ $usuario->nit }}', '{{ $usuario->razon_social }}', '{{ $usuario->perfil_id }}', '{{ $usuario->almacen_id }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-primary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>

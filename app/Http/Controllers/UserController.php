@@ -21,7 +21,7 @@ class UserController extends Controller
 {
     public function listado()
     {
-        $usuarios = User::get();
+        $usuarios = User::where('rol', '!=', 'Cliente')->orderBy('almacen_id')->get();
         $almacenes = Almacene::whereNull('estado')->get();
         $perfiles = Perfile::get();
         $menus = Menu::whereNull('padre')->get();
