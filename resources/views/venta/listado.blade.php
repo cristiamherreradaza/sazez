@@ -16,13 +16,13 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">LISTADO DEL VENTAS </h4>
-                {{-- <div class="table-responsive m-t-40"> --}}
                 <div class="table-responsive">
                     <table id="tabla-ventas" class="table table-striped table-bordered no-wrap">
                         <thead>
-                            <tr>
+                            <tr>lista de ventas por producto, ingresos por excel
                                 <th>ID</th>
                                 <th>TIENDA</th>
+                                <th>USUARIO</th>
                                 <th>CLIENTE</th>
                                 <th>TOTAL</th>
                                 <th>SALDO</th>
@@ -34,7 +34,6 @@
                         </tbody>
                     </table>
                 </div>
-                {{-- </div> --}}
             </div>
         </div>
     </div>
@@ -71,6 +70,7 @@ $(document).ready(function() {
         columns: [
             {data: 'id', name: 'id'},
             {data: 'almacene', name: 'almacenes.nombre'},
+            {data: 'nombre_usuario', name: 'usuario.name'},
             {data: 'user', name: 'users.name'},
             {data: 'total', name: 'total'},
             {data: 'saldo', name: 'saldo'},

@@ -513,17 +513,21 @@ class VentaController extends Controller
     {
         $almacen = Auth::user()->almacen_id;
         $ventas = Venta::select(
-                'ventas.id',
-                'almacenes.nombre as almacene',
-                'users.name as user',
-                'ventas.total',
-                'ventas.saldo',
-                'ventas.fecha'
-            )
-            ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
-            ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
-            ->where('ventas.almacene_id', $almacen);
-
+                        'ventas.id',
+                        'almacenes.nombre as almacene',
+                        'usuario.name as nombre_usuario',
+                        'users.name as user',
+                        'ventas.total',
+                        'ventas.saldo',
+                        'ventas.fecha'
+                    )
+                    ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
+                    ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
+                    ->leftJoin('users as usuario', 'ventas.user_id', '=', 'usuario.id')
+                    ->where('ventas.almacene_id', $almacen);
+        if(Auth::user()->perfil_id != 1){
+            $ventas->where('ventas.user_id', Auth::user()->id);
+        }
         return Datatables::of($ventas)
             ->addColumn('action', function ($ventas) {
                 return '<button onclick="muestra(' . $ventas->id . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>
