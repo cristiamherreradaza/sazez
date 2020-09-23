@@ -384,4 +384,54 @@ class ReporteController extends Controller
             $productos = $query->get();
         return view('reporte.ajax_listado_saldos_tiendas')->with(compact('almacenes', 'productos'));
     }
+
+    public function ventas_usuario()
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        return view('reporte.ventas_usuario')->with(compact('almacenes'));
+    }
+
+    public function ajax_listado_ventas_usuario(Request $request)
+    {
+        $fecha_inicio = $request->fecha_inicio;
+        $fecha_fin = $request->fecha_fin;
+        $users = User::where('almacen_id', $request->almacen_id)
+                    ->get();
+        $fechas = DB::select("
+                            SELECT vp.fecha, DAYOFWEEK(vp.fecha) as dia
+                            FROM ventas_productos as vp
+                            WHERE fecha BETWEEN '$fecha_inicio' AND '$fecha_fin'
+                            GROUP BY vp.fecha
+                            ");
+        return view('reporte.ajax_listado_ventas_usuario')->with(compact('users', 'fechas'));
+    }
+
+    public function ventas_accesorio()
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        $tipos = Tipo::get();
+        return view('reporte.ventas_accesorio')->with(compact('almacenes', 'tipos'));
+    }
+
+    public function ajax_listado_ventas_accesorio(Request $request)
+    {
+        // Encontramos a los usuarios pertenecientes al almacen X
+        $users = User::where('almacen_id', $request->almacen_id)->get();
+        // En un array guardaremos el atributo id de la tabla Users de los registros capturados
+        $array_user_id = array();
+        foreach($users as $row){
+            array_push($array_user_id, $row->id);
+        }
+        // Ejecutamos la consulta, incluyendo a los usuarios pertenecientes al almacen X
+        $query = VentasProducto::whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])
+                                ->whereIn('user_id', $array_user_id)
+                                ->orderBy('tipo_id');
+        // Si se buscara un tipo_id X
+        if ($request->tipo_id) {
+            $query = $query->where('tipo_id', $request->tipo_id);
+        }
+        // Guardamos el resultado en la variable $ventas
+        $ventas = $query->get();
+        return view('reporte.ajax_listado_ventas_accesorio')->with(compact('ventas'));
+    }
 }

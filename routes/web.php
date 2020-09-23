@@ -292,6 +292,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/ajax_listado_saldos', 'ReporteController@ajax_listado_saldos');
     Route::get('Reporte/saldos_tiendas', 'ReporteController@saldos_tiendas');
     Route::get('Reporte/ajax_listado_saldos_tiendas', 'ReporteController@ajax_listado_saldos_tiendas');
+    Route::get('Reporte/ventas_usuario', 'ReporteController@ventas_usuario');
+    Route::get('Reporte/ajax_listado_ventas_usuario', 'ReporteController@ajax_listado_ventas_usuario');
+    Route::get('Reporte/ventas_accesorio', 'ReporteController@ventas_accesorio');
+    Route::get('Reporte/ajax_listado_ventas_accesorio', 'ReporteController@ajax_listado_ventas_accesorio');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');
