@@ -605,26 +605,31 @@ class CuponController extends Controller
         $cupon->save();
 
         if($request->cobro_producto_id){        //Si es cupon por un producto
-            $producto = Producto::find($request->cobro_producto_id);
+            // Buscamos al producto
+            $item = Producto::find($request->cobro_producto_id);
             // Registramos en Ventas_producto
             $ventaProducto = new VentasProducto();
             $ventaProducto->user_id = Auth::user()->id;
             $ventaProducto->producto_id = $request->cobro_producto_id;
+            $ventaProducto->tipo_id = $item->tipo_id;
             $ventaProducto->cupon_id = $request->cobro_cupon_id;
             $ventaProducto->venta_id = $venta->id;
             $ventaProducto->precio_venta = $request->cobro_total;
             $ventaProducto->precio_cobrado = $request->cobro_total;
             $ventaProducto->cantidad = 1;
             $ventaProducto->fecha = date('Y-m-d');
-            $ventaProducto->fecha_garantia = Carbon::now()->addDay($producto->dias_garantia);
+            $ventaProducto->fecha_garantia = Carbon::now()->addDay($item->dias_garantia);
             $ventaProducto->save();
         }else{                                  //Es cupon por una promocion
             $productos_combo = CombosProducto::where('combo_id', $request->cobro_combo_id)->get();
             foreach($productos_combo as $producto){
+                // Buscamos al producto
+                $item = Producto::find($producto->producto_id);
                 // Registramos en Ventas_producto
                 $ventaProducto = new VentasProducto();
                 $ventaProducto->user_id = Auth::user()->id;
                 $ventaProducto->producto_id = $producto->producto_id;
+                $ventaProducto->tipo_id = $item->tipo_id;
                 $ventaProducto->combo_id = $request->cobro_combo_id;
                 $ventaProducto->cupon_id = $request->cobro_cupon_id;
                 $ventaProducto->venta_id = $venta->id;
@@ -632,16 +637,19 @@ class CuponController extends Controller
                 $ventaProducto->precio_cobrado = $producto->precio;
                 $ventaProducto->cantidad = $producto->cantidad;
                 $ventaProducto->fecha = date('Y-m-d');
-                $ventaProducto->fecha_garantia = Carbon::now()->addDay($producto->producto->dias_garantia);
+                $ventaProducto->fecha_garantia = Carbon::now()->addDay($item->dias_garantia);
                 $ventaProducto->save();
             }
         }
         
         if($request->cobro_producto_id){
+            // Buscamos al producto
+            $item = Producto::find($request->cobro_producto_id);
             // Registrar en Movimientos
             $movimiento = new Movimiento();
             $movimiento->user_id = Auth::user()->id;
             $movimiento->producto_id = $request->cobro_producto_id;
+            $movimiento->tipo_id = $item->tipo_id;
             $movimiento->almacene_id = Auth::user()->almacen->id;
             $movimiento->cliente_id = $request->cobro_cliente_id;
             $movimiento->venta_id = $venta->id;
@@ -654,10 +662,13 @@ class CuponController extends Controller
         }else{
             $productos_combo = CombosProducto::where('combo_id', $request->cobro_combo_id)->get();
             foreach($productos_combo as $producto){
+                // Buscamos al producto
+                $item = Producto::find($producto->producto_id);
                 // Registrar en Movimientos
                 $movimiento = new Movimiento();
                 $movimiento->user_id = Auth::user()->id;
                 $movimiento->producto_id = $producto->producto_id;
+                $movimiento->tipo_id = $item->tipo_id;
                 $movimiento->almacene_id = Auth::user()->almacen->id;
                 $movimiento->cliente_id = $request->cobro_cliente_id;
                 $movimiento->venta_id = $venta->id;

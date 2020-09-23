@@ -71,10 +71,13 @@ class EntregaController extends Controller
                 $efectuado = 'Si';
                 // si la cantidad del producto_x es mayor a 0, entonces crea envio (salida/ingreso)
                 //echo $request->$cantidad_x. "<br>";
+                // Buscamos al producto
+                $item = Producto::find($producto->producto_id);
                 //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN CENTRAL
                 $salida = new Movimiento();
                 $salida->user_id = Auth::user()->id;
                 $salida->producto_id = $producto->producto_id;
+                $salida->tipo_id = $item->tipo_id;
                 $salida->almacene_id = $pedido->almacene_id;
                 $salida->pedido_id = $pedido->id;
                 $salida->salida = $request->$cantidad_x;
@@ -87,6 +90,7 @@ class EntregaController extends Controller
                 $ingreso = new Movimiento();
                 $ingreso->user_id = Auth::user()->id;
                 $ingreso->producto_id = $producto->producto_id;
+                $ingreso->tipo_id = $item->tipo_id;
                 $ingreso->almacen_origen_id = $pedido->almacene_id;
                 $ingreso->almacene_id = $pedido->almacene_solicitante_id;
                 $ingreso->pedido_id = $pedido->id;
@@ -163,6 +167,7 @@ class EntregaController extends Controller
         return view('envio.envio')->with(compact('almacenes'));
     }  
 
+    // No usado
     public function ajax_importar(Request $request)
     {
         $num = DB::select("SELECT MAX(numero) as nro

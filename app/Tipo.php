@@ -21,4 +21,14 @@ class Tipo extends Model
         return $this->hasOne('App\Producto');
     }
 
+    public function movimientos()
+    {
+        return $this->hasMany('App\Movimiento');
+    }
+
+    public function ventas_productos()
+    {
+        return $this->hasMany('App\VentasProducto');
+    }
+
 }

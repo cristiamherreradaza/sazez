@@ -71,6 +71,7 @@ class MovimientosImport implements ToModel
                         $salida = new Movimiento();
                         $salida->user_id = Auth::user()->id;
                         $salida->producto_id = $producto->id;
+                        $salida->tipo_id = $producto->tipo_id;
                         $salida->almacene_id = $pedido->almacene_id;
                         $salida->pedido_id = $pedido->id;
                         $salida->salida = $row[7];
@@ -83,6 +84,7 @@ class MovimientosImport implements ToModel
                         $entrada = new Movimiento();
                         $entrada->user_id = Auth::user()->id;
                         $entrada->producto_id = $producto->id;
+                        $entrada->tipo_id = $producto->tipo_id;
                         $entrada->almacen_origen_id = $pedido->almacene_solicitante_id;
                         $entrada->almacene_id = $pedido->almacene_id;
                         $entrada->pedido_id = $pedido->id;

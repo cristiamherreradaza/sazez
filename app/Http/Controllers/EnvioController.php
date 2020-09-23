@@ -60,10 +60,13 @@ class EnvioController extends Controller
             $llaves = array_keys($request->item);
             foreach ($llaves as $key => $ll) 
             {
+                // Buscamos al producto
+                $item = Producto::find($ll);
                 //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
                 $salida = new Movimiento();
                 $salida->user_id = Auth::user()->id;
                 $salida->producto_id = $ll;
+                $salida->tipo_id = $item->tipo_id;
                 $salida->almacene_id = $almacen_origen;
                 $salida->salida = $request->item[$ll];
                 $salida->fecha = $hoy;
@@ -75,6 +78,7 @@ class EnvioController extends Controller
                 $ingreso = new Movimiento();
                 $ingreso->user_id = Auth::user()->id;
                 $ingreso->producto_id = $ll;
+                $ingreso->tipo_id = $item->tipo_id;
                 $ingreso->almacen_origen_id = $almacen_origen;
                 $ingreso->almacene_id = $request->almacen_a_pedir;
                 $ingreso->ingreso = $request->item[$ll];
@@ -84,7 +88,7 @@ class EnvioController extends Controller
                 $ingreso->save();
             }
         }
-        return redirect('Envio/listado');
+        return redirect('Envio/ver_pedido/'.$numero);
     }
 
     public function eliminar($id)
@@ -139,10 +143,13 @@ class EnvioController extends Controller
                                         ->where('estado', 'Envio')
                                         ->first();
             if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese envio/producto
+                // Buscamos al producto
+                $item = Producto::find($request->producto_id);
                 //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
                 $salida = new Movimiento();
                 $salida->user_id = Auth::user()->id;
                 $salida->producto_id = $request->producto_id;
+                $salida->tipo_id = $item->tipo_id;
                 $salida->almacene_id = $request->almacen_origen;
                 $salida->salida = $request->producto_cantidad;
                 $salida->fecha = date('Y-m-d H:i:s');
@@ -154,6 +161,7 @@ class EnvioController extends Controller
                 $ingreso = new Movimiento();
                 $ingreso->user_id = Auth::user()->id;
                 $ingreso->producto_id = $request->producto_id;
+                $ingreso->tipo_id = $item->tipo_id;
                 $ingreso->almacen_origen_id = $request->almacen_origen;
                 $ingreso->almacene_id = $request->almacen_destino;
                 $ingreso->ingreso = $request->producto_cantidad;

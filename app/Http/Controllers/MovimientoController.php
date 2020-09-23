@@ -90,10 +90,13 @@ class MovimientoController extends Controller
                 $llaves = array_keys($request->precio);     // Sacamos los items
                 foreach ($llaves as $key => $ll) 
                 {
+                    // Buscamos al producto mediante
+                    $producto = Producto::find($ll);
                     // Creación de Movimiento - Ingresa a Almacen Central
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $ll;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacene_id =  1;             // Siempre sera 1?
                     $ingreso->proveedor_id = $request->proveedor;
                     $ingreso->ingreso = $request->subtotal[$ll];
@@ -106,6 +109,7 @@ class MovimientoController extends Controller
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $ll;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacene_id = 1;              // Siempre sera 1?
                     $ingreso->salida = $request->subtotal[$ll];
                     $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
@@ -117,6 +121,7 @@ class MovimientoController extends Controller
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $ll;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacen_origen_id = 1;        // Siempre sera 1?
                     $ingreso->almacene_id = $request->almacen;
                     $ingreso->ingreso = $request->subtotal[$ll];
@@ -145,10 +150,13 @@ class MovimientoController extends Controller
                 $llaves = array_keys($request->precio);
                 foreach ($llaves as $key => $ll) 
                 {
+                    // Buscamos al producto mediante
+                    $producto = Producto::find($ll);
                     // Creación de Movimiento
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $ll;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacene_id = $request->almacen;
                     $ingreso->proveedor_id = $request->proveedor;
                     $ingreso->ingreso = $request->subtotal[$ll];
@@ -157,7 +165,7 @@ class MovimientoController extends Controller
                     $ingreso->fecha = $fecha;
                     $ingreso->save();
                 }
-                return redirect('Producto/listadoIngresos');
+                return redirect('Producto/ver_ingreso/'.$numeroi);
             }
         }
         //Generar su reporte de envio
@@ -182,10 +190,13 @@ class MovimientoController extends Controller
 
     public function reportar(Request $request)
     {
-        //dd('hola');
+        // Buscamos al producto
+        $producto = Producto::find($request->id_producto_a_reportar);
+        // Procesamos reporte de producto
         $producto_reportado = new Movimiento();
         $producto_reportado->user_id = Auth::user()->id;
         $producto_reportado->producto_id = $request->id_producto_a_reportar;
+        $producto_reportado->tipo_id = $producto->tipo_id;
         $producto_reportado->almacene_id = Auth::user()->almacen->id;
         $producto_reportado->salida = $request->cantidad_producto_a_reportar;
         $producto_reportado->fecha = date('Y-m-d H:i:s');
@@ -197,9 +208,13 @@ class MovimientoController extends Controller
 
     public function habilitar(Request $request)
     {
+        // Buscamos al producto
+        $producto = Producto::find($request->id_producto_a_habilitar);
+        // Procesamos reporte de producto
         $producto_habilitado = new Movimiento();
         $producto_habilitado->user_id = Auth::user()->id;
         $producto_habilitado->producto_id = $request->id_producto_a_habilitar;
+        $producto_habilitado->tipo_id = $producto->tipo_id;
         $producto_habilitado->almacene_id = Auth::user()->almacen->id;
         $producto_habilitado->ingreso = $request->cantidad_producto_a_habilitar;
         $producto_habilitado->fecha = date('Y-m-d H:i:s');

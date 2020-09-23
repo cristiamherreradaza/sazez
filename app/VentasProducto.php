@@ -13,6 +13,7 @@ class VentasProducto extends Model
         'user_id',
         'cotizacione_id',
         'producto_id',
+        'tipo_id',
         'combo_id',
         'cupon_id',
         'escala_id',
@@ -38,6 +39,11 @@ class VentasProducto extends Model
     public function producto()
     {
         return $this->belongsTo('App\Producto');
+    }
+
+    public function tipo()
+    {
+        return $this->belongsTo('App\Tipo', 'tipo_id');
     }
 
     public function combo()

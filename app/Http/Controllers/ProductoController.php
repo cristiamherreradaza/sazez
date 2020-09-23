@@ -694,11 +694,13 @@ class ProductoController extends Controller
                                     ->whereNotNull('almacen_origen_id')
                                     ->where('estado', 'Envio')
                                     ->first();
-                    //dd($dato->numero);
+                    // Buscamos al producto
+                    $producto = Producto::find($request->producto_id);
                     // AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $request->producto_id;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacene_id = $request->almacen_ingreso;
                     $ingreso->proveedor_id = $request->proveedor_id;
                     $ingreso->ingreso = $request->producto_cantidad;
@@ -711,6 +713,7 @@ class ProductoController extends Controller
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $request->producto_id;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacene_id = $request->almacen_ingreso;              // Siempre sera 1?
                     $ingreso->salida = $request->producto_cantidad;
                     $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
@@ -722,6 +725,7 @@ class ProductoController extends Controller
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $request->producto_id;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacen_origen_id = $request->almacen_ingreso;        // Siempre sera 1?
                     $ingreso->almacene_id = $dato->almacene_id;
                     $ingreso->ingreso = $request->producto_cantidad;
@@ -731,10 +735,13 @@ class ProductoController extends Controller
                     $ingreso->fecha = date('Y-m-d H:i:s');
                     $ingreso->save();
                 }else{
+                    // Buscamos al producto
+                    $producto = Producto::find($request->producto_id);
                     //AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $request->producto_id;
+                    $ingreso->tipo_id = $producto->tipo_id;
                     $ingreso->almacene_id = $request->almacen_ingreso;
                     $ingreso->proveedor_id = $request->proveedor_id;
                     $ingreso->ingreso = $request->producto_cantidad;
