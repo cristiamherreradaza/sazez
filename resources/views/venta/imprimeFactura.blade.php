@@ -29,6 +29,14 @@
 			left: 720px;
 		}
 
+		#literalTotal{
+			font-weight: bold;
+			font-size: 10pt;
+			position: absolute;
+			top: 402px;
+			left: 90px;
+		}
+
 
 	</style>
 	<script src="{{ asset('js/NumeroALetras.js') }}"></script>
@@ -72,6 +80,9 @@
 		<div id="total">
 			{{ $sumaSubTotal }}
 		</div>
+		<div id="literalTotal">
+
+		</div>
 		
 	</div>
 
@@ -79,13 +90,15 @@
 		let valorTotal = Number({{ $sumaSubTotal }});
 		function numerosALetras() {
 		    valorLiteral = numeroALetras(valorTotal, {
-		        plural: 'Bolivianos',
+		        plural: 'BOLIVIANOS',
 		        singular: 'Bolivianos',
 		        centPlural: 'Centavos',
 		        centSingular: 'Centavo'
 		    });
 			console.log(valorLiteral);
+			document.getElementById("literalTotal").innerHTML = valorLiteral;
 		}
+
 		window.onload = numerosALetras;
 	</script>
 	
