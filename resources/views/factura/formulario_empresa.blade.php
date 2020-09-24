@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<form action="{{ url('Empresa/guarda') }}" method="POST" id="formularioEmpresa">
+<form action="" method="POST" id="formularioEmpresa">
     @csrf
     <div class="row">
         <div class="col-md-12">
@@ -24,6 +24,10 @@
                             <div class="form-group">
                                 <input type="hidden" name="empresa_id" id="empresa_id" value="{{ $empresa->id }}">
                                 <input type="hidden" name="almacene_id" id="almacene_id" value="{{ $empresa->almacene_id }}">
+                                <input type="hidden" name="validador_autorizacion" id="validador_autorizacion" value="0">
+                                <input type="hidden" name="validador_dosificacion" id="validador_dosificacion" value="0">
+                                <input type="hidden" name="validador_inicial" id="validador_inicial" value="0">
+                                <input type="hidden" name="validador_emision" id="validador_emision" value="0">
                                 <label class="control-label">NOMBRE</label>
                                 <input type="text" name="nombre" id="nombre" class="form-control" value="{{ $empresa->nombre }}" required>
                             </div>
@@ -89,17 +93,26 @@
 
                     <div id="bloqueParametros" style="display: none;">
                         <div class="row">
+                            <div class="col-md-12 text-center">
+                                <label class="control-label text-primary ">
+                                    Para el registro de los parametros, todas las casillas deben ser llenadas y coincidir respectivamente.
+                                </label>
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-2"></div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">NUMERO DE AUTORIZACION</label>
-                                    <input type="text" name="numero_autorizacion" id="numero_autorizacion" class="form-control">
+                                    <input type="text" name="numero_autorizacion" id="numero_autorizacion" onchange="validaAutorizacion()" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">NUMERO DE AUTORIZACION <span class="text-warning">(CONFIRMACION)</span></label>
-                                    <input type="text" name="numero_autorizacion_verificacion" id="numero_autorizacion_verificacion" class="form-control">
+                                    <input type="text" name="numero_autorizacion_verificacion" id="numero_autorizacion_verificacion" onchange="validaAutorizacion()" class="form-control">
+                                    <div class="invalid-feedback" id="v_autorizacion" style="display: none;">Los valores de numero de autorizacion y su confirmacion no coinciden</div>
                                 </div>
                             </div>
                             <div class="col-md-2"></div>
@@ -109,13 +122,14 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">LLAVE DE DOSIFICACION</label>
-                                    <input type="text" name="llave_dosificacion" id="llave_dosificacion" class="form-control">
+                                    <input type="text" name="llave_dosificacion" id="llave_dosificacion" onchange="validaDosificacion()" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">LLAVE DE DOSIFICACION <span class="text-warning">(CONFIRMACION)</span></label>
-                                    <input type="text" name="llave_dosificacion_verificacion" id="llave_dosificacion_verificacion" class="form-control">
+                                    <input type="text" name="llave_dosificacion_verificacion" id="llave_dosificacion_verificacion" onchange="validaDosificacion()" class="form-control">
+                                    <div class="invalid-feedback" id="v_dosificacion" style="display: none;">Los valores de llave de dosificacion y su confirmacion no coinciden</div>
                                 </div>
                             </div>
                             <div class="col-md-2"></div>
@@ -125,13 +139,14 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">NUMERO DE FACTURA INICIAL</label>
-                                    <input type="text" name="numero_factura" id="numero_factura" class="form-control">
+                                    <input type="text" name="numero_factura" id="numero_factura" onchange="validaInicial()" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">NUMERO DE FACTURA INICIAL <span class="text-warning">(CONFIRMACION)</span></label>
-                                    <input type="text" name="numero_factura_verificacion" id="numero_factura_verificacion" class="form-control">
+                                    <input type="text" name="numero_factura_verificacion" id="numero_factura_verificacion" onchange="validaInicial()" class="form-control">
+                                    <div class="invalid-feedback" id="v_inicial" style="display: none;">Los valores de numero de factura inicial y su confirmacion no coinciden</div>
                                 </div>
                             </div>
                             <div class="col-md-2"></div>
@@ -141,13 +156,14 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">FECHA LIMITE DE EMISION</label>
-                                    <input type="date" name="fecha_limite" id="fecha_limite" class="form-control">
+                                    <input type="date" name="fecha_limite" id="fecha_limite" onchange="validaEmision()" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">FECHA LIMITE DE EMISION <span class="text-warning">(CONFIRMACION)</span></label>
-                                    <input type="date" name="fecha_limite_verficacion" id="fecha_limite_verficacion" class="form-control">
+                                    <input type="date" name="fecha_limite_verificacion" id="fecha_limite_verificacion" onchange="validaEmision()" class="form-control">
+                                    <div class="invalid-feedback" id="v_emision" style="display: none;">Los valores de fecha limite de emision y su confirmacion no coinciden</div>
                                 </div>
                             </div>
                         </div>
@@ -216,6 +232,24 @@
         }
     });
 
+    //Funcion para seteo de atributos al iniciar la pagina
+    // $( function() {
+    //     $("#cliente").prop("disabled", true);
+    //     $("#email").prop("disabled", true);
+    //     $("#tipo_envio").val("");
+
+    //     $("#tipo_envio").change( function() {
+    //         if ($(this).val() == "1") {
+    //             $("#cliente").prop("disabled", false);
+    //             $("#email").prop("disabled", true);
+    //         }
+    //         if ($(this).val() == "2") {
+    //             $("#cliente").prop("disabled", true);
+    //             $("#email").prop("disabled", false);
+    //         }
+    //     });
+    // });
+
     function muestraFormularioParametros()
     {
         $("#bloqueParametros").toggle('slow');
@@ -242,6 +276,98 @@
 
         }else{
             $("#formularioEmpresa")[0].reportValidity();
+        }
+    }
+
+    function validaAutorizacion()
+    {
+        let numero_autorizacion = $("#numero_autorizacion").val();
+        let numero_autorizacion_verificacion = $("#numero_autorizacion_verificacion").val();
+        if(numero_autorizacion == numero_autorizacion_verificacion){
+            // Muestra barrita verde
+            $("#numero_autorizacion_verificacion").removeClass("is-invalid");
+            $("#numero_autorizacion_verificacion").addClass("is-valid");
+            // Oculta si estuviera desplegado la barra de texto
+            $("#v_autorizacion").hide();
+            // Habilita el id validador para el envio al controlador
+            $("#validador_autorizacion").val('1');
+        }else{
+            // Muestra barrita roja
+            $("#numero_autorizacion_verificacion").removeClass("is-valid");
+            $("#numero_autorizacion_verificacion").addClass("is-invalid");
+            // Muestra que texto que no son iguales
+            $("#v_autorizacion").show();
+            // Coloca el id validador en 0
+            $("#validador_autorizacion").val('0');
+        }
+    }
+
+    function validaDosificacion()
+    {
+        let llave_dosificacion = $("#llave_dosificacion").val();
+        let llave_dosificacion_verificacion = $("#llave_dosificacion_verificacion").val();
+        if(llave_dosificacion == llave_dosificacion_verificacion){
+            // Muestra barrita verde
+            $("#llave_dosificacion_verificacion").removeClass("is-invalid");
+            $("#llave_dosificacion_verificacion").addClass("is-valid");
+            // Oculta si estuviera desplegado la barra de texto
+            $("#v_dosificacion").hide();
+            // Habilita el id validador para el envio al controlador
+            $("#validador_dosificacion").val('1');
+        }else{
+            // Muestra barrita roja
+            $("#llave_dosificacion_verificacion").removeClass("is-valid");
+            $("#llave_dosificacion_verificacion").addClass("is-invalid");
+            // Muestra que texto que no son iguales
+            $("#v_dosificacion").show();
+            // Coloca el id validador en 0
+            $("#validador_dosificacion").val('0');
+        }
+    }
+
+    function validaInicial()
+    {
+        let numero_factura = $("#numero_factura").val();
+        let numero_factura_verificacion = $("#numero_factura_verificacion").val();
+        if(numero_factura == numero_factura_verificacion){
+            // Muestra barrita verde
+            $("#numero_factura_verificacion").removeClass("is-invalid");
+            $("#numero_factura_verificacion").addClass("is-valid");
+            // Oculta si estuviera desplegado la barra de texto
+            $("#v_inicial").hide();
+            // Habilita el id validador para el envio al controlador
+            $("#validador_inicial").val('1');
+        }else{
+            // Muestra barrita roja
+            $("#numero_factura_verificacion").removeClass("is-valid");
+            $("#numero_factura_verificacion").addClass("is-invalid");
+            // Muestra que texto que no son iguales
+            $("#v_inicial").show();
+            // Coloca el id validador en 0
+            $("#validador_inicial").val('0');
+        }
+    }
+
+    function validaEmision()
+    {
+        let fecha_limite = $("#fecha_limite").val();
+        let fecha_limite_verificacion = $("#fecha_limite_verificacion").val();
+        if(fecha_limite == fecha_limite_verificacion){
+            // Muestra barrita verde
+            $("#fecha_limite_verificacion").removeClass("is-invalid");
+            $("#fecha_limite_verificacion").addClass("is-valid");
+            // Oculta si estuviera desplegado la barra de texto
+            $("#v_emision").hide();
+            // Habilita el id validador para el envio al controlador
+            $("#validador_emision").val('1');
+        }else{
+            // Muestra barrita roja
+            $("#fecha_limite_verificacion").removeClass("is-valid");
+            $("#fecha_limite_verificacion").addClass("is-invalid");
+            // Muestra que texto que no son iguales
+            $("#v_emision").show();
+            // Coloca el id validador en 0
+            $("#validador_emision").val('0');
         }
     }
 
