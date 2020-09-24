@@ -304,4 +304,9 @@ class FacturaController extends Controller
     {
         //
     }
+    
+    public function formulario()
+    {
+        return view('factura.formulario');
+    }
 }

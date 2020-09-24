@@ -9,6 +9,7 @@ use App\Grupo;
 use App\Venta;
 use App\Precio;
 use DataTables;
+use App\Empresa;
 use App\Factura;
 use App\Almacene;
 use App\Producto;
@@ -493,7 +494,9 @@ class VentaController extends Controller
 
     public function muestra(Request $request, $ventaId)
     {
-        $datosVenta = Venta::find($ventaId);
+        // dd($ventaId);
+        $datosVenta = Venta::where('id', $ventaId)->first();
+        // dd($datosVenta);
         $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
         $opcionesEliminaVenta = Configuracione::where('descripcion', 'comboEliminaVenta')->get();
         $opcionesCambiaProductoVenta = Configuracione::where('descripcion', 'comboCambiaProductoVenta')->get();
@@ -617,9 +620,11 @@ class VentaController extends Controller
 
     public function imprimeFactura($ventaId = null)
     {
-        $datosVenta = Venta::find($ventaId);
+        $datosVenta = Venta::where('id', $ventaId)->first();
+        $datosEmpresa = Empresa::where('almacene_id', $datosVenta->almacene_id)->first();
         $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
-        dd($datosVenta->cliente->nit);
+
+        // dd($datosVenta->cliente->nit);
         // verficamos si tiene datos para facturar
         $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
             ->latest()
@@ -647,7 +652,7 @@ class VentaController extends Controller
                 $facturador          = new CodigoControlV7();
                 $numero_autorizacion = $parametrosFactura->numero_autorizacion;
                 $numero_factura      = $nuevoNumeroFactura;
-                $nit_cliente         = $request->nit_cliente;
+                $nit_cliente         = $datosVenta->cliente->nit;
                 $fecha_compra        = $fechaParaCodigo;
                 $monto_compra        = round($datosVenta->total, 0, PHP_ROUND_HALF_UP);
                 $clave               = $parametrosFactura->llave_dosificacion;
@@ -657,24 +662,32 @@ class VentaController extends Controller
                 $nuevaFactura                      = new Factura();
                 $nuevaFactura->user_id             = Auth::user()->id;
                 $nuevaFactura->almacene_id         = Auth::user()->almacen_id;
-                $nuevaFactura->cliente_id          = $datosVenta->cliente_id;
+                $nuevaFactura->cliente_id          = $datosVenta->cliente->id;
                 $nuevaFactura->numero_autorizacion = $parametrosFactura->numero_autorizacion;
                 $nuevaFactura->numero_factura      = $nuevoNumeroFactura;
-                $nuevaFactura->nit_cliente         = $request->nit_cliente;
-                $nuevaFactura->monto_compra        = round($request->totalCompra, 0, PHP_ROUND_HALF_UP);
+                $nuevaFactura->nit_cliente         = $datosVenta->cliente->nit;
+                $nuevaFactura->venta_id            = $datosVenta->id;
+                $nuevaFactura->fecha_compra        = $datosVenta->fecha;
+                $nuevaFactura->fecha_limite        = $parametrosFactura->fecha_limite;
+                $nuevaFactura->monto_compra        = round($datosVenta->total, 0, PHP_ROUND_HALF_UP);
                 $nuevaFactura->clave               = $parametrosFactura->llave_dosificacion;
                 $nuevaFactura->codigo_control      = $codigoControl;
                 $nuevaFactura->save();
                 $facturaId = $nuevaFactura->id;
 
-                $datosFactura = Factura::find($nuevaFactura->id);
+                $datosFactura = Factura::where("id", $nuevaFactura->id)->first();
+                // modificamos la venta para la factura
+                $venta = Venta::find($datosVenta->id);
+                $venta->factura_id = $facturaId;
+                $venta->save();
+                
             }
         } else {
-            
+            $datosFactura = Factura::where("id", $datosVenta->factura_id)->first();
         }
 
         // dd($datosVenta);
 
-        return view('venta.imprimeFactura')->with(compact('datosVenta', 'productosVenta'));
+        return view('venta.imprimeFactura')->with(compact('datosVenta', 'productosVenta', 'datosFactura', 'datosEmpresa'));
     }
 }
