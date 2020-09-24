@@ -157,6 +157,7 @@ class FacturaController extends Controller
         $empresa = Empresa::where('almacene_id', $id)->first();
         $parametros = Parametros::where('estado', 'Activo')
                                 ->where('almacene_id', $id)
+                                ->whereNull('deleted_at')
                                 ->get();
                                 //->first();
         if(!$empresa){                      // Si no tiene empresa
@@ -186,7 +187,7 @@ class FacturaController extends Controller
         $empresa->nit                = $request->nit;
         $empresa->save();
         // Guardamos parametros de la factura
-        if($request->numero_autorizacion && $request->llave_dosificacion && $request->numero_factura && $request->fecha_limite)
+        if($request->numero_autorizacion && $request->llave_dosificacion && $request->numero_factura && $request->fecha_limite && $request->validador_autorizacion == 1 && $request->validador_dosificacion == 1 && $request->validador_inicial == 1 && $request->validador_emision == 1)
         {
             $parametro = Parametros::where('almacene_id', $request->almacene_id)
                                     ->first();
