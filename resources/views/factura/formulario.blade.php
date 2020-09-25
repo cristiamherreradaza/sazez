@@ -139,6 +139,17 @@
         }
     });
 
+
+    $(document).ready(function () {
+        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
+            t.row($(this).parents('tr'))
+                .remove()
+                .draw();
+            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
+        });
+
+    });
+
     var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
@@ -183,6 +194,15 @@
             '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
         ]).draw(false);
         // console.log(producto);
+
+        document.getElementById("producto").value = "";
+        document.getElementById("cantidad").value = "";
+        document.getElementById("precio").value = "";
+        document.getElementById("subtotal").value = "";
+
+        document.getElementById("producto").focus();
+        
+
     }
 
 </script>
