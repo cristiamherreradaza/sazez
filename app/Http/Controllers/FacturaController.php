@@ -375,16 +375,25 @@ class FacturaController extends Controller
             $venta->factura_id      = $facturaId;
             $venta->nombre          = $request->nombre;
             $venta->nit             = $request->nit;
-            $venta->nombre          = $request->producto[$i];
             $venta->producto        = $request->producto[$i];
+            $venta->cantidad        = $request->cantidad[$i];
             $venta->precio_unitario = $request->precio[$i];
             $venta->subtotal        = $request->subtotal[$i];
             $venta->fecha           = date("Y-m-d");
             $venta->save();
         }
-        echo $cantidadItems;
-        dd($request->all());
+        // echo $cantidadItems;
+        // dd($request->all());
 
-        return redirect('Venta/imprimeFactura/15');
+        return redirect("Factura/imprimeFactura/$facturaId");
+    }
+
+    public function imprimeFactura($facturaId)
+    {
+        $datosFactura = Factura::where('id', $facturaId)->first();
+        $datosEmpresa = Empresa::where('almacene_id', $datosFactura->almacene_id)->first();
+        $productosVenta = Ventasfac::where('factura_id', $facturaId)->get();
+
+        return view('factura.imprimeFactura')->with(compact('productosVenta', 'datosFactura', 'datosEmpresa'));
     }
 }
