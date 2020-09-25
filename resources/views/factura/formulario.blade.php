@@ -22,13 +22,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Nit</label>
-                                <input type="text" name="codigo" id="codigo" class="form-control">
+                                <input type="text" name="nit" id="nit" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Razon Social / nombre</label>
-                                <input type="text" name="nombre" id="nombre" class="form-control">
+                                <input type="text" name="nombre" id="nombre" class="form-control" required>
+                                <input type="hidden" name="totalVenta" id="totalVenta" />
                             </div>
                         </div>
                     </div>
@@ -91,6 +92,15 @@
                                             </thead>
                                             <tbody>
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>TOTAL</th>
+                                                    <th><div id="montoTotal"></div></th>
+                                                    <th></th>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>
@@ -108,16 +118,13 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-12" id="mostrar" style="display:none;">
-    </div>
-</div>
-
 @stop
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
+
+    var totalImporte = 0;
 
     var cantidad = document.getElementById('cantidad');
     cantidad.addEventListener('keyup', multiplicaCantidad);
@@ -163,12 +170,16 @@
         let cantidad = document.getElementById("cantidad").value;
         let precio   = document.getElementById("precio").value;
         let subtotal = document.getElementById("subtotal").value;
+        
+        totalImporte = Number(totalImporte) + Number(subtotal); 
+        document.getElementById("montoTotal").innerHTML = totalImporte;
+        document.getElementById("totalVenta").value = totalImporte;
 
         t.row.add([
-            producto,
-            cantidad,
-            precio,
-            subtotal,
+            `<input type="text" name="producto[]" value="`+producto+`" class="form-control" readonly >`,
+            `<input type="text" name="cantidad[]" value="`+cantidad+`" class="form-control text-right" style="width: 80px;" readonly >`,
+            `<input type="text" name="precio[]" value="`+precio+`" class="form-control text-right" style="width: 80px;" readonly >`,
+            `<input type="text" name="subtotal[]" value="`+subtotal+`" class="form-control text-right" style="width: 80px;" readonly >`,
             '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
         ]).draw(false);
         // console.log(producto);
