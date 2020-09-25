@@ -16,7 +16,8 @@
                 <h4 class="mb-0 text-white">GENERACION DE LA FACTURA</h4>
             </div>
             <div class="card-body">
-                <form>
+                <form action="{{ url('Factura/guardaVenta') }}" method="POST" id="formularioVenta">
+                    @csrf
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -95,6 +96,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success text-white">REGISTRAR VENTA</button>
                     </div>
                     
                 </form>

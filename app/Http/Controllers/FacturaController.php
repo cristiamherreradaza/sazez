@@ -310,4 +310,10 @@ class FacturaController extends Controller
     {
         return view('factura.formulario');
     }
+
+    public function guardaVenta(Request $request)
+    {
+        // dd($request->all());
+        return redirect('Venta/imprimeFactura/15');
+    }
 }
