@@ -53,25 +53,21 @@
                     @endphp
                     @foreach($users as $usuario)
                         @php
-                            $accesorios_venta = App\VentasProducto::where('fecha', $fecha->fecha)
+                            $accesorios_venta = App\VentasProducto::select(DB::raw("(precio_venta * cantidad) as total"))
+                                                            ->whereDate('fecha', $fecha->fecha)
                                                             ->where('user_id', $usuario->id)
-                                                            ->sum('precio_venta');
-                            $accesorios_cobrado = App\VentasProducto::where('fecha', $fecha->fecha)
+                                                            ->groupBy('producto_id')
+                                                            ->get();
+                            $accesorios_cobrado = App\VentasProducto::select(DB::raw("(precio_cobrado * cantidad) as total"))
+                                                            ->whereDate('fecha', $fecha->fecha)
                                                             ->where('user_id', $usuario->id)
-                                                            ->sum('precio_cobrado');
-                            $descuento = $accesorios_venta - $accesorios_cobrado;
-                            $accesorios_venta_mayor = App\VentasProducto::where('fecha', $fecha->fecha)
-                                                            ->where('user_id', $usuario->id)
-                                                            ->sum('precio_venta_mayor');
-                            $accesorios_cobrado_mayor = App\VentasProducto::where('fecha', $fecha->fecha)
-                                                            ->where('user_id', $usuario->id)
-                                                            ->sum('precio_cobrado_mayor');
-                            $descuento_mayor = $accesorios_venta_mayor - $accesorios_cobrado_mayor;
-                            $total = $total + ($accesorios_venta - $descuento);
+                                                            ->groupBy('producto_id')
+                                                            ->get();
+                            $descuento = $accesorios_venta->sum('total') - $accesorios_cobrado->sum('total');
                         @endphp
-                        <td>{{ $accesorios_venta }}</td>
+                        <td>{{ $accesorios_venta->sum('total') }}</td>
                         <td>{{ $descuento }}</td>
-                        <td>{{ ($accesorios_venta - $descuento) }}</td>
+                        <td>{{ ($accesorios_venta->sum('total')-$descuento) }}</td>
                     @endforeach
                     <td>{{ $total }}</td>
                 </tr>

@@ -8,9 +8,11 @@
                 <th>Tipo</th>
                 <th>Codigo</th>
                 <th>Nombre Producto</th>
-                <th>Precio Unitario</th>
+                <th>Precio Venta</th>
+                <th>Precio Cobrado</th>
                 <th>Cantidad</th>
-                <th>Total</th>
+                <th>Total Venta</th>
+                <th>Total Cobrado</th>
             </tr>
         </thead>
         <tbody>
@@ -22,8 +24,10 @@
                 <td>{{ $venta->tipo->nombre }}</td>
                 <td>{{ $venta->producto->codigo }}</td>
                 <td>{{ $venta->producto->nombre }}</td>
+                <td>{{ $venta->precio_venta }}</td>
                 <td>{{ $venta->precio_cobrado }}</td>
                 <td>{{ round($venta->cantidad) }}</td>
+                <td>{{ ($venta->cantidad * $venta->precio_venta) }}</td>
                 <td>{{ ($venta->cantidad * $venta->precio_cobrado) }}</td>
             </tr>
             @endforeach
