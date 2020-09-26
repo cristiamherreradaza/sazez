@@ -76,15 +76,35 @@
     <div class="card-body" id="printableArea">
         <div class="row">
             <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-3"><h4><span class="text-info">Numero:</span> {{ $datos->numero_ingreso }}</h4></div>
+                    <div class="col-md-3"><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></div>
+                    <div class="col-md-3"><h4><span class="text-info">Proveedor:</span>
+                                    @if($datos->proveedor)
+                                        {{ $datos->proveedor->nombre }}
+                                    @else
+                                        No Tiene
+                                    @endif
+                                </h4></div>
+                    <div class="col-md-3"><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></div>
+                </div>
                 <div class="table-responsve">
-                    <table class="table">
+                    <!-- <table class="table">
                         <tr>
                             <td><h4><span class="text-info">Numero:</span> {{ $datos->numero_ingreso }}</h4></td>
                             <td><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></td>
-                            <td><h4><span class="text-info">Proveedor:</span> {{ $datos->proveedor->nombre }}</h4></td>
+                            <td>
+                                <h4><span class="text-info">Proveedor:</span>
+                                    @if($datos->proveedor)
+                                        {{ $datos->proveedor->nombre }}
+                                    @else
+                                        No Tiene
+                                    @endif
+                                </h4>
+                            </td>
                             <td><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></td>
                         </tr>
-                    </table>
+                    </table> -->
                     
                     <table class="table table-hover">
                         <thead class="bg-inverse text-white">

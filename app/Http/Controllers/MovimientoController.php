@@ -9,6 +9,10 @@ use App\Movimiento;
 use App\Almacene;
 use App\Producto;
 use App\Proveedore;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductosExport;
+use App\Imports\IngresoImport;
+use Validator;
 
 class MovimientoController extends Controller
 {
@@ -222,5 +226,109 @@ class MovimientoController extends Controller
         $producto_habilitado->descripcion = $request->descripcion_producto_a_habilitar;
         $producto_habilitado->save();
         return redirect('Producto/listado');
+    }
+
+    public function ingreso_excel()
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        $proveedores = Proveedore::get();
+        
+        return view('movimiento.ingreso_excel')->with(compact('almacenes', 'proveedores'));
+    }
+
+    public function exportar_formato_ingreso($id)
+    {
+        //dd($id);
+        $almacen = Almacene::find($id);
+        $sucursal = Almacene::find($id);
+        session(['sucursal' => $sucursal]);
+        $date = strtotime(date('Y-m-d H:i:s'));
+        return Excel::download(new ProductosExport($almacen), "Listado_productos_$date.xlsx");
+        session()->forget('sucursal');
+    }
+
+    public function importar_formato_ingreso(Request $request)
+    {
+        //dd($request->proveedor);
+        $proveedor = Proveedore::find($request->proveedor);
+        if($proveedor){
+            $proveedor = $proveedor->id;
+        }else{
+            $proveedor = NULL;
+        }
+        $incluye_distribucion = $request->incluye_almacen;
+        if(!$incluye_distribucion){
+            $incluye_distribucion = 'No';
+        }
+        
+        $maximo = Movimiento::max('numero');
+        if ($maximo) {
+            $numero = $maximo + 1;
+        } else {
+            $numero = 1;
+        }
+        $maximo_ingreso = Movimiento::max('numero_ingreso');
+        if ($maximo_ingreso) {
+            $numero_ingreso = $maximo_ingreso + 1;
+        } else {
+            $numero_ingreso = 1;
+        }
+        $maximo_ingreso_envio = Movimiento::max('numero_ingreso_envio');
+        if ($maximo_ingreso_envio) {
+            $numero_ingreso_envio = $maximo_ingreso_envio + 1;
+        } else {
+            $numero_ingreso_envio = 1;
+        }
+
+        $sw=0;
+
+        $validation = Validator::make($request->all(), [
+            'select_file' => 'required|mimes:xlsx|max:2048'
+        ]);
+        if($validation->passes())
+        {
+            // Creamos variables de sesión para pasar al import
+            session(['proveedor' => $proveedor]);
+            session(['incluye_distribucion' => $incluye_distribucion]);
+            session(['numero' => $numero]);
+            session(['numero_ingreso' => $numero_ingreso]);
+            session(['numero_ingreso_envio' => $numero_ingreso_envio]);
+            $file = $request->file('select_file');
+            Excel::import(new IngresoImport, $file); 
+            // Eliminarmos variables de sesión
+            session()->forget('proveedor');
+            session()->forget('incluye_distribucion');
+            session()->forget('numero');
+            session()->forget('numero_ingreso');
+            session()->forget('numero_ingreso_envio');
+            
+            $sw=1;
+
+            return response()->json([
+                'message' => 'Importacion realizada con exito',
+                //'numero' => $pedido->id,
+                'numero' => $numero_ingreso,
+                'sw' => $sw
+            ]);
+        }
+        else
+        {
+            switch ($validation->errors()->first()) {
+                case "The select file field is required.":
+                    $mensaje = "Es necesario agregar un archivo Excel.";
+                    break;
+                case "The select file must be a file of type: xlsx.":
+                    $mensaje = "El archivo debe ser de tipo: Excel.";
+                    break;
+                default:
+                    $mensaje = "Fallo al importar el archivo seleccionado.";
+                    break;
+            }
+            return response()->json([
+                //0
+                'message' => $mensaje,
+                'sw' => 0
+            ]);
+        }
     }
 }

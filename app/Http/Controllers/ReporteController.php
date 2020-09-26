@@ -434,4 +434,28 @@ class ReporteController extends Controller
         $ventas = $query->get();
         return view('reporte.ajax_listado_ventas_accesorio')->with(compact('ventas'));
     }
+
+    public function saldos_mayorista()
+    {
+        $almacenes = Almacene::whereNotNull('estado')->get();
+        $tipos = Tipo::get();
+        return view('reporte.saldos_mayorista')->with(compact('almacenes', 'tipos'));
+    }
+
+    public function ajax_listado_saldos_mayorista(Request $request)
+    {
+        $datosMovimientos = Movimiento::where('movimientos.fecha', '<=', $request->fecha)
+                            ->select('movimientos.producto_id', 'productos.nombre', 'tipos.nombre as nombre_tipo', 'marcas.nombre as nombre_marca', DB::raw('SUM(movimientos.ingreso) - SUM(movimientos.salida) as total'), 'almacene_id')
+                            ->where('movimientos.almacene_id', $request->almacen_id)
+                            ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
+                            ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
+                            ->leftJoin('marcas', 'productos.marca_id', '=', 'marcas.id')
+                            ->whereNull('productos.estado')
+                            // ->where('estado', 'Ingreso')
+                            // ->orWhere('estado', 'Envio')
+                            ->groupBy('movimientos.producto_id')
+                            ->get();
+
+        return view('reporte.ajax_listado_saldos_mayorista')->with(compact('datosMovimientos'));
+    }
 }
