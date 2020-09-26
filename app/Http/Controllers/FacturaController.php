@@ -382,8 +382,8 @@ class FacturaController extends Controller
             $venta->fecha           = date("Y-m-d");
             $venta->save();
         }
-        echo $cantidadItems;
-        dd($request->all());
+        // echo $cantidadItems;
+        // dd($request->all());
 
         return redirect('Venta/imprimeFactura/15');
     }

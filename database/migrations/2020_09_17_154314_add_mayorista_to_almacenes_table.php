@@ -14,7 +14,7 @@ class AddMayoristaToAlmacenesTable extends Migration
     public function up()
     {
         Schema::table('almacenes', function (Blueprint $table) {
-            $table->string('mayorista', 2)->nullable()->after('estado');
+            $table->string('mayorista', 2)->default('No')->after('estado');
         });
     }
 

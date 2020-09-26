@@ -142,7 +142,7 @@
     var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
-        ordering:  false,
+        ordering:  false,   
         info: false,
         language: {
             url: '{{ asset('datatableEs.json') }}'
