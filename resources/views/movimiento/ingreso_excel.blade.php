@@ -164,6 +164,7 @@
         });
     });
 
+    // Funcion para descargar el excel con el almacen previamente elegido
     function descargaFormato()
     {
         let almacen_id = $("#almacen").val();
