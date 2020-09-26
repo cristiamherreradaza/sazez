@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Almacene;
+use DataTables;
 use App\Empresa;
 use App\Factura;
+use App\Almacene;
+use App\Ventasfac;
 use App\Parametros;
 use CodigoControlV7;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class FacturaController extends Controller
 {
@@ -304,5 +305,95 @@ class FacturaController extends Controller
     public function destroy(Factura $factura)
     {
         //
+    }
+    
+    public function formulario()
+    {
+        return view('factura.formulario');
+    }
+
+    public function guardaVenta(Request $request)
+    {
+        $fechaHora = date('Y-m-d H:i:s');
+        $fecha = date('Y-m-d');
+
+        $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
+            ->latest()
+            ->first();
+
+        // preguntamos si la venta ya tiene una factura creada
+        if($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
+        {
+            // tramemos los parametros de la facturacion
+            $parametrosFactura = Parametros::where('estado', 'Activo')->first();
+
+            // obtenemos el ultimo numero de factura
+            $ultimoNumeroFactura = Factura::latest()->first();
+
+            if($ultimoNumeroFactura == null){
+                $nuevoNumeroFactura = $parametrosFactura->numero_factura;
+            }else{
+                $nuevoNumeroFactura = $ultimoNumeroFactura->numero_factura+1;
+            }
+
+            $fechaParaCodigo = str_replace("-", "", $fecha);
+
+            // generamos el codigo de control
+            $facturador          = new CodigoControlV7();
+            $numero_autorizacion = $parametrosFactura->numero_autorizacion;
+            $numero_factura      = $nuevoNumeroFactura;
+            $nit_cliente         = $request->nit;
+            $fecha_compra        = $fechaParaCodigo;
+            $monto_compra        = round($request->totalVenta, 0, PHP_ROUND_HALF_UP);
+            $clave               = $parametrosFactura->llave_dosificacion;
+            $codigoControl       = $facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+
+            // creamos la factura
+            $nuevaFactura                      = new Factura();
+            $nuevaFactura->user_id             = Auth::user()->id;
+            $nuevaFactura->almacene_id         = Auth::user()->almacen_id;
+            $nuevaFactura->numero_autorizacion = $parametrosFactura->numero_autorizacion;
+            $nuevaFactura->numero_factura      = $nuevoNumeroFactura;
+            $nuevaFactura->nit_cliente         = $request->nit;
+            $nuevaFactura->fecha_compra        = $fechaHora;
+            $nuevaFactura->fecha_limite        = $parametrosFactura->fecha_limite;
+            $nuevaFactura->monto_compra        = round($request->totalVenta, 0, PHP_ROUND_HALF_UP);
+            $nuevaFactura->clave               = $parametrosFactura->llave_dosificacion;
+            $nuevaFactura->codigo_control      = $codigoControl;
+            $nuevaFactura->save();
+            $facturaId = $nuevaFactura->id;
+
+        }
+
+        $cantidadItems = count($request->cantidad);
+        for ($i=0; $i < $cantidadItems; $i++) { 
+
+            echo $request->cantidad[$i].' - '.$request->precio[$i].' - '.$request->subtotal[$i]."<br />";
+            $venta                  = new Ventasfac();
+            $venta->user_id         = Auth::user()->id;
+            $venta->almacene_id     = Auth::user()->almacen_id;
+            $venta->factura_id      = $facturaId;
+            $venta->nombre          = $request->nombre;
+            $venta->nit             = $request->nit;
+            $venta->producto        = $request->producto[$i];
+            $venta->cantidad        = $request->cantidad[$i];
+            $venta->precio_unitario = $request->precio[$i];
+            $venta->subtotal        = $request->subtotal[$i];
+            $venta->fecha           = date("Y-m-d");
+            $venta->save();
+        }
+        // echo $cantidadItems;
+        // dd($request->all());
+
+        return redirect("Factura/imprimeFactura/$facturaId");
+    }
+
+    public function imprimeFactura($facturaId)
+    {
+        $datosFactura = Factura::where('id', $facturaId)->first();
+        $datosEmpresa = Empresa::where('almacene_id', $datosFactura->almacene_id)->first();
+        $productosVenta = Ventasfac::where('factura_id', $facturaId)->get();
+
+        return view('factura.imprimeFactura')->with(compact('productosVenta', 'datosFactura', 'datosEmpresa'));
     }
 }

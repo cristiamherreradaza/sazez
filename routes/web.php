@@ -328,6 +328,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Factura/guarda_formulario', 'FacturaController@guarda_formulario');
     Route::get('Factura/reporte', 'FacturaController@reporte');
     Route::get('Factura/ajax_listado', 'FacturaController@ajax_listado');
+    Route::get('Factura/formulario', 'FacturaController@formulario');
+    Route::post('Factura/guardaVenta', 'FacturaController@guardaVenta');
+    Route::get('Factura/imprimeFactura/{id}', 'FacturaController@imprimeFactura');
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');
