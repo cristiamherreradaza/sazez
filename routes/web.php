@@ -78,6 +78,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/continua/{id}', 'ProductoController@continua');
     Route::get('Producto/vista_previa_ingreso/{id}', 'ProductoController@vista_previa_ingreso');
     Route::post('Producto/ajaxInformacion', 'ProductoController@ajaxInformacion');
+
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
 
@@ -134,6 +135,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Movimiento/guarda', 'MovimientoController@guarda');
     Route::post('Movimiento/reportar', 'MovimientoController@reportar');
     Route::post('Movimiento/habilitar', 'MovimientoController@habilitar');
+
+    Route::get('Movimiento/ingreso_excel', 'MovimientoController@ingreso_excel');
+    Route::get('Movimiento/exportar_formato_ingreso/{id}', 'MovimientoController@exportar_formato_ingreso');
+    Route::post('Movimiento/importar_formato_ingreso', 'MovimientoController@importar_formato_ingreso');
 
     // PERFILES
     Route::get('Perfil/listado', 'PerfilController@listado');
@@ -296,6 +301,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/ajax_listado_ventas_usuario', 'ReporteController@ajax_listado_ventas_usuario');
     Route::get('Reporte/ventas_accesorio', 'ReporteController@ventas_accesorio');
     Route::get('Reporte/ajax_listado_ventas_accesorio', 'ReporteController@ajax_listado_ventas_accesorio');
+    Route::get('Reporte/saldos_mayorista', 'ReporteController@saldos_mayorista');
+    Route::get('Reporte/ajax_listado_saldos_mayorista', 'ReporteController@ajax_listado_saldos_mayorista');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');
