@@ -445,10 +445,11 @@ class ProductoController extends Controller
         }
 
         if ($request->cantidad > 0) {
-            $movimiento = new Movimiento();
+            $movimiento                = new Movimiento();
             $movimiento->user_id       = Auth::user()->id;
             $movimiento->producto_id   = $producto_id;
             $movimiento->almacene_id   = $request->almacene_id;
+            $movimiento->tipo_id       = $request->tipo_id;
             $movimiento->precio_compra = $request->precio_compra;
             $movimiento->ingreso       = $request->cantidad;
             $movimiento->save();
