@@ -256,6 +256,7 @@ class VentaController extends Controller
                         $movimientoPromocion->user_id      = Auth::user()->id;
                         $movimientoPromocion->almacene_id  = Auth::user()->almacen_id;
                         $movimientoPromocion->venta_id     = $venta_id;
+                        $movimientoPromocion->tipo_id      = $ppr->producto->tipo_id;
                         $movimientoPromocion->producto_id  = $ppr->producto_id;
                         $movimientoPromocion->precio_venta = $precioProductoCombo;
                         $movimientoPromocion->salida       = $cantidadProductosPromo;
@@ -272,6 +273,7 @@ class VentaController extends Controller
                             $movimientoPromocion->user_id      = Auth::user()->id;
                             $movimientoPromocion->almacene_id  = $datosMayorista->almacen_id;
                             $movimientoPromocion->venta_id     = $venta_id;
+                            $movimientoPromocion->tipo_id      = $ppr->producto->tipo_id;
                             $movimientoPromocion->producto_id  = $ppr->producto_id;
                             $movimientoPromocion->precio_venta = $precioProductoCombo;
                             $movimientoPromocion->ingreso      = $cantidadProductosPromo;
@@ -325,6 +327,7 @@ class VentaController extends Controller
                     $movimiento->almacene_id  = Auth::user()->almacen_id;
                     $movimiento->venta_id     = $venta_id;
                     $movimiento->producto_id  = $ll;
+                    $movimiento->tipo_id      = $datosProductoUnidad->tipo_id;
                     $movimiento->precio_venta = $request->precio[$ll];
                     $movimiento->salida       = $request->cantidad[$ll];
                     $movimiento->estado       = 'Venta';
@@ -340,6 +343,7 @@ class VentaController extends Controller
                         $movimiento->user_id      = Auth::user()->id;
                         $movimiento->almacene_id  = $datosMayorista->almacen_id;
                         $movimiento->venta_id     = $venta_id;
+                        $movimiento->tipo_id      = $datosProductoUnidad->tipo_id;
                         $movimiento->producto_id  = $ll;
                         $movimiento->precio_venta = $request->precio[$ll];
                         $movimiento->ingreso      = $request->cantidad[$ll];
@@ -396,6 +400,7 @@ class VentaController extends Controller
                     $movimientoMayor->venta_id     = $venta_id;
                     $movimientoMayor->escala_id    = $request->escala_id_m[$llm];
                     $movimientoMayor->producto_id  = $llm;
+                    $movimientoMayor->tipo_id      = $datosProductosMayor->tipo_id;
                     $movimientoMayor->precio_venta = $request->precio_m[$llm];
                     $movimientoMayor->salida       = $cantidadVendida;
                     $movimientoMayor->estado       = 'Venta';
@@ -413,6 +418,7 @@ class VentaController extends Controller
                         $movimientoMayor->venta_id     = $venta_id;
                         $movimientoMayor->escala_id    = $request->escala_id_m[$llm];
                         $movimientoMayor->producto_id  = $llm;
+                        $movimientoMayor->tipo_id      = $datosProductosMayor->tipo_id;
                         $movimientoMayor->precio_venta = $request->precio_m[$llm];
                         $movimientoMayor->ingreso      = $cantidadVendida;
                         $movimientoMayor->estado       = 'Tranferencia Mayorista';
