@@ -21,7 +21,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Fecha</label>
                             <span class="text-danger">
@@ -30,7 +30,7 @@
                             <input type="date" name="fecha" id="fecha" class="form-control" value="{{ date('Y-m-d') }}"required>
                         </div>                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Sucursal</label>
                             <select name="almacen_id" id="almacen_id" class="form-control">
@@ -44,7 +44,7 @@
                             </select>
                         </div>
                     </div>
-                    {{-- <div class="col-md-2">
+                    {{-- <div class="col-md-4">
                         <div class="form-group">
                             <label>Tipo</label>
                             <select name="tipo_id" id="tipo_id" class="form-control">

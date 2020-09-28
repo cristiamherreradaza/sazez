@@ -58,10 +58,14 @@
                         <div class="form-group">
                             <label>Seleccionar Vendedor</label>
                             <select name="usuario_id" id="usuario_id" class="form-control">
-                            <option value="" selected>Todos</option>
-                                @foreach($usuarios as $usuario)
-                                    <option value="{{ $usuario->id }}"> {{ $usuario->name }} </option>
-                                @endforeach
+                                @if(auth()->user()->rol == 'Administrador')
+                                    <option value="" selected>Todos</option>
+                                    @foreach($usuarios as $usuario)
+                                        <option value="{{ $usuario->id }}"> {{ $usuario->name }} </option>
+                                    @endforeach
+                                @else
+                                <option value="{{ auth()->user()->id }}"> {{ auth()->user()->name }} </option>
+                                @endif
                             </select>
                         </div>
                     </div>
