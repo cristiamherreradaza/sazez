@@ -56,19 +56,17 @@
                             $accesorios_venta = App\VentasProducto::select(DB::raw("(precio_venta * cantidad) as total"))
                                                             ->whereDate('fecha', $fecha->fecha)
                                                             ->where('user_id', $usuario->id)
-                                                            ->groupBy('producto_id')
                                                             ->get();
                             $accesorios_cobrado = App\VentasProducto::select(DB::raw("(precio_cobrado * cantidad) as total"))
                                                             ->whereDate('fecha', $fecha->fecha)
                                                             ->where('user_id', $usuario->id)
-                                                            ->groupBy('producto_id')
                                                             ->get();
                             $descuento = $accesorios_venta->sum('total') - $accesorios_cobrado->sum('total');
                             $total = $total + ($accesorios_cobrado->sum('total'));
                         @endphp
                         <td>{{ $accesorios_venta->sum('total') }}</td>
                         <td>{{ $descuento }}</td>
-                        <td>{{ ($accesorios_venta->sum('total')-$descuento) }}</td>
+                        <td>{{ ($accesorios_venta->sum('total') - $descuento) }}</td>
                     @endforeach
                     <td>{{ $total }}</td>
                 </tr>
