@@ -64,6 +64,7 @@
                                                             ->groupBy('producto_id')
                                                             ->get();
                             $descuento = $accesorios_venta->sum('total') - $accesorios_cobrado->sum('total');
+                            $total = $total + ($accesorios_cobrado->sum('total'));
                         @endphp
                         <td>{{ $accesorios_venta->sum('total') }}</td>
                         <td>{{ $descuento }}</td>
