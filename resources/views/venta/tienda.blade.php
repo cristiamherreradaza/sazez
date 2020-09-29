@@ -193,8 +193,11 @@
                             <div class="form-group">
                                 <label class="control-label">ENVIO</label>
                                 <div class="input-group mb-3">
-                                <input name="envioMayorista" id="envioMayorista" type="checkbox" data-toggle="toggle" data-on="SI" data-off="NO"
-                                    data-onstyle="success" data-offstyle="danger" data-width="80">
+                                    <select name="envioMayorista" id="envioMayorista" class="form-control">
+                                        <option value="No"> No </option>
+                                        <option value="Si"> Si </option>
+                                    </select>
+                                {{-- <input name="envioMayorista" id="envioMayorista" type="checkbox" data-toggle="toggle" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger" data-width="80"> --}}
                                 </div>
                             </div>
                         </div>

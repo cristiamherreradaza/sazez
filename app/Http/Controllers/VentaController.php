@@ -266,7 +266,7 @@ class VentaController extends Controller
                         $movimientoPromocion->save();
 
                         // pregutamos si se desea enviar los productos al mayorista
-                        if($request->has("envioMayorista")){
+                        if($request->envioMayorista == "Si"){
                             $datosMayorista = User::find($request->cliente_id);
                             // echo "si enviar";
                             // enviamos productos al manyorista
@@ -338,7 +338,7 @@ class VentaController extends Controller
                     $movimiento->save();
 
                      // pregutamos si se desea enviar los productos al mayorista
-                    if($request->has("envioMayorista")){
+                    if($request->envioMayorista == "Si"){
                         $datosMayorista = User::find($request->cliente_id);
                         // echo "si enviar";
                         // enviamos productos al manyorista
@@ -413,7 +413,7 @@ class VentaController extends Controller
                     $movimientoMayor->save();
 
                     // pregutamos si se desea enviar los productos al mayorista
-                    if($request->has("envioMayorista")){
+                    if($request->envioMayorista == "Si"){
                         $datosMayorista = User::find($request->cliente_id);
                         // echo "si enviar";
                         // enviamos productos al manyorista
