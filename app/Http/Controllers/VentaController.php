@@ -242,6 +242,7 @@ class VentaController extends Controller
                         $productosPr->user_id        = Auth::user()->id;
                         $productosPr->producto_id    = $ppr->producto_id;
                         $productosPr->venta_id       = $venta_id;
+                        $productosPr->tipo_id        = $ppr->producto->tipo_id;
                         $productosPr->combo_id       = $ppr->combo_id;
                         $productosPr->factura_id     = $facturaId;
                         $productosPr->precio_venta   = $precioProductoCombo;
@@ -311,8 +312,9 @@ class VentaController extends Controller
                     $productos->user_id        = Auth::user()->id;
                     $productos->producto_id    = $ll;
                     $productos->venta_id       = $venta_id;
-                    $productos->precio_venta   = $request->precio_venta[$ll];
                     $productos->factura_id     = $facturaId;
+                    $productos->tipo_id        = $datosProductoUnidad->tipo_id;
+                    $productos->precio_venta   = $request->precio_venta[$ll];
                     $productos->precio_cobrado = $request->precio[$ll];
                     $productos->cantidad       = $request->cantidad[$ll];
                     $productos->fecha          = $request->fecha;
@@ -381,6 +383,7 @@ class VentaController extends Controller
                     $productosMayor->venta_id             = $venta_id;
                     $productosMayor->escala_id            = $request->escala_id_m[$llm];
                     $productosMayor->factura_id           = $facturaId;
+                    $productosMayor->tipo_id              = $datosProductosMayor->tipo_id;
                     $productosMayor->precio_venta_mayor   = $request->precio_venta_m[$llm];
                     $productosMayor->precio_cobrado_mayor = $request->precio_m[$llm];
                     $productosMayor->cantidad             = $request->cantidad_m[$llm];
