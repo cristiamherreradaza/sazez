@@ -396,4 +396,13 @@ class FacturaController extends Controller
 
         return view('factura.imprimeFactura')->with(compact('productosVenta', 'datosFactura', 'datosEmpresa'));
     }
+
+    public function listadoVentas()
+    {
+        $ventas = Factura::where('user_id', Auth::user()->id)
+                    ->whereNull('venta_id')
+                    ->get();
+
+        return view('factura.listadoVentas')->with(compact('productosVenta', 'datosFactura', 'datosEmpresa'));
+    }
 }

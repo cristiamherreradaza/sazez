@@ -343,7 +343,7 @@ class ReporteController extends Controller
 
     public function saldos()
     {
-        $almacenes = Almacene::whereNull('estado')->get();
+        $almacenes = Almacene::whereNotNull('estado')->get();
         $tipos = Tipo::get();
         return view('reporte.saldos')->with(compact('almacenes', 'tipos'));
     }

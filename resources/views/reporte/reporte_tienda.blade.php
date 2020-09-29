@@ -24,7 +24,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="date" name="fecha_ini" id="fecha_ini" class="form-control" required>
+                                <input type="date" name="fecha_ini" id="fecha_ini" class="form-control" value="{{ date('Y-m-d') }}" required>
                             </div>                    
                         </div>
                         <div class="col-md-3">
@@ -33,7 +33,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required>
+                                <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" value="{{ date('Y-m-d') }}" required>
                             </div>                    
                         </div>
                         <div class="col-md-3">

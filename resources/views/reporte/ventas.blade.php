@@ -27,7 +27,7 @@
                             <span class="text-danger">
                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                             </span>
-                            <input type="date" name="fecha_inicial" id="fecha_inicial" class="form-control" required>
+                            <input type="date" name="fecha_inicial" id="fecha_inicial" class="form-control" value="{{ date('Y-m-d') }}" required>
                         </div>                    
                     </div>
                     <div class="col-md-2">
@@ -36,7 +36,7 @@
                             <span class="text-danger">
                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                             </span>
-                            <input type="date" name="fecha_final" id="fecha_final" class="form-control" required>
+                            <input type="date" name="fecha_final" id="fecha_final" class="form-control" value="{{ date('Y-m-d') }}" required>
                         </div>                    
                     </div>
                     <div class="col-md-2">
@@ -58,10 +58,14 @@
                         <div class="form-group">
                             <label>Seleccionar Vendedor</label>
                             <select name="usuario_id" id="usuario_id" class="form-control">
-                            <option value="" selected>Todos</option>
-                                @foreach($usuarios as $usuario)
-                                    <option value="{{ $usuario->id }}"> {{ $usuario->name }} </option>
-                                @endforeach
+                                @if(auth()->user()->rol == 'Administrador')
+                                    <option value="" selected>Todos</option>
+                                    @foreach($usuarios as $usuario)
+                                        <option value="{{ $usuario->id }}"> {{ $usuario->name }} </option>
+                                    @endforeach
+                                @else
+                                <option value="{{ auth()->user()->id }}"> {{ auth()->user()->name }} </option>
+                                @endif
                             </select>
                         </div>
                     </div>
