@@ -16,6 +16,10 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                $totalventa=0;
+                $totalcobrado=0;
+            @endphp
             @foreach($ventas as $venta)
             <tr>
                 <td>{{ $venta->fecha }}</td>
@@ -29,9 +33,20 @@
                 <td>{{ round($venta->cantidad) }}</td>
                 <td>{{ ($venta->cantidad * $venta->precio_venta) }}</td>
                 <td>{{ ($venta->cantidad * $venta->precio_cobrado) }}</td>
+                @php
+                    $totalventa=$totalventa+($venta->cantidad * $venta->precio_venta);
+                    $totalcobrado=$totalcobrado+($venta->cantidad * $venta->precio_cobrado);
+                @endphp
             </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="9"></td>
+                <td>{{ $totalventa }}</td>
+                <td>{{ $totalcobrado }}</td>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
