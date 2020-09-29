@@ -77,17 +77,23 @@
     <div class="card-body" id="printableArea">
         <div class="row">
             <div class="col-md-12">
+                <div class="row col-md-12">
+                    <h4><span class="text-danger">PRODUCTOS PARA INGRESO</span></h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-3"><h4><span class="text-info">Numero de ingreso:</span> {{ $datos->numero_ingreso }}</h4></div>
+                    <div class="col-md-3"><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></div>
+                    <div class="col-md-3"><h4><span class="text-info">Proveedor:</span>
+                                    @if($datos->proveedor)
+                                        {{ $datos->proveedor->nombre }}
+                                    @else
+                                        No Tiene
+                                    @endif
+                                </h4></div>
+                    <div class="col-md-3"><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></div>
+                </div>
                 <div class="table-responsve">
                     <table class="table table-hover">
-                        <thead>
-                            <h4><span class="text-danger">PRODUCTOS PARA INGRESO</span></h4>
-                            <tr>
-                                <td colspan="2"><h4><span class="text-info">Numero de ingreso:</span> {{ $datos->numero_ingreso }}</h4></td>
-                                <td colspan="2"><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></td>
-                                <td colspan="2"><h4><span class="text-info">Proveedor:</span> {{ $datos->proveedor->nombre }}</h4></td>
-                                <td colspan="2"><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></td>
-                            </tr>
-                        </thead>
                         <thead class="bg-inverse text-white">
                             <tr>
                                 <th>#</th>
@@ -123,16 +129,16 @@
                         </tbody>
                     </table>
                     
+                    <div class="row col-md-12">
+                        <h4><span class="text-danger">PRODUCTOS PARA ENVIO</span></h4>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3"><h4><span class="text-info">Numero de envio:</span> {{ $datos_envio->numero }} </h4></div>
+                        <div class="col-md-3"><h4><span class="text-info">Origen:</span> {{ $datos_envio->almacen_origen->nombre }} </h4></div>
+                        <div class="col-md-3"><h4><span class="text-info">Destino:</span> {{ $datos_envio->almacen->nombre }} </h4></div>
+                        <div class="col-md-3"><h4><span class="text-info">Fecha:</span> {{ $datos_envio->fecha }} </h4></div>
+                    </div>
                     <table class="table table-hover">
-                        <thead>
-                            <h4><span class="text-danger">PRODUCTOS PARA ENVIO</span></h4>
-                            <tr>
-                                <td colspan="2"><h4><span class="text-info">Numero de envio:</span> {{ $datos_envio->numero }}</h4></td>
-                                <td colspan="2"><h4><span class="text-info">Origen:</span> {{ $datos_envio->almacen_origen->nombre }}</h4></td>
-                                <td colspan="2"><h4><span class="text-info">Destino:</span> {{ $datos_envio->almacen->nombre }}</h4></td>
-                                <td colspan="2"><h4><span class="text-info">Fecha:</span> {{ $datos_envio->fecha }}</h4></td>
-                            </tr>
-                        </thead>
                         <thead class="bg-inverse text-white">
                             <tr>
                                 <th>#</th>
