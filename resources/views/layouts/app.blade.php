@@ -212,140 +212,6 @@
                                 <!-- ============================================================== -->
                                 <!-- End Messages -->
                                 <!-- ============================================================== -->
-                                <!-- ============================================================== -->
-                                <!-- mega menu -->
-                                <!-- ============================================================== -->
-                                <li class="nav-item dropdown mega-dropdown"><a class="nav-link dropdown-toggle waves-effect waves-dark"
-                                        href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class=""><i class="mdi mdi-view-grid"></i></span>
-                                    </a>
-                                    <div class="dropdown-menu animated bounceInDown">
-                                        <div class="mega-dropdown-menu row">
-                                            <div class="col-lg-3 col-xlg-2 mb-4">
-                                                <h4 class="mb-3">CAROUSEL</h4>
-                                                <!-- CAROUSEL -->
-                                                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                                    <div class="carousel-inner" role="listbox">
-                                                        <div class="carousel-item active">
-                                                            <div class="container p-0"> <img class="d-block img-fluid"
-                                                                    src="{{ asset('assets/images/big/img1.jpg') }}" alt="First slide"></div>
-                                                        </div>
-                                                        <div class="carousel-item">
-                                                            <div class="container p-0"><img class="d-block img-fluid"
-                                                                    src="{{ asset('assets/images/big/img2.jpg') }}" alt="Second slide"></div>
-                                                        </div>
-                                                        <div class="carousel-item">
-                                                            <div class="container p-0"><img class="d-block img-fluid"
-                                                                    src="{{ asset('assets/images/big/img3.jpg') }}" alt="Third slide"></div>
-                                                        </div>
-                                                    </div>
-                                                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
-                                                        data-slide="prev"> <span class="carousel-control-prev-icon"
-                                                            aria-hidden="true"></span> <span class="sr-only">Previous</span> </a>
-                                                    <a class="carousel-control-next" href="#carouselExampleControls" role="button"
-                                                        data-slide="next"> <span class="carousel-control-next-icon"
-                                                            aria-hidden="true"></span> <span class="sr-only">Next</span> </a>
-                                                </div>
-                                                <!-- End CAROUSEL -->
-                                            </div>
-                                            <div class="col-lg-3 mb-4">
-                                                <h4 class="mb-3">ACCORDION</h4>
-                                                <!-- Accordian -->
-                                                <div id="accordion">
-                                                    <div class="card mb-1">
-                                                        <div class="card-header" id="headingOne">
-                                                            <h5 class="mb-0">
-                                                                <button class="btn btn-link" data-toggle="collapse"
-                                                                    data-target="#collapseOne" aria-expanded="true"
-                                                                    aria-controls="collapseOne">
-                                                                    Collapsible Group Item #1
-                                                                </button>
-                                                            </h5>
-                                                        </div>
-                                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                                            data-parent="#accordion">
-                                                            <div class="card-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                                                                terry.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card mb-1">
-                                                        <div class="card-header" id="headingTwo">
-                                                            <h5 class="mb-0">
-                                                                <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                                    data-target="#collapseTwo" aria-expanded="false"
-                                                                    aria-controls="collapseTwo">
-                                                                    Collapsible Group Item #2
-                                                                </button>
-                                                            </h5>
-                                                        </div>
-                                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                                            data-parent="#accordion">
-                                                            <div class="card-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                                                                terry.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card mb-1">
-                                                        <div class="card-header" id="headingThree">
-                                                            <h5 class="mb-0">
-                                                                <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                                    data-target="#collapseThree" aria-expanded="false"
-                                                                    aria-controls="collapseThree">
-                                                                    Collapsible Group Item #3
-                                                                </button>
-                                                            </h5>
-                                                        </div>
-                                                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                                            data-parent="#accordion">
-                                                            <div class="card-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-                                                                terry.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3  mb-4">
-                                                <h4 class="mb-3">CONTACT US</h4>
-                                                <!-- Contact -->
-                                                <form>
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" id="exampleInputname1"
-                                                            placeholder="Enter Name"> </div>
-                                                    <div class="form-group">
-                                                        <input type="email" class="form-control" placeholder="Enter email"> </div>
-                                                    <div class="form-group">
-                                                        <textarea class="form-control" id="exampleTextarea" rows="3"
-                                                            placeholder="Message"></textarea>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-info">Submit</button>
-                                                </form>
-                                            </div>
-                                            <div class="col-lg-3 col-xlg-4 mb-4">
-                                                <h4 class="mb-3">List style</h4>
-                                                <!-- List style -->
-                                                <ul class="list-style-none">
-                                                    <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> You can
-                                                            give link</a></li>
-                                                    <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Give
-                                                            link</a></li>
-                                                    <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another
-                                                            Give link</a></li>
-                                                    <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Forth
-                                                            link</a></li>
-                                                    <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> Another
-                                                            fifth link</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <!-- ============================================================== -->
-                                <!-- End mega menu -->
-                                <!-- ============================================================== -->
                             </ul>
                             <!-- ============================================================== -->
                             <!-- Right side toggle and nav items -->
@@ -355,10 +221,11 @@
                                 <!-- Search -->
                                 <!-- ============================================================== -->
                                 <li class="nav-item search-box d-none d-md-block">
-                                    <form class="app-search mt-3 mr-2">
+                                    <div class="app-search mt-3 mr-2 text-white text-bold"><span id="fechaActual"></span><br />La hora es: <span id="horaActual"></span></div>
+                                    {{-- <form class="app-search mt-3 mr-2">
                                         <input type="text" class="form-control rounded-pill border-0" placeholder="Search for...">
                                         <a class="srh-btn"><i class="ti-search"></i></a>
-                                    </form>
+                                    </form> --}}
                                 </li>
                                 <!-- ============================================================== -->
                                 <!-- User profile and search -->
@@ -398,22 +265,6 @@
                                 <!-- ============================================================== -->
                                 <!-- User profile and search -->
                                 <!-- ============================================================== -->
-                                <!-- ============================================================== -->
-                                <!-- create new -->
-                                <!-- ============================================================== -->
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="flag-icon flag-icon-us"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right  animated bounceInDown"
-                                        aria-labelledby="navbarDropdown2">
-                                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-us"></i> English</a>
-                                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-fr"></i> French</a>
-                                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-es"></i> Spanish</a>
-                                        <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-de"></i> German</a>
-                                    </div>
-                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -528,7 +379,48 @@
                 return false;
             }
             });
+
+            muestraFechaActual();
+            startTime();
         });
+
+        function makeArray() {
+            for (i = 0; i < makeArray.arguments.length; i++)
+                this[i + 1] = makeArray.arguments[i];
+        }
+
+        function muestraFechaActual() {
+            var months = new makeArray('Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo',
+                'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre');
+            var date = new Date();
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var yy = date.getYear();
+            var year = (yy < 1000) ? yy + 1900 : yy;
+            let fechaActual = "Hoy es " + day + " de " + months[month] + " del " + year;
+            $("#fechaActual").html(fechaActual);
+        }
+
+            function startTime() {
+                today = new Date();
+                h = today.getHours();
+                m = today.getMinutes();
+                s = today.getSeconds();
+                m = checkTime(m);
+                s = checkTime(s);
+                document.getElementById('horaActual').innerHTML = h + ":" + m + ":" + s;
+                t = setTimeout('startTime()', 500);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+        
+        
+
     </script>
 
     @section('js')
