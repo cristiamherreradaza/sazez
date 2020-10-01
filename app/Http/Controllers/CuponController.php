@@ -74,35 +74,92 @@ class CuponController extends Controller
                         'almacenes.nombre as tienda',
                         'cupones_cobrados.fecha as cobrado',
                         'cupones.fecha_inicio as fecha_inicio',
-                        'cupones.fecha_final as fecha_final'
-                    );
+                        'cupones.fecha_final as fecha_final',
+                        'cupones.estado as estado'
+                    )
+                    ->orderBy('id', 'desc');
         return Datatables::of($cupones)->addColumn('action', function ($cupones) {
-            if(is_null($cupones->cobrado)){
-                if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final)){
-                    return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
-                }else{
-                    return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\', \''.$cupones->combo_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
-                    <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>
-                    <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+            // Si el usuario tiene perfil de administrador 
+            if(Auth::user()->perfil_id == 1)
+            {
+                // Si no se cobró el cupón, 
+                if($cupones->estado == 'Vigente')
+                {
+                    // Si la fecha_fin del cupon es menor a la fecha actual, muestra todos los botones (Ver Cupon, Cobrar, ELiminar)
+                    if(strtotime($cupones->fecha_final) >= strtotime(date('Y-m-d H:i:s')))
+                    {
+                        return '<button onclick="cobrar('.$cupones->id.')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                                <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>
+                                <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+                    }
+                    else
+                    {
+                        return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                    }
+                }
+                // Si se cobró el cupón, muestra el boton Ver Cupon
+                else
+                {
+                    return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
                 }
             }
-        })->make(true);
+            // Si el usuario no tiene perfil de administrador
+            else
+            {
+                // Si no se cobró el cupón, muestra los botones Ver Cupon y Cobrar
+                if($cupones->estado == 'Vigente')
+                {
+                    // Si la fecha_fin del cupon es menor a la fecha actual, muestra todos los botones (Ver Cupon, Cobrar, ELiminar)
+                    if(strtotime($cupones->fecha_final) >= strtotime(date('Y-m-d H:i:s')))
+                    //if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final))
+                    {
+                        return '<button onclick="cobrar('.$cupones->id.')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                                <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                    }
+                    else
+                    {
+                        return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                    }
+                }
+                // Si se cobró el cupón, muestra el boton Ver Cupon
+                else
+                {
+                    return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                }
+            }
+            // if(is_null($cupones->cobrado)){
+            //     if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final)){
+            //         return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+            //     }else{
+            //         return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\', \''.$cupones->combo_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+            //         <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>
+            //         <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+            //     }
+            // }
+        })
+        ->make(true);
     }
 
-    public function ajaxMuestraCupon(Request $request)
+    public function cobra_cupon($id)
     {
-        $cupon = Cupone::find($request->cupon_id);
-        $cliente = User::find($request->cliente_id);
-        if($request->producto_id){
-            $producto = Producto::find($request->producto_id);
-            return view('cupon.ajaxMuestraCupon')->with(compact('cupon', 'cliente', 'producto'));
-        }else{
-            $producto=NULL;
-            $combo = Combo::find($request->combo_id);
-            $productos_combo = CombosProducto::where('combo_id', $combo->id)->get();
-            return view('cupon.ajaxMuestraCupon')->with(compact('cupon', 'cliente', 'producto', 'combo', 'productos_combo'));
-        }
+        $cupon = Cupone::find($id);
+        return view('cupon.cobra_cupon')->with(compact('cupon'));
     }
+
+    // public function ajaxMuestraCupon(Request $request)
+    // {
+    //     $cupon = Cupone::find($request->cupon_id);
+    //     $cliente = User::find($request->cliente_id);
+    //     if($request->producto_id){
+    //         $producto = Producto::find($request->producto_id);
+    //         return view('cupon.ajaxMuestraCupon')->with(compact('cupon', 'cliente', 'producto'));
+    //     }else{
+    //         $producto=NULL;
+    //         $combo = Combo::find($request->combo_id);
+    //         $productos_combo = CombosProducto::where('combo_id', $combo->id)->get();
+    //         return view('cupon.ajaxMuestraCupon')->with(compact('cupon', 'cliente', 'producto', 'combo', 'productos_combo'));
+    //     }
+    // }
 
     public function ver($id)
     {

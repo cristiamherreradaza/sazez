@@ -139,7 +139,7 @@ class ComboController extends Controller
 
     public function listado()
     {
-        $combos = Combo::get();
+        $combos = Combo::orderBy('id', 'desc')->get();
         return view('combo.listado')->with(compact('combos'));
     }
 

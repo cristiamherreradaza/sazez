@@ -121,7 +121,7 @@
                                                     @endphp
                                                     @if(count($cupones) > 0)
                                                         @foreach($cupones as $key => $cupon)
-                                                            <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
+                                                            <a href="{{ url('Cupon/cobra_cupon/'.$cupon->id) }}" class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                                 @php
                                                                     if($cupon->producto_id){
                                                                         $icono = 'cube';

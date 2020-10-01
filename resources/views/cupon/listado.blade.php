@@ -90,24 +90,29 @@
         }
     });
 
-    function cobrar(cupon_id, cliente_id, producto_id, combo_id)
+    function cobrar(id)
     {
-        $.ajax({
-            url: "{{ url('Cupon/ajaxMuestraCupon') }}",
-            data: {
-                cupon_id: cupon_id,
-                cliente_id: cliente_id,
-                producto_id: producto_id,
-                combo_id: combo_id
-                },
-            type: 'get',
-            success: function(data) {
-                //$("#muestraCuponAjax").show('slow');
-                $("#muestraCuponAjax").html(data);
-                $("#modal_cobro").modal('show');
-            }
-        }); 
+        window.location.href = "{{ url('Cupon/cobra_cupon') }}/"+id;
     }
+
+    // function cobrar(cupon_id, cliente_id, producto_id, combo_id)
+    // {
+    //     $.ajax({
+    //         url: "{{ url('Cupon/ajaxMuestraCupon') }}",
+    //         data: {
+    //             cupon_id: cupon_id,
+    //             cliente_id: cliente_id,
+    //             producto_id: producto_id,
+    //             combo_id: combo_id
+    //             },
+    //         type: 'get',
+    //         success: function(data) {
+    //             //$("#muestraCuponAjax").show('slow');
+    //             $("#muestraCuponAjax").html(data);
+    //             $("#modal_cobro").modal('show');
+    //         }
+    //     }); 
+    // }
 
     function ver(cupon_id)
     {
