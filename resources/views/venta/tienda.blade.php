@@ -413,7 +413,7 @@
                         </table>
                     </div>
                     <div class="form-group">
-                        <a class="btn waves-effect waves-light btn-block btn-success text-white" onclick="validaItems()">REGISTRAR VENTA</a>
+                        <a class="btn waves-effect waves-light btn-block btn-success text-white" onclick="validaItems()" id="btnEnviaVenta">REGISTRAR VENTA</a>
                     </div>
                 </div>
             </div>
@@ -682,6 +682,7 @@
             if ($("#formularioVenta")[0].checkValidity()) {
 
                 let datosFormularioVenta = $("#formularioVenta").serializeArray();
+                $("#btnEnviaVenta").hide();
 
                 $.ajax({
                     url: "{{ url('Venta/guardaVenta') }}",

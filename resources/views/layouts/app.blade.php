@@ -221,7 +221,7 @@
                                 <!-- Search -->
                                 <!-- ============================================================== -->
                                 <li class="nav-item search-box d-none d-md-block">
-                                    <div class="app-search mt-3 mr-2 text-white text-bold"><span id="fechaActual"></span><br />La hora es: <span id="horaActual"></span></div>
+                                    <div class="app-search mt-3 mr-2 text-white text-bold"><span id="fechaActual"></span><br />Hora <span id="horaActual"></span></div>
                                     {{-- <form class="app-search mt-3 mr-2">
                                         <input type="text" class="form-control rounded-pill border-0" placeholder="Search for...">
                                         <a class="srh-btn"><i class="ti-search"></i></a>
@@ -381,7 +381,7 @@
             });
 
             muestraFechaActual();
-            startTime();
+            mueveReloj();
         });
 
         function makeArray() {
@@ -401,25 +401,18 @@
             $("#fechaActual").html(fechaActual);
         }
 
-            function startTime() {
-                today = new Date();
-                h = today.getHours();
-                m = today.getMinutes();
-                s = today.getSeconds();
-                m = checkTime(m);
-                s = checkTime(s);
-                document.getElementById('horaActual').innerHTML = h + ":" + m + ":" + s;
-                t = setTimeout('startTime()', 500);
-            }
+        function mueveReloj() {
+            momentoActual = new Date()
+            hora = momentoActual.getHours()
+            minuto = momentoActual.getMinutes()
+            segundo = momentoActual.getSeconds()
 
-            function checkTime(i) {
-                if (i < 10) {
-                    i = "0" + i;
-                }
-                return i;
-            }
-        
-        
+            horaImprimible = hora + " : " + minuto + " : " + segundo
+            $("#horaActual").html(horaImprimible);
+            // document.form_reloj.reloj.value = horaImprimible
+
+            setTimeout("mueveReloj()", 1000)
+        }
 
     </script>
 
