@@ -16,6 +16,18 @@ class AdminMiddleware
     public function handle($request, Closure $next)
     {
         if(auth()->user()->rol != 'Administrador'){
+            if(auth()->user()->rol != 'Mayorista'){
+                if(auth()->user()->rol != 'Almacen'){
+                    if(auth()->user()->rol != 'Tienda'){
+                        return redirect('/');
+                    }
+                }
+            }
+        }
+        return $next($request);
+
+        /*
+        if(auth()->user()->rol != 'Administrador'){
             if(auth()->user()->rol != 'Distribuidor'){
                 if(auth()->user()->rol != 'Tienda'){
                     return redirect('/');
@@ -23,6 +35,7 @@ class AdminMiddleware
             }
         }
         return $next($request);
+        */
 
         // if(auth()->user()->perfil->nombre == 'Administrador'){
         //     return $next($request);  

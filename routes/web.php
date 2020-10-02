@@ -49,6 +49,8 @@ Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback
 
 // Aqui colocar todas las rutas para los usuarios que no sean clientes.... todavia por definir.
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    
     // PRODUCTOS
     Route::post('Producto/guarda', 'ProductoController@guarda');
     Route::post('Producto/guardaEdicion', 'ProductoController@guardaEdicion');
