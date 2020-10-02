@@ -95,120 +95,126 @@
                                 <!-- ============================================================== -->
                                 <!-- Comment -->
                                 <!-- ============================================================== -->
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-wallet-giftcard"></i>
-                                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                                    </a>
-                                    <div class="dropdown-menu mailbox animated bounceInDown">
-                                        <ul class="list-style-none">
-                                            <li>
-                                                <div class="font-weight-medium border-bottom rounded-top py-3 px-4">
-                                                    Cupones Recientes
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="message-center notifications position-relative" style="height:250px;">
-                                                    @php
-                                                        $cupones = App\Cupone::where(function ($query) {
-                                                                                $query->where('almacene_id', auth()->user()->almacen->id)
-                                                                                    ->orWhere('almacene_id', NULL);
-                                                                            })->whereDate('fecha_final', '>=', date('Y-m-d'))
-                                                                            ->where('estado', 'Vigente')
-                                                                            ->orderBy('id', 'desc')
-                                                                            ->take(5)
-                                                                            ->get();
-                                                    @endphp
-                                                    @if(count($cupones) > 0)
-                                                        @foreach($cupones as $key => $cupon)
-                                                            <a href="{{ url('Cupon/cobra_cupon/'.$cupon->id) }}" class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                                @php
-                                                                    if($cupon->producto_id){
-                                                                        $icono = 'cube';
-                                                                        $item = $cupon->producto->nombre;
-                                                                    }else{
-                                                                        $icono = 'cubes';
-                                                                        $item = $cupon->combo->nombre;
-                                                                    }
-                                                                @endphp
-                                                                <span class="btn btn-info rounded-circle btn-circle">
-                                                                    <i class="fas fa-{{ $icono }}"></i>
-                                                                </span>
-                                                                <div class="w-75 d-inline-block v-middle pl-2">
-                                                                    <h5 class="message-title mb-0 mt-1 text-info">{{ $cupon->user->name }}</h5>
-                                                                    <span class="font-12 text-nowrap d-block text-muted text-truncate">
-                                                                        {{ $item }}
+                                @if(auth()->user()->rol != 'Cliente')
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-wallet-giftcard"></i>
+                                            <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                                        </a>
+                                        <div class="dropdown-menu mailbox animated bounceInDown">
+                                            <ul class="list-style-none">
+                                                <li>
+                                                    <div class="font-weight-medium border-bottom rounded-top py-3 px-4">
+                                                        Cupones Recientes
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="message-center notifications position-relative" style="height:250px;">
+                                                        @php
+                                                            $cupones = App\Cupone::where(function ($query) {
+                                                                                    $query->where('almacene_id', auth()->user()->almacen->id)
+                                                                                        ->orWhere('almacene_id', NULL);
+                                                                                })->whereDate('fecha_final', '>=', date('Y-m-d'))
+                                                                                ->where('estado', 'Vigente')
+                                                                                ->orderBy('id', 'desc')
+                                                                                ->take(5)
+                                                                                ->get();
+                                                        @endphp
+                                                        @if(count($cupones) > 0)
+                                                            @foreach($cupones as $key => $cupon)
+                                                                <a href="{{ url('Cupon/cobra_cupon/'.$cupon->id) }}" class="message-item d-flex align-items-center border-bottom px-3 py-2">
+                                                                    @php
+                                                                        if($cupon->producto_id){
+                                                                            $icono = 'cube';
+                                                                            $item = $cupon->producto->nombre;
+                                                                        }else{
+                                                                            $icono = 'cubes';
+                                                                            $item = $cupon->combo->nombre;
+                                                                        }
+                                                                    @endphp
+                                                                    <span class="btn btn-info rounded-circle btn-circle">
+                                                                        <i class="fas fa-{{ $icono }}"></i>
                                                                     </span>
-                                                                    <span class="font-12 text-nowrap d-block text-danger">
-                                                                        Valido hasta {{ $cupon->fecha_final }}
-                                                                    </span>
-                                                                </div>
-                                                            </a>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link border-top text-center text-dark pt-3" href="{{ url('Cupon/listado') }}">
-                                                    <strong>Ver todos los cupones</strong> <i class="fa fa-angle-right"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
+                                                                    <div class="w-75 d-inline-block v-middle pl-2">
+                                                                        <h5 class="message-title mb-0 mt-1 text-info">{{ $cupon->user->name }}</h5>
+                                                                        <span class="font-12 text-nowrap d-block text-muted text-truncate">
+                                                                            {{ $item }}
+                                                                        </span>
+                                                                        <span class="font-12 text-nowrap d-block text-danger">
+                                                                            Valido hasta {{ $cupon->fecha_final }}
+                                                                        </span>
+                                                                    </div>
+                                                                </a>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <a class="nav-link border-top text-center text-dark pt-3" href="{{ url('Cupon/listado') }}">
+                                                        <strong>Ver todos los cupones</strong> <i class="fa fa-angle-right"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                @endif
+                                
                                 <!-- ============================================================== -->
                                 <!-- End Comment -->
                                 <!-- ============================================================== -->
                                 <!-- ============================================================== -->
                                 <!-- Messages -->
                                 <!-- ============================================================== -->
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-cart-plus"></i>
-                                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                                    </a>
-                                    <div class="dropdown-menu mailbox animated bounceInDown" aria-labelledby="2">
-                                        <ul class="list-style-none">
-                                            <li>
-                                                <div class="font-weight-medium border-bottom rounded-top py-3 px-4">
-                                                    Promociones
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="message-center message-body position-relative" style="height:250px;">
-                                                    @php
-                                                        $combos = App\Combo::whereDate('fecha_final', '>=', date('Y-m-d'))
-                                                                            ->get();
-                                                    @endphp
-                                                    @if(count($combos)>0)
-                                                        @foreach($combos as $combo)
-                                                            <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
-                                                                <span class="btn btn-success rounded-circle btn-circle">
-                                                                    <i class="fas fa-star"></i>
-                                                                </span>
-                                                                <div class="w-75 d-inline-block v-middle pl-2">
-                                                                    <h5 class="message-title mb-0 mt-1">{{ $combo->nombre }}</h5>
-                                                                    @php
-                                                                        $cantidad = App\CombosProducto::where('combo_id', $combo->id)->count();
-                                                                    @endphp
-                                                                    <span class="font-12 text-nowrap d-block text-muted text-truncate">
-                                                                        {{ $cantidad }} Producto(s) en promocion
+                                @if(auth()->user()->rol != 'Cliente')
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-cart-plus"></i>
+                                            <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                                        </a>
+                                        <div class="dropdown-menu mailbox animated bounceInDown" aria-labelledby="2">
+                                            <ul class="list-style-none">
+                                                <li>
+                                                    <div class="font-weight-medium border-bottom rounded-top py-3 px-4">
+                                                        Promociones
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="message-center message-body position-relative" style="height:250px;">
+                                                        @php
+                                                            $combos = App\Combo::whereDate('fecha_final', '>=', date('Y-m-d'))
+                                                                                ->get();
+                                                        @endphp
+                                                        @if(count($combos)>0)
+                                                            @foreach($combos as $combo)
+                                                                <a href="javascript:void(0)" class="message-item d-flex align-items-center border-bottom px-3 py-2">
+                                                                    <span class="btn btn-success rounded-circle btn-circle">
+                                                                        <i class="fas fa-star"></i>
                                                                     </span>
-                                                                    <span class="font-12 text-nowrap d-block text-danger">Vigente hasta {{ $combo->fecha_final }}</span>
-                                                                </div>
-                                                            </a>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <a class="nav-link border-top text-center text-dark pt-3" href="{{ url('Combo/listado') }}">
-                                                    <b>Ver todas las promociones</b> <i class="fa fa-angle-right"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
+                                                                    <div class="w-75 d-inline-block v-middle pl-2">
+                                                                        <h5 class="message-title mb-0 mt-1">{{ $combo->nombre }}</h5>
+                                                                        @php
+                                                                            $cantidad = App\CombosProducto::where('combo_id', $combo->id)->count();
+                                                                        @endphp
+                                                                        <span class="font-12 text-nowrap d-block text-muted text-truncate">
+                                                                            {{ $cantidad }} Producto(s) en promocion
+                                                                        </span>
+                                                                        <span class="font-12 text-nowrap d-block text-danger">Vigente hasta {{ $combo->fecha_final }}</span>
+                                                                    </div>
+                                                                </a>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <a class="nav-link border-top text-center text-dark pt-3" href="{{ url('Combo/listado') }}">
+                                                        <b>Ver todas las promociones</b> <i class="fa fa-angle-right"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                @endif
+                                
                                 <!-- ============================================================== -->
                                 <!-- End Messages -->
                                 <!-- ============================================================== -->
