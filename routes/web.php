@@ -49,6 +49,8 @@ Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback
 
 // Aqui colocar todas las rutas para los usuarios que no sean clientes.... todavia por definir.
 Route::middleware(['auth', 'admin'])->group(function () {
+
+    
     // PRODUCTOS
     Route::post('Producto/guarda', 'ProductoController@guarda');
     Route::post('Producto/guardaEdicion', 'ProductoController@guardaEdicion');
@@ -304,6 +306,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/ajax_listado_ventas_accesorio', 'ReporteController@ajax_listado_ventas_accesorio');
     Route::get('Reporte/saldos_mayorista', 'ReporteController@saldos_mayorista');
     Route::get('Reporte/ajax_listado_saldos_mayorista', 'ReporteController@ajax_listado_saldos_mayorista');
+    Route::get('Reporte/saldos_diarios', 'ReporteController@saldos_diarios');
+    Route::get('Reporte/ajax_listado_saldos_diarios', 'ReporteController@ajax_listado_saldos_diarios');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');
