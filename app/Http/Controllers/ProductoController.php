@@ -450,6 +450,7 @@ class ProductoController extends Controller
             $movimiento->producto_id   = $producto_id;
             $movimiento->almacene_id   = $request->almacene_id;
             $movimiento->tipo_id       = $request->tipo_id;
+            $movimiento->fecha         = date("Y-m-d H:i:s");
             $movimiento->precio_compra = $request->precio_compra;
             $movimiento->ingreso       = $request->cantidad;
             $movimiento->save();

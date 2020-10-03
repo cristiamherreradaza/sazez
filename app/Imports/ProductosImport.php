@@ -188,6 +188,7 @@ class ProductosImport implements ToModel, WithStartRow
         $movimiento->almacene_id   = $almacene_id;
         $movimiento->proveedor_id  = $proveedorId;
         $movimiento->tipo_id       = $tipo_id;
+        $movimiento->fecha         = date("Y-m-d H:i:s");
         $movimiento->precio_compra = $row[7];
         $movimiento->precio_venta  = 0;
         $movimiento->ingreso       = $row[9];

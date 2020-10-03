@@ -490,10 +490,10 @@ class VentaController extends Controller
                     )
                     ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
                     ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
-                    ->leftJoin('users as usuario', 'ventas.user_id', '=', 'usuario.id')
-                    ->where('ventas.almacene_id', $almacen);
+                    ->leftJoin('users as usuario', 'ventas.user_id', '=', 'usuario.id');
         if(Auth::user()->perfil_id != 1){
             $ventas->where('ventas.user_id', Auth::user()->id);
+            $ventas->where('ventas.almacene_id', $almacen);
         }
         return Datatables::of($ventas)
             ->addColumn('action', function ($ventas) {
