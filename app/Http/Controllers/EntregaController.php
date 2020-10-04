@@ -28,7 +28,15 @@ class EntregaController extends Controller
         // dd($pedidos[0]->id);
         // $entrega = Pedido::find($id);
         $pedido = Pedido::find($id);
-
+        if($pedido->estado == 'Entregado'){
+            //dd('entregado');
+            return redirect('Pedido/listado');
+        }else{
+            //dd('no entregado');
+            $pedido_productos = PedidosProducto::where('pedido_id', $pedido->id)
+                                            ->get();
+            return view('entrega.entrega')->with(compact('pedido', 'pedido_productos'));
+        }
         // $productos = DB::table('pedidos_productos')
         //         ->where('pedidos_productos.pedido_id', '=', $id)
         //         ->join('productos', 'pedidos_productos.producto_id', '=', 'productos.id')
@@ -37,123 +45,83 @@ class EntregaController extends Controller
         //         ->select('pedidos_productos.*', 'productos.codigo', 'productos.nombre', 'marcas.nombre as nombre_marca', 'tipos.nombre as nombre_tipo', 'productos.modelo', 'productos.colores')
         //         ->get();
 
-        $pedido_productos = PedidosProducto::where('pedido_id', $pedido->id)
-                                            ->get();
+        
         // dd($productos);
-        return view('entrega.entrega')->with(compact('pedido', 'pedido_productos'));
+        
     }   
 
     public function store(Request $request)
     {
-        //dd($request->cantidad_304);
-        //dd($request->cantidad_1);
-        // $producto_id = 304;
-        // $cantidad_x = 'cantidad_'.$producto_id;
-        //dd($request->$cantidad_x);
-        //dd($cantidad_x);
-
-        //$hoy = date("Y-m-d H:i:s");
-        $efectuado = 'No';
-        $num = DB::select("SELECT MAX(numero) as nro
-                                FROM movimientos");
-        if (!empty($num)) {
-            $numero = $num[0]->nro + 1;
-        } else {
-            $numero = 1;
-        }
-        
         $pedido = Pedido::find($request->pedido_id);
-        $pedido_productos = PedidosProducto::where('pedido_id', $pedido->id)->get();
-
-        foreach($pedido_productos as $producto){
-            $cantidad_x = 'cantidad_'.$producto->producto_id;
-            if($request->$cantidad_x > 0){
-                $efectuado = 'Si';
-                // si la cantidad del producto_x es mayor a 0, entonces crea envio (salida/ingreso)
-                //echo $request->$cantidad_x. "<br>";
-                // Buscamos al producto
-                $item = Producto::find($producto->producto_id);
-                //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN CENTRAL
-                $salida = new Movimiento();
-                $salida->user_id = Auth::user()->id;
-                $salida->producto_id = $producto->producto_id;
-                $salida->tipo_id = $item->tipo_id;
-                $salida->almacene_id = $pedido->almacene_id;
-                $salida->pedido_id = $pedido->id;
-                $salida->salida = $request->$cantidad_x;
-                $salida->fecha = date("Y-m-d H:i:s");
-                $salida->numero = $numero;
-                $salida->estado = 'Envio';
-                $salida->save();
-
-                //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
-                $ingreso = new Movimiento();
-                $ingreso->user_id = Auth::user()->id;
-                $ingreso->producto_id = $producto->producto_id;
-                $ingreso->tipo_id = $item->tipo_id;
-                $ingreso->almacen_origen_id = $pedido->almacene_id;
-                $ingreso->almacene_id = $pedido->almacene_solicitante_id;
-                $ingreso->pedido_id = $pedido->id;
-                $ingreso->ingreso = $request->$cantidad_x;
-                $ingreso->fecha = date("Y-m-d H:i:s");
-                $ingreso->numero = $numero;
-                $ingreso->estado = 'Envio';
-                $ingreso->save();
-            }
-        }
-        /*
-        $pedido_id = $request->input("pedido_id");
-        $almacene_id = $request->input("almacene_id");
-        $pedido = DB::table('pedidos_productos')
-                ->where('pedido_id', '=', $pedido_id)
-                ->get();
-        foreach ($pedido as $valor) {
-            $dato = 'cantidad_'.$valor->id;
-            $cantidad = $request->input($dato);
-
-            $total = DB::select("SELECT (SUM(ingreso) - SUM(salida))as total
-                                                                FROM movimientos
-                                                                WHERE producto_id = '$valor->producto_id'
-                                                                AND almacene_id = 1
-                                                                GROUP BY producto_id");
-            $cantidad_disponible = $total[0]->total;
-
-            if ($cantidad <= $cantidad_disponible) {
-                //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN CENTRAL
-                $salida = new Movimiento();
-                $salida->user_id = Auth::user()->id;
-                $salida->producto_id = $valor->producto_id;
-                $salida->almacene_id = 1;
-                $salida->pedido_id = $pedido_id;
-                $salida->salida = $cantidad;
-                $salida->fecha = $hoy;
-                $salida->numero = $numero;
-                $salida->estado = 'Pedido';
-                $salida->save();
-
-
-                //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
-                $ingreso = new Movimiento();
-                $ingreso->user_id = Auth::user()->id;
-                $ingreso->producto_id = $valor->producto_id;
-                $ingreso->almacene_id = $almacene_id;
-                $ingreso->pedido_id = $pedido_id;
-                $ingreso->ingreso = $cantidad;
-                $ingreso->fecha = $hoy;
-                $ingreso->numero = $numero;
-                $ingreso->estado = 'Pedido';
-                $ingreso->save();
-            }
-        }
-        */
-        //ACTUALIZAMOS EL PEDIDO A ENTREGADO
-        //$pedidos = Pedido::find($pedido_id);
-        if($efectuado == 'Si'){
-            $pedido->estado = 'Entregado';
-            $pedido->save();
+        if($pedido->estado == 'Entregado'){
             return redirect('Entrega/ver_pedido/'.$pedido->numero);
+        }else{
+            $efectuado = 'No';
+            $maximo = Movimiento::max('numero');
+            if ($maximo) {
+                $numero = $maximo + 1;
+            } else {
+                $numero = 1;
+            }
+            // Del pedido X, sacamos a los productos
+            $pedido_productos = PedidosProducto::where('pedido_id', $pedido->id)->get();
+            foreach($pedido_productos as $producto){
+                $cantidad_x = 'cantidad_'.$producto->producto_id;
+                // Si la cantidad del producto X, es mayor a 0
+                if($request->$cantidad_x > 0){
+                    // Sacamos el stock existente en almacen X del producto X
+                    $ingreso = Movimiento::where('producto_id', $producto->producto_id)
+                                        ->where('almacene_id', $pedido->almacene_id)
+                                        ->where('ingreso', '>', 0)
+                                        ->sum('ingreso');
+                    $salida = Movimiento::where('producto_id', $producto->producto_id)
+                                        ->where('almacene_id', $pedido->almacene_id)
+                                        ->where('salida', '>', 0)
+                                        ->sum('salida');
+                    $cantidad_disponible = $ingreso - $salida;
+                    // Si la cantidad solicitada, no supera a la existente en almacen X del producto X 
+                    if($cantidad_disponible >= $request->$cantidad_x){
+                        // Se efectua el envio, por tanto cambia la variable $efectuado al valor 'Si'
+                        $efectuado = 'Si';
+                        // Buscamos al producto
+                        $item = Producto::find($producto->producto_id);
+                        //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN CENTRAL
+                        $salida = new Movimiento();
+                        $salida->user_id = Auth::user()->id;
+                        $salida->producto_id = $producto->producto_id;
+                        $salida->tipo_id = $item->tipo_id;
+                        $salida->almacene_id = $pedido->almacene_id;
+                        $salida->pedido_id = $pedido->id;
+                        $salida->salida = $request->$cantidad_x;
+                        $salida->fecha = date("Y-m-d H:i:s");
+                        $salida->numero = $numero;
+                        $salida->estado = 'Envio';
+                        $salida->save();
+        
+                        //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
+                        $ingreso = new Movimiento();
+                        $ingreso->user_id = Auth::user()->id;
+                        $ingreso->producto_id = $producto->producto_id;
+                        $ingreso->tipo_id = $item->tipo_id;
+                        $ingreso->almacen_origen_id = $pedido->almacene_id;
+                        $ingreso->almacene_id = $pedido->almacene_solicitante_id;
+                        $ingreso->pedido_id = $pedido->id;
+                        $ingreso->ingreso = $request->$cantidad_x;
+                        $ingreso->fecha = date("Y-m-d H:i:s");
+                        $ingreso->numero = $numero;
+                        $ingreso->estado = 'Envio';
+                        $ingreso->save();
+                    }
+                }
+            }
+            //ACTUALIZAMOS EL PEDIDO A ENTREGADO
+            if($efectuado == 'Si'){
+                $pedido->estado = 'Entregado';
+                $pedido->save();
+                return redirect('Entrega/ver_pedido/'.$pedido->numero);
+            }
+            return redirect('Pedido/listado');
         }
-        return redirect('Pedido/listado');
     }
 
     public function excel($id)

@@ -127,93 +127,102 @@
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 
 <script>
-$(document).ready(function() {
-  
-
-    // DataTable
-    var table = $('#tabla-usuarios').DataTable( {
-        
-        iDisplayLength: 10,
-        processing: true,
-        // scrollX: true,
-        serverSide: true,
-        ajax: "{{ url('Pedido/ajax_listado') }}",
-        columns: [
-            {data: 'numero_pedido', name: 'pedidos.numero'},
-            {data: 'almacen_destino', name: 'almacenes.nombre'},
-            {data: 'nombre_usuario', name: 'users.name'},
-            {data: 'almacen_origen', name: 'origen.nombre'},
-            {data: 'fecha', name: 'pedidos.fecha'},
-            {data: 'estado', name: 'pedidos.estado'},
-            {data: 'action'},
-        ],
-        language: {
-            url: '{{ asset('datatableEs.json') }}'
-        },
+    // Funcion ajax para mostrar el listado de pedidos y sus respectivas opciones
+    $(document).ready(function() {
+        // DataTable
+        var table = $('#tabla-usuarios').DataTable( {
+            
+            iDisplayLength: 10,
+            processing: true,
+            // scrollX: true,
+            serverSide: true,
+            ajax: "{{ url('Pedido/ajax_listado') }}",
+            columns: [
+                {data: 'numero_pedido', name: 'pedidos.numero'},
+                {data: 'almacen_destino', name: 'almacenes.nombre'},
+                {data: 'nombre_usuario', name: 'users.name'},
+                {data: 'almacen_origen', name: 'origen.nombre'},
+                {data: 'fecha', name: 'pedidos.fecha'},
+                {data: 'estado', name: 'pedidos.estado'},
+                {data: 'action'},
+            ],
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        } );
     } );
 
-} );
+    // Funcion que al clickear sobre el boton ver pedido (boton celeste), redirige al detalle del pedido
+    function ver_pedido(id)
+    {
+        window.location.href = "{{ url('Entrega/ver_pedido') }}/"+id;
+    }
 
-</script>
-<script>
+    // Funcion que al clickear sobre el boton entregar pedido (boton negro), redirige a la interfaz de entrega
+    function entrega(id)
+    {
+        window.location.href = "{{ url('Entrega/entrega') }}/"+id;
+    }
+    
+    // Funcion que al clickear sobre el boton bajar pedido (boton verde), descarga el formato excel con el detalle del pedido
+    function excel(id)
+    {
+        window.location.href = "{{ url('Entrega/excel') }}/"+id;
+    }
+
+    // Funcion que al clickear sobre el boton de entregar pedido via excel(boton plomo), despliega el modal
     function entrega_excel(id)
     {
         $("#pedido_id").val(id);
         $("#entrega_excel").modal('show');
     }
 
-    function ver_pedido(id)
-    {
-        window.location.href = "{{ url('Entrega/ver_pedido') }}/"+id;
-    }
-    
-</script>
-<script>
-// Script de importacion de excel
-$(document).ready(function() {
-    $('.upload_form').on('submit', function(event) {
-        event.preventDefault();
-        $.ajax({
-            url: "{{ url('Entrega/importar_envio') }}",
-            method: "POST",
-            data: new FormData(this), pedido_id,
-            dataType: 'JSON',
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(data)
-            {
-                if(data.sw == 1){
-                    Swal.fire(
-                    'Hecho',
-                    data.message,
-                    'success'
-                    )
-                    .then(function() {
-                        window.location.href = "{{ url('Entrega/ver_pedido') }}/"+data.numero;
-                    });
-                }else{
-                    Swal.fire(
-                    'Oops...',
-                    data.message,
-                    'error'
-                    )
-                    .then(function() {
-                        window.location.href = "{{ url('Pedido/listado') }}";
-                    });
+    // Script de importacion de excel
+    $(document).ready(function() {
+        $('.upload_form').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{{ url('Entrega/importar_envio') }}",
+                method: "POST",
+                data: new FormData(this), pedido_id,
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data)
+                {
+                    if(data.sw == 1){
+                        Swal.fire(
+                        'Hecho',
+                        data.message,
+                        'success'
+                        )
+                        .then(function() {
+                            window.location.href = "{{ url('Entrega/ver_pedido') }}/"+data.numero;
+                        });
+                    }else{
+                        Swal.fire(
+                        'Oops...',
+                        data.message,
+                        'error'
+                        )
+                        .then(function() {
+                            window.location.href = "{{ url('Pedido/listado') }}";
+                        });
+                    }
                 }
-            }
-        })
+            })
+        });
     });
-});
-</script>
-<script>
+
+    // Funcion sin uso
     function editar(id)
     {
         $("#id").val(id);
         window.location.href = "{{ url('Pedido/editar') }}/"+id;
     }
 
+    // Funcion sin uso
     function eliminar(id)
     {
         Swal.fire({
@@ -236,15 +245,6 @@ $(document).ready(function() {
                 });
             }
         })
-    }
-    
-    function entrega(id)
-    {
-        window.location.href = "{{ url('Entrega/entrega') }}/"+id;
-    }
-    function excel(id)
-    {
-        window.location.href = "{{ url('Entrega/excel') }}/"+id;
     }
 </script>
 @endsection
