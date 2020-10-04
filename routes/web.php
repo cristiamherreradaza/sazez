@@ -33,8 +33,6 @@ Route::get('/', 'Auth\LoginController@inicio');
 // });
 Auth::routes();
 
-Route::get('/home', 'ProductoController@panelControl')->name('home');
-
 // LOGIN SOCIALITE GITHUB
 Route::get('login/github', 'Auth\LoginController@redirectToProvider');
 Route::get('login/github/callback', 'Auth\LoginController@handleProviderCallback');
@@ -49,8 +47,7 @@ Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback
 
 // Aqui colocar todas las rutas para los usuarios que no sean clientes.... todavia por definir.
 Route::middleware(['auth', 'admin'])->group(function () {
-
-    
+    Route::get('/home', 'ProductoController@panelControl')->name('home');
     // PRODUCTOS
     Route::post('Producto/guarda', 'ProductoController@guarda');
     Route::post('Producto/guardaEdicion', 'ProductoController@guardaEdicion');

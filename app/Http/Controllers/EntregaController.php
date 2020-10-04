@@ -219,67 +219,89 @@ class EntregaController extends Controller
         $pedido = Pedido::find($request->pedido_id);
         // $num = DB::select("SELECT MAX(numero) as nro
         //                         FROM movimientos");
-        $maximo = Movimiento::max('numero');
-        if ($maximo) {
-            $numero = $maximo + 1;
-        } else {
-            $numero = 1;
-        }
-        //dd($numero);
-
-        $sw=0;
-        //$pedido = $request->all('pedido_id');
-        //$pedido_id = $pedido['pedido_id'];
-        // dd($pedido_id);
-        // Excel::import(new MovimientosImport, $file);
-        $validation = Validator::make($request->all(), [
-            'select_file' => 'required|mimes:xlsx|max:2048'
-        ]);
-        if($validation->passes())
-        {
-            // Creamos variables de sesión para pasar al import
-            session(['pedido' => $pedido]);
-            session(['numero' => $numero]);
-            $file = $request->file('select_file');
-            Excel::import(new MovimientosImport, $file);
-            // Eliminarmos variables de sesión
-            session()->forget('pedido');
-            session()->forget('numero');
-
-            // Verificamos si hubo algun envio
-            $pedido = Pedido::find($request->pedido_id);
-            if($pedido->estado == 'Entregado'){
-                $sw=1;
+        //dd('hola');
+        //dd($pedido->estado);
+        if($pedido->estado != 'Entregado'){
+            //dd('es null');
+            $maximo = Movimiento::max('numero');
+            if ($maximo) {
+                $numero = $maximo + 1;
+            } else {
+                $numero = 1;
             }
-            //ACTUALIZAMOS EL PEDIDO A ENTREGADO
-            // $pedidos = Pedido::find($pedido_id);
-            // $pedidos->estado = 'Entregado';
-            // $pedidos->save();
-            return response()->json([
-                'message' => 'Importacion realizada con exito',
-                'numero' => $pedido->id,
-                'sw' => $sw
+            //dd($numero);
+
+            $sw=0;
+            //$pedido = $request->all('pedido_id');
+            //$pedido_id = $pedido['pedido_id'];
+            // dd($pedido_id);
+            // Excel::import(new MovimientosImport, $file);
+            $validation = Validator::make($request->all(), [
+                'select_file' => 'required|mimes:xlsx|max:2048'
             ]);
-        }
-        else
-        {
-            switch ($validation->errors()->first()) {
-                case "The select file field is required.":
-                    $mensaje = "Es necesario agregar un archivo Excel.";
-                    break;
-                case "The select file must be a file of type: xlsx.":
-                    $mensaje = "El archivo debe ser de tipo: Excel.";
-                    break;
-                default:
-                    $mensaje = "Fallo al importar el archivo seleccionado.";
-                    break;
+            if($validation->passes())
+            {
+                // Creamos variables de sesión para pasar al import
+                session(['pedido' => $pedido]);
+                session(['numero' => $numero]);
+                $file = $request->file('select_file');
+                Excel::import(new MovimientosImport, $file);
+                // Eliminarmos variables de sesión
+                session()->forget('pedido');
+                session()->forget('numero');
+                // Verificamos si hubo algun envio
+                $pedido = Pedido::find($request->pedido_id);
+                if($pedido->estado == 'Entregado'){
+                    $sw=1;
+                }
+                //ACTUALIZAMOS EL PEDIDO A ENTREGADO
+                // $pedidos = Pedido::find($pedido_id);
+                // $pedidos->estado = 'Entregado';
+                // $pedidos->save();
+                if($sw==1){
+                    return response()->json([
+                        'message' => 'Importacion realizada con exito',
+                        'numero' => $pedido->id,
+                        'sw' => $sw
+                    ]);
+                }else{
+                    return response()->json([
+                        'message' => 'Alguna cantidad solicitada supera al stock actual',
+                        'numero' => $pedido->id,
+                        'sw' => $sw
+                    ]);
+                }
             }
+            else
+            {
+                switch ($validation->errors()->first()) {
+                    case "The select file field is required.":
+                        $mensaje = "Es necesario agregar un archivo Excel.";
+                        break;
+                    case "The select file must be a file of type: xlsx.":
+                        $mensaje = "El archivo debe ser de tipo: Excel.";
+                        break;
+                    default:
+                        $mensaje = "Fallo al importar el archivo seleccionado.";
+                        break;
+                }
+                return response()->json([
+                    //0
+                    'message' => $mensaje,
+                    'sw' => 0
+                ]);
+            }
+
+
+        }else{
+            //dd($pedido->estado);
             return response()->json([
                 //0
-                'message' => $mensaje,
+                'message' => 'El Pedido ya fue entregado',
                 'sw' => 0
             ]);
         }
+        
     }
 
     public function ver_pedido($id)

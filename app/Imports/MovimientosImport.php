@@ -19,7 +19,6 @@ class MovimientosImport implements ToModel
     */
     public function model(array $row)
     {
-        
         //dd($pedido->numero);
         // dd($pedido_id);
         // return new Movimiento([
@@ -37,7 +36,6 @@ class MovimientosImport implements ToModel
             $producto = Producto::where('codigo', $row[2])
                                 ->where('nombre', $row[3])
                                 ->firstOrFail();
-
             // Busca si el nombre del almacen (origen) coincide con la fila del excel
             // $almacen = Almacene::where('nombre', $row[0])
             //                     ->firstOrFail();
@@ -85,8 +83,8 @@ class MovimientosImport implements ToModel
                         $entrada->user_id = Auth::user()->id;
                         $entrada->producto_id = $producto->id;
                         $entrada->tipo_id = $producto->tipo_id;
-                        $entrada->almacen_origen_id = $pedido->almacene_solicitante_id;
-                        $entrada->almacene_id = $pedido->almacene_id;
+                        $entrada->almacen_origen_id = $pedido->almacene_id;
+                        $entrada->almacene_id = $pedido->almacene_solicitante_id;
                         $entrada->pedido_id = $pedido->id;
                         $entrada->ingreso = $row[7];
                         $entrada->fecha = date("Y-m-d H:i:s");

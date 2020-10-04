@@ -198,6 +198,9 @@ $(document).ready(function() {
                     data.message,
                     'error'
                     )
+                    .then(function() {
+                        window.location.href = "{{ url('Pedido/listado') }}";
+                    });
                 }
             }
         })

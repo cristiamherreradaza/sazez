@@ -45,15 +45,13 @@
                                     }
                                     $resultado = $salida->total - $ingreso;
                                 }else{
-                                    $ingreso = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) as total'))
-                                                        ->where('producto_id', $producto->id)
-                                                        ->where('almacene_id', auth()->user()->almacen->id)
-                                                        ->first();
-                                    $salida = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(salida) as total'))
-                                                            ->where('producto_id', $producto->id)
+                                    $ingreso = App\Movimiento::where('producto_id', $producto->id)
                                                             ->where('almacene_id', auth()->user()->almacen->id)
-                                                            ->first();
-                                    $resultado = $ingreso->total - $salida->total;
+                                                            ->sum('ingreso');
+                                    $salida = App\Movimiento::where('producto_id', $producto->id)
+                                                            ->where('almacene_id', auth()->user()->almacen->id)
+                                                            ->sum('salida');                                                            
+                                    $resultado = $ingreso - $salida;
                                 }
                             @endphp
                             <td>{{ intval($resultado) }}</td>
