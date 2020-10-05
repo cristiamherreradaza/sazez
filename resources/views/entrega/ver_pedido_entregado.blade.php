@@ -104,8 +104,13 @@
                                                                 ->where('ingreso', '>', 0)
                                                                 ->where('producto_id', $producto->producto_id)
                                                                 ->first();
+                                        if($cantidad){
+                                            $cantidad = $cantidad->ingreso;
+                                        }else{
+                                            $cantidad = 0;
+                                        }
                                     @endphp
-                                    <td style="text-align:center;">{{ round($cantidad->ingreso) }}</td>
+                                    <td style="text-align:center;">{{ round($cantidad) }}</td>
                                 </tr>
                             @endforeach   
                         </tbody>
@@ -118,7 +123,7 @@
             <div class="card-footer">
                 <div class="row">
                     <div class="col-md-12">
-                        <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$cantidad->numero) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
+                        <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$pedido->id) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
                     </div>
                 </div>
             </div>

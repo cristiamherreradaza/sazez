@@ -17,7 +17,12 @@ class PedidoController extends Controller
     {
         $almacenes = Almacene::whereNull('estado')->get();
         return view('pedido.nuevo')->with(compact('almacenes'));
-    }   
+    }
+
+    public function listado()
+    {
+        return view('pedido.listado');
+    }
 
     public function pedido_productos($id)
     {
@@ -137,12 +142,6 @@ class PedidoController extends Controller
                             ->limit(8)
                             ->get();
         return view('pedido.ajaxBuscaProducto')->with(compact('productos', 'almacen_id'));
-    }
-
-    public function listado()
-    {
-        // dd($productos);
-        return view('pedido.listado');
     }
 
     public function ajax_listado()

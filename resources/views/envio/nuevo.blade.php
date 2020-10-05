@@ -107,7 +107,7 @@
                             </table>
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
-                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success">ENVIAR</button>
+                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">ENVIAR</button>
                             </div>
                         </div>
                     </div>
@@ -124,10 +124,8 @@
                 </div>
                 <div class="card-body" id="bloque_formulario_importacion" style="display: none;">
                     <form method="post" enctype="multipart/form-data" id="upload_form" class="upload_form">
-                            @csrf
                         @csrf
                         <div class="row">
-                        
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -151,7 +149,7 @@
                                     disabled style="display: none;">
                                     <span class="spinner-border spinner-border-sm" role="status"
                                         aria-hidden="true"></span>
-                                    &nbsp;&nbsp;Estamos trabajando, ten pasciencia ;-)
+                                    &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
                                 </button>
 
                             </div>
@@ -184,7 +182,7 @@
                             <div class="col-md-12">
                                 {{-- <img src="{{ asset('assets/images/muestra_excel_productos.png') }}" class="img-thumbnail" alt=""> --}}
                                 <span class='zoom' id='ex1'>
-                                    <img src='{{ asset('assets/images/muestra_excel_envios.png') }}' class="img-thumbnail" alt='Daisy on the Ohoopee' />
+                                    <img src="{{ asset('assets/images/muestra_excel_envios.png') }}" class="img-thumbnail" alt='Daisy on the Ohoopee' />
                                 </span>
                             </div>
                         </div>
@@ -200,48 +198,21 @@
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
-// Script de importacion de excel
-$(document).ready(function() {
-    $('.upload_form').on('submit', function(event) {
-        event.preventDefault();
-        $.ajax({
-            url: "{{ url('Entrega/ajax_importar') }}",
-            method: "POST",
-            data: new FormData(this),
-            dataType: 'JSON',
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(data)
-            {
-                if(data.sw == 1){
-                    Swal.fire(
-                    'Hecho',
-                    data.message,
-                    'success'
-                    )
-                    .then(function() {
-                        window.location.href = "{{ url('Envio/listado') }}";
-                    });
-                }else{
-                    Swal.fire(
-                    'Oops...',
-                    data.message,
-                    'error'
-                    )
-                }
-            }
-        })
+    // Funcion que muestra/oculta caja de importacion/exportacion de envio excel
+    function muestra_formulario_importacion()
+    {
+        $("#bloque_formulario_importacion").toggle('slow');
+    }
+
+    // Funcion para el uso de ajax
+    $.ajaxSetup({
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
-});
-</script>
-<script>
-function muestra_formulario_importacion()
-{
-    $("#bloque_formulario_importacion").toggle('slow');
-}
-</script>
-<script>
+
+    // Funcion que habilita el datatable
     var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
@@ -251,26 +222,8 @@ function muestra_formulario_importacion()
             url: '{{ asset('datatableEs.json') }}'
         }
     });
-    var itemsPedidoArray = [];
-    $.ajaxSetup({
-        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
 
-    $(document).ready(function () {
-        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
-            t.row($(this).parents('tr'))
-                .remove()
-                .draw();
-            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
-            let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
-            itemsPedidoArray.splice(pos, 1);
-        });
-    });
-
-
+    // Funcion Ajax que busca el producto y devuelve coincidencias
     $(document).on('keyup', '#termino', function(e) {
         almacen_origen = $('#almacen_origen').val();
         termino_busqueda = $('#termino').val();
@@ -288,9 +241,74 @@ function muestra_formulario_importacion()
                 }
             });
         }
-
+    });
+    
+    // Variable necesaria para funcionamiento de datatable
+    var itemsPedidoArray = [];
+    
+    // Funcion que elimina un producto en la lista de productos ingresados
+    $(document).ready(function () {
+        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
+            t.row($(this).parents('tr'))
+                .remove()
+                .draw();
+            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
+            let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
+            itemsPedidoArray.splice(pos, 1);
+        });
     });
 
+    // Funcion que valida que exista al menos un item en la lista para continuar
+    function validaItems()
+    {
+        if(itemsPedidoArray.length > 0){
+            //alert('ok');
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar al menos un producto.'
+            })
+        }        
+    }
+
+    // Script de importacion de excel
+    $(document).ready(function() {
+        $('.upload_form').on('submit', function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: "{{ url('Entrega/ajax_importar') }}",
+                method: "POST",
+                data: new FormData(this),
+                dataType: 'JSON',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data)
+                {
+                    if(data.sw == 1){
+                        Swal.fire(
+                        'Hecho',
+                        data.message,
+                        'success'
+                        )
+                        .then(function() {
+                            window.location.href = "{{ url('Envio/listado') }}";
+                        });
+                    }else{
+                        Swal.fire(
+                        'Oops...',
+                        data.message,
+                        'error'
+                        )
+                    }
+                }
+            })
+        });
+    });
+
+    //
     function adicionaPedido(item)
     {
         /*var item = $("#item_"+item).closest("tr").find('td').each(function(){
@@ -324,6 +342,8 @@ function muestra_formulario_importacion()
             }
         })
     }
+
+    
 
 </script>
 @endsection

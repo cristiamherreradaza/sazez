@@ -25,7 +25,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Fecha</label>
-                                <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ date("Y-m-d") }}" required>
+                                <input type="date" name="fecha_pedido" id="fecha_pedido" class="form-control" value="{{ date('Y-m-d') }}" required>
                             </div>
                         </div>
 
@@ -106,7 +106,6 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
-
 <script>
     var t = $('#tablaPedido').DataTable({
         paging: false,
@@ -141,6 +140,7 @@
         $("#botonSubmit").hide();
     }
 
+    // Funcion para busqueda de producto en pedido input (BUSCAR PRODUCTO)
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
         almacen_id = $('#almacen_a_pedir').val();
@@ -158,7 +158,6 @@
                 }
             });
         }
-
     });
 
     function adicionaPedido(item)

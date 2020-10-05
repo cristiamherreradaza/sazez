@@ -681,6 +681,7 @@ class ProductoController extends Controller
 
     public function adicionaProducto(Request $request)
     {
+        dd('hola');
         //dd($request->numero_ingreso_envio);
         if($request->producto_id){
             // Buscaremos si ya existe ese producto en ese ingreso

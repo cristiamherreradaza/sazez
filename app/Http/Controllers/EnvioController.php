@@ -39,6 +39,7 @@ class EnvioController extends Controller
 
     public function guarda(Request $request)
     {
+        dd('hola');
         if($request->item){
             //Preguntaremos si almacen_origen es null
             if($request->almacen_origen){

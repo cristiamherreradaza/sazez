@@ -172,6 +172,7 @@
 <script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
 <script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
 <script>
+    // Funcion para el uso de ajax
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -179,6 +180,7 @@
         }
     });
 
+    // Funcion que habilita el datatable
     $(function () {
         $('#config-table').DataTable({
             responsive: true,
@@ -191,15 +193,46 @@
         });
     });
 
-    $("#botonImprimir").click(function() {
-		var mode = 'iframe'; //popup
-		var close = mode == "popup";
-		var options = {
-				mode: mode,
-				popClose: close
-		};
-		$("div#printableArea").printArea(options);
-	});
+    // Funcion Ajax que busca el producto y devuelve coincidencias
+    $(document).on('keyup', '#termino', function(e) {
+        termino_busqueda = $('#termino').val();
+        if (termino_busqueda.length > 2) {
+            $.ajax({
+                url: "{{ url('Producto/ajaxBuscaIngresoProducto') }}",
+                data: {termino: termino_busqueda},
+                type: 'POST',
+                success: function(data) {
+                    $("#listadoProductosAjax").show('slow');
+                    $("#listadoProductosAjax").html(data);
+                }
+            });
+        }
+    });
+
+    // Funcion que pone en blanco valores del formulario de adiciona producto
+    $( function() {
+        $("#tipo_envio").val("");
+        $("#incluye_almacen").prop('disabled', true);
+        $("#incluye_almacen").val("No");
+        $("#almacen").change( function() {
+            if($(this).val() != 1){
+                $("#incluye_almacen").prop('disabled', false);
+            }else{
+                $("#incluye_almacen").prop('disabled', true);
+                $("#incluye_almacen").val("No");
+            }
+        });
+    });
+
+    // $("#botonImprimir").click(function() {
+	// 	var mode = 'iframe'; //popup
+	// 	var close = mode == "popup";
+	// 	var options = {
+	// 			mode: mode,
+	// 			popClose: close
+	// 	};
+	// 	$("div#printableArea").printArea(options);
+	// });
 
     function eliminar(id, nombre)
     {
@@ -249,22 +282,8 @@
             }
         })
     }
-
-    $(document).on('keyup', '#termino', function(e) {
-        termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 2) {
-            $.ajax({
-                url: "{{ url('Producto/ajaxBuscaIngresoProducto') }}",
-                data: {termino: termino_busqueda},
-                type: 'POST',
-                success: function(data) {
-                    $("#listadoProductosAjax").show('slow');
-                    $("#listadoProductosAjax").html(data);
-                }
-            });
-        }
-
-    });
+    
+    
 
 
 </script>

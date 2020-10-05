@@ -98,6 +98,7 @@
                                                                 ->where('salida', '>', 0)
                                                                 ->sum('salida');
                                         $cantidad_disponible = $ingreso - $salida;
+                                        
                                     @endphp
                                     <td style="text-align:center;">{{ $cantidad_disponible }}</td>
                                     <td style="text-align:center;">{{ $producto->cantidad }}</td>

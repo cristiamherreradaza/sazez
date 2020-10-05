@@ -127,6 +127,41 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('js/NumeroALetras.js') }}"></script>
 <script>
+    // Funcion para el uso de ajax
+    $.ajaxSetup({
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Funcion que habilita el datatable
+    var t = $('#tablaPedido').DataTable({
+        paging: false,
+        searching: false,
+        ordering: false,
+        info:false,
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        }
+    });
+
+    // Funcion Ajax que busca el producto y devuelve coincidencias
+    $(document).on('keyup', '#termino', function(e) {
+        termino_busqueda = $('#termino').val();
+        if (termino_busqueda.length > 2) {
+            $.ajax({
+                url: "{{ url('Movimiento/ajaxBuscaProducto') }}",
+                data: {termino: termino_busqueda},
+                type: 'POST',
+                success: function(data) {
+                    $("#listadoProductosAjax").show('slow');
+                    $("#listadoProductosAjax").html(data);
+                }
+            });
+        }
+    });
+
     // Funcion para habilitar/deshabilitar el input de Incluir Almacen Central
     $( function() {
         $("#incluye_almacen").prop('disabled', true);
@@ -140,24 +175,9 @@
             }
         });
     });
-
-    var t = $('#tablaPedido').DataTable({
-        paging: false,
-        searching: false,
-        ordering: false,
-        info:false,
-        language: {
-            url: '{{ asset('datatableEs.json') }}'
-        }
-    });
+    
+    // Funcion que elimina un producto en la lista de productos ingresados
     var itemsPedidoArray = [];
-    $.ajaxSetup({
-        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
     $(document).ready(function () {
         $('#tablaPedido tbody').on('click', '.btnElimina', function () {
             t.row($(this).parents('tr'))
@@ -169,6 +189,7 @@
         });
     });
 
+    
     $(document).on('keyup change', '.precio', function(e){
         let precio = Number($(this).val());
         if(precio == 0){
@@ -213,22 +234,7 @@
         // console.log(valor);
     }
 
-
-    $(document).on('keyup', '#termino', function(e) {
-        termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 2) {
-            $.ajax({
-                url: "{{ url('Movimiento/ajaxBuscaProducto') }}",
-                data: {termino: termino_busqueda},
-                type: 'POST',
-                success: function(data) {
-                    $("#listadoProductosAjax").show('slow');
-                    $("#listadoProductosAjax").html(data);
-                }
-            });
-        }
-
-    });
+    
 
     function adicionaPedido(item)
     {
