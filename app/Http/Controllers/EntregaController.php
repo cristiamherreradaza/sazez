@@ -34,7 +34,7 @@ class EntregaController extends Controller
         }else{
             //dd('no entregado');
             $pedido_productos = PedidosProducto::where('pedido_id', $pedido->id)
-                                            ->get();
+                                                ->get();
             return view('entrega.entrega')->with(compact('pedido', 'pedido_productos'));
         }
         // $productos = DB::table('pedidos_productos')

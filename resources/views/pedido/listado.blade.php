@@ -134,7 +134,7 @@
             
             iDisplayLength: 10,
             processing: true,
-            // scrollX: true,
+            scrollX: true,
             serverSide: true,
             ajax: "{{ url('Pedido/ajax_listado') }}",
             columns: [

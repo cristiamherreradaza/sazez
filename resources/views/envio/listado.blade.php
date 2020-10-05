@@ -133,7 +133,7 @@ $(document).ready(function() {
     var table = $('#tabla-usuarios').DataTable( {
         "iDisplayLength": 10,
         "processing": true,
-        // "scrollX": true,
+        "scrollX": true,
         "serverSide": true,
         "ajax": "{{ url('Envio/ajax_listados') }}",
         "columns": [

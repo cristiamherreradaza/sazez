@@ -192,7 +192,7 @@
     $(document).on('keyup', '#termino', function(e) {
         almacen_solicitado = $('#almacen_solicitado').val();
         termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 3) {
+        if (termino_busqueda.length > 2) {
             $.ajax({
                 url: "{{ url('Pedido/ajaxBuscaProductos') }}",
                 data: {

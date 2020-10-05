@@ -90,11 +90,11 @@
                                     <td>{{ $producto->producto->modelo }}</td>
                                     @php
                                         $ingreso = App\Movimiento::where('producto_id', $producto->producto_id)
-                                                                ->where('almacene_id', Auth::user()->almacen_id)
+                                                                ->where('almacene_id', $pedido->almacene_id)
                                                                 ->where('ingreso', '>', 0)
                                                                 ->sum('ingreso');
                                         $salida = App\Movimiento::where('producto_id', $producto->producto_id)
-                                                                ->where('almacene_id', Auth::user()->almacen_id)
+                                                                ->where('almacene_id', $pedido->almacene_id)
                                                                 ->where('salida', '>', 0)
                                                                 ->sum('salida');
                                         $cantidad_disponible = $ingreso - $salida;
