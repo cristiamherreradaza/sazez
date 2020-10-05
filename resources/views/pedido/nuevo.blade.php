@@ -92,7 +92,7 @@
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                            <button type="submit" onclick="oculta()" id="botonSubmit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
                         </div>
                     </div>
                 </div>
@@ -136,6 +136,10 @@
         });
     });
 
+    function oculta(){
+        //alert('hola');
+        $("#botonSubmit").hide();
+    }
 
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
