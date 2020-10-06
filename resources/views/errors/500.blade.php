@@ -46,7 +46,7 @@
             </p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="{{ url()->previous() }}" class="button">Regresar</a>
+                <a href="{{ url()->previous() }}" class="button">REGRESAR</a>
             </p>
             
         </div>
