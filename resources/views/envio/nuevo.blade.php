@@ -13,7 +13,6 @@
 
     <form action="{{ url('Envio/guarda') }}" method="POST">
         @csrf
-    
         <div class="row">
             <div class="col-md-12">
                 <div class="card border-info">                                
@@ -165,22 +164,18 @@
                                 Colocar NT en caso de no tener informacion
                             </div>
                             <div class="col-md-3">
-                                <span
-                                    style="background-color: #67ff67; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="background-color: #67ff67; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 Solo introducir numeros
                             </div>
                             <div class="col-md-3">
-                                <span
-                                    style="background-color: #8065a9; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="background-color: #8065a9; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 Colocar 0 si no tienen el dato
                             </div>
                             <div class="col-md-3">
-                                <span
-                                    style="background-color: #62adea; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span style="background-color: #62adea; width: 20px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 No dejar celdas vacias ni cambiar el orden
                             </div>
                             <div class="col-md-12">
-                                {{-- <img src="{{ asset('assets/images/muestra_excel_productos.png') }}" class="img-thumbnail" alt=""> --}}
                                 <span class='zoom' id='ex1'>
                                     <img src="{{ asset('assets/images/muestra_excel_envios.png') }}" class="img-thumbnail" alt='Daisy on the Ohoopee' />
                                 </span>
@@ -246,18 +241,6 @@
     // Variable necesaria para funcionamiento de datatable
     var itemsPedidoArray = [];
     
-    // Funcion que elimina un producto en la lista de productos ingresados
-    $(document).ready(function () {
-        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
-            t.row($(this).parents('tr'))
-                .remove()
-                .draw();
-            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
-            let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
-            itemsPedidoArray.splice(pos, 1);
-        });
-    });
-
     // Funcion que valida que exista al menos un item en la lista para continuar
     function validaItems()
     {
@@ -272,6 +255,25 @@
             })
         }        
     }
+
+    // Funcion que agrega un item de la lista de productos buscados
+    function adicionaPedido(item)
+    {
+        var item = $("#item_"+item).closest("tr").find('td').text();
+        console.log(item);
+    }
+
+    // Funcion que elimina un producto en la lista de productos ingresados
+    $(document).ready(function () {
+        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
+            t.row($(this).parents('tr'))
+                .remove()
+                .draw();
+            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
+            let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
+            itemsPedidoArray.splice(pos, 1);
+        });
+    });
 
     // Script de importacion de excel
     $(document).ready(function() {
@@ -308,16 +310,6 @@
         });
     });
 
-    //
-    function adicionaPedido(item)
-    {
-        /*var item = $("#item_"+item).closest("tr").find('td').each(function(){
-            console.log(this.text);
-        });*/
-        var item = $("#item_"+item).closest("tr").find('td').text();
-        console.log(item);
-    }
-
     function eliminar_pedido()
     {
         var id = $("#id_pedido").val();
@@ -342,8 +334,5 @@
             }
         })
     }
-
-    
-
 </script>
 @endsection

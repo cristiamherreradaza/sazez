@@ -37,9 +37,9 @@ class EnvioController extends Controller
         return view('envio.ajaxBuscaProductos')->with(compact('productos', 'almacen_id'));
     }
 
+    // Funcion que guarda y procesa el envio de productos desde la interfaz Envio/nuevo
     public function guarda(Request $request)
     {
-        dd('hola');
         if($request->item){
             //Preguntaremos si almacen_origen es null
             if($request->almacen_origen){
@@ -61,32 +61,45 @@ class EnvioController extends Controller
             $llaves = array_keys($request->item);
             foreach ($llaves as $key => $ll) 
             {
-                // Buscamos al producto
-                $item = Producto::find($ll);
-                //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
-                $salida = new Movimiento();
-                $salida->user_id = Auth::user()->id;
-                $salida->producto_id = $ll;
-                $salida->tipo_id = $item->tipo_id;
-                $salida->almacene_id = $almacen_origen;
-                $salida->salida = $request->item[$ll];
-                $salida->fecha = $hoy;
-                $salida->numero = $numero;
-                $salida->estado = 'Envio';
-                $salida->save();
+                // Sacamos el stock existente en almacen X del producto X
+                $ingreso = Movimiento::where('producto_id', $ll)
+                                    ->where('almacene_id', $almacen_origen)
+                                    ->where('ingreso', '>', 0)
+                                    ->sum('ingreso');
+                $salida = Movimiento::where('producto_id', $ll)
+                                    ->where('almacene_id', $almacen_origen)
+                                    ->where('salida', '>', 0)
+                                    ->sum('salida');
+                $cantidad_disponible = $ingreso - $salida;
+                // Si la cantidad solicitada, no supera a la existente en almacen X del producto X 
+                if($cantidad_disponible >= $request->item[$ll]){
+                    // Buscamos al producto
+                    $item = Producto::find($ll);
+                    //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
+                    $salida = new Movimiento();
+                    $salida->user_id = Auth::user()->id;
+                    $salida->producto_id = $ll;
+                    $salida->tipo_id = $item->tipo_id;
+                    $salida->almacene_id = $almacen_origen;
+                    $salida->salida = $request->item[$ll];
+                    $salida->fecha = $hoy;
+                    $salida->numero = $numero;
+                    $salida->estado = 'Envio';
+                    $salida->save();
 
-                //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
-                $ingreso = new Movimiento();
-                $ingreso->user_id = Auth::user()->id;
-                $ingreso->producto_id = $ll;
-                $ingreso->tipo_id = $item->tipo_id;
-                $ingreso->almacen_origen_id = $almacen_origen;
-                $ingreso->almacene_id = $request->almacen_a_pedir;
-                $ingreso->ingreso = $request->item[$ll];
-                $ingreso->fecha = $hoy;
-                $ingreso->numero = $numero;
-                $ingreso->estado = 'Envio';
-                $ingreso->save();
+                    //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $ll;
+                    $ingreso->tipo_id = $item->tipo_id;
+                    $ingreso->almacen_origen_id = $almacen_origen;
+                    $ingreso->almacene_id = $request->almacen_a_pedir;
+                    $ingreso->ingreso = $request->item[$ll];
+                    $ingreso->fecha = $hoy;
+                    $ingreso->numero = $numero;
+                    $ingreso->estado = 'Envio';
+                    $ingreso->save();
+                }
             }
         }
         return redirect('Envio/ver_pedido/'.$numero);
