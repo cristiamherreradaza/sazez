@@ -31,6 +31,10 @@ class ProductoController extends Controller
 {
     public function panelControl(Request $request)
     {
+        $datosDispositivo = $_SERVER['HTTP_USER_AGENT'];
+        preg_match('#\((.*?)\)#', $datosDispositivo, $match);
+        $request->session()->put('dispositivo', $match[1]);
+
         // validamos la fecha de la facturacion vigente
         $hoy = date('Y-m-d');
 

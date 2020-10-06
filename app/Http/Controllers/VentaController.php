@@ -263,6 +263,7 @@ class VentaController extends Controller
                         $movimientoPromocion->salida       = $cantidadProductosPromo;
                         $movimientoPromocion->estado       = 'Venta';
                         $movimientoPromocion->fecha        = $fechaHoraVenta;
+                        $movimientoPromocion->dispositivo  = session('dispositivo');
                         $movimientoPromocion->save();
 
                         // pregutamos si se desea enviar los productos al mayorista
@@ -281,6 +282,7 @@ class VentaController extends Controller
                             $movimientoPromocion->ingreso           = $cantidadProductosPromo;
                             $movimientoPromocion->estado            = 'Transferencia Mayorista';
                             $movimientoPromocion->fecha             = $fechaHoraVenta;
+                            $movimientoPromocion->dispositivo       = session('dispositivo');
                             $movimientoPromocion->save();
                         }
                     }
@@ -335,6 +337,7 @@ class VentaController extends Controller
                     $movimiento->salida       = $request->cantidad[$ll];
                     $movimiento->estado       = 'Venta';
                     $movimiento->fecha        = $fechaHoraVenta;
+                    $movimiento->dispositivo  = session('dispositivo');
                     $movimiento->save();
 
                      // pregutamos si se desea enviar los productos al mayorista
@@ -353,6 +356,7 @@ class VentaController extends Controller
                         $movimiento->ingreso           = $request->cantidad[$ll];
                         $movimiento->estado            = 'Transferencia Mayorista';
                         $movimiento->fecha             = $fechaHoraVenta;
+                        $movimiento->dispositivo       = session('dispositivo');
                         $movimiento->save();
                     }
                 }
@@ -410,6 +414,7 @@ class VentaController extends Controller
                     $movimientoMayor->salida       = $cantidadVendida;
                     $movimientoMayor->estado       = 'Venta';
                     $movimientoMayor->fecha        = $fechaHoraVenta;
+                    $movimientoMayor->dispositivo  = session('dispositivo');
                     $movimientoMayor->save();
 
                     // pregutamos si se desea enviar los productos al mayorista
@@ -429,6 +434,7 @@ class VentaController extends Controller
                         $movimientoMayor->ingreso           = $cantidadVendida;
                         $movimientoMayor->estado            = 'Tranferencia Mayorista';
                         $movimientoMayor->fecha             = $fechaHoraVenta;
+                        $movimientoMayor->dispositivo       = session('dispositivo');
                         $movimientoMayor->save();
                     }
 
@@ -705,37 +711,7 @@ class VentaController extends Controller
 
     public function infoDispositivo()
     {
-        
-        $datosDispositivo = $_SERVER['HTTP_USER_AGENT'];
-        // $text = 'ignore everything except this (text)';
-        preg_match('#\((.*?)\)#', $datosDispositivo, $match);
-        print $match[1];
-        $ip = $this->getUserIP();
-        dd($ip);
-
-        // dd($datosDispositivo);
+        $dispositivo = session('dispositivo');
+        dd($dispositivo);
     }
-
-    protected function getUserIP()
-    {
-        // Get real visitor IP behind CloudFlare network
-        if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
-            $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-            $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
-        }
-        $client = @$_SERVER['HTTP_CLIENT_IP'];
-        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
-        $remote = $_SERVER['REMOTE_ADDR'];
-
-        if (filter_var($client, FILTER_VALIDATE_IP)) {
-            $ip = $client;
-        } elseif (filter_var($forward, FILTER_VALIDATE_IP)) {
-            $ip = $forward;
-        } else {
-            $ip = $remote;
-        }
-
-        return $ip;
-    }
-
 }
