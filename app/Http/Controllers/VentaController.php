@@ -705,10 +705,12 @@ class VentaController extends Controller
 
     public function infoDispositivo()
     {
-        echo $_SERVER['HTTP_USER_AGENT'] . "\n\n";
+        
+        $datosDispositivo = $_SERVER['HTTP_USER_AGENT'];
+        // $text = 'ignore everything except this (text)';
+        preg_match('#\((.*?)\)#', $datosDispositivo, $match);
+        print $match[1];
 
-$browser = get_browser(null, true);
-print_r($browser);
-
+        // dd($datosDispositivo);
     }
 }
