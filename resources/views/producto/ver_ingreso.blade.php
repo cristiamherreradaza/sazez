@@ -54,7 +54,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn btn-block btn-primary">INGRESAR</button>
+                            <button type="submit" class="btn btn-block btn-primary" onclick="validaItems()">INGRESAR</button>
                         </div>
                     </div>
                 </div>
@@ -209,31 +209,31 @@
         }
     });
 
-    // Funcion que pone en blanco valores del formulario de adiciona producto
+    // Funcion que pone en vacio las variables del formulario ADICIONA UN PRODUCTO
     $( function() {
-        $("#tipo_envio").val("");
-        $("#incluye_almacen").prop('disabled', true);
-        $("#incluye_almacen").val("No");
-        $("#almacen").change( function() {
-            if($(this).val() != 1){
-                $("#incluye_almacen").prop('disabled', false);
-            }else{
-                $("#incluye_almacen").prop('disabled', true);
-                $("#incluye_almacen").val("No");
-            }
-        });
+        $("#producto_id").val("");
+        $("#producto_nombre").val("");
+        $("#producto_cantidad").val("");
     });
 
-    // $("#botonImprimir").click(function() {
-	// 	var mode = 'iframe'; //popup
-	// 	var close = mode == "popup";
-	// 	var options = {
-	// 			mode: mode,
-	// 			popClose: close
-	// 	};
-	// 	$("div#printableArea").printArea(options);
-	// });
+    // Funcion que valida que no se adicione un item si no esta lleno los valores (BOTON ADICIONAR)
+    function validaItems()
+    {
+        let producto_id = $('#producto_id').val();
+        let producto_cantidad = $('#producto_cantidad').val();
+        if(producto_id.length > 0 && producto_cantidad > 0){
+            //alert('ok');
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar un producto y que la cantidad a ingresar sea al menos de 1.'
+            })
+        }        
+    }
 
+    // Funcion que elimina un producto de la lista de producto ingresados
     function eliminar(id, nombre)
     {
         Swal.fire({
@@ -258,6 +258,7 @@
         })
     }
 
+    // Funcion que elimina todo el ingreso de productos
     function elimina_ingreso()
     {
         let numero_ingreso = $('#numero_ingreso').val();
@@ -282,9 +283,5 @@
             }
         })
     }
-    
-    
-
-
 </script>
 @endsection
