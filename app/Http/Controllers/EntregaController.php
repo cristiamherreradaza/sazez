@@ -118,7 +118,7 @@ class EntregaController extends Controller
             if($efectuado == 'Si'){
                 $pedido->estado = 'Entregado';
                 $pedido->save();
-                return redirect('Entrega/ver_pedido/'.$pedido->numero);
+                return redirect('Entrega/ver_pedido/'.$pedido->id);
             }
             return redirect('Pedido/listado');
         }
@@ -259,8 +259,6 @@ class EntregaController extends Controller
                     'sw' => 0
                 ]);
             }
-
-
         }else{
             //dd($pedido->estado);
             return response()->json([
