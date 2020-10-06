@@ -100,21 +100,23 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">LISTADO DE PEDIDOS </h4>
-                <table id="tabla-usuarios" class="table table-bordered table-striped no-wrap">
-                    <thead>
-                        <tr>
-                            <th>N&uacute;mero de Pedido</th>
-                            <th>Almacen Solicitante</th>
-                            <th>Persona Solicitante</th>
-                            <th>Almacen Solicitado</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th>Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="table-responsive m-t-40">
+                    <table id="tabla-usuarios" class="table table-bordered table-striped no-wrap">
+                        <thead>
+                            <tr>
+                                <th>N&uacute;mero de Pedido</th>
+                                <th>Almacen Solicitante</th>
+                                <th>Persona Solicitante</th>
+                                <th>Almacen Solicitado</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -134,7 +136,7 @@
             
             iDisplayLength: 10,
             processing: true,
-            scrollX: true,
+            //scrollX: true,
             serverSide: true,
             ajax: "{{ url('Pedido/ajax_listado') }}",
             columns: [
