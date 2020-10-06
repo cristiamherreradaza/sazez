@@ -27,7 +27,7 @@
                     @php
                         $cantidadTotal = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
                             ->where('producto_id', $p->id)
-                            ->where('almacene_id', auth()->user()->almacen_id)
+                            ->where('almacene_id', $almacen_id)
                             ->first();
                         $cantidadTotal=intval($cantidadTotal->total);
                     @endphp
