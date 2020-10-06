@@ -11,6 +11,8 @@
 @endsection
 
 @section('content')
+
+@if(auth()->user()->perfil_id == 1 || auth()->user()->almacen_id == $datos->almacen_origen_id)
 <div class="card border-info">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">ADICIONA UN PRODUCTO</h4>
@@ -62,7 +64,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn btn-block btn-primary">ADICIONAR</button>
+                            <button type="submit" class="btn btn-block btn-primary" onclick="validaItems()">ADICIONAR</button>
                         </div>
                     </div>
                 </div>
@@ -76,6 +78,8 @@
         </div>
     </div>
 </div>
+@endif
+
 
 <div class="card border-primary">
     <div class="card-header bg-primary">
@@ -158,7 +162,6 @@
     <div class="card-footer">
         <div class="row">
             <div class="col">
-                <!-- <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button> -->
                 <a class="btn btn-inverse btn-block " href="{{ url('Envio/vista_previa_envio/'.$datos->numero) }}" target="_blank"><span><i class="fa fa-print"></i> VISTA PREVIA IMPRESION </span></a>
             </div>
             @if(auth()->user()->perfil_id == 1)
@@ -231,6 +234,7 @@
 <script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
 <script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
 <script>
+    // Funcion para el uso de ajax
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -238,6 +242,7 @@
         }
     });
 
+    // Funcion que habilita el datatable
     $(function () {
         $('#config-table').DataTable({
             responsive: true,
@@ -250,16 +255,27 @@
         });
     });
 
-    $("#botonImprimir").click(function() {
-		var mode = 'iframe'; //popup
-		var close = mode == "popup";
-		var options = {
-				mode: mode,
-				popClose: close
-		};
-		$("div#printableArea").printArea(options);
-	});
+    // Funcion Ajax que busca el producto y devuelve coincidencias
+    $(document).on('keyup', '#termino', function(e) {
+        almacen_origen = $('#almacen_origen').val();
+        termino_busqueda = $('#termino').val();
+        if (termino_busqueda.length > 2) {
+            $.ajax({
+                url: "{{ url('Envio/ajaxBuscaProducto') }}",
+                data: {
+                    almacen_origen: almacen_origen,
+                    termino: termino_busqueda
+                    },
+                type: 'POST',
+                success: function(data) {
+                    $("#listadoProductosAjax").show('slow');
+                    $("#listadoProductosAjax").html(data);
+                }
+            });
+        }
+    });
 
+    // Funcion que elimina un producto de la lista de producto enviados
     function eliminar(id, nombre)
     {
         Swal.fire({
@@ -284,6 +300,7 @@
         })
     }
 
+    // Funcion que elimina todo el envio de productos
     function elimina_envio()
     {
         let numero_pedido = $('#numero_pedido').val();
@@ -309,26 +326,7 @@
         })
     }
 
-    $(document).on('keyup', '#termino', function(e) {
-        almacen_origen = $('#almacen_origen').val();
-        termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 2) {
-            $.ajax({
-                url: "{{ url('Envio/ajaxBuscaProducto') }}",
-                data: {
-                    almacen_origen: almacen_origen,
-                    termino: termino_busqueda
-                    },
-                type: 'POST',
-                success: function(data) {
-                    $("#listadoProductosAjax").show('slow');
-                    $("#listadoProductosAjax").html(data);
-                }
-            });
-        }
-
-    });
-
+    // Funcion que muestra un modal con los datos del producto a reportar
     function reporta_producto(id_producto, nombre)
     {
         $("#id_producto_a_reportar").val(id_producto);
@@ -336,6 +334,7 @@
         $("#reportar_producto").modal('show');
     }
 
+    // Funcion que muestra una alerta si el proceso de reporte de un producto fue exitoso
     function reportar()
     {
         //var cantidad = $("#cantidad_producto_a_reportar").val();
@@ -347,6 +346,31 @@
                 'success'
             )
         }
+    }
+
+    // Funcion que pone en vacio las variables del formulario ADICIONA UN PRODUCTO
+    $( function() {
+        $("#producto_id").val("");
+        $("#producto_nombre").val("");
+        $("#producto_stock").val("");
+        $("#producto_cantidad").val("");
+    });
+
+    // Funcion que valida que no se adicione un item si no esta lleno los valores (BOTON ADICIONAR)
+    function validaItems()
+    {
+        let producto_id = $('#producto_id').val();
+        let producto_cantidad = $('#producto_cantidad').val();
+        if(producto_id.length > 0 && producto_cantidad > 0){
+            //alert('ok');
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar un producto y que la cantidad de envio sea al menos de 1.'
+            })
+        }        
     }
 </script>
 @endsection

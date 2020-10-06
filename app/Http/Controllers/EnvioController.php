@@ -156,39 +156,48 @@ class EnvioController extends Controller
                                         ->where('producto_id', $request->producto_id)
                                         ->where('estado', 'Envio')
                                         ->first();
-            if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese envio/producto
-                // Buscamos al producto
-                $item = Producto::find($request->producto_id);
-                //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
-                $salida = new Movimiento();
-                $salida->user_id = Auth::user()->id;
-                $salida->producto_id = $request->producto_id;
-                $salida->tipo_id = $item->tipo_id;
-                $salida->almacene_id = $request->almacen_origen;
-                $salida->salida = $request->producto_cantidad;
-                $salida->fecha = date('Y-m-d H:i:s');
-                $salida->numero = $request->numero_pedido;
-                $salida->estado = 'Envio';
-                $salida->save();
+            if(!$producto_lista){    // En caso de no encontrarlo, verificamos que tenga suficiente stock en el almacen que enviara
+                // Sacamos el stock existente en almacen X del producto X
+                $ingreso = Movimiento::where('producto_id', $request->producto_id)
+                                    ->where('almacene_id', $request->almacen_origen)
+                                    ->where('ingreso', '>', 0)
+                                    ->sum('ingreso');
+                $salida = Movimiento::where('producto_id', $request->producto_id)
+                                    ->where('almacene_id', $request->almacen_origen)
+                                    ->where('salida', '>', 0)
+                                    ->sum('salida');
+                $cantidad_disponible = $ingreso - $salida;
+                // Si la cantidad solicitada, no supera a la existente en almacen X del producto X 
+                if($cantidad_disponible >= $request->producto_cantidad){
+                    // Buscamos al producto
+                    $item = Producto::find($request->producto_id);
+                    //AQUI SACAMOS EL MATERIAL SOLICITADO DEL ALMACEN ORIGEN
+                    $salida = new Movimiento();
+                    $salida->user_id = Auth::user()->id;
+                    $salida->producto_id = $request->producto_id;
+                    $salida->tipo_id = $item->tipo_id;
+                    $salida->almacene_id = $request->almacen_origen;
+                    $salida->salida = $request->producto_cantidad;
+                    $salida->fecha = date('Y-m-d H:i:s');
+                    $salida->numero = $request->numero_pedido;
+                    $salida->estado = 'Envio';
+                    $salida->save();
 
-                //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
-                $ingreso = new Movimiento();
-                $ingreso->user_id = Auth::user()->id;
-                $ingreso->producto_id = $request->producto_id;
-                $ingreso->tipo_id = $item->tipo_id;
-                $ingreso->almacen_origen_id = $request->almacen_origen;
-                $ingreso->almacene_id = $request->almacen_destino;
-                $ingreso->ingreso = $request->producto_cantidad;
-                $ingreso->fecha = date('Y-m-d H:i:s');
-                $ingreso->numero = $request->numero_pedido;
-                $ingreso->estado = 'Envio';
-                $ingreso->save();
+                    //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
+                    $ingreso = new Movimiento();
+                    $ingreso->user_id = Auth::user()->id;
+                    $ingreso->producto_id = $request->producto_id;
+                    $ingreso->tipo_id = $item->tipo_id;
+                    $ingreso->almacen_origen_id = $request->almacen_origen;
+                    $ingreso->almacene_id = $request->almacen_destino;
+                    $ingreso->ingreso = $request->producto_cantidad;
+                    $ingreso->fecha = date('Y-m-d H:i:s');
+                    $ingreso->numero = $request->numero_pedido;
+                    $ingreso->estado = 'Envio';
+                    $ingreso->save();
+                }
             }
         }
-        // $request->producto_id;
-        // $request->producto_nombre;
-        // $request->producto_cantidad;
-        // $request->numero_pedido;
         return redirect("Envio/ver_pedido/$request->numero_pedido");
     }
 

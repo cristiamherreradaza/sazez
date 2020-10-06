@@ -75,23 +75,6 @@
             $("#producto_stock").val(stock);
             $("#producto_cantidad").attr({ "max" : stock });
 
-            // let buscaItem = itemsPedidoArray.lastIndexOf(id);
-            // if(buscaItem < 0)
-            // {
-            //     itemsPedidoArray.push(id);  
-            //     t.row.add([
-            //         id,
-            //         codigo,
-            //         nombre,
-            //         marca,
-            //         tipo,
-            //         modelo,
-            //         colores,
-            //         stock,
-            //         `<input type="number" class="form-control" value="1" min="1" max="`+stock+`" name="item[` + id + `]">`,
-            //         '<button type="button" class="btnElimina btn btn-danger" title="Eliminar marca"><i class="fas fa-trash-alt"></i></button>'
-            //     ]).draw(false);
-            // }
         });
 
     });
