@@ -702,4 +702,13 @@ class VentaController extends Controller
 
         return view('venta.imprimeFactura')->with(compact('datosVenta', 'productosVenta', 'datosFactura', 'datosEmpresa'));
     }
+
+    public function infoDispositivo()
+    {
+        echo $_SERVER['HTTP_USER_AGENT'] . "\n\n";
+
+$browser = get_browser(null, true);
+print_r($browser);
+
+    }
 }
