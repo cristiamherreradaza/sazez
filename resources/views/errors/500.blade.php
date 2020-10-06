@@ -21,14 +21,33 @@
             font-size: 18pt;
         }
 
+        .button {
+            background-color: #008CBA;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+
     </style>
 </head>
 <body>
     <div id="outer">
         <div id="inner">
             <img src="{{ asset('assets/images/fantasma_error.jpg') }}" alt="Problema" class="rounded-circle" width="476" />
-            <p>UPPS!!! paso algo raro.</p>
-            <p><a href="{{ URL::to('/') }}">Volver al sistema</a></p>
+            <p>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                UPPS!!! paso algo raro.
+            </p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{{ url()->previous() }}" class="button">Regresar</a>
+            </p>
             
         </div>
     </div>
