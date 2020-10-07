@@ -149,10 +149,14 @@
     // Funcion Ajax que busca el producto y devuelve coincidencias
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
+        almacen = $('#almacen').val();
         if (termino_busqueda.length > 2) {
             $.ajax({
                 url: "{{ url('Movimiento/ajaxBuscaProducto') }}",
-                data: {termino: termino_busqueda},
+                data: {
+                    termino: termino_busqueda,
+                    almacen: almacen
+                    },
                 type: 'POST',
                 success: function(data) {
                     $("#listadoProductosAjax").show('slow');

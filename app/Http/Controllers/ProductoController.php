@@ -676,16 +676,16 @@ class ProductoController extends Controller
 
     public function ajaxBuscaIngresoProducto(Request $request)
     {
+        $almacen_id = $request->almacen;   
         $productos = Producto::where('nombre', 'like', "%$request->termino%")
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-        return view('producto.listadoIngresoProductosAjax')->with(compact('productos'));
+        return view('producto.listadoIngresoProductosAjax')->with(compact('productos', 'almacen_id'));
     }
 
     public function adicionaProducto(Request $request)
     {
-        //dd($request->numero_ingreso_envio);
         if($request->producto_id){
             // Buscaremos si ya existe ese producto en ese ingreso
             $producto_lista = Movimiento::where('numero_ingreso', $request->numero_ingreso)
