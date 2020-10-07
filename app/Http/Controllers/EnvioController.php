@@ -266,19 +266,19 @@ class EnvioController extends Controller
     public function vista_previa_envio($id)
     {
         $productos_envio = Movimiento::where('estado', 'Envio')
-                                    ->where('numero', $id)
+                                    ->where('pedido_id', $id)
                                     ->where('ingreso', '>', 0)
                                     ->get();
         $cantidad_producto = Movimiento::where('estado', 'Envio')
-                                        ->where('numero', $id)
+                                        ->where('pedido_id', $id)
                                         ->where('ingreso', '>', 0)
                                         ->count();
         $detalle = Movimiento::where('estado', 'Envio')
-                            ->where('numero', $id)
+                            ->where('pedido_id', $id)
                             ->where('ingreso', '>', 0)
                             ->first();
         $complemento = 20 - $cantidad_producto;
-        //dd($complemento);
+        //dd($detalle);
         return view('envio.vista_previa_envio')->with(compact('productos_envio', 'detalle', 'cantidad_producto', 'complemento'));
     }
 
