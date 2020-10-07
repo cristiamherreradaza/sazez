@@ -178,17 +178,6 @@ class VentaController extends Controller
         }
         $errorVenta = 0;
         $mensajeError = "";
-        // creamos la venta
-        $venta              = new Venta();
-        $venta->user_id     = Auth::user()->id;
-        $venta->almacene_id = Auth::user()->almacen_id;
-        $venta->cliente_id  = $request->cliente_id;
-        $venta->fecha       = $request->fecha;
-        $venta->saldo       = $saldoVenta;
-        $venta->credito     = $pagoCredito;
-        $venta->total       = $request->totalCompra;
-        $venta->save();
-        $venta_id = $venta->id;
 
         // procesamos para el nit del cliente
         $buscaNitCliente = User::where('nit', $request->nit_cliente)->first();
@@ -206,13 +195,28 @@ class VentaController extends Controller
             $cliente->nit          = $request->nit_cliente;
             $cliente->razon_social = $request->razon_social_cliente;
             $cliente->save();
+            $clienteId = $cliente->id;
         } else {
             // modificamos el nit y razon social del cliente
             $cliente               = User::find($buscaNitCliente->id);
             $cliente->nit          = $request->nit_cliente;
             $cliente->razon_social = $request->razon_social_cliente;
             $cliente->save();
+            $clienteId = $cliente->id;
         }
+        // fin del registro del cliente
+        
+        // creamos la venta
+        $venta              = new Venta();
+        $venta->user_id     = Auth::user()->id;
+        $venta->almacene_id = Auth::user()->almacen_id;
+        $venta->cliente_id  = $clienteId;
+        $venta->fecha       = $request->fecha;
+        $venta->saldo       = $saldoVenta;
+        $venta->credito     = $pagoCredito;
+        $venta->total       = $request->totalCompra;
+        $venta->save();
+        $venta_id = $venta->id;
 
         $fechaHoraVenta = date("Y-m-d H:i:s");
         // guardamos los productos de la promcion
