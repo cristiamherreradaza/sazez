@@ -4,6 +4,7 @@
             <tr>REPORTE DE SALDOS DE {{ $almacen->nombre }} EN FECHA {{ $fecha }}</tr>
             <tr>
                 <th>Tienda</th>
+                <th>Codigo</th>
                 <th>Producto</th>
                 <th>Marca</th>
                 <th>Saldo Anterior</th>
@@ -32,7 +33,6 @@
                                                     ->where('producto_id', $producto->id)
                                                     ->where('almacene_id', $almacen->id)
                                                     ->whereDate('fecha', $fecha)
-                                                    
                                                     ->get();
                     if($ingreso[0]->total)
                     {
@@ -59,9 +59,9 @@
                 @endphp
                 <tr>
                     <td>{{ $almacen->nombre }}</td>
+                    <td>{{ $producto->codigo }}</td>
                     <td>{{ $producto->nombre }}</td>
                     <td>{{ $producto->marca->nombre }}</td>
-                    
                     <td>{{ $saldo_anterior }}</td>
                     <td>{{ $ingreso }}</td>
                     <td>{{ $salida }}</td>
