@@ -63,7 +63,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn btn-block btn-primary">ADICIONAR</button>
+                            <button type="submit" class="btn btn-block btn-primary" onclick="validaItems()">ADICIONAR</button>
                         </div>
                     </div>
                 </div>
@@ -170,6 +170,7 @@
 <script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
 <script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
 <script>
+    // Funcion para el uso de ajax
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -177,6 +178,7 @@
         }
     });
 
+    // Funcion que habilita el datatable
     $(function () {
         $('#config-table').DataTable({
             responsive: true,
@@ -189,6 +191,7 @@
         });
     });
 
+    // Funcion para busqueda de producto en pedido input (BUSCAR PRODUCTO)
     $(document).on('keyup', '#termino', function(e) {
         almacen_solicitado = $('#almacen_solicitado').val();
         termino_busqueda = $('#termino').val();
@@ -206,9 +209,9 @@
                 }
             });
         }
-
     });
 
+    // Funcion que elimina un producto de la lista de producto enviados
     function eliminar(id, nombre)
     {
         Swal.fire({
@@ -233,6 +236,7 @@
         })
     }
 
+    // Funcion que elimina todo el envio de productos
     function elimina_envio()
     {
         let numero_pedido = $('#numero_pedido').val();
@@ -257,6 +261,31 @@
                 });
             }
         })
+    }
+
+    // Funcion que pone en vacio las variables del formulario ADICIONA UN PRODUCTO
+    $( function() {
+        $("#producto_id").val("");
+        $("#producto_nombre").val("");
+        $("#producto_stock").val("");
+        $("#producto_cantidad").val("");
+    });
+
+    // Funcion que valida que no se adicione un item si no esta lleno los valores (BOTON ADICIONAR)
+    function validaItems()
+    {
+        let producto_id = $('#producto_id').val();
+        let producto_cantidad = $('#producto_cantidad').val();
+        if(producto_id.length > 0 && producto_cantidad > 0){
+            //alert('ok');
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar un producto y que la cantidad a solicitar sea al menos de 1.'
+            })
+        }        
     }
 </script>
 @endsection

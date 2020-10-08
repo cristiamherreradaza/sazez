@@ -54,7 +54,7 @@ class EntregaController extends Controller
     {
         $pedido = Pedido::find($request->pedido_id);
         if($pedido->estado == 'Entregado'){
-            return redirect('Entrega/ver_pedido/'.$pedido->numero);
+            return redirect('Entrega/ver_pedido/'.$pedido->id);
         }else{
             $efectuado = 'No';
             $maximo = Movimiento::max('numero');

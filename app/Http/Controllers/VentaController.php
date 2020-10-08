@@ -178,17 +178,6 @@ class VentaController extends Controller
         }
         $errorVenta = 0;
         $mensajeError = "";
-        // creamos la venta
-        $venta              = new Venta();
-        $venta->user_id     = Auth::user()->id;
-        $venta->almacene_id = Auth::user()->almacen_id;
-        $venta->cliente_id  = $request->cliente_id;
-        $venta->fecha       = $request->fecha;
-        $venta->saldo       = $saldoVenta;
-        $venta->credito     = $pagoCredito;
-        $venta->total       = $request->totalCompra;
-        $venta->save();
-        $venta_id = $venta->id;
 
         // procesamos para el nit del cliente
         $buscaNitCliente = User::where('nit', $request->nit_cliente)->first();
@@ -206,13 +195,28 @@ class VentaController extends Controller
             $cliente->nit          = $request->nit_cliente;
             $cliente->razon_social = $request->razon_social_cliente;
             $cliente->save();
+            $clienteId = $cliente->id;
         } else {
             // modificamos el nit y razon social del cliente
             $cliente               = User::find($buscaNitCliente->id);
             $cliente->nit          = $request->nit_cliente;
             $cliente->razon_social = $request->razon_social_cliente;
             $cliente->save();
+            $clienteId = $cliente->id;
         }
+        // fin del registro del cliente
+        
+        // creamos la venta
+        $venta              = new Venta();
+        $venta->user_id     = Auth::user()->id;
+        $venta->almacene_id = Auth::user()->almacen_id;
+        $venta->cliente_id  = $clienteId;
+        $venta->fecha       = $request->fecha;
+        $venta->saldo       = $saldoVenta;
+        $venta->credito     = $pagoCredito;
+        $venta->total       = $request->totalCompra;
+        $venta->save();
+        $venta_id = $venta->id;
 
         $fechaHoraVenta = date("Y-m-d H:i:s");
         // guardamos los productos de la promcion
@@ -263,6 +267,7 @@ class VentaController extends Controller
                         $movimientoPromocion->salida       = $cantidadProductosPromo;
                         $movimientoPromocion->estado       = 'Venta';
                         $movimientoPromocion->fecha        = $fechaHoraVenta;
+                        $movimientoPromocion->dispositivo  = session('dispositivo');
                         $movimientoPromocion->save();
 
                         // pregutamos si se desea enviar los productos al mayorista
@@ -281,6 +286,7 @@ class VentaController extends Controller
                             $movimientoPromocion->ingreso           = $cantidadProductosPromo;
                             $movimientoPromocion->estado            = 'Transferencia Mayorista';
                             $movimientoPromocion->fecha             = $fechaHoraVenta;
+                            $movimientoPromocion->dispositivo       = session('dispositivo');
                             $movimientoPromocion->save();
                         }
                     }
@@ -335,6 +341,7 @@ class VentaController extends Controller
                     $movimiento->salida       = $request->cantidad[$ll];
                     $movimiento->estado       = 'Venta';
                     $movimiento->fecha        = $fechaHoraVenta;
+                    $movimiento->dispositivo  = session('dispositivo');
                     $movimiento->save();
 
                      // pregutamos si se desea enviar los productos al mayorista
@@ -353,6 +360,7 @@ class VentaController extends Controller
                         $movimiento->ingreso           = $request->cantidad[$ll];
                         $movimiento->estado            = 'Transferencia Mayorista';
                         $movimiento->fecha             = $fechaHoraVenta;
+                        $movimiento->dispositivo       = session('dispositivo');
                         $movimiento->save();
                     }
                 }
@@ -410,6 +418,7 @@ class VentaController extends Controller
                     $movimientoMayor->salida       = $cantidadVendida;
                     $movimientoMayor->estado       = 'Venta';
                     $movimientoMayor->fecha        = $fechaHoraVenta;
+                    $movimientoMayor->dispositivo  = session('dispositivo');
                     $movimientoMayor->save();
 
                     // pregutamos si se desea enviar los productos al mayorista
@@ -429,6 +438,7 @@ class VentaController extends Controller
                         $movimientoMayor->ingreso           = $cantidadVendida;
                         $movimientoMayor->estado            = 'Tranferencia Mayorista';
                         $movimientoMayor->fecha             = $fechaHoraVenta;
+                        $movimientoMayor->dispositivo       = session('dispositivo');
                         $movimientoMayor->save();
                     }
 
@@ -705,10 +715,7 @@ class VentaController extends Controller
 
     public function infoDispositivo()
     {
-        echo $_SERVER['HTTP_USER_AGENT'] . "\n\n";
-
-$browser = get_browser(null, true);
-print_r($browser);
-
+        $dispositivo = session('dispositivo');
+        dd($dispositivo);
     }
 }

@@ -35,6 +35,7 @@
                     <input type="hidden" name="numero_ingreso" id="numero_ingreso" value="{{ $datos->numero_ingreso }}">
                     <input type="hidden" name="proveedor_id" id="proveedor_id" value="{{ $datos->proveedor_id }}">
                     <input type="hidden" name="almacen_ingreso" id="almacen_ingreso" value="{{ $datos->almacene_id }}">
+                    <input type="hidden" name="almacen_destino" id="almacen_destino" value="{{ $datos_envio->almacen->id }}">
                     <input type="hidden" name="numero_ingreso_envio" id="numero_ingreso_envio" value="{{ $datos_envio->numero_ingreso_envio }}">
                     <div class="col-md-3">
                         <div class="form-group">
@@ -213,6 +214,7 @@
 <script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
 <script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
 <script>
+    // Funcion para el uso de ajax
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -220,6 +222,7 @@
         }
     });
 
+    // Funcion que habilita el datatable
     $(function () {
         $('#config-table').DataTable({
             responsive: true,
@@ -232,16 +235,51 @@
         });
     });
 
-    $("#botonImprimir").click(function() {
-		var mode = 'iframe'; //popup
-		var close = mode == "popup";
-		var options = {
-				mode: mode,
-				popClose: close
-		};
-		$("div#printableArea").printArea(options);
-	});
+    // Funcion Ajax que busca el producto y devuelve coincidencias
+    $(document).on('keyup', '#termino', function(e) {
+        termino_busqueda = $('#termino').val();
+        almacen_destino = $('#almacen_destino').val();
+        if (termino_busqueda.length > 2) {
+            $.ajax({
+                url: "{{ url('Producto/ajaxBuscaIngresoProducto') }}",
+                data: {
+                    termino: termino_busqueda,
+                    almacen: almacen_destino
+                    },
+                type: 'POST',
+                success: function(data) {
+                    $("#listadoProductosAjax").show('slow');
+                    $("#listadoProductosAjax").html(data);
+                }
+            });
+        }
+    });
 
+    // Funcion que pone en vacio las variables del formulario ADICIONA UN PRODUCTO
+    $( function() {
+        $("#producto_id").val("");
+        $("#producto_nombre").val("");
+        $("#producto_cantidad").val("");
+    });
+
+    // Funcion que valida que no se adicione un item si no esta lleno los valores (BOTON ADICIONAR)
+    function validaItems()
+    {
+        let producto_id = $('#producto_id').val();
+        let producto_cantidad = $('#producto_cantidad').val();
+        if(producto_id.length > 0 && producto_cantidad > 0){
+            //alert('ok');
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar un producto y que la cantidad a ingresar sea al menos de 1.'
+            })
+        }        
+    }
+
+    // Funcion que elimina un producto de la lista de producto ingresados
     function eliminar(id, nombre)
     {
         Swal.fire({
@@ -266,6 +304,7 @@
         })
     }
 
+    // Funcion que elimina todo el ingreso de productos
     function elimina_ingreso()
     {
         let numero_ingreso = $('#numero_ingreso').val();
@@ -290,23 +329,5 @@
             }
         })
     }
-
-    $(document).on('keyup', '#termino', function(e) {
-        termino_busqueda = $('#termino').val();
-        if (termino_busqueda.length > 2) {
-            $.ajax({
-                url: "{{ url('Producto/ajaxBuscaIngresoProducto') }}",
-                data: {termino: termino_busqueda},
-                type: 'POST',
-                success: function(data) {
-                    $("#listadoProductosAjax").show('slow');
-                    $("#listadoProductosAjax").html(data);
-                }
-            });
-        }
-
-    });
-
-
 </script>
 @endsection

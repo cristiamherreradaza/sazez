@@ -278,7 +278,7 @@ class EnvioController extends Controller
                             ->where('ingreso', '>', 0)
                             ->first();
         $complemento = 20 - $cantidad_producto;
-        //dd($complemento);
+        //dd($detalle);
         return view('envio.vista_previa_envio')->with(compact('productos_envio', 'detalle', 'cantidad_producto', 'complemento'));
     }
 

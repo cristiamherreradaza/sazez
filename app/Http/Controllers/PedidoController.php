@@ -226,7 +226,7 @@ class PedidoController extends Controller
                 $producto->save();
             }
         }
-        return redirect("Entrega/ver_pedido/$pedido->numero");
+        return redirect("Entrega/ver_pedido/$pedido->id");
     }
 
     public function ajaxBuscaProductos(Request $request)

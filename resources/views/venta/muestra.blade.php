@@ -262,23 +262,46 @@
 
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-4">
-                        <a href="{{ url("Venta/imprimeFactura/$datosVenta->id") }}" target="_blank">
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-info">IMPRIMIR FACTURA</button>
-                        </a>
+            @php
+                $ultimoParametro = App\Parametros::where('almacene_id', Auth::user()->almacen_id)
+                ->latest()
+                ->first();
+            @endphp
+            @if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a href="{{ url("Venta/imprimeFactura/$datosVenta->id") }}" target="_blank">
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-info">IMPRIMIR FACTURA</button>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url('Venta/listado') }}">
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
+                                onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <a href="{{ url('Venta/listado') }}">
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger" onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
+                </div>   
+            @else
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{{ url('Venta/listado') }}">
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
+                                onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endif
+            
         </div>
     </div>
 </div>

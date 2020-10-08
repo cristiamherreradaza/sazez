@@ -92,7 +92,7 @@
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" onclick="oculta()" id="botonSubmit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR PEDIDO</button>
+                            <button type="submit" id="botonSubmit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">GUARDAR PEDIDO</button>
                         </div>
                     </div>
                 </div>
@@ -107,6 +107,15 @@
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
+    // Funcion para el uso de ajax
+    $.ajaxSetup({
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Funcion que habilita el datatable
     var t = $('#tablaPedido').DataTable({
         paging: false,
         searching: false,
@@ -116,29 +125,6 @@
             url: '{{ asset('datatableEs.json') }}'
         }
     });
-    var itemsPedidoArray = [];
-    $.ajaxSetup({
-        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-    $(document).ready(function () {
-        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
-            t.row($(this).parents('tr'))
-                .remove()
-                .draw();
-            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
-            let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
-            itemsPedidoArray.splice(pos, 1);
-        });
-    });
-
-    function oculta(){
-        //alert('hola');
-        $("#botonSubmit").hide();
-    }
 
     // Funcion para busqueda de producto en pedido input (BUSCAR PRODUCTO)
     $(document).on('keyup', '#termino', function(e) {
@@ -160,39 +146,71 @@
         }
     });
 
+    // Variable necesaria para funcionamiento de datatable
+    var itemsPedidoArray = [];
+
+    // Funcion que valida que exista al menos un item en la lista para continuar
+    function validaItems()
+    {
+        if(itemsPedidoArray.length > 0){
+            //alert('ok');
+            $("#botonSubmit").hide();
+        }else{
+            event.preventDefault();
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Tienes que adicionar al menos un producto.'
+            })
+        }        
+    }
+
+    // Funcion que agrega un item de la lista de productos buscados
     function adicionaPedido(item)
     {
-        /*var item = $("#item_"+item).closest("tr").find('td').each(function(){
-            console.log(this.text);
-        });*/
         var item = $("#item_"+item).closest("tr").find('td').text();
         console.log(item);
     }
+    
+    // Funcion que elimina un producto en la lista de productos ingresados
+    $(document).ready(function () {
+        $('#tablaPedido tbody').on('click', '.btnElimina', function () {
+            t.row($(this).parents('tr'))
+                .remove()
+                .draw();
+            let itemBorrar = $(this).closest("tr").find("td:eq(0)").text();
+            let pos = itemsPedidoArray.lastIndexOf(itemBorrar);
+            itemsPedidoArray.splice(pos, 1);
+        });
+    });
 
-    function eliminar_pedido()
-    {
-        var id = $("#id_pedido").val();
-        Swal.fire({
-            title: 'Estas seguro de eliminar este pedido?',
-            text: "Luego no podras recuperarlo!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, estoy seguro!',
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Excelente!',
-                    'El Pedido fue eliminado',
-                    'success'
-                ).then(function() {
-                    window.location.href = "{{ url('Pedido/eliminar') }}/"+id;
-                });
-            }
-        })
-    }
+    
+    
+
+    // function eliminar_pedido()
+    // {
+    //     var id = $("#id_pedido").val();
+    //     Swal.fire({
+    //         title: 'Estas seguro de eliminar este pedido?',
+    //         text: "Luego no podras recuperarlo!",
+    //         type: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Si, estoy seguro!',
+    //         cancelButtonText: "Cancelar",
+    //     }).then((result) => {
+    //         if (result.value) {
+    //             Swal.fire(
+    //                 'Excelente!',
+    //                 'El Pedido fue eliminado',
+    //                 'success'
+    //             ).then(function() {
+    //                 window.location.href = "{{ url('Pedido/eliminar') }}/"+id;
+    //             });
+    //         }
+    //     })
+    // }
 
 </script>
 

@@ -51,11 +51,12 @@ class MovimientoController extends Controller
 
     public function ajaxBuscaProducto(Request $request)
     {
+        $almacen_id = $request->almacen;
         $productos = Producto::where('nombre', 'like', "%$request->termino%")
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-        return view('movimiento.ajaxBuscaProducto')->with(compact('productos'));
+        return view('movimiento.ajaxBuscaProducto')->with(compact('productos', 'almacen_id'));
     }
 
     public function guarda(Request $request)
@@ -232,7 +233,6 @@ class MovimientoController extends Controller
     {
         $almacenes = Almacene::whereNull('estado')->get();
         $proveedores = Proveedore::get();
-        
         return view('movimiento.ingreso_excel')->with(compact('almacenes', 'proveedores'));
     }
 

@@ -31,6 +31,10 @@ class ProductoController extends Controller
 {
     public function panelControl(Request $request)
     {
+        $datosDispositivo = $_SERVER['HTTP_USER_AGENT'];
+        preg_match('#\((.*?)\)#', $datosDispositivo, $match);
+        $request->session()->put('dispositivo', $match[1]);
+
         // validamos la fecha de la facturacion vigente
         $hoy = date('Y-m-d');
 
@@ -672,17 +676,16 @@ class ProductoController extends Controller
 
     public function ajaxBuscaIngresoProducto(Request $request)
     {
+        $almacen_id = $request->almacen;   
         $productos = Producto::where('nombre', 'like', "%$request->termino%")
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-        return view('producto.listadoIngresoProductosAjax')->with(compact('productos'));
+        return view('producto.listadoIngresoProductosAjax')->with(compact('productos', 'almacen_id'));
     }
 
     public function adicionaProducto(Request $request)
     {
-        dd('hola');
-        //dd($request->numero_ingreso_envio);
         if($request->producto_id){
             // Buscaremos si ya existe ese producto en ese ingreso
             $producto_lista = Movimiento::where('numero_ingreso', $request->numero_ingreso)
