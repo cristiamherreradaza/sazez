@@ -96,6 +96,7 @@ class EntregaController extends Controller
                         $salida->fecha = date("Y-m-d H:i:s");
                         $salida->numero = $numero;
                         $salida->estado = 'Envio';
+                        $salida->dispositivo  = session('dispositivo');
                         $salida->save();
         
                         //AQUI INGRESAMOS EL MATERIAL AL ALMACEN QUE LO SOLICITO
@@ -110,6 +111,7 @@ class EntregaController extends Controller
                         $ingreso->fecha = date("Y-m-d H:i:s");
                         $ingreso->numero = $numero;
                         $ingreso->estado = 'Envio';
+                        $ingreso->dispositivo  = session('dispositivo');
                         $ingreso->save();
                     }
                 }

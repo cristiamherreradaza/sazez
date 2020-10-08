@@ -47,6 +47,7 @@ class IngresoImport implements ToModel
                         $ingreso->fecha = date("Y-m-d H:i:s");
                         $ingreso->numero_ingreso = $numero_ingreso;
                         $ingreso->estado = 'Ingreso';
+                        $ingreso->dispositivo  = session('dispositivo');
                         $ingreso->save();
                     }else{
                         // Incluye distribucion, verificar que no sea almacen central
@@ -64,6 +65,7 @@ class IngresoImport implements ToModel
                             $ingreso->numero_ingreso = $numero_ingreso;
                             $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                             $ingreso->fecha = date("Y-m-d H:i:s");
+                            $ingreso->dispositivo  = session('dispositivo');
                             $ingreso->save();
                             // Creación de Movimiento - Sale de Almacen Central
                             $salida = new Movimiento();
@@ -76,6 +78,7 @@ class IngresoImport implements ToModel
                             $salida->numero = $numero;
                             $salida->numero_ingreso_envio = $numero_ingreso_envio;
                             $salida->fecha = date("Y-m-d H:i:s");
+                            $salida->dispositivo  = session('dispositivo');
                             $salida->save();
                             // Creación de Movimiento - Ingresa a la Sucursal
                             $ingreso = new Movimiento();
@@ -89,6 +92,7 @@ class IngresoImport implements ToModel
                             $ingreso->numero = $numero;
                             $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                             $ingreso->fecha = date("Y-m-d H:i:s");
+                            $ingreso->dispositivo  = session('dispositivo');
                             $ingreso->save();
                         }else{
                             // Se crea un registro por cada producto
@@ -102,6 +106,7 @@ class IngresoImport implements ToModel
                             $ingreso->fecha = date("Y-m-d H:i:s");
                             $ingreso->numero_ingreso = $numero_ingreso;
                             $ingreso->estado = 'Ingreso';
+                            $ingreso->dispositivo  = session('dispositivo');
                             $ingreso->save();
                         }   
                     }

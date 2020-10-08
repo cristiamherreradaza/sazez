@@ -76,6 +76,7 @@ class MovimientosImport implements ToModel
                         $salida->fecha = date("Y-m-d H:i:s");
                         $salida->numero = $numero;
                         $salida->estado = 'Envio';
+                        $salida->dispositivo  = session('dispositivo');
                         $salida->save();
 
                         // Ingresa al almacen DESTINO el producto X
@@ -90,6 +91,7 @@ class MovimientosImport implements ToModel
                         $entrada->fecha = date("Y-m-d H:i:s");
                         $entrada->numero = $numero;
                         $entrada->estado = 'Envio';
+                        $entrada->dispositivo  = session('dispositivo');
                         $entrada->save();
 
                         $pedido->estado = 'Entregado';

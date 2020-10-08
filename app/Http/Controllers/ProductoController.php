@@ -457,6 +457,7 @@ class ProductoController extends Controller
             $movimiento->fecha         = date("Y-m-d H:i:s");
             $movimiento->precio_compra = $request->precio_compra;
             $movimiento->ingreso       = $request->cantidad;
+            $movimiento->dispositivo   = session('dispositivo');
             $movimiento->save();
         }
 
@@ -714,6 +715,7 @@ class ProductoController extends Controller
                     $ingreso->numero_ingreso = $request->numero_ingreso;
                     $ingreso->numero_ingreso_envio = $request->numero_ingreso_envio;
                     $ingreso->estado = 'Ingreso';
+                    $ingreso->dispositivo = session('dispositivo');
                     $ingreso->save();
                     // Creación de Movimiento - Sale de Almacen Central
                     $ingreso = new Movimiento();
@@ -726,6 +728,7 @@ class ProductoController extends Controller
                     $ingreso->numero = $dato->numero;
                     $ingreso->numero_ingreso_envio = $request->numero_ingreso_envio;
                     $ingreso->fecha = date('Y-m-d H:i:s');
+                    $ingreso->dispositivo = session('dispositivo');
                     $ingreso->save();
                     // Creación de Movimiento - Ingresa a la Sucursal
                     $ingreso = new Movimiento();
@@ -739,6 +742,7 @@ class ProductoController extends Controller
                     $ingreso->numero = $dato->numero;
                     $ingreso->numero_ingreso_envio = $request->numero_ingreso_envio;
                     $ingreso->fecha = date('Y-m-d H:i:s');
+                    $ingreso->dispositivo = session('dispositivo');
                     $ingreso->save();
                 }else{
                     // Buscamos al producto
@@ -754,6 +758,7 @@ class ProductoController extends Controller
                     $ingreso->fecha = date('Y-m-d H:i:s');
                     $ingreso->numero_ingreso = $request->numero_ingreso;
                     $ingreso->estado = 'Ingreso';
+                    $ingreso->dispositivo = session('dispositivo');
                     $ingreso->save();
                 }
             }

@@ -109,6 +109,7 @@ class MovimientoController extends Controller
                     $ingreso->numero_ingreso = $numeroi;           //Ingreso
                     $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                     $ingreso->fecha = $fecha;
+                    $ingreso->dispositivo  = session('dispositivo');
                     $ingreso->save();
                     // Creación de Movimiento - Sale de Almacen Central
                     $ingreso = new Movimiento();
@@ -121,6 +122,7 @@ class MovimientoController extends Controller
                     $ingreso->numero = $numero;
                     $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                     $ingreso->fecha = $fecha;
+                    $ingreso->dispositivo  = session('dispositivo');
                     $ingreso->save();
                     // Creación de Movimiento - Ingresa a la Sucursal
                     $ingreso = new Movimiento();
@@ -134,6 +136,7 @@ class MovimientoController extends Controller
                     $ingreso->numero = $numero;
                     $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
                     $ingreso->fecha = $fecha;
+                    $ingreso->dispositivo  = session('dispositivo');
                     $ingreso->save();
                 }
                 // Redireccionar a detalle de ingreso/envio
@@ -168,6 +171,7 @@ class MovimientoController extends Controller
                     $ingreso->estado = 'Ingreso';
                     $ingreso->numero_ingreso = $numeroi; //Ingreso
                     $ingreso->fecha = $fecha;
+                    $ingreso->dispositivo  = session('dispositivo');
                     $ingreso->save();
                 }
                 return redirect('Producto/ver_ingreso/'.$numeroi);
@@ -207,6 +211,7 @@ class MovimientoController extends Controller
         $producto_reportado->fecha = date('Y-m-d H:i:s');
         $producto_reportado->estado = 'Defectuoso';
         $producto_reportado->descripcion = $request->descripcion_producto_a_reportar;
+        $producto_reportado->dispositivo  = session('dispositivo');
         $producto_reportado->save();
         return redirect('Producto/listado');
     }
@@ -225,6 +230,7 @@ class MovimientoController extends Controller
         $producto_habilitado->fecha = date('Y-m-d H:i:s');
         $producto_habilitado->estado = 'Reacondicionado';
         $producto_habilitado->descripcion = $request->descripcion_producto_a_habilitar;
+        $producto_habilitado->dispositivo  = session('dispositivo');
         $producto_habilitado->save();
         return redirect('Producto/listado');
     }
