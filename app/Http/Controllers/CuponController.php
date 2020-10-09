@@ -714,6 +714,7 @@ class CuponController extends Controller
             $movimiento->precio_venta = $request->cobro_total;
             $movimiento->salida = 1;
             $movimiento->fecha = date('Y-m-d H:i:s');
+            $movimiento->dispositivo  = session('dispositivo');
             $movimiento->estado = 'Cupon';
             $movimiento->save();
         }else{
@@ -734,6 +735,7 @@ class CuponController extends Controller
                 $movimiento->precio_venta = $producto->precio;
                 $movimiento->salida = $producto->cantidad;
                 $movimiento->fecha = date('Y-m-d H:i:s');
+                $movimiento->dispositivo  = session('dispositivo');
                 $movimiento->estado = 'Cupon';
                 $movimiento->save();
             }
