@@ -154,7 +154,7 @@
     {
         if(itemsPedidoArray.length > 0){
             //alert('ok');
-            $("#botonSubmit").hide();
+            //$("#botonSubmit").hide();
         }else{
             event.preventDefault();
             Swal.fire({

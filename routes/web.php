@@ -220,6 +220,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Entrega/ajax_importar', 'EntregaController@ajax_importar');
     Route::post('Entrega/importar_envio', 'EntregaController@importar_envio');
     Route::get('Entrega/ver_pedido/{id}', 'EntregaController@ver_pedido');
+    Route::get('Entrega/vista_previa_entrega/{id}', 'EntregaController@vista_previa_entrega');
+
+    Route::get('Entrega/eliminaEntrega/{id}', 'EntregaController@eliminaEntrega');
+    Route::get('Entrega/eliminaEnvio/{id}', 'EntregaController@eliminaEnvio');
+    Route::post('Entrega/modificar', 'EntregaController@modificar');
+    
+    Route::post('Entrega/ajaxBuscaProductos', 'EntregaController@ajaxBuscaProductos');
+    Route::post('Entrega/adicionaProducto', 'EntregaController@adicionaProducto');
+    
+    
 
     //TIPOS
     Route::get('Tipo/listado', 'TipoController@listado');

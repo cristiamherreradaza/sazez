@@ -11,6 +11,7 @@
 @endsection
 
 @section('content')
+@if(auth()->user()->perfil_id == 1 || auth()->user()->almacen_id == $pedido->almacen->id)
 <div class="card border-info">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">ADICIONA UN PRODUCTO</h4>
@@ -77,6 +78,7 @@
         </div>
     </div>
 </div>
+@endif
 
 <div class="card border-primary">
     <div class="card-header bg-primary">

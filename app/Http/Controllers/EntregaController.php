@@ -280,7 +280,14 @@ class EntregaController extends Controller
         if($pedido->estado == 'Entregado')
         {
             $movimientos = Movimiento::where('pedido_id', $pedido->id)->get();
-            return view('entrega.ver_pedido_entregado')->with(compact('pedido', 'pedido_productos', 'movimientos'));
+            $envio = Movimiento::where('pedido_id', $pedido->id)->where('ingreso', '>', 0)->first();
+            if(!$envio){
+                $pedido->estado = NULL;
+                $pedido->save();
+                return redirect('Pedido/listado');
+            }else{
+                return view('entrega.ver_pedido_entregado')->with(compact('pedido', 'pedido_productos', 'movimientos', 'envio'));
+            }
         }
         else
         {
@@ -307,5 +314,158 @@ class EntregaController extends Controller
         // dd($productos);
         return view('entrega.ver_pedido')->with(compact('pedidos', 'entregas', 'productos'));
         */
+    }
+
+    public function vista_previa_entrega($id)
+    {
+        $pedido = Pedido::find($id);
+        $productos_pedido = PedidosProducto::where('pedido_id', $pedido->id)
+                                            ->get();
+        $entregas = Movimiento::where('pedido_id', $pedido->id)
+                            ->whereNull('almacen_origen_id')
+                            ->get();
+        $cantidad_producto = PedidosProducto::where('pedido_id', $pedido->id)
+                                        ->count();
+        $complemento = 20 - $cantidad_producto;
+        // dd($complemento);
+        //dd($entregas);
+
+        // $productos_envio = Movimiento::where('estado', 'Envio')
+        //                             ->where('numero', $id)
+        //                             ->where('ingreso', '>', 0)
+        //                             ->get();
+        // $cantidad_producto = Movimiento::where('estado', 'Envio')
+        //                                 ->where('numero', $id)
+        //                                 ->where('ingreso', '>', 0)
+        //                                 ->count();
+        // $detalle = Movimiento::where('estado', 'Envio')
+        //                     ->where('numero', $id)
+        //                     ->where('ingreso', '>', 0)
+        //                     ->first();
+
+        return view('entrega.vista_previa_entrega')->with(compact('pedido', 'cantidad_producto', 'productos_pedido', 'entregas', 'complemento'));   
+    }
+
+    
+
+
+
+
+
+    public function adicionaProducto(Request $request)
+    {
+        $pedido = Pedido::find($request->pedido_id);
+        
+        if($request->producto_id){
+            // Buscaremos si ya existe ese producto en ese pedido
+            $producto_lista = PedidosProducto::where('pedido_id', $request->pedido_id)
+                                            ->where('producto_id', $request->producto_id)
+                                            ->first();
+            //dd($producto_lista);
+            if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese pedido/producto
+                $producto = new PedidosProducto();
+                $producto->user_id = Auth::user()->id;
+                $producto->pedido_id = $pedido->id;
+                $producto->producto_id = $request->producto_id;
+                $producto->cantidad = $request->producto_cantidad;
+                $producto->save();
+            }
+        }
+        return redirect("Entrega/ver_pedido/$pedido->id");
+    }
+
+    public function ajaxBuscaProductos(Request $request)
+    {
+        $productos = Producto::where('nombre', 'like', "%$request->termino%")
+                            ->orWhere('codigo', 'like', "%$request->termino%")
+                            ->limit(8)
+                            ->get();
+        $almacen_id = $request->almacen_solicitado;
+        return view('envio.ajaxBuscaProducto')->with(compact('productos', 'almacen_id'));
+    }
+
+    public function eliminaEntrega($id)
+    {
+        $pedidos_producto = PedidosProducto::find($id);
+        $producto_id = $pedidos_producto->producto_id;
+        $productos = Movimiento::where('producto_id', $producto_id)
+                                ->where('pedido_id', $pedidos_producto->pedido_id)
+                                ->get();
+        foreach($productos as $producto){
+            $producto->delete();
+        }
+        return redirect("Entrega/ver_pedido/$pedidos_producto->pedido_id");
+    }
+
+    public function eliminaEnvio($id)
+    {
+        $registro = Movimiento::where('numero', $id)->first();
+        $pedido = Pedido::find($registro->pedido_id);
+        $productos_pedido = Movimiento::where('numero', $id)
+                                    ->where('pedido_id', $pedido->id)
+                                    ->get();
+        foreach($productos_pedido as $producto){
+            $producto->delete();
+        }
+        $pedido->estado = NULL;
+        $pedido->save();
+        return redirect('Pedido/listado');
+    }
+
+    public function modificar(Request $request)
+    {
+        //dd($request->id);
+        $pedidos_producto = PedidosProducto::find($request->id);
+        $pedido = Pedido::find($pedidos_producto->pedido_id);
+        $item = Producto::find($pedidos_producto->producto_id);
+        // Tenemos que verificar que no exceda el stock actual, la cantidad solicitada del producto X en el almacen X
+        $ingreso = Movimiento::where('producto_id', $item->id)
+                            ->where('almacene_id', $pedido->almacene_id)
+                            ->where('ingreso', '>', 0)
+                            ->sum('ingreso');
+        $salida = Movimiento::where('producto_id', $item->id)
+                            ->where('almacene_id', $pedido->almacene_id)
+                            ->where('salida', '>', 0)
+                            ->sum('salida');
+        $cantidad_disponible = $ingreso - $salida;
+        if($cantidad_disponible >= $request->cantidad_enviar)
+        {
+            // Eliminamos registros anteriores
+            $productos = Movimiento::where('producto_id', $item->id)
+                                ->where('pedido_id', $pedidos_producto->pedido_id)
+                                ->get();
+            foreach($productos as $producto){
+                $producto->delete();
+            }
+            // Creamos nuevos registros Salida del producto X del almacen X
+            $salida = new Movimiento();
+            $salida->user_id = Auth::user()->id;
+            $salida->producto_id = $item->id;
+            $salida->tipo_id = $item->tipo_id;
+            $salida->almacene_id = $pedido->almacene_id;
+            $salida->pedido_id = $pedido->id;
+            $salida->salida = $request->cantidad_enviar;
+            $salida->fecha = date("Y-m-d H:i:s");
+            $salida->numero = $request->numero_envio;
+            $salida->estado = 'Envio';
+            $salida->dispositivo  = session('dispositivo');
+            $salida->save();
+
+            // Creamos nuevos registros Entrada del producto X al almacen Y
+            $ingreso = new Movimiento();
+            $ingreso->user_id = Auth::user()->id;
+            $ingreso->producto_id = $item->id;
+            $ingreso->tipo_id = $item->tipo_id;
+            $ingreso->almacen_origen_id = $pedido->almacene_id;
+            $ingreso->almacene_id = $pedido->almacene_solicitante_id;
+            $ingreso->pedido_id = $pedido->id;
+            $ingreso->ingreso = $request->cantidad_enviar;
+            $ingreso->fecha = date("Y-m-d H:i:s");
+            $ingreso->numero = $request->numero_envio;
+            $ingreso->estado = 'Envio';
+            $ingreso->dispositivo  = session('dispositivo');
+            $ingreso->save();
+        }
+        return redirect("Entrega/ver_pedido/$pedido->id");
     }
 }

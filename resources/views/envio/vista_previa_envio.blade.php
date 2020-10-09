@@ -133,8 +133,8 @@
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
                 <!-- <th class="text-right">Tipo</th> -->
-                <th class="text-right">Cantidad</th>
-                <th class="text-right">Stock</th>
+                <th class="text-right">Cantidad Ingresada</th>
+                <th class="text-right">Stock actual en {{ $detalle->almacen->nombre }} </th>
                 <th class="text-right">Total</th>
             </tr>
         </thead>
@@ -208,8 +208,8 @@
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
                 <!-- <th class="text-right">Tipo</th> -->
-                <th class="text-right">Cantidad</th>
-                <th class="text-right">Stock</th>
+                <th class="text-right">Cantidad Ingresada</th>
+                <th class="text-right">Stock actual en {{ $detalle->almacen->nombre }} </th>
                 <th class="text-right">Total</th>
             </tr>
         </thead>

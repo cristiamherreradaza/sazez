@@ -104,7 +104,7 @@
                                     <td style="text-align:center;">{{ $producto->cantidad }}</td>
                                     <td>
                                         <div class="form-group">
-                                            <input type="number" class="form-control" id="cantidad_{{ $producto->producto->id }}" name="cantidad_{{ $producto->producto->id }}" value="0" min="0" max="{{ $cantidad_disponible }}">
+                                            <input type="number" class="form-control" id="cantidad_{{ $producto->producto->id }}" name="cantidad_{{ $producto->producto->id }}" value="0" min="0" max="{{ $cantidad_disponible }}" required>
                                         </div>
                                     </td>  
                                 </tr>
@@ -113,7 +113,7 @@
                         </tbody>
                     </table>
                     <div class="modal-footer">
-                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success">ENTREGAR PRODUCTOS</button>
+                        <button type="submit" id="botonSubmit" onclick="validaItems()" class="btn waves-effect waves-light btn-block btn-success">ENTREGAR PRODUCTOS</button>
                     </div>
                 </div>
                 </form>
@@ -127,5 +127,16 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script>
+    function validaItems()
+    {
+        //$("#botonSubmit").hide();
+        Swal.fire({
+            type: 'success',
+            title: 'Excelente',
+            text: 'Procesando'
+        })
+    }
+</script>
 
 @endsection

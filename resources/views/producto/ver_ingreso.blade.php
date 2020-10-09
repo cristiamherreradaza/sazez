@@ -88,7 +88,7 @@
                                 </h4></div>
                     <div class="col-md-3"><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></div>
                 </div>
-                <div class="table-responsve">
+                <div class="table-responsive">
                     <!-- <table class="table">
                         <tr>
                             <td><h4><span class="text-info">Numero:</span> {{ $datos->numero_ingreso }}</h4></td>

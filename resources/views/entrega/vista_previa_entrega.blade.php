@@ -112,21 +112,15 @@
 </head>
 <body>
 <div class="invoice" id="printableArea">
-    <p style="margin-top: 5px; font-size: 15px; text-align: center;">RECIBO DE INGRESO DE PRODUCTOS</p>
+    <p style="margin-top: 5px; font-size: 15px; text-align: center;">RECIBO DE PEDIDO - ENVIO DE PRODUCTOS</p>
     <table class="contenidos">
         <tr>
-            <td><b>Numero de Ingreso :</b> {{ $detalle->numero_ingreso }} </td>
-            <td><b>Fecha :</b> {{ $detalle->fecha }}</td>
+            <td><b>Numero de Pedido :</b> {{ $pedido->numero }} </td>
+            <td><b>Fecha :</b> {{ $pedido->fecha }}</td>
         </tr>
         <tr>
-            <td><b>Proveedor :</b> 
-                @if($detalle->proveedor)
-                    {{ $detalle->proveedor->nombre }}
-                @else
-                    No Tiene
-                @endif
-            </td>
-            <td><b>Almacen :</b> {{ $detalle->almacen->nombre }} </td>
+            <td><b>Sucursal que solicita :</b> {{ $pedido->almacen->nombre }} </td>
+            <td><b>Sucursal que envia :</b> {{ $pedido->almacen_destino->nombre }} </td>
         </tr>
     </table>
     <!-- Detalle de los Productos -->
@@ -138,23 +132,40 @@
                 <th>#</th>
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
+                <th class="text-right">Marca</th>
                 <th class="text-right">Tipo</th>
-                <th class="text-right">Cantidad</th>
+                <th class="text-right">Cantidad Solicitada</th>
+                <th class="text-right">Cantidad Enviada</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($productos_envio as $key => $producto)
+            @foreach($productos_pedido as $key => $producto)
                 <tr>
                     <td>{{ ($key+1) }}</td>
                     <td class="text-right">{{ $producto->producto->codigo }}</td>
                     <td class="text-right">{{ $producto->producto->nombre }}</td>
+                    <td class="text-right">{{ $producto->producto->marca->nombre }}</td>
                     <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
-                    <td class="text-right">{{ round($producto->ingreso) }}</td>
+                    <td class="text-right">{{ $producto->cantidad }}</td>
+                    @php
+                        $cantidad = App\Movimiento::where('pedido_id', $pedido->id)
+                                                ->where('ingreso', '>', 0)
+                                                ->where('producto_id', $producto->producto_id)
+                                                ->first();
+                        if($cantidad){
+                            $cantidad = $cantidad->ingreso;
+                        }else{
+                            $cantidad = 0;
+                        }
+                    @endphp
+                    <td class="text-right">{{ round($cantidad) }}</td>
                 </tr>
             @endforeach
             @if($complemento > 0)
                 @for($i=1; $i<=$complemento; $i++)
                     <tr>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -176,21 +187,15 @@
 <br>
 <br>
 <div class="invoice" id="printableArea">
-    <p style="margin-top: 5px; font-size: 15px; text-align: center;">RECIBO DE INGRESO DE PRODUCTOS</p>
+    <p style="margin-top: 5px; font-size: 15px; text-align: center;">RECIBO DE PEDIDO - ENVIO DE PRODUCTOS</p>
     <table class="contenidos">
         <tr>
-            <td><b>Numero de Ingreso :</b> {{ $detalle->numero_ingreso }} </td>
-            <td><b>Fecha :</b> {{ $detalle->fecha }}</td>
+            <td><b>Numero de Pedido :</b> {{ $pedido->numero }} </td>
+            <td><b>Fecha :</b> {{ $pedido->fecha }}</td>
         </tr>
         <tr>
-            <td><b>Proveedor :</b> 
-                @if($detalle->proveedor)
-                    {{ $detalle->proveedor->nombre }}
-                @else
-                    No Tiene
-                @endif
-            </td>
-            <td><b>Almacen :</b> {{ $detalle->almacen->nombre }} </td>
+            <td><b>Sucursal que solicita :</b> {{ $pedido->almacen->nombre }} </td>
+            <td><b>Sucursal que envia :</b> {{ $pedido->almacen_destino->nombre }} </td>
         </tr>
     </table>
     <!-- Detalle de los Productos -->
@@ -202,23 +207,40 @@
                 <th>#</th>
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
+                <th class="text-right">Marca</th>
                 <th class="text-right">Tipo</th>
-                <th class="text-right">Cantidad</th>
+                <th class="text-right">Cantidad Solicitada</th>
+                <th class="text-right">Cantidad Enviada</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($productos_envio as $key => $producto)
+            @foreach($productos_pedido as $key => $producto)
                 <tr>
                     <td>{{ ($key+1) }}</td>
                     <td class="text-right">{{ $producto->producto->codigo }}</td>
                     <td class="text-right">{{ $producto->producto->nombre }}</td>
+                    <td class="text-right">{{ $producto->producto->marca->nombre }}</td>
                     <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
-                    <td class="text-right">{{ round($producto->ingreso) }}</td>
+                    <td class="text-right">{{ $producto->cantidad }}</td>
+                    @php
+                        $cantidad = App\Movimiento::where('pedido_id', $pedido->id)
+                                                ->where('ingreso', '>', 0)
+                                                ->where('producto_id', $producto->producto_id)
+                                                ->first();
+                        if($cantidad){
+                            $cantidad = $cantidad->ingreso;
+                        }else{
+                            $cantidad = 0;
+                        }
+                    @endphp
+                    <td class="text-right">{{ round($cantidad) }}</td>
                 </tr>
             @endforeach
             @if($complemento > 0)
                 @for($i=1; $i<=$complemento; $i++)
                     <tr>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

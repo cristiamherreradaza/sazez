@@ -15,9 +15,13 @@ use App\Categoria;
 use App\Movimiento;
 use App\Parametros;
 use App\Caracteristica;
+use App\Cupone;
 use App\Configuracione;
 use App\ImagenesProducto;
 use App\CategoriasProducto;
+use App\CombosProducto;
+use App\PedidosProducto;
+use App\VentasProducto;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\ProductosExport;
@@ -550,9 +554,9 @@ class ProductoController extends Controller
         return view('producto.info');
     }
 
+    // Funcion que elimina el producto seleccionado desde lista de productos
     public function elimina(Request $request, $productoId)
     {
-        // dd($productoId);
         $producto = Producto::find($productoId);
         $producto->delete();
         // eliminamos las tablas relacionadas
@@ -572,6 +576,8 @@ class ProductoController extends Controller
         VentasProducto::where('producto_id', $productoId)->delete();
         // cupones 
         Cupone::where('producto_id', $productoId)->delete();
+        // Movimientos
+        Movimiento::where('producto_id', $productoId)->delete();
         return redirect('Producto/listado');
     }
 

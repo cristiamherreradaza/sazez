@@ -107,8 +107,8 @@
                                 <th>Marca</th>
                                 <th>Tipo</th>
                                 <th>Modelo</th>
-                                <th class="text-center">Cantidad</th>
-                                <th class="text-center">Stock</th>
+                                <th class="text-center">Cantidad Ingresada</th>
+                                <th class="text-center">Stock actual en {{ $datos->almacen->nombre }}</th>
                                 <th class="text-center">Total</th>
                                 <th></th>
                             </tr>
