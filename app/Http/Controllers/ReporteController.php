@@ -27,6 +27,28 @@ class ReporteController extends Controller
 
     public function ajax_tienda_listado(Request $request)
     {   
+        $envios = DB::table('movimientos')
+                        ->select(
+                            'movimientos.numero',
+                            'origen.nombre as origen',
+                            'almacenes.nombre as destino',
+                            'movimientos.fecha',
+                            DB::raw('SUM(ingreso) as total')
+                            )
+                        ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                        ->leftJoin('almacenes as origen', 'movimientos.almacen_origen_id', '=', 'origen.id')
+                        ->whereDate('movimientos.fecha', '>=', $request->tipo_fecha_ini)
+                        ->whereDate('movimientos.fecha', '<=', $request->tipo_fecha_fin)
+                        ->whereNull('movimientos.deleted_at')
+                        ->whereNotNull('movimientos.almacen_origen_id')
+                        ->whereNotNull('movimientos.numero')
+                        ->groupBy('movimientos.numero');
+        if($request->tipo_id){
+            $envios->where('movimientos.almacen_origen_id', $request->tipo_id);
+        }
+        return Datatables::of($envios)->make(true);
+        
+        /*
         $almacen_id = $request->tipo_id;
         $fecha_ini = $request->tipo_fecha_ini;
         $fecha_fin = $request->tipo_fecha_fin;
@@ -54,6 +76,8 @@ class ReporteController extends Controller
         }
          return Datatables::of($productos)
                 ->make(true);
+        */
+        
     }
 
     public function ventas()

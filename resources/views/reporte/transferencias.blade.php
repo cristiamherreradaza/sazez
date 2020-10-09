@@ -85,7 +85,7 @@
 <div class="col-md-12" id="mostrar" style="display:none;">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">LISTA DE INGRESOS DE PRODUCTOS POR PROVEEDOR</h4>
+            <h4 class="card-title">LISTA DE TRANSFERENCIAS ENTRE SUCURSALES</h4>
             <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
                 <thead>
                     <tr>

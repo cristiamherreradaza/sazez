@@ -38,10 +38,10 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Seleccionar Tienda</label>
+                                <label>Seleccionar Tienda Origen</label>
                                 <select name="almacen_id" id="almacen_id" class="form-control">
                                     @if(auth()->user()->rol == 'Administrador')
-                                        <option value="0">Todos</option>
+                                        <option value="">Todos</option>
                                         @foreach($almacenes as $almacen)
                                             <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
                                         @endforeach
@@ -85,32 +85,30 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">LISTA DE ENVIOS </h4>
-                {{-- <div class="table-responsive m-t-40"> --}}
-                <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
-                    <thead>
-                        <tr>
-                            <th>Almacen</th>
-                            <th>Tipo</th>
-                            <th>Producto </th>
-                            <th>Marca</th>
-                            <th>Color</th>
-                            <th>Stock</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Almacen</th>
-                            <th>Tipo</th>
-                            <th>Producto </th>
-                            <th>Marca</th>
-                            <th>Color</th>
-                            <th>Stock</th>
-                        </tr>
-                  </tfoot>
-                </table>
-                {{-- </div> --}}
+                <div class="table-responsive m-t-40">
+                    <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
+                        <thead>
+                            <tr>
+                                <th>Numero de Envio</th>
+                                <th>Sucursal Origen</th>
+                                <th>Sucursal Destino</th>
+                                <th>Fecha</th>
+                                <th>Cantidad de Productos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Numero de Envio</th>
+                                <th>Sucursal Origen</th>
+                                <th>Sucursal Destino</th>
+                                <th>Fecha</th>
+                                <th>Cantidad de Productos</th>
+                            </tr>
+                    </tfoot>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -140,7 +138,7 @@
         table = $('#tabla-tienda').DataTable( {
             "iDisplayLength": 10,
             "processing": true,
-            "scrollX": true,
+            //"scrollX": true,
             "serverSide": true,
             "ajax": { 
                 url : "{{ url('Reporte/ajax_tienda_listado') }}",
@@ -150,12 +148,11 @@
                       } 
                 },
             "columns": [
-                {data: 'alma_nombre', name: 'alma_nombre'},
-                {data: 'tipo_nombre', name: 'tipo_nombre'},
-                {data: 'prod_nombre', name: 'prod_nombre'},
-                {data: 'marc_nombre', name: 'marc_nombre'},
-                {data: 'colores', name: 'colores'},
-                {data: 'stock', name: 'stock'},
+                {data: 'numero', name: 'numero'},
+                {data: 'origen', name: 'origen.nombre'},
+                {data: 'destino', name: 'almacenes.destino'},
+                {data: 'fecha', name: 'fecha'},
+                {data: 'total', name: 'total'},
             ],
             language: {
                 url: '{{ asset('datatableEs.json') }}'
