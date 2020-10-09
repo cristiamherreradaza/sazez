@@ -648,7 +648,6 @@ class ProductoController extends Controller
     public function listadoIngresos()
     {
         return view('producto.listadoIngresos');
-
     }
 
     public function ver_ingreso($id)

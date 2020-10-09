@@ -22,27 +22,15 @@
 
                     <div class="row">
 
-                        <div class="col-md-2" id="ventana_almacen">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Incluir Central</label>
-                                <select name="incluye_almacen" id="incluye_almacen" class="form-control">
-                                    <option value="No" selected> No </option>
-                                    <option value="Si"> Si </option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Sucursal</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <select name="almacen" id="almacen" class="form-control">
-                                    @foreach($almacenes as $almacen)
-                                    <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
-                                    @endforeach
-                                </select>
+                                <label class="control-label">Buscar Producto</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="termino" name="termino">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="ti-search"></i></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -60,17 +48,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label">Buscar Producto</label>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="termino" name="termino">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="ti-search"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="row">
                         <div class="col-md-12">

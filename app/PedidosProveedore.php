@@ -26,12 +26,12 @@ class PedidosProveedore extends Model
     
     public function almacene()
     {
-        return $this->belongsTo('App\Almacenes');
+        return $this->belongsTo('App\Almacene');
     }
     
     public function proveedore()
     {
-        return $this->belongsTo('App\Proveedores');
+        return $this->belongsTo('App\Proveedore');
     }
 
 }

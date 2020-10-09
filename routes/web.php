@@ -349,7 +349,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('PedidosProveedore/nuevo', 'PedidosProveedoreController@nuevo');
     Route::post('PedidosProveedore/ajaxBuscaProducto', 'PedidosProveedoreController@ajaxBuscaProducto');
     Route::post('PedidosProveedore/guarda', 'PedidosProveedoreController@guarda');
-
+    Route::get('PedidosProveedore/verPedido/{id}', 'PedidosProveedoreController@verPedido');
 
 });
 

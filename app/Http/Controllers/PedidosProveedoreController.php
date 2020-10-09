@@ -67,8 +67,47 @@ class PedidosProveedoreController extends Controller
                 $ingreso->save();
 
             }
-            // return redirect('Producto/ver_ingreso/'.$numeroi);
+            return redirect('PedidosProveedore/verPedido/'.$ppId);
         }
+    }
+
+    public function verPedido(Request $request, $idPedido)
+    {
+        $datosPedido = PedidosProveedore::where('id', $idPedido)->first();
+        $productosPedido = ProductosPedidoProveedore::where('pedidos_proveedore_id', $idPedido)->get();
+        return view('pedidos_proveedores.verPedido')->with(compact('datosPedido', 'productosPedido'));
+    }
+
+    public function listado()
+    {
+        return view('pedidos_proveedores.listado');
+    }
+
+    public function ajaxListado()
+    {
+        $ingresos = Movimiento::where('movimientos.estado', '=', 'Ingreso')
+                            ->where('movimientos.ingreso', '>', 0)
+                            ->whereNotNull('numero_ingreso')
+                            ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
+                            ->leftJoin('users', 'movimientos.user_id', '=', 'users.id')
+                            //->distinct()
+                            ->select(
+                                'movimientos.numero_ingreso',
+                                'almacenes.nombre',
+                                'users.name',
+                                'movimientos.fecha',
+                                'movimientos.estado'
+                            )
+                            ->groupBy('movimientos.numero_ingreso')
+                            ->orderBy('movimientos.id', 'desc');
+        if(Auth::user()->perfil_id != 1){
+            $ingresos->where('movimientos.almacene_id', Auth::user()->almacen->id);
+        }
+        return Datatables::of($ingresos)
+                ->addColumn('action', function ($ingresos) {
+                    return '<button onclick="ver_pedido(' . $ingresos->numero_ingreso . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>';
+                })
+                ->make(true); 
     }
 
 }
