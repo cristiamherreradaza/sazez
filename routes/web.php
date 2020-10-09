@@ -344,6 +344,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Factura/formulario', 'FacturaController@formulario');
     Route::post('Factura/guardaVenta', 'FacturaController@guardaVenta');
     Route::get('Factura/imprimeFactura/{id}', 'FacturaController@imprimeFactura');
+    
+    // PEDIDOS PROEVEEDORES
+    Route::get('PedidosProveedore/nuevo', 'PedidosProveedoreController@nuevo');
+    Route::post('PedidosProveedore/ajaxBuscaProducto', 'PedidosProveedoreController@ajaxBuscaProducto');
+    Route::post('PedidosProveedore/guarda', 'PedidosProveedoreController@guarda');
+
+
 });
 
 Route::get('Cliente/inicio', 'ClienteController@inicio');

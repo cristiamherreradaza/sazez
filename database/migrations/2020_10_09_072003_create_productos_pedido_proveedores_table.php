@@ -17,8 +17,8 @@ class CreateProductosPedidoProveedoresTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('pedidos_proveedore');
-            $table->foreign('pedidos_proveedore')->references('id')->on('pedidos_proveedores');
+            $table->unsignedBigInteger('pedidos_proveedore_id');
+            $table->foreign('pedidos_proveedore_id')->references('id')->on('pedidos_proveedores');
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('productos');
             $table->integer('caja')->nullable();
