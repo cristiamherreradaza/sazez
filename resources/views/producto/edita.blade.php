@@ -88,7 +88,7 @@
                                                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                                                 </span>
                                                             </label>
-                                                            <input type="text" class="form-control" name="codigo" id="validationTooltip01" autofocus required>
+                                                            <input type="text" class="form-control" name="codigo" id="validationTooltip01" value="{{ $producto->codigo }}"utofocus required>
                                                         </div>
                                                     </div>
                                                 @endif
