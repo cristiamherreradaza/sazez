@@ -5,77 +5,20 @@
 @endsection
 
 @section('content')
-<style>
-    body {
-        font-family: 'Ropa Sans', sans-serif;
-        color: #333;
-        max-width: 640px;
-        margin: 0 auto;
-        position: relative;
-    }
 
-    #githubLink {
-        position: absolute;
-        right: 0;
-        top: 12px;
-        color: #2D99FF;
-    }
-
-    h1 {
-        margin: 10px 0;
-        font-size: 40px;
-    }
-
-    #loadingMessage {
-        text-align: center;
-        padding: 40px;
-        background-color: #eee;
-    }
-
-    #canvas {
-        width: 100%;
-    }
-
-    #output {
-        margin-top: 20px;
-        background: #eee;
-        padding: 10px;
-        padding-bottom: 0;
-    }
-
-    #output div {
-        padding-bottom: 10px;
-        word-wrap: break-word;
-    }
-
-    #noQRFound {
-        text-align: center;
-    }
-</style>
-
+<div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)
+                </div>
+                <canvas id="canvas" style="width: 100%;" hidden></canvas>
+                <div id="output" hidden>
+                    <div id="outputMessage">No QR code detected.</div>
+                    <div hidden><b>Data:</b> <span id="outputData"></span></div>
+                </div>
 <div class="card card-body">
     <div class="invoice-123" id="printableArea">
         <div class="row">
 
-            <h1>jsQR Demo</h1>
-            <a id="githubLink" href="https://github.com/cozmo/jsQR">View documentation on Github</a>
-            <p>Pure JavaScript QR code decoding library.</p>
-            <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
-            <canvas id="canvas" hidden></canvas>
-            <div id="output" hidden>
-                <div id="outputMessage">No QR code detected.</div>
-                <div hidden><b>Data:</b> <span id="outputData"></span></div>
-            </div>
-
             <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-4">
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                </div>
+
             </div>
 
         </div>
@@ -93,6 +36,7 @@
 <script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
 <script src="{{ asset('dist/js/jsQR.js') }}"></script>
 <script>
+
     var video = document.createElement("video");
     var canvasElement = document.getElementById("canvas");
     var canvas = canvasElement.getContext("2d");

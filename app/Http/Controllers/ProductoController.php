@@ -876,7 +876,7 @@ class ProductoController extends Controller
     public function generaQr(Request $request)
     {
         $cantidad = 5;
-        $productoId = 1;
+        $productoId = 40;
         for ($i=0; $i < $cantidad; $i++) { 
 
             $numeroQr = Qr::max('numero');
