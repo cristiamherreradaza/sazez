@@ -10,14 +10,15 @@
                 </div>
                 <canvas id="canvas" style="width: 100%;" hidden></canvas>
                 <div id="output" hidden>
-                    <div id="outputMessage">No QR code detected.</div>
-                    <div hidden><b>Data:</b> <span id="outputData"></span></div>
+                    <div id="outputMessage">Qr no detectado.</div>
+                    <div hidden><b>Datos:</b> <span id="outputData"></span></div>
                 </div>
 <div class="card card-body">
     <div class="invoice-123" id="printableArea">
         <div class="row">
 
             <div class="col-md-12">
+
 
             </div>
 
