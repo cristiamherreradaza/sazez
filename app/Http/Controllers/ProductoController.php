@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Qr;
 use Session;
 use App\Tipo;
 use App\Marca;
 use App\Venta;
+use App\Cupone;
 use App\Escala;
 use App\Precio;
 use DataTables;
@@ -15,13 +17,12 @@ use App\Categoria;
 use App\Movimiento;
 use App\Parametros;
 use App\Caracteristica;
-use App\Cupone;
+use App\CombosProducto;
 use App\Configuracione;
+use App\VentasProducto;
+use App\PedidosProducto;
 use App\ImagenesProducto;
 use App\CategoriasProducto;
-use App\CombosProducto;
-use App\PedidosProducto;
-use App\VentasProducto;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Exports\ProductosExport;
@@ -870,6 +871,27 @@ class ProductoController extends Controller
                     ->get();
         
         return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios'));
+    }
+
+    public function generaQr(Request $request)
+    {
+        $cantidad = 5;
+        $productoId = 1;
+        for ($i=0; $i < $cantidad; $i++) { 
+
+            $numeroQr = Qr::max('numero');
+
+            if ($numeroQr) {
+                $ultimo_numero = $numeroQr+1;
+            }else{
+                $ultimo_numero =1;
+            }
+
+            $qrs = new Qr();
+            $qrs->producto_id = $productoId;
+            $qrs->numero = $ultimo_numero;
+            $qrs->save();
+        }
     }
 
 }

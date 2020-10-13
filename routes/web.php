@@ -77,6 +77,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/continua/{id}', 'ProductoController@continua');
     Route::get('Producto/vista_previa_ingreso/{id}', 'ProductoController@vista_previa_ingreso');
     Route::post('Producto/ajaxInformacion', 'ProductoController@ajaxInformacion');
+    Route::get('Producto/generaQr', 'ProductoController@generaQr');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
@@ -264,6 +265,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Venta/ajaxBuscaNitCliente', 'VentaController@ajaxBuscaNitCliente');
     Route::get('Venta/imprimeFactura/{ventaId}', 'VentaController@imprimeFactura');
     Route::get('Venta/infoDispositivo', 'VentaController@infoDispositivo');
+    Route::get('Venta/ventasQr', 'VentaController@ventasQr');
 
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');

@@ -718,4 +718,9 @@ class VentaController extends Controller
         $dispositivo = session('dispositivo');
         dd($dispositivo);
     }
+
+    public function ventasQr()
+    {
+        return view('venta.ventasQr');
+    }
 }
