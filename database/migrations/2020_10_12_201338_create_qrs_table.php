@@ -18,6 +18,7 @@ class CreateQrsTable extends Migration
             $table->unsignedBigInteger('producto_id')->nullable();
             $table->foreign('producto_id')->references('id')->on('productos');
             $table->bigInteger('numero')->nullable();
+            $table->bigInteger('lote')->nullable();
             $table->string('estado', 30)->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

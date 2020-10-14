@@ -875,8 +875,17 @@ class ProductoController extends Controller
 
     public function generaQr(Request $request)
     {
+        
+        $numeroLote = Qr::max('lote');
+
+        if ($numeroLote) {
+            $ultimo_lote = $numeroLote+1;
+        }else{
+            $ultimo_lote =1;
+        }
+
         $cantidad = 5;
-        $productoId = 40;
+        $productoId = 400;
         for ($i=0; $i < $cantidad; $i++) { 
 
             $numeroQr = Qr::max('numero');
@@ -887,11 +896,15 @@ class ProductoController extends Controller
                 $ultimo_numero =1;
             }
 
-            $qrs = new Qr();
+            $qrs              = new Qr();
             $qrs->producto_id = $productoId;
-            $qrs->numero = $ultimo_numero;
+            $qrs->numero      = $ultimo_numero;
+            $qrs->lote        = $ultimo_lote;
             $qrs->save();
         }
+
+        $qrsGenerados = Qr::where('lote', $ultimo_lote)->get();
+        return view('producto.generaQr')->with(compact('qrsGenerados'));
     }
 
 }
