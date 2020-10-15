@@ -551,6 +551,7 @@ class VentaController extends Controller
         Movimiento::where('venta_id', $request->ventaId)->delete();
         VentasProducto::where('venta_id', $request->ventaId)->delete();
         Pago::where('venta_id', $request->ventaId)->delete();
+        Factura::where('venta_id', $request->ventaId)->delete();
 
         return redirect('Venta/listado');
         // dd($request->all());
