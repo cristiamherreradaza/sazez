@@ -907,4 +907,42 @@ class ProductoController extends Controller
         return view('producto.generaQr')->with(compact('qrsGenerados'));
     }
 
+    public function adicionaRegularizacion(Request $request)
+    {
+        $datosProducto = Producto::where('id', $request->regularizaAdicionProductoId)->first();
+
+        $movimiento              = new Movimiento();
+        $movimiento->user_id     = Auth::user()->id;
+        $movimiento->producto_id = $request->regularizaAdicionProductoId;
+        $movimiento->tipo_id     = $datosProducto->tipo_id;
+        $movimiento->almacene_id = Auth::user()->almacen->id;
+        $movimiento->fecha       = date("Y-m-d H:i:s");
+        $movimiento->ingreso     = $request->adicionaCantidad;
+        $movimiento->estado      = "Regularizacion";
+        $movimiento->descripcion = $request->descripcion;
+        $movimiento->dispositivo = session('dispositivo');
+        $movimiento->save();
+
+        return redirect('Producto/listado');
+    }
+
+    public function quitaRegularizacion(Request $request)
+    {
+        $datosProducto = Producto::where('id', $request->regularizaQuitaProductoId)->first();
+
+        $movimiento              = new Movimiento();
+        $movimiento->user_id     = Auth::user()->id;
+        $movimiento->producto_id = $request->regularizaQuitaProductoId;
+        $movimiento->tipo_id     = $datosProducto->tipo_id;
+        $movimiento->almacene_id = Auth::user()->almacen->id;
+        $movimiento->fecha       = date("Y-m-d H:i:s");
+        $movimiento->salida      = $request->quitaCantidad;
+        $movimiento->estado      = "Regularizacion";
+        $movimiento->descripcion = $request->descripcion;
+        $movimiento->dispositivo = session('dispositivo');
+        $movimiento->save();
+
+        return redirect('Producto/listado');
+    }
+
 }

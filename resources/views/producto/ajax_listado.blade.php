@@ -58,6 +58,13 @@
                             <td>
                                 <button class="btn btn-warning" onclick="edita_producto('{{ $producto->id }}')" title="Editar producto"><i class="fas fa-edit"></i> </button>
                                 <button class="btn btn-info" onclick="muestra_producto('{{ $producto->id }}')" title="Ver producto"><i class="fas fa-eye"></i></button>
+                                
+                                @if (auth()->user()->perfil_id == 1)
+                                <button class="btn btn-danger" onclick="quita_producto('{{ $producto->id }}')" title="Quitar producto"><i class="fas fa-minus-circle"></i></button>
+                                <button class="btn btn-success" onclick="adiciona_producto('{{ $producto->id }}')" title="Adicionar producto"><i class="fas fa-plus-circle"></i></button>
+                                @endif
+                                <button class="btn btn-dark" onclick="genera_qr('{{ $producto->id }}')" title="Ver producto"><i class="fas fa-qrcode"></i></button>
+                                
                                 @if($producto->estado == 'Discontinuo')
                                     <button class="btn btn-primary" onclick="continua_producto('{{ $producto->id }}', '{{ $producto->nombre }}')" title="Continuar producto"><i class="fas fa-check-circle"></i></button>
                                 @else

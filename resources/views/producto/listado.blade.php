@@ -90,7 +90,7 @@
                 <h4 class="modal-title text-white" id="myModalLabel">REPORTAR PRODUCTO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Movimiento/reportar') }}"  method="POST" >
+            <form action="{{ url('Movimiento/reportar') }}"  method="POST" />
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="id_producto_a_reportar" id="id_producto_a_reportar" value="">
@@ -150,6 +150,98 @@
     </div>
 </div>
 <!-- fin modal informacion producto -->
+
+<!-- inicio modal adiciona producto -->
+<div id="adiciona_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-success">
+                <h4 class="modal-title text-white" id="myModalLabel">ADICIONA PRODUCTO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+                <form action="{{ url('Producto/adicionaRegularizacion') }}" method="POST" id="formularioAdicionaProducto" />
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="regularizaAdicionProductoId" id="regularizaAdicionProductoId" value="">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Cant.</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="adicionaCantidad" type="number" id="adicionaCantidad" min="1" class="form-control" value="1" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="control-label">Descripcion</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="descripcion" type="text" id="descripcion" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="valida_adiciona()">ADICIONAR</button>
+                </div>
+                </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal adiciona producto -->
+
+{{-- inicio modal quita producto --}}
+<div id="quita_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-danger">
+                <h4 class="modal-title text-white" id="myModalLabel">QUITA PRODUCTO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+                <form action="{{ url('Producto/quitaRegularizacion') }}" method="POST" id="formularioQuitaProducto" />
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="regularizaQuitaProductoId" id="regularizaQuitaProductoId" value="">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Cant.</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="quitaCantidad" type="number" id="quitaCantidad" min="1" class="form-control" value="1" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="control-label">Descripcion</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="descripcion" type="text" id="descripcion" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn waves-effect waves-light btn-block btn-danger" onclick="valida_quita()">QUITAR</button>
+                </div>
+                </form>
+        </div>
+    </div>
+</div>
+{{-- fin inicio modal quita producto --}}
 
 <!-- inicio modal habilitar producto -->
 <div id="habilitar_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -375,6 +467,41 @@
 
         $("#detalle_producto").modal("show");
         //ajaxMuestraTotalesAlmacenes
+    }
+
+    function adiciona_producto(productoId)
+    {
+        $("#regularizaAdicionProductoId").val(productoId);
+        $("#adiciona_producto").modal("show");
+    }
+
+    function quita_producto(productoId)
+    {
+        $("#regularizaQuitaProductoId").val(productoId);
+        $("#quita_producto").modal("show");
+    }
+
+    function genera_qr(productoId)
+    {
+        alert('qr');
+    }
+
+    function valida_adiciona(productoId)
+    {
+        if ($("#formularioAdicionaProducto")[0].checkValidity()) {
+            $("#formularioAdicionaProducto").submit();
+        }else{
+            $("#formularioAdicionaProducto")[0].reportValidity();
+        }
+    }
+
+    function valida_quita(productoId)
+    {
+        if ($("#formularioQuitaProducto")[0].checkValidity()) {
+            $("#formularioQuitaProducto").submit();
+        }else{
+            $("#formularioQuitaProducto")[0].reportValidity();
+        }
     }
 
 </script>

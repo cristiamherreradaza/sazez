@@ -78,6 +78,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/vista_previa_ingreso/{id}', 'ProductoController@vista_previa_ingreso');
     Route::post('Producto/ajaxInformacion', 'ProductoController@ajaxInformacion');
     Route::get('Producto/generaQr', 'ProductoController@generaQr');
+    Route::post('Producto/adicionaRegularizacion', 'ProductoController@adicionaRegularizacion');
+    Route::post('Producto/quitaRegularizacion', 'ProductoController@quitaRegularizacion');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
