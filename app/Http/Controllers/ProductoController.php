@@ -873,6 +873,14 @@ class ProductoController extends Controller
         return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios'));
     }
 
+    public function ajaxGeneraQr(Request $request)
+    {
+        $datosProducto = Producto::where('id', $request->producto_id)->first();
+        $datosPrecios = Precio::where('producto_id', $request->producto_id)->get();
+        // dd($datosPrecios->count());
+        return view('producto.ajaxGeneraQr')->with(compact('datosPrecios', 'datosProducto'));
+    }
+
     public function generaQr(Request $request)
     {
         

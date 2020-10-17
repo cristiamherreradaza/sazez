@@ -80,6 +80,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Producto/generaQr', 'ProductoController@generaQr');
     Route::post('Producto/adicionaRegularizacion', 'ProductoController@adicionaRegularizacion');
     Route::post('Producto/quitaRegularizacion', 'ProductoController@quitaRegularizacion');
+    Route::post('Producto/ajaxGeneraQr', 'ProductoController@ajaxGeneraQr');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
