@@ -94,7 +94,7 @@
         });
     })();
 @endforeach
-
+// function para imprimir la pagina
 function imprime()
 {
     window.print();
