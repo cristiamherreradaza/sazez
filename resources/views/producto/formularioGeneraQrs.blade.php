@@ -13,7 +13,7 @@
     <div class="col-md-12">
         <div class="card border-info">
             <div class="card-header bg-info">
-                <h4 class="mb-0 text-white">PRODUCTOS</h4>
+                <h4 class="mb-0 text-white">PRODUCTO</h4>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Cant.</label>
+                                <label class="control-label">Cantidad</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
@@ -150,22 +150,6 @@
     </div>
 </div>
 <!-- fin modal informacion producto -->
-
-{{-- modal genera qr --}}
-<div id="genera_qr" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-dark">
-                <h4 class="modal-title text-white" id="myModalLabel">GENERADOR DE QR</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-            </div>
-            <div class="modal-body" id="ajaxGeneraQr">
-
-            </div>
-        </div>
-    </div>
-</div>
-{{-- fin modal genera qr --}}
 
 <!-- inicio modal adiciona producto -->
 <div id="adiciona_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -499,17 +483,7 @@
 
     function genera_qr(productoId)
     {
-        $("#genera_qr").modal("show");
-        
-        $.ajax({
-            url: "{{ url('Producto/ajaxGeneraQr') }}",
-            data: {producto_id: productoId},
-            type: 'POST',
-            success: function(data) {
-                $("#ajaxGeneraQr").html(data);
-            }
-        });
-
+        alert('qr');
     }
 
     function valida_adiciona(productoId)
@@ -528,16 +502,6 @@
         }else{
             $("#formularioQuitaProducto")[0].reportValidity();
         }
-    }
-
-    function valida_qr()
-    {
-        if ($("#formularioGeneraQr")[0].checkValidity()) {
-            $("#formularioGeneraQr").submit();
-        }else{
-            $("#formularioGeneraQr")[0].reportValidity();
-        }
-        
     }
 
 </script>

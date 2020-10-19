@@ -883,6 +883,7 @@ class ProductoController extends Controller
 
     public function generaQr(Request $request)
     {
+        // dd($request->all());
         
         $numeroLote = Qr::max('lote');
 
@@ -892,8 +893,8 @@ class ProductoController extends Controller
             $ultimo_lote =1;
         }
 
-        $cantidad = 5;
-        $productoId = 400;
+        $cantidad = $request->cantidadQr;
+        $productoId = $request->productoIdQr;
         for ($i=0; $i < $cantidad; $i++) { 
 
             $numeroQr = Qr::max('numero');
