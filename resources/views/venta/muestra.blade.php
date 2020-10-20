@@ -224,6 +224,7 @@
                         <h2 class="text-info">PRODUCTOS CAMBIADOS</h2>
                         <table class="tablesaw table-striped table-hover table-bordered table no-wrap">
                             <thead>
+                                <tr>
                                 <th class="text-center">#</th>
                                 <th>CODIGO</th>
                                 <th>NOMBRE</th>
