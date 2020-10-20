@@ -34,4 +34,10 @@ class ProductosPedidoProveedore extends Model
         return $this->belongsTo('App\Producto');
     }
 
+    public function escala()
+    {
+        return $this->belongsTo('App\Escala');
+    }
+
+
 }
