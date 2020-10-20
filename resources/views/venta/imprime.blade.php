@@ -76,11 +76,7 @@
     </div>
 </div>
 <div class="row">
-<<<<<<< HEAD
     <button id="botonImprimir" class="btn btn-success btn-block col-md-6 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
-=======
-<button id="botonImprimir" class="btn btn-success btn-block col-md-8 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
->>>>>>> 234dbdac04cc512df11768858b202bbf44d1aa2d
 </div>
 @stop
 
