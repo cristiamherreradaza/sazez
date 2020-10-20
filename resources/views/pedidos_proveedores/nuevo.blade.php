@@ -81,7 +81,6 @@
                                     <th>Stock</th>
                                     <th>Cantidad por Caja</th>
                                     <th style="width: 5%">Cantidad</th>
-                                    <th>Total Cantidad</th>
                                     <th></th>
                                 </tr>
                             </thead>

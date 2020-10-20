@@ -40,7 +40,7 @@
                 ->where('almacene_id', auth()->user()->almacen_id)
                 ->first();
 
-                // dd($arrayPreciosProductos);
+                // sacamos los precios de los productos
                 $preciosProductos = App\Precio::where('producto_id', $p->id)
                                     ->where('precio', '<>',0)
                                     ->get();
@@ -54,7 +54,6 @@
                     $contadorPrecios++;
                 }
                 $arrayPreciosProductosJson = json_encode($arrayPreciosProductos);
-                // dd($arrayPreciosProductosJson);
 
             @endphp
                 <tr class="item_{{ $p->id }}">                    

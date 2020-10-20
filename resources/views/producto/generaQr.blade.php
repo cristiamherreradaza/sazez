@@ -44,7 +44,6 @@
 
     .buttonImpresion {
         background-color: #529e3a;
-        /* Green */
         border: none;
         color: white;
         padding: 15px 32px;
@@ -54,28 +53,39 @@
         font-size: 16px;
     }
 
+    .pagina{
+        height: 612px;
+        width: 791px;
+        display: block;
+    }
+
+    .btnImpresion{
+        display: block;
+    }
+
     @media print {
-      #btnImpresion {
-        display: none;
-      }
+        #btnImpresion {
+            display: none;
+        }
     }
 </style>
 <body>
+<div class="pagina">
 @foreach ($qrsGenerados as $qr)
-  <div class="codigos">
+<div class="codigos">
     <canvas id="qr-code_{{ $qr->id }}" class="qrs"></canvas><br />
     <div class="texto">
-      {{ $qr->producto->nombre }}-{{ $qr->id }}<br />
-      {{ $qr->producto->tipo->nombre }}
-  </div>
+        {{ $qr->producto->nombre }}-{{ $qr->id }}<br />
+        {{ $qr->producto->tipo->nombre }}
+    </div>
 </div>
 @endforeach
-<center>
-<p id="btnImpresion">
-    <a href="{{ url()->previous() }}" class="button">REGRESAR</a>
+</div>
+<p></p>
+<div id="btnImpresion">
     <a href="#" class="buttonImpresion" onclick="imprime()">IMPRIMIR</a>
-</p>
-</center>
+    <a href="{{ url()->previous() }}" class="button">REGRESAR</a>
+</div>
 
 </body>
 <!--This page JavaScript -->
