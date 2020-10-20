@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<form action="{{ url('PedidosProveedore/guarda') }}" method="POST">
+<form action="{{ url('PedidosProveedore/guarda') }}" method="POST" id="formularioPedido">
     @csrf
     <div class="row">
         <div class="col-md-12">
@@ -64,7 +64,7 @@
         <div class="col-md-12">
             <div class="card border-dark">
                 <div class="card-header bg-dark">
-                    <h4 class="mb-0 text-white">PRODUCTOS A INGRESAR</h4>
+                    <h4 class="mb-0 text-white">PRODUCTOS A PEDIR</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive m-t-40">
@@ -89,7 +89,7 @@
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">GUARDAR INGRESO</button>
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">REGISTRA PEDIDO</button>
                         </div>
                     </div>
                 </div>
@@ -143,20 +143,6 @@
         }
     });
 
-    // Funcion para habilitar/deshabilitar el input de Incluir Almacen Central
-    $( function() {
-        $("#incluye_almacen").prop('disabled', true);
-        $("#incluye_almacen").val("No");
-        $("#almacen").change( function() {
-            if($(this).val() != 1){
-                $("#incluye_almacen").prop('disabled', false);
-            }else{
-                $("#incluye_almacen").prop('disabled', true);
-                $("#incluye_almacen").val("No");
-            }
-        });
-    });
-    
     // Funcion que elimina un producto en la lista de productos ingresados
     var itemsPedidoArray = [];
     $(document).ready(function () {
@@ -170,104 +156,18 @@
         });
     });
 
-    
-    $(document).on('keyup change', '.precio', function(e){
-        let precio = Number($(this).val());
-        if(precio == 0){
-            precio = 1;
-        }
-        let id = $(this).data("id");
-        let cantidad = Number($("#cantidad_"+id).val());
-        let subtotal = precio*cantidad;
-        $("#subtotal_"+id).val(subtotal);
-        sumaSubTotales();
-    });
-
-    $(document).on('keyup change', '.cantidad', function(e){
-        // alert("cambio");
-        let cantidad = Number($(this).val());
-        let id = $(this).data("id");
-        let precio = Number($("#precio_"+id).val());
-        if(precio == 0){
-            precio = 1;
-        }
-        let subtotal = precio*cantidad;
-        $("#subtotal_"+id).val(subtotal);
-        sumaSubTotales();
-    });
-
-    function sumaSubTotales()
-    {
-        let sum = 0;
-        $('.subtotal').each(function(){
-            sum += parseFloat(this.value);
-        });
-        // sumaVisible = sum.toLocaleString('en', {useGrouping:true});
-        
-        $("#resultadoSubTotales").val(sum);
-        valorLiteral = numeroALetras(sum, {
-            plural: 'Bolivianos',
-            singular: 'Bolivianos',
-            centPlural: 'Centavos',
-            centSingular: 'Centavo'
-        });
-        $("#montoLiteral").html(valorLiteral);
-        // console.log(valor);
-    }
-
-    
-
-    function adicionaPedido(item)
-    {
-        /*var item = $("#item_"+item).closest("tr").find('td').each(function(){
-            console.log(this.text);
-        });*/
-        var item = $("#item_"+item).closest("tr").find('td').text();
-        console.log(item);
-    }
-
-    function eliminar_pedido()
-    {
-        var id = $("#id_pedido").val();
-        Swal.fire({
-            title: 'Estas seguro de eliminar este pedido?',
-            text: "Luego no podras recuperarlo!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, estoy seguro!',
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Excelente!',
-                    'El Pedido fue eliminado',
-                    'success'
-                ).then(function() {
-                    window.location.href = "{{ url('Pedido/eliminar') }}/"+id;
-                });
-            }
-        })
-    }
-
     function validaItems()
     {
-        if(itemsPedidoArray.length > 0){
-            //alert(itemsPedidoArray[0].precio);
-            // Swal.fire({
-            //     type: 'success',
-            //     title: 'Excelente',
-            //     text: 'Se realizo el ingreso'
-            // })
-        }else{
-            event.preventDefault();
+        if ($("#formularioPedido")[0].checkValidity()) {
+            $("#formularioPedido").submit();
             Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: 'Tienes que adicionar al menos un producto.'
+                type: 'success',
+                title: 'Excelente',
+                text: 'Se registro el pedido'
             })
-        }        
+        }else{
+            $("#formularioPedido")[0].reportValidity();
+        }
     }
 
 </script>

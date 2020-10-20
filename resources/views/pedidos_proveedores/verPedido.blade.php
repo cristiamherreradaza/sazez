@@ -64,7 +64,7 @@
                                 <td>{{ $producto->producto->codigo }}</td>
                                 <td>{{ $producto->producto->nombre }}</td>
                                 <td>{{ $producto->producto->marca->nombre }}</td>
-                                <td>{{ $producto->producto->tipo->nombre }}</td>
+                                <td>{{ $producto->escala->nombre }}</td>
                                 @php
                                     if($producto->caja == 0){
                                         $cantidadTotal = $producto->cantidad;

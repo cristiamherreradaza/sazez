@@ -102,11 +102,10 @@
                     colores,
                     stock,
                     '<select class="form-control" name="escala_id_m['+id+']" id="escala_m_'+id+'" onchange="cambiaPrecioM('+id+')"></select>',
-                    `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" pattern="^[0-9]+" required>`,
+                    `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" required>`,
                     `<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash-alt"></i></button>`
                 ]).draw(false);
                 adicionaItemUnidad(precios, id);
-                sumaSubTotales();
             }
         });
 
@@ -117,7 +116,7 @@
     {
         let objetoPrecios = JSON.parse(precios);
         for (let [key, value] of Object.entries(objetoPrecios)) {
-            $('#escala_m_'+productoId).append(`<option value="`+value.escala_id+`" data-cantidad="`+value.minimo+`" data-precio="`+value.precio+`">`+value.nombre+`</option>`);
+            $('#escala_m_'+productoId).append(`<option value="`+value.escala_id+`">`+value.nombre+`</option>`);
         }
     }
 </script>

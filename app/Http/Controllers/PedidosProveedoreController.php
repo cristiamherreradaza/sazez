@@ -35,7 +35,7 @@ class PedidosProveedoreController extends Controller
         // dd($request->all());
         $fecha = date("Y-m-d H:i:s");
 
-        if($request->precio)
+        if($request->cantidad)
         {
 
             $num_ingreso = DB::select("SELECT MAX(numero) as nroi
@@ -55,15 +55,16 @@ class PedidosProveedoreController extends Controller
             $pp->save();
             $ppId = $pp->id;
 
-            $llaves = array_keys($request->precio);
+            $llaves = array_keys($request->cantidad);
             foreach ($llaves as $key => $ll) 
             {
                 $ingreso                        = new ProductosPedidoProveedore();
                 $ingreso->user_id               = Auth::user()->id;
                 $ingreso->pedidos_proveedore_id = $ppId;
                 $ingreso->producto_id           = $ll;
+                $ingreso->escala_id             = $request->escala_id_m[$ll];
                 $ingreso->caja                  = $request->precio[$ll];
-                $ingreso->cantidad                  = $request->cantidad[$ll];
+                $ingreso->cantidad              = $request->cantidad[$ll];
                 $ingreso->save();
 
             }
