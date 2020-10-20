@@ -38,7 +38,7 @@
             border-collapse: collapse;
             background-color: #fff;
         }
-
+        
         .datos th {
             height: 10px;
             background-color: #616362;
@@ -95,7 +95,7 @@
 
         .invoice {
             margin-left: 15px;
-            width: 813px;
+            width: 400px;
         }
 
         .information {
@@ -149,20 +149,15 @@
         </table>
         <!-- Detalle de los Productos -->
         <br>
-        <div class="titulo">Detalle de Productos</div>
         <table class="datos">
             <thead>
                 <tr>
-                <th class="text-center">#</th>
-                <th>CODIGO</th>
-                <th>NOMBRE</th>
-                <th>MARCA</th>
-                <th>TIPO</th>
-                <th class="text-center">GARANTIA</th>
-                <th class="text-right">CANTIDAD</th>
-                <th class="text-right">PRECIO</th>
-                <th class="text-right">IMPORTE</th>
-                <th></th>
+                    <th class="text-center">#</th>
+                    <th>CODIGO</th>
+                    <th>NOMBRE</th>
+                    <th class="text-right">CANTIDAD</th>
+                    <th class="text-right">PRECIO</th>
+                    <th class="text-right">IMPORTE</th>
                 </tr>
             </thead>
             <tbody>
@@ -174,26 +169,11 @@
                     <td class="text-center">{{ ++$con }}</td>
                     <td>{{ $pv->producto->codigo }}</td>
                     <td>{{ $pv->producto->nombre }}</td>
-                    <td>{{ $pv->producto->marca->nombre }}</td>
-                    <td>{{ $pv->producto->tipo->nombre }}</td>
-                    @php
-                    $fechaGarantia = Illuminate\Support\Carbon::createFromDate($pv->fecha_garantia);
-                    $fechaHoy = Illuminate\Support\Carbon::now();
-                    $diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
-                    if($diferenciaDias > $pv->producto->dias_garantia)
-                    {
-                    $mensajeGarantia = 0;
-                    }else{
-                    $mensajeGarantia = $diferenciaDias;
-                    }
-                    @endphp
-                    <td class="text-primary text-center"><b>{{ $pv->fecha_garantia }} <span
-                                class="text-success">({{ $mensajeGarantia }})</span></b></td>
-                    <td class="text-right">
+                    <td style="text-align:right">
                         <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
                         <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
                         &nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
-                    <td class="text-right">
+                    <td style="text-align:right">
                         {{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor:$pv->precio_cobrado }}
                     </td>
                     @php
@@ -205,23 +185,8 @@
                     $subTotal = $precio_costo * $pv->cantidad;
                     $sumaSubTotal += $subTotal;
                     @endphp
-                    <td class="text-right"><b>{{ $subTotal }}</b></td>
-                    <td>
-                        @php
-                        $fechaGarantia = Illuminate\Support\Carbon::createFromDate($pv->fecha_garantia);
-                        $fechaHoy = Illuminate\Support\Carbon::now();
-                        $diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
-                        if($diferenciaDias < $pv->producto->dias_garantia):
-                            @endphp
-        
-                            <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO"
-                                onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}', '{{ $pv->fecha_garantia }}')">
-                                <i class="fas fa-exchange-alt"></i>
-                            </button>
-                            @php
-                            endif;
-                            @endphp
-                    </td>
+                    <td style="text-align:right"><b>{{ $subTotal }}</b></td>
+                    
                 </tr>
                 @endforeach
             </tbody>
@@ -230,12 +195,9 @@
                     <th class="text-center"></th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
                     <th class="text-right"></th>
                     <th class="text-right">TOTAL</th>
-                    <th class="text-right">{{ $sumaSubTotal }}</th>
-                    <th class="text-right"></th>
+                    <th style="text-align:right">{{ $sumaSubTotal }}</th>
                 </tr>
             </tfoot>
         </table>
