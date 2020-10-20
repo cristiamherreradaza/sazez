@@ -269,6 +269,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Venta/imprimeFactura/{ventaId}', 'VentaController@imprimeFactura');
     Route::get('Venta/infoDispositivo', 'VentaController@infoDispositivo');
     Route::get('Venta/ventasQr', 'VentaController@ventasQr');
+    Route::get('Venta/imprimenota/{id}', 'VentaController@imprimenota');
 
     // ENVIO
     Route::get('Envio/nuevo', 'EnvioController@nuevo');

@@ -724,4 +724,21 @@ class VentaController extends Controller
     {
         return view('venta.ventasQr');
     }
+
+    public function imprimenota(Request $request, $ventaId)
+    {
+        // dd($ventaId);
+        $datosVenta = Venta::where('id', $ventaId)->first();
+        // dd($datosVenta);
+        $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
+        $opcionesEliminaVenta = Configuracione::where('descripcion', 'comboEliminaVenta')->get();
+        $opcionesCambiaProductoVenta = Configuracione::where('descripcion', 'comboCambiaProductoVenta')->get();
+        $cambiados = Movimiento::withTrashed()
+                        ->where('venta_id', $ventaId)
+                        ->where('estado', 'Devuelto')
+                        ->get();
+        // dd($datosVenta);
+        return view('venta.imprimenota')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta', 'cambiados'));
+    }
+
 }

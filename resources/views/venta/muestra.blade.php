@@ -224,6 +224,7 @@
                         <h2 class="text-info">PRODUCTOS CAMBIADOS</h2>
                         <table class="tablesaw table-striped table-hover table-bordered table no-wrap">
                             <thead>
+                                <tr>
                                 <th class="text-center">#</th>
                                 <th>CODIGO</th>
                                 <th>NOMBRE</th>
@@ -267,40 +268,31 @@
                 ->latest()
                 ->first();
             @endphp
-            @if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <a href="{{ url("Venta/imprimeFactura/$datosVenta->id") }}" target="_blank">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-info">IMPRIMIR FACTURA</button>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="{{ url('Venta/listado') }}">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
-                            </a>
-                        </div>
-                        <div class="col-md-4">
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
-                                onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
-                        </div>
+            <div class="col-md-12">
+                <div class="row">
+                    @if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
+                    <div class="col">
+                        <a href="{{ url("Venta/imprimeFactura/$datosVenta->id") }}" target="_blank">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-info">IMPRIMIR FACTURA</button>
+                        </a>
                     </div>
-                </div>   
-            @else
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a href="{{ url('Venta/listado') }}">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
-                            </a>
-                        </div>
-                        <div class="col-md-6">
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
-                                onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
-                        </div>
+                    @endif
+                    <div class="col">
+                        <a href="{{ url("Venta/imprimenota/$datosVenta->id") }}" target="_blank">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-primary">IMPRIME</button>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{{ url('Venta/listado') }}">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
+                            onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
                     </div>
                 </div>
-            @endif
+            </div>   
             
         </div>
     </div>
