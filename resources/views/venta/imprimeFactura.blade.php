@@ -9,103 +9,38 @@
 				font-family: Arial, Helvetica, sans-serif;
 				}
 		#fondo{
-			background-image: url("{{ asset('assets/images/factura_szone.jpg') }}");
-			width: 792px;
-			height: 514px;
+			/* background-image: url("{{ asset('assets/images/factura_szone.jpg') }}"); */
+			width: 302px;
+			/* height: 514px; */
 		}
 
 		#tablaProductos{
 			font-size: 8pt;
-			position: absolute;
+			/* position: absolute;
 			top: 260px;
-			left: 50px;
+			left: 50px; */
 		}
 
-		#total{
-			font-weight: bold;
+		#datosFactura{
+			text-align: center;
 			font-size: 10pt;
-			position: absolute;
-			top: 402px;
-			left: 720px;
 		}
 
 		#literalTotal{
 			font-weight: bold;
 			font-size: 10pt;
-			position: absolute;
-			top: 402px;
-			left: 90px;
 		}
 
 		#qrcode{
 			font-weight: bold;
 			font-size: 10pt;
-			position: absolute;
-			top: 420px;
-			left: 660px;
 		}
 
 		#codigoControl{
 			font-weight: bold;
 			font-size: 10pt;
-			position: absolute;
-			top: 425px;
-			left: 180px;
 		}
 
-		#fechaLimite{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 450px;
-			left: 217px;
-		}
-
-		#nitEmpresa{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 122px;
-			left: 358px;
-		}
-
-		#numeroFactura{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 140px;
-			left: 420px;
-		}
-
-		#numeroAutorizacion{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 158px;
-			left: 430px;
-		}
-		#lugarFecha{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 193px;
-			left: 155px;
-		}
-		#razonCliente{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 213px;
-			left: 125px;
-		}
-
-		#nitCliente{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 193px;
-			left: 480px;
-		}
 
 	</style>
 	<script src="{{ asset('js/NumeroALetras.js') }}"></script>
@@ -113,23 +48,38 @@
 </head>
 <body>
 	<div id="fondo">
+		<div id="datosFactura">
+			<img src="{{ asset('assets/images/logo_bacor.jpg') }}" width="280" />
 
+			NIT: {{ $datosEmpresa->nit }} <br />
+			Factura No: {{ $datosFactura->numero_factura }} <br />
+			Factura No: {{ $datosFactura->numero_autorizacion }} <br />
+			<h1></h1>
+			<hr>
+			Fecha: {{ $datosVenta->fecha }} <br />
+			Se&ntilde;or(es): {{ $datosVenta->cliente->razon_social }} <br />
+			Nit: {{ $datosFactura->nit_cliente }}
+		</div>
+		<h1></h1>
 		<table id="tablaProductos">
-			
+			<thead>
+			    <tr>
+			        <th>DETALLE</th>
+			        <th>CANTIDAD</th>
+			        <th>IMPORTE</th>
+			    </tr>
+			</thead>
 			<tbody>
 				@php
 					$sumaSubTotal = 0;
 				@endphp
 				@foreach ($productosVenta as $con => $pv)
 					<tr>
-						<td width="65px">&nbsp;&nbsp;
-							{{ str_pad($pv->producto->id, 5, "0", STR_PAD_LEFT) }}
-						</td>
-						<td width="425px">{{ $pv->producto->nombre }}</td>
-						<td style="text-align: right;" width="100px">
-							<span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
-							<span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
-							&nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
+						<td width="400px">{{ $pv->producto->nombre }}</td>
+						<td style="text-align: right;">
+							<span><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
+							<span><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
+							&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
 						
 						@php
 							if ($pv->precio_cobrado_mayor>0) {
@@ -140,26 +90,32 @@
 							$subTotal = $precio_costo * $pv->cantidad;
 							$sumaSubTotal += $subTotal;
 						@endphp
-						<td style="text-align: right;" width="100px"><b>{{ $subTotal }}</b></td>
+						<td style="text-align: right;"><b>{{ $subTotal }}</b></td>
 						
 					</tr>
 				@endforeach
 			</tbody>
+			<tfoot>
+				<tr>
+					<td></td>
+					<td>TOTAL</td>
+					<td style="text-align: right;">{{ $sumaSubTotal }}</td>
+				</tr>
+			</tfoot>
 			
 		</table>
-		<div id="total">
-			{{ $sumaSubTotal }}
-		</div>
+	
 		<div id="literalTotal"></div>
-		<div id="codigoControl">{{ $datosFactura->codigo_control }}</div>
-		<div id="fechaLimite">{{ $datosFactura->fecha_limite }}</div>
-		<div id="nitEmpresa">{{ $datosEmpresa->nit }}</div>
-		<div id="numeroFactura">{{ $datosFactura->numero_factura }}</div>
-		<div id="numeroAutorizacion">{{ $datosFactura->numero_autorizacion }}</div>
-		<div id="lugarFecha">La Paz, {{ $datosVenta->fecha }}</div>
-		<div id="razonCliente">{{ $datosVenta->cliente->razon_social }}</div>
-		<div id="nitCliente">{{ $datosFactura->nit_cliente }}</div>
+		<div id="codigoControl">CODIGO CONTROL: {{ $datosFactura->codigo_control }}</div>
+		<h1></h1>
+		<center>
 		<div id="qrcode"></div>
+		</center>
+		<h1></h1>
+
+		<div id="datosFactura">
+			ESTA FACTURA CONTRIBUYE AL DESAROLLO DEL PAIS, EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A LEY
+		</div>
 	</div>
 
 	<script>
