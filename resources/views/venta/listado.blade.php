@@ -19,7 +19,7 @@
                 <div class="table-responsive">
                     <table id="tabla-ventas" class="table table-striped table-bordered no-wrap">
                         <thead>
-                            <tr>lista de ventas por producto, ingresos por excel
+                            <tr>
                                 <th>ID</th>
                                 <th>TIENDA</th>
                                 <th>USUARIO</th>
