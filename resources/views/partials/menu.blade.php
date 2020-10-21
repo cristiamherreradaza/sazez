@@ -27,7 +27,8 @@
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">ADMINISTRACION</span></li>
 
                 @php
-                    $menus = App\Menu::get();
+                    $menus = App\Menu::orderBy('orden', 'asc')
+                                ->get();
                 @endphp
                 @foreach($menus as $menu)
                     @php
