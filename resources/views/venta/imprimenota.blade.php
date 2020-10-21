@@ -140,6 +140,16 @@
 
 <body>
     <div class="invoice" id="printableArea">
+        <table class="contenidos">
+            <tr>
+                <td><img src="{{ asset('assets/images/logo_bacor.jpg') }}" width="280" /></td>
+                <td>
+                    <img src="{{ asset('assets/images/logo_five.jpg') }}" width="120" /><br>
+                    <h1>No. {{ $datosVenta->id }}</h1>
+                    <h4>Fecha. {{ $datosVenta->fecha }}</h4>
+                </td>
+            </tr>
+        </table>
         <p style="margin-top: 5px; font-size: 15px; text-align: center;">SALIDA ALMACEN</p>
         <table class="contenidos">
             <tr>
