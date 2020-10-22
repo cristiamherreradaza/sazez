@@ -170,7 +170,7 @@
                                                         <label>
                                                             CANTIDAD
                                                         </label>
-                                                        <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" required>
+                                                        <input type="number" class="form-control" name="cantidad" id="cantidad" min="0" value="0" required>
                                                     </div>
                                                 </div>
 
