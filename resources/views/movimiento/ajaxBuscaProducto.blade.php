@@ -16,9 +16,28 @@
         </thead>
         <tbody>
             @foreach ($productos as $key => $p)
+            @php
+                // sacamos los precios de los productos
+                $preciosProductos = App\Precio::where('producto_id', $p->id)
+                                    ->where('precio', '<>', 0)
+                                    ->get();
+                $contadorPrecios = 0;
+                foreach ($preciosProductos as $pep) {
+                    $arrayPreciosProductos[$contadorPrecios]["escala_id"] = $pep->escala->id;
+                    $arrayPreciosProductos[$contadorPrecios]["nombre"]    = $pep->escala->nombre;
+                    $arrayPreciosProductos[$contadorPrecios]["minimo"]    = $pep->escala->minimo;
+                    $arrayPreciosProductos[$contadorPrecios]["maximo"]    = $pep->escala->maximo;
+                    $arrayPreciosProductos[$contadorPrecios]["precio"]    = $pep->precio;
+                    $contadorPrecios++;
+                }
+                $arrayPreciosProductosJson = json_encode($arrayPreciosProductos);
+            @endphp
                 <tr class="item_{{ $p->id }}">
                     <td>{{ $p->id }}</td>
-                    <td>{{ $p->codigo }}</td>
+                    <td>
+                        {{ $p->codigo }}
+                        <input type="hidden" id="preciosEscalas_{{ $p->id }}" name="preciosEscalas_{{ $p->id }}" value="{{ $arrayPreciosProductosJson }}">
+                    </td>
                     <td>{{ $p->nombre }}</td>
                     <td>{{ $p->marca->nombre }}</td>
                     <td>{{ $p->tipo->nombre }}</td>
@@ -65,6 +84,8 @@
             var colores = currentRow.find("td:eq(6)").text();
             var stock   = currentRow.find("td:eq(7)").text();
 
+            precios = $("#preciosEscalas_"+id).val();
+
             let buscaItem = itemsPedidoArray.lastIndexOf(id);
             if(buscaItem < 0)
             {
@@ -78,14 +99,39 @@
                     modelo,
                     colores,
                     stock,
-                    `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="0" data-id="`+id+`" step="any" min="0" pattern="^[0-9]+" required>`,
+                    '<select class="form-control" name="escala_id_m['+id+']" id="escala_m_'+id+'" onchange="cambiaPrecioM('+id+')"></select><input type="hidden" name="cantidad_escala_m['+id+']" id="cantidad_escala_m_'+id+'" value="1"><input type="hidden" name="producto_id['+id+']" id="producto_id_'+id+'" value="'+id+'">',
                     `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" pattern="^[0-9]+" required>`,
                     `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="1" step="any" readonly>`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash-alt"></i></button>'
                 ]).draw(false);
-                sumaSubTotales();
+                adicionaItemUnidad(precios, id);
             }
         });
 
     });
+
+     // funcion para llenar el combo de los productos al por mayor
+    function adicionaItemUnidad(precios, productoId)
+    {
+        let objetoPrecios = JSON.parse(precios);
+        for (let [key, value] of Object.entries(objetoPrecios)) {
+            $('#escala_m_'+productoId).append(`<option value="`+value.escala_id+`" data-cantidad="`+value.minimo+`">`+value.nombre+`</option>`);
+        }
+    }
+
+    function cambiaPrecioM(productoId)
+    {
+        // let precio = $("#escala_m_"+productoId).find(':selected').data('precio');
+        let cantidadEscala = $("#escala_m_"+productoId).find(':selected').data('cantidad');
+        // $("#precio_m_"+productoId).val(precio);
+        // $("#precio_venta_m_"+productoId).val(precio);
+        // let cantidadMayor = Number($("#cantidad_m_"+productoId).val());
+        // let precioMayor = Number($("#precio_m_"+productoId).val());
+        // let subtotalMayor = precioMayor*cantidadMayor;
+        // $("#subtotal_m_"+productoId).val(subtotalMayor);
+        $("#cantidad_escala_m_"+productoId).val(cantidadEscala);
+        // sumaSubTotales();
+    }
+
+
 </script>

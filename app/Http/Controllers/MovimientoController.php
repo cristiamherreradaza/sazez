@@ -143,8 +143,9 @@ class MovimientoController extends Controller
                 return redirect('Producto/ver_ingreso/'.$numeroi);
             }
         }else{
+            // dd($request->all());
             // Crear 1 registro
-            if($request->precio)
+            if($request->producto_id)
             {
                 $num_ingreso = DB::select("SELECT MAX(numero_ingreso) as nroi
                 FROM movimientos");
@@ -155,23 +156,30 @@ class MovimientoController extends Controller
                 }
 
                 $fecha = date("Y-m-d H:i:s");
-                $llaves = array_keys($request->precio);
+                $llaves = array_keys($request->producto_id);
+
                 foreach ($llaves as $key => $ll) 
                 {
+
+                    $cantidaMayor = $request->cantidad[$ll];
+                    $cantidadEscala = $request->cantidad_escala_m[$ll];
+                    $cantidadIngresada = $cantidaMayor * $cantidadEscala;
+
                     // Buscamos al producto mediante
                     $producto = Producto::find($ll);
                     // Creación de Movimiento
-                    $ingreso = new Movimiento();
-                    $ingreso->user_id = Auth::user()->id;
-                    $ingreso->producto_id = $ll;
-                    $ingreso->tipo_id = $producto->tipo_id;
-                    $ingreso->almacene_id = $request->almacen;
-                    $ingreso->proveedor_id = $request->proveedor;
-                    $ingreso->ingreso = $request->subtotal[$ll];
-                    $ingreso->estado = 'Ingreso';
-                    $ingreso->numero_ingreso = $numeroi; //Ingreso
-                    $ingreso->fecha = $fecha;
-                    $ingreso->dispositivo  = session('dispositivo');
+                    $ingreso                 = new Movimiento();
+                    $ingreso->user_id        = Auth::user()->id;
+                    $ingreso->producto_id    = $ll;
+                    $ingreso->tipo_id        = $producto->tipo_id;
+                    $ingreso->almacene_id    = $request->almacen;
+                    $ingreso->proveedor_id   = $request->proveedor;
+                    $ingreso->escala_id      = $request->escala_id_m[$ll];
+                    $ingreso->ingreso        = $cantidadIngresada;
+                    $ingreso->estado         = 'Ingreso';
+                    $ingreso->numero_ingreso = $numeroi;                    //Ingreso
+                    $ingreso->fecha          = $fecha;
+                    $ingreso->dispositivo    = session('dispositivo');
                     $ingreso->save();
                 }
                 return redirect('Producto/ver_ingreso/'.$numeroi);

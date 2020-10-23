@@ -31,7 +31,6 @@
                     $contadorPrecios++;
                 }
                 $arrayPreciosProductosJson = json_encode($arrayPreciosProductos);
-
             @endphp
                 <tr class="item_{{ $p->id }}">
                     <td>{{ $p->id }}</td>
