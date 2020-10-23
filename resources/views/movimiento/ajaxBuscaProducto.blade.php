@@ -99,7 +99,7 @@
                     modelo,
                     colores,
                     stock,
-                    '<select class="form-control" name="escala_id_m['+id+']" id="escala_m_'+id+'" onchange="cambiaPrecioM('+id+')"></select>',
+                    '<select class="form-control" name="escala_id_m['+id+']" id="escala_m_'+id+'" onchange="cambiaPrecioM('+id+')"></select><input type="hidden" name="cantidad_escala_m['+id+']" id="cantidad_escala_m_'+id+'" value="1"><input type="hidden" name="producto_id['+id+']" id="producto_id_'+id+'" value="'+id+'">',
                     `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" pattern="^[0-9]+" required>`,
                     `<input type="number" class="form-control text-right subtotal" name="subtotal[`+id+`]" id="subtotal_`+id+`" value="1" step="any" readonly>`,
                     '<button type="button" class="btnElimina btn btn-danger" title="Eliminar producto"><i class="fas fa-trash-alt"></i></button>'
@@ -115,8 +115,23 @@
     {
         let objetoPrecios = JSON.parse(precios);
         for (let [key, value] of Object.entries(objetoPrecios)) {
-            $('#escala_m_'+productoId).append(`<option value="`+value.escala_id+`">`+value.nombre+`</option>`);
+            $('#escala_m_'+productoId).append(`<option value="`+value.escala_id+`" data-cantidad="`+value.minimo+`">`+value.nombre+`</option>`);
         }
     }
+
+    function cambiaPrecioM(productoId)
+    {
+        // let precio = $("#escala_m_"+productoId).find(':selected').data('precio');
+        let cantidadEscala = $("#escala_m_"+productoId).find(':selected').data('cantidad');
+        // $("#precio_m_"+productoId).val(precio);
+        // $("#precio_venta_m_"+productoId).val(precio);
+        // let cantidadMayor = Number($("#cantidad_m_"+productoId).val());
+        // let precioMayor = Number($("#precio_m_"+productoId).val());
+        // let subtotalMayor = precioMayor*cantidadMayor;
+        // $("#subtotal_m_"+productoId).val(subtotalMayor);
+        $("#cantidad_escala_m_"+productoId).val(cantidadEscala);
+        // sumaSubTotales();
+    }
+
 
 </script>
