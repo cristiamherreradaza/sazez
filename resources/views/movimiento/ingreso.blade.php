@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<form action="{{ url('Movimiento/guarda') }}" method="POST">
+<form action="{{ url('Movimiento/guarda') }}" method="POST" id="formularioIngresos">
     @csrf
     <div class="row">
         <div class="col-md-12">
@@ -103,7 +103,6 @@
                                     <th>Stock</th>
                                     <th>Cantidad por Caja</th>
                                     <th style="width: 5%">Cantidad</th>
-                                    <th>Total Cantidad</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -112,7 +111,7 @@
                         </table>
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">GUARDAR INGRESO</button>
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">GUARDAR INGRESO</button>
                         </div>
                     </div>
                 </div>
@@ -276,21 +275,32 @@
 
     function validaItems()
     {
-        if(itemsPedidoArray.length > 0){
-            //alert(itemsPedidoArray[0].precio);
-            // Swal.fire({
-            //     type: 'success',
-            //     title: 'Excelente',
-            //     text: 'Se realizo el ingreso'
-            // })
-        }else{
-            event.preventDefault();
+
+        if ($("#formularioIngresos")[0].checkValidity() && itemsPedidoArray.length > 0) {
+
             Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: 'Tienes que adicionar al menos un producto.'
+                type: 'success',
+                title: 'Excelente',
+                text: 'Se realizo el pedido.'
             })
-        }        
+
+            $("#formularioIngresos").submit();
+        }else{
+            // console.log(itemsPedidoArray);
+
+            if(itemsPedidoArray.length == 0){
+
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Tienes que adicionar al menos un producto.'
+                })
+
+            }else{
+                $("#formularioIngresos")[0].reportValidity();
+            }
+
+        }
     }
 
 </script>

@@ -62,8 +62,10 @@ class MovimientoController extends Controller
     public function guarda(Request $request)
     {
         if($request->incluye_almacen == 'Si'){
+
+            // dd($request->all());
             // Crear 3 registros
-            if($request->precio)        // Si existen items
+            if($request->producto_id)        // Si existen items
             {
                 // Numero maximo de Envio
                 $num = DB::select("SELECT MAX(numero) as nro
@@ -92,51 +94,58 @@ class MovimientoController extends Controller
                 }
 
                 $fecha = date("Y-m-d H:i:s");
-                $llaves = array_keys($request->precio);     // Sacamos los items
+                $llaves = array_keys($request->producto_id);     // Sacamos los items
                 foreach ($llaves as $key => $ll) 
                 {
+                    $cantidaMayor = $request->cantidad[$ll];
+                    $cantidadEscala = $request->cantidad_escala_m[$ll];
+                    $cantidadIngresada = $cantidaMayor * $cantidadEscala;
+
                     // Buscamos al producto mediante
                     $producto = Producto::find($ll);
                     // Creación de Movimiento - Ingresa a Almacen Central
-                    $ingreso = new Movimiento();
-                    $ingreso->user_id = Auth::user()->id;
-                    $ingreso->producto_id = $ll;
-                    $ingreso->tipo_id = $producto->tipo_id;
-                    $ingreso->almacene_id =  1;             // Siempre sera 1?
-                    $ingreso->proveedor_id = $request->proveedor;
-                    $ingreso->ingreso = $request->subtotal[$ll];
-                    $ingreso->estado = 'Ingreso';           //Ingreso
-                    $ingreso->numero_ingreso = $numeroi;           //Ingreso
+                    $ingreso                       = new Movimiento();
+                    $ingreso->user_id              = Auth::user()->id;
+                    $ingreso->producto_id          = $ll;
+                    $ingreso->tipo_id              = $producto->tipo_id;
+                    $ingreso->almacene_id          = 1;                           // Siempre sera 1?
+                    $ingreso->proveedor_id         = $request->proveedor;
+                    $ingreso->escala_id            = $request->escala_id_m[$ll];
+                    $ingreso->ingreso              = $cantidadIngresada;
+                    $ingreso->estado               = 'Ingreso';                   //Ingreso
+                    $ingreso->numero_ingreso       = $numeroi;                    //Ingreso
                     $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
-                    $ingreso->fecha = $fecha;
-                    $ingreso->dispositivo  = session('dispositivo');
+                    $ingreso->fecha                = $fecha;
+                    $ingreso->dispositivo          = session('dispositivo');
                     $ingreso->save();
                     // Creación de Movimiento - Sale de Almacen Central
-                    $ingreso = new Movimiento();
-                    $ingreso->user_id = Auth::user()->id;
-                    $ingreso->producto_id = $ll;
-                    $ingreso->tipo_id = $producto->tipo_id;
-                    $ingreso->almacene_id = 1;              // Siempre sera 1?
-                    $ingreso->salida = $request->subtotal[$ll];
-                    $ingreso->estado = 'Envio';           //Ingreso/Envio/Salida
-                    $ingreso->numero = $numero;
+                    $ingreso                       = new Movimiento();
+                    $ingreso->user_id              = Auth::user()->id;
+                    $ingreso->producto_id          = $ll;
+                    $ingreso->tipo_id              = $producto->tipo_id;
+                    $ingreso->almacene_id          = 1;                           // Siempre sera 1?
+                    $ingreso->escala_id            = $request->escala_id_m[$ll];
+                    $ingreso->salida               = $cantidadIngresada;
+                    $ingreso->estado               = 'Envio';                     //Ingreso/Envio/Salida
+                    $ingreso->numero               = $numero;
                     $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
-                    $ingreso->fecha = $fecha;
-                    $ingreso->dispositivo  = session('dispositivo');
+                    $ingreso->fecha                = $fecha;
+                    $ingreso->dispositivo          = session('dispositivo');
                     $ingreso->save();
                     // Creación de Movimiento - Ingresa a la Sucursal
-                    $ingreso = new Movimiento();
-                    $ingreso->user_id = Auth::user()->id;
-                    $ingreso->producto_id = $ll;
-                    $ingreso->tipo_id = $producto->tipo_id;
-                    $ingreso->almacen_origen_id = 1;        // Siempre sera 1?
-                    $ingreso->almacene_id = $request->almacen;
-                    $ingreso->ingreso = $request->subtotal[$ll];
-                    $ingreso->estado = 'Envio';           //Ingreso/Envio
-                    $ingreso->numero = $numero;
+                    $ingreso                       = new Movimiento();
+                    $ingreso->user_id              = Auth::user()->id;
+                    $ingreso->producto_id          = $ll;
+                    $ingreso->tipo_id              = $producto->tipo_id;
+                    $ingreso->almacen_origen_id    = 1;                           // Siempre sera 1?
+                    $ingreso->escala_id            = $request->escala_id_m[$ll];
+                    $ingreso->almacene_id          = $request->almacen;
+                    $ingreso->ingreso              = $cantidadIngresada;
+                    $ingreso->estado               = 'Envio';                     //Ingreso/Envio
+                    $ingreso->numero               = $numero;
                     $ingreso->numero_ingreso_envio = $numero_ingreso_envio;
-                    $ingreso->fecha = $fecha;
-                    $ingreso->dispositivo  = session('dispositivo');
+                    $ingreso->fecha                = $fecha;
+                    $ingreso->dispositivo          = session('dispositivo');
                     $ingreso->save();
                 }
                 // Redireccionar a detalle de ingreso/envio
