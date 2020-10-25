@@ -80,12 +80,12 @@
                     <div class="col-md-3"><h4><span class="text-info">Numero:</span> {{ $datos->numero_ingreso }}</h4></div>
                     <div class="col-md-3"><h4><span class="text-info">Sucursal:</span> {{ $datos->almacen->nombre }}</h4></div>
                     <div class="col-md-3"><h4><span class="text-info">Proveedor:</span>
-                                    @if($datos->proveedor)
-                                        {{ $datos->proveedor->nombre }}
-                                    @else
-                                        No Tiene
-                                    @endif
-                                </h4></div>
+                        @if($datos->proveedor)
+                            {{ $datos->proveedor->nombre }}
+                        @else
+                            No Tiene
+                        @endif
+                    </h4></div>
                     <div class="col-md-3"><h4><span class="text-info">Fecha:</span> {{ $datos->fecha }}</h4></div>
                 </div>
                 <div class="table-responsive">
