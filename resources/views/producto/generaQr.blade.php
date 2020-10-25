@@ -100,7 +100,7 @@
         qr_{{ $qr->id }} = new QRious({
             element: document.getElementById('qr-code_{{ $qr->id }}'),
             size: 80,
-            value: "{{ $qr->numero }}\n{{ $qr->producto->nombre }}\n{{ $qr->producto->tipo->nombre }}"
+            value: "{{ $qr->producto->codigo }}"
         });
     })();
 @endforeach

@@ -954,4 +954,45 @@ class ProductoController extends Controller
         return redirect('Producto/listado');
     }
 
+    public function traspasainfo()
+    {
+        /*$cajas = DB::table('b')->select('nombre', 'cantidad')->distinct()->get();
+        foreach ($cajas as $key => $c) {
+            echo ++$key." - ".$c->nombre." - ".$c->cantidad."<br />";
+            $escala = new Escala();
+            $escala->user_id = Auth::user()->id;
+            $escala->nombre = $c->nombre;
+            $escala->minimo = $c->cantidad;
+            $escala->save();
+
+        }*/
+        // dd($cajas);
+        /*$precios = DB::table('b')
+                    ->get();*/
+
+        /*$productos = DB::table('b')
+                    ->select('a.codigo as codigo', 'a.nombre as producto', 'a.precio as precio', 'b.cantidad as cantidad', 'b.nombre as caja')
+                    ->leftJoin('a', 'b.producto_id', '=', 'a.id')
+                    ->get();
+        $precioCaja = 0;
+        foreach ($productos as $key => $p) {
+            $precioCaja = $p->precio*$p->cantidad;
+            echo ++$key." - ".$p->codigo." - ".$p->producto." - ".$p->caja." - ".$precioCaja."<br />";
+            $prod = Producto::where('codigo', $p->codigo)->first();
+            if($prod){
+                $ca = Escala::where('nombre', $p->caja)->first();
+                echo $prod->id." - ".$ca->id."-".$precioCaja."<br />";
+                $precio = new Precio();
+                $precio->user_id = Auth::user()->id;
+                $precio->producto_id = $prod->id;
+                $precio->escala_id = $ca->id;
+                $precio->precio = $precioCaja;
+                $precio->save();
+            }
+        }
+
+        dd($productos);*/
+        // echo "si";
+    }
+
 }

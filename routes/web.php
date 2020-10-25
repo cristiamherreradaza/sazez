@@ -81,6 +81,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Producto/adicionaRegularizacion', 'ProductoController@adicionaRegularizacion');
     Route::post('Producto/quitaRegularizacion', 'ProductoController@quitaRegularizacion');
     Route::post('Producto/ajaxGeneraQr', 'ProductoController@ajaxGeneraQr');
+    Route::get('Producto/traspasainfo', 'ProductoController@traspasainfo');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
