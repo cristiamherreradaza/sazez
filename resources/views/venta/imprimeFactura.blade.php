@@ -6,41 +6,67 @@
 	<title>Factura</title>
 	<style type="text/css">
 		body{
-				font-family: Arial, Helvetica, sans-serif;
-				}
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 9px;
+		}
 		#fondo{
 			/* background-image: url("{{ asset('assets/images/factura_szone.jpg') }}"); */
 			width: 300px;
 			/* height: 514px; */
 		}
-
-		#tablaProductos{
-			font-size: 8pt;
-			/* position: absolute;
-			top: 260px;
-			left: 50px; */
-		}
 		#datosFactura{
+			text-align: center;
+			/* font-size: 10pt; */
+		}
+
+		#datosFacturaEmpresa{
 			text-align: center;
 			font-size: 10pt;
 		}
 		#qrcode{
 			font-weight: bold;
-			font-size: 10pt;
+			/* font-size: 10pt; */
 		}
 		#codigoControl{
 			font-weight: bold;
-			font-size: 10pt;
+			/* font-size: 10pt; */
 		}
+		/*estilos para tablas de datos*/
+        table.datos {
+            /*font-size: 13px;*/
+            /*line-height:14px;*/
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+        
+        .datos th {
+            height: 8px;
+            color: #000;
+        }
 
+        .datos td {
+            height: 12px;
+        }
 
+        .datos th,
+        .datos td {
+            border: 1px solid #ddd;
+            padding: 1px;
+            text-align: center;
+        }
+
+        .datos tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        /*fin de estilos para tablas de datos*/
 	</style>
 	<script src="{{ asset('js/NumeroALetras.js') }}"></script>
 	<script src="{{ asset('dist/js/qrcode.min.js') }}"></script>
 </head>
 <body>
 	<div id="fondo">
-		<div id="datosFactura">
+		<div id="datosFacturaEmpresa">
 			<img src="{{ asset('assets/images/logo_bacor.jpg') }}" width="280" />
 			<p></p>
 			La Paz Bolivia <br />
@@ -55,12 +81,13 @@
 			NIT: {{ $datosFactura->nit_cliente }} <br />
 			----------------------------------- <br />
 		</div>
-		<table id="tablaProductos">
+		<table class="datos">
 			<thead>
 			    <tr>
+			        <th><h3>CT</h3></th>
 			        <th><h3>DETALLE</h3></th>
-			        <th><h3>CANT.</h3></th>
-			        <th><h3>IMPOR.</h3></th>
+			        <th><h3>P/U</h3></th>
+			        <th><h3>S/T</h3></th>
 			    </tr>
 			</thead>
 			<tbody>
@@ -69,11 +96,16 @@
 				@endphp
 				@foreach ($productosVenta as $con => $pv)
 					<tr>
-						<td width="400px">{{ $pv->producto->nombre }}</td>
 						<td style="text-align: right;">
+							{{ intval($pv->cantidad) }}
+						</td>
+
+						<td width="400px" style="text-align: left;">
+							{{ $pv->producto->nombre }}
+							&nbsp;
 							<span><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
 							<span><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
-							&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
+						</td>
 						
 						@php
 							if ($pv->precio_cobrado_mayor>0) {
@@ -84,6 +116,7 @@
 							$subTotal = $precio_costo * $pv->cantidad;
 							$sumaSubTotal += $subTotal;
 						@endphp
+						<td style="text-align: right;"><b>{{ $precio_costo }}</b></td>
 						<td style="text-align: right;"><b>{{ $subTotal }}</b></td>
 						
 					</tr>
@@ -91,6 +124,7 @@
 			</tbody>
 			<tfoot>
 				<tr>
+					<td></td>
 					<td></td>
 					<td><h3>TOTAL</h3></td>
 					<td style="text-align: right;"><h3>{{ $sumaSubTotal }}</h3></td>
@@ -115,6 +149,7 @@
 		</div>
 		<br>
 	</div>
+	<input type="button" name="imprimir" id="boton_imprimir" value="Imprimir" onclick="window.print();">
 
 	<script>
 		let valorTotal = Number({{ $sumaSubTotal }});
@@ -147,6 +182,16 @@
 			colorDark : "#000000",
 			colorLight : "#ffffff",
 			correctLevel : QRCode.CorrectLevel.H
+		});
+
+		$("#botonImprimir").click(function () {
+			var mode = 'iframe'; //popup
+			var close = mode == "popup";
+			var options = {
+				mode: mode,
+				popClose: close
+			};
+			$("div#printableArea").printArea(options);
 		});
 	</script>
 	

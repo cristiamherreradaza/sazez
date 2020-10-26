@@ -117,7 +117,7 @@
             line-height: 14px;
         }
 
-        .pie_pagina {
+        .smartxiaomi pie_pagina {
             font-size: 10px;
             line-height: 14px;
         }
