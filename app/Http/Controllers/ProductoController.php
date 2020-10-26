@@ -857,7 +857,8 @@ class ProductoController extends Controller
     public function ajaxInformacion(Request $request)
     {
         $producto_id = $request->producto_id;
-        $datosProducto = Producto::find($producto_id);
+        $datosProducto = Producto::where('id', $producto_id)->first();
+        $escalas = Escala::get();
         $cantidadTotal = Movimiento::select(
             DB::raw('SUM(movimientos.ingreso) - SUM(movimientos.salida) as total'),
             'almacenes.nombre as almacen'
@@ -870,7 +871,7 @@ class ProductoController extends Controller
         $precios = Precio::where('producto_id', $producto_id)
                     ->get();
         
-        return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios'));
+        return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios', 'escalas'));
     }
 
     public function ajaxGeneraQr(Request $request)
@@ -993,6 +994,27 @@ class ProductoController extends Controller
 
         dd($productos);*/
         // echo "si";
+    }
+    public function ajaxGuardaPrecio(Request $request)
+    {   
+        // dd($request->all());
+        $precios = new Precio();
+        $precios->user_id = Auth::user()->id;
+        $precios->producto_id = $request->productoId;
+        $precios->escala_id = $request->escala;
+        $precios->precio = $request->precio;
+        $precios->save();
+    }
+
+    public function ajaxMuestraPrecios(Request $request)
+    {
+        $precios = Precio::where("producto_id", $request->productoId)->get();
+        return view('producto.ajaxMuestraPrecios')->with(compact('precios'));
+    }
+
+    public function ajaxEliminaPrecios(Request $request)
+    {
+        Precio::destroy($request->precioId);
     }
 
 }
