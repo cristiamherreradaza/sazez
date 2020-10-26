@@ -1,33 +1,45 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Impresion Recibo</title>
-    <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura</title>
     <style type="text/css">
         @media print {
             #boton_imprimir {
                 display: none;
             }
         }
-
-        @page {
-            margin: 15px;
-        }
-
         body {
-            background-repeat: no-repeat;
-            font-size: 8px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9px;
         }
 
-        * {
-            font-family: Verdana, Arial, sans-serif;
+        #fondo {
+            /* background-image: url("{{ asset('assets/images/factura_szone.jpg') }}"); */
+            width: 300px;
+            /* height: 514px; */
         }
 
-        a {
-            color: #fff;
-            text-decoration: none;
+        #datosFactura {
+            text-align: center;
+            /* font-size: 10pt; */
+        }
+
+        #datosFacturaEmpresa {
+            text-align: center;
+            font-size: 10pt;
+        }
+
+        #qrcode {
+            font-weight: bold;
+            /* font-size: 10pt; */
+        }
+
+        #codigoControl {
+            font-weight: bold;
+            /* font-size: 10pt; */
         }
 
         /*estilos para tablas de datos*/
@@ -38,11 +50,10 @@
             border-collapse: collapse;
             background-color: #fff;
         }
-        
+
         .datos th {
-            height: 10px;
-            background-color: #616362;
-            color: #fff;
+            height: 8px;
+            color: #000;
         }
 
         .datos td {
@@ -52,7 +63,7 @@
         .datos th,
         .datos td {
             border: 1px solid #ddd;
-            padding: 2px;
+            padding: 1px;
             text-align: center;
         }
 
@@ -61,113 +72,34 @@
         }
 
         /*fin de estilos para tablas de datos*/
-        /*estilos para tablas de contenidos*/
-        table.contenidos {
-            /*font-size: 13px;*/
-            line-height: 10px;
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-        }
-
-        .contenidos th {
-            height: 20px;
-            background-color: #616362;
-            color: #fff;
-        }
-
-        .contenidos td {
-            height: 10px;
-        }
-
-        .contenidos th,
-        .contenidos td {
-            border-bottom: 1px solid #ddd;
-            padding: 5px;
-            text-align: left;
-        }
-
-        /*.contenidos tr:nth-child(even) {background-color: #f2f2f2;}*/
-        /*fin de estilos para tablas de contenidos*/
-        .titulo {
-            font-weight: bolder;
-        }
-
-        .invoice {
-            margin-left: 15px;
-            width: 400px;
-        }
-
-        .information {
-            background-color: #60A7A6;
-            color: #FFF;
-            line-height: 7px;
-        }
-
-        .information .logo {
-            margin: 5px;
-        }
-
-        .information table {
-            padding: 10px;
-        }
-
-        .glosa {
-            font-size: 10px;
-            line-height: 14px;
-        }
-
-        .smartxiaomi pie_pagina {
-            font-size: 10px;
-            line-height: 14px;
-        }
-
-        .titulo {
-            font-size: 13px;
-            line-height: 18px;
-        }
-
-        .firmas td {
-            padding-top: 30px;
-            text-align: center;
-        }
-
-        .firmas {
-            width: 100%;
-        }
     </style>
+    <script src="{{ asset('js/NumeroALetras.js') }}"></script>
+    <script src="{{ asset('dist/js/qrcode.min.js') }}"></script>
 </head>
 
 <body>
-    <div class="invoice" id="printableArea">
-        <table class="contenidos">
-            <tr>
-                <td><img src="{{ asset('assets/images/logo_bacor.jpg') }}" width="280" /></td>
-                <td>
-                    <img src="{{ asset('assets/images/logo_five.jpg') }}" width="120" /><br>
-                    <h1>No. {{ $datosVenta->id }}</h1>
-                    <h4>Fecha. {{ $datosVenta->fecha }}</h4>
-                </td>
-            </tr>
-        </table>
-        <p style="margin-top: 5px; font-size: 15px; text-align: center;">SALIDA ALMACEN</p>
-        <table class="contenidos">
-            <tr>
-                <td><b>Venta :</b> {{ $datosVenta->id }} </td>
-                <td><b>Fecha :</b> {{ $datosVenta->fecha }}</td>
-            </tr>
-        </table>
-        <!-- Detalle de los Productos -->
-        <br>
+    <div id="fondo">
+        <div id="datosFacturaEmpresa">
+            <img src="{{ asset('assets/images/logo_bacor.jpg') }}" width="280" />
+            <p></p>
+            SALIDA ALMACEN
+
+        </div>
         <table class="datos">
             <thead>
                 <tr>
-                    <th class="text-center">#</th>
-                    <th>CODIGO</th>
-                    <th>NOMBRE</th>
-                    <th class="text-right">CANTIDAD</th>
-                    <th class="text-right">PRECIO</th>
-                    <th class="text-right">IMPORTE</th>
+                    <th>
+                        <h3>CAN</h3>
+                    </th>
+                    <th>
+                        <h3>DETALLE</h3>
+                    </th>
+                    <th>
+                        <h3>P/U</h3>
+                    </th>
+                    <th>
+                        <h3>S/T</h3>
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -176,16 +108,17 @@
                 @endphp
                 @foreach ($productosVenta as $con => $pv)
                 <tr>
-                    <td class="text-center">{{ ++$con }}</td>
-                    <td>{{ $pv->producto->codigo }}</td>
-                    <td>{{ $pv->producto->nombre }}</td>
-                    <td style="text-align:right">
-                        <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
-                        <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
-                        &nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
-                    <td style="text-align:right">
-                        {{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor:$pv->precio_cobrado }}
+                    <td style="text-align: right;">
+                        {{ intval($pv->cantidad) }}
                     </td>
+
+                    <td width="400px" style="text-align: left;">
+                        {{ $pv->producto->nombre }}
+                        &nbsp;
+                        <span><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
+                        <span><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
+                    </td>
+
                     @php
                     if ($pv->precio_cobrado_mayor>0) {
                     $precio_costo = $pv->precio_cobrado_mayor;
@@ -195,48 +128,43 @@
                     $subTotal = $precio_costo * $pv->cantidad;
                     $sumaSubTotal += $subTotal;
                     @endphp
-                    <td style="text-align:right"><b>{{ $subTotal }}</b></td>
-                    
+                    <td style="text-align: right;"><b>{{ $precio_costo }}</b></td>
+                    <td style="text-align: right;"><b>{{ $subTotal }}</b></td>
+
                 </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="text-center"></th>
-                    <th></th>
-                    <th></th>
-                    <th class="text-right"></th>
-                    <th class="text-right">TOTAL</th>
-                    <th style="text-align:right">{{ $sumaSubTotal }}</th>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <h3>TOTAL</h3>
+                    </td>
+                    <td style="text-align: right;">
+                        <h3>{{ $sumaSubTotal }}</h3>
+                    </td>
                 </tr>
             </tfoot>
-        </table>
-        
-        <table class="firmas">
-            <tr>
-                <td>
-                    <hr style="width: 150px"> Entregue Conforme</td>
-                <td>
-                    <hr style="width: 150px"> Recibi Conforme</td>
-            </tr>
-        </table>
-    </div>
-</body>
-<input type="button" name="imprimir" id="boton_imprimir" value="Imprimir" onclick="window.print();">
-<!-- <button id="botonImprimir" class="btn btn-inverse btn-block print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button> -->
 
-<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
-<script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
-<script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
-<script>
-    $("#botonImprimir").click(function () {
-        var mode = 'iframe'; //popup
-        var close = mode == "popup";
-        var options = {
-            mode: mode,
-            popClose: close
-        };
-        $("div#printableArea").printArea(options);
-    });
-</script>
+        </table>
+
+    </div>
+    <input type="button" name="imprimir" id="boton_imprimir" value="Imprimir" onclick="window.print();">
+
+    <script>
+
+		$("#botonImprimir").click(function () {
+			var mode = 'iframe'; //popup
+			var close = mode == "popup";
+			var options = {
+				mode: mode,
+				popClose: close
+			};
+			$("div#printableArea").printArea(options);
+		});
+    </script>
+
+</body>
+
+</html>

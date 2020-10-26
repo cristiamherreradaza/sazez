@@ -5,6 +5,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Factura</title>
 	<style type="text/css">
+		@media print {
+            #boton_imprimir {
+                display: none;
+            }
+        }
 		body{
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 9px;
