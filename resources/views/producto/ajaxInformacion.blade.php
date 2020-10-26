@@ -62,7 +62,7 @@
         <input type="number" name="importePrecios" id="importePrecios" class="form-control" value="1" min="1">
     </div>
     <div class="col-md-3">
-        <button type="button" class="btn waves-effect waves-light btn-success" onclick="adiciona_precio()"><i class="fas fa-plus-circle"></i></button>    
+        <button type="button" class="btn waves-effect waves-light btn-success" id="btnAjaxAdicionaPrecio" onclick="adiciona_precio()"><i class="fas fa-plus-circle"></i></button>    
     </div>
 </div>
 
@@ -80,6 +80,7 @@
         let escala   = $("#precios_escala").val();
         let producto = $("#precios_producto_id").val();
         let precio   = $("#importePrecios").val();
+        $("#btnAjaxAdicionaPrecio").hide();
 
         $.ajax({
             url: "{{ url('Producto/ajaxGuardaPrecio') }}",
@@ -87,6 +88,7 @@
             type: 'GET',
             success: function(data) {
                 $("#ajaxActualizaPrecios").load("{{ url('Producto/ajaxMuestraPrecios') }}/"+producto);
+                $("#btnAjaxAdicionaPrecio").show();
             }
         });
     }
