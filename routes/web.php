@@ -81,6 +81,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Producto/adicionaRegularizacion', 'ProductoController@adicionaRegularizacion');
     Route::post('Producto/quitaRegularizacion', 'ProductoController@quitaRegularizacion');
     Route::post('Producto/ajaxGeneraQr', 'ProductoController@ajaxGeneraQr');
+    Route::get('Producto/ajaxGuardaPrecio', 'ProductoController@ajaxGuardaPrecio');
+    Route::get('Producto/ajaxMuestraPrecios/{productoId}', 'ProductoController@ajaxMuestraPrecios');
+    Route::get('Producto/ajaxEliminaPrecios', 'ProductoController@ajaxEliminaPrecios');
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
