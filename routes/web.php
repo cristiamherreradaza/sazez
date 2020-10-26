@@ -81,13 +81,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Producto/adicionaRegularizacion', 'ProductoController@adicionaRegularizacion');
     Route::post('Producto/quitaRegularizacion', 'ProductoController@quitaRegularizacion');
     Route::post('Producto/ajaxGeneraQr', 'ProductoController@ajaxGeneraQr');
-<<<<<<< HEAD
     Route::get('Producto/traspasainfo', 'ProductoController@traspasainfo');
-=======
     Route::get('Producto/ajaxGuardaPrecio', 'ProductoController@ajaxGuardaPrecio');
     Route::get('Producto/ajaxMuestraPrecios/{productoId}', 'ProductoController@ajaxMuestraPrecios');
     Route::get('Producto/ajaxEliminaPrecios', 'ProductoController@ajaxEliminaPrecios');
->>>>>>> develop
 
     // PAQUETES
     Route::get('Paquete/nuevo', 'PaqueteController@nuevo');
