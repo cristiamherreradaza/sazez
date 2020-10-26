@@ -10,7 +10,7 @@
 				}
 		#fondo{
 			/* background-image: url("{{ asset('assets/images/factura_szone.jpg') }}"); */
-			width: 302px;
+			width: 300px;
 			/* height: 514px; */
 		}
 
@@ -20,22 +20,14 @@
 			top: 260px;
 			left: 50px; */
 		}
-
 		#datosFactura{
 			text-align: center;
 			font-size: 10pt;
 		}
-
-		#literalTotal{
-			font-weight: bold;
-			font-size: 10pt;
-		}
-
 		#qrcode{
 			font-weight: bold;
 			font-size: 10pt;
 		}
-
 		#codigoControl{
 			font-weight: bold;
 			font-size: 10pt;
@@ -50,23 +42,25 @@
 	<div id="fondo">
 		<div id="datosFactura">
 			<img src="{{ asset('assets/images/logo_bacor.jpg') }}" width="280" />
-
+			<p></p>
+			La Paz Bolivia <br />
+			ORIGINAL <br />
+			----------------------------------- <br />
 			NIT: {{ $datosEmpresa->nit }} <br />
-			Factura No: {{ $datosFactura->numero_factura }} <br />
-			Factura No: {{ $datosFactura->numero_autorizacion }} <br />
-			<h1></h1>
-			<hr>
-			Fecha: {{ $datosVenta->fecha }} <br />
-			Se&ntilde;or(es): {{ $datosVenta->cliente->razon_social }} <br />
-			Nit: {{ $datosFactura->nit_cliente }}
+			Factura Nro: {{ $datosFactura->numero_factura }} <br />
+			AUTORIZACION Nro: {{ $datosFactura->numero_autorizacion }} <br />
+			----------------------------------- <br />
+			FECHA: {{ $datosVenta->fecha }} <br />
+			SE&ntilde;OR(ES): {{ $datosVenta->cliente->razon_social }} <br />
+			NIT: {{ $datosFactura->nit_cliente }} <br />
+			----------------------------------- <br />
 		</div>
-		<h1></h1>
 		<table id="tablaProductos">
 			<thead>
 			    <tr>
-			        <th>DETALLE</th>
-			        <th>CANTIDAD</th>
-			        <th>IMPORTE</th>
+			        <th><h3>DETALLE</h3></th>
+			        <th><h3>CANT.</h3></th>
+			        <th><h3>IMPOR.</h3></th>
 			    </tr>
 			</thead>
 			<tbody>
@@ -98,24 +92,28 @@
 			<tfoot>
 				<tr>
 					<td></td>
-					<td>TOTAL</td>
-					<td style="text-align: right;">{{ $sumaSubTotal }}</td>
+					<td><h3>TOTAL</h3></td>
+					<td style="text-align: right;"><h3>{{ $sumaSubTotal }}</h3></td>
 				</tr>
 			</tfoot>
 			
 		</table>
 	
-		<div id="literalTotal"></div>
+		Son: <span id="literalTotal"></span> 000/100 Bs.
 		<div id="codigoControl">CODIGO CONTROL: {{ $datosFactura->codigo_control }}</div>
-		<h1></h1>
+		<br>
 		<center>
 		<div id="qrcode"></div>
 		</center>
-		<h1></h1>
+		<br>
 
 		<div id="datosFactura">
 			ESTA FACTURA CONTRIBUYE AL DESAROLLO DEL PAIS, EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A LEY
+			<br><br>
+			Ley 453 los servicios deben suministrarse en condiciones de inocuidad calidad y seguridad
+			<br><br>
 		</div>
+		<br>
 	</div>
 
 	<script>
@@ -127,10 +125,10 @@
 
 			// generamos los numeros a letras
 		    valorLiteral = numeroALetras(valorTotal, {
-		        plural: 'BOLIVIANOS',
-		        singular: 'Bolivianos',
-		        centPlural: 'Centavos',
-		        centSingular: 'Centavo'
+		        plural: ' ',
+		        singular: ' ',
+		        centPlural: ' ',
+		        centSingular: ' '
 		    });
 			// console.log(valorLiteral);
 			document.getElementById("literalTotal").innerHTML = valorLiteral;

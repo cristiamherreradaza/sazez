@@ -647,7 +647,6 @@ class VentaController extends Controller
         $datosEmpresa = Empresa::where('almacene_id', $datosVenta->almacene_id)->first();
         $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
 
-        // dd($datosVenta->cliente->nit);
         // verficamos si tiene datos para facturar
         $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
             ->latest()
