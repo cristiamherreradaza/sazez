@@ -84,7 +84,7 @@
 		<table class="datos">
 			<thead>
 			    <tr>
-			        <th><h3>CT</h3></th>
+			        <th><h3>CAN</h3></th>
 			        <th><h3>DETALLE</h3></th>
 			        <th><h3>P/U</h3></th>
 			        <th><h3>S/T</h3></th>
