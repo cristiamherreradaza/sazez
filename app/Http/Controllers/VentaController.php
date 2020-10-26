@@ -539,22 +539,25 @@ class VentaController extends Controller
 
     public function elimina(Request $request)
     {
-        $venta = Venta::find($request->ventaId);
-        $venta->descripcion = $request->opcion_elimina;
-        $venta->save();
+    	$venta = Venta::find($request->ventaId);
+    	$venta->descripcion = $request->opcion_elimina;
+    	$venta->save();
 
-        // elimnamos la venta
-        $venta = Venta::find($request->ventaId);
-        $venta->delete();
+	    // elimnamos la venta
+    	$venta = Venta::find($request->ventaId);
+    	$venta->delete();
 
         // eliminamos los datos de la venta
-        Movimiento::where('venta_id', $request->ventaId)->delete();
-        VentasProducto::where('venta_id', $request->ventaId)->delete();
-        Pago::where('venta_id', $request->ventaId)->delete();
-        Factura::where('venta_id', $request->ventaId)->delete();
+    	Movimiento::where('venta_id', $request->ventaId)->delete();
+    	VentasProducto::where('venta_id', $request->ventaId)->delete();
+    	Pago::where('venta_id', $request->ventaId)->delete();
 
-        return redirect('Venta/listado');
-        // dd($request->all());
+        // Anulamos la factura
+    	$eliminaFactura = Factura::where('venta_id', $request->ventaId)->first();
+    	$eliminaFactura->estado = "Anulado";
+    	$eliminaFactura->save();
+
+    	return redirect('Venta/listado');
     }
 
     public function ajaxCambiaProducto(Request $request)
