@@ -198,8 +198,7 @@
                             // echo $calculoPaquetes;
                         @endphp
                             @if ($de->escala['id'] == 1)
-                                    {{-- {{ $de->escala['id'] }} --}}
-                                {{ $calculoPaquetes }} Unidades
+                                {{ $cantidadIngreso }} Unid
                             @else
                                 @if ($calculoPaquetes > 0)
                                     <b>({{ $calculoPaquetes }} {{ $de->escala['nombre'] }}, {{ $resto }} U)</b>
