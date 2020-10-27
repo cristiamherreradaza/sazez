@@ -132,6 +132,13 @@
     <!-- Detalle de los Productos -->
     <br>
     <div class="titulo">Detalle de Productos</div>
+    @php
+        /*$demo1 = intdiv(19,5);
+        $demo2 = 19%5;
+
+        echo $demo1."<br>";
+        echo $demo2;*/
+    @endphp
     <table class="datos">
         <thead>
             <tr>
@@ -144,12 +151,36 @@
         </thead>
         <tbody>
             @foreach($productos_envio as $key => $producto)
+            @php
+                $detalleEscala = App\Precio::where('producto_id', $producto->producto->id)->get();
+                // dd($detalleEscala);
+            @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
                     <td class="text-right">{{ $producto->producto->codigo }}</td>
                     <td class="text-right">{{ $producto->producto->nombre }}</td>
                     <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
-                    <td class="text-right">{{ round($producto->ingreso) }}</td>
+                    <td class="text-right">
+                        @foreach ($detalleEscala as $de)
+                        @php
+                            $cantidadIngreso  = round($producto->ingreso);
+                            // echo $de->escala['minimo'];
+                            $cantidadEscala = $de->escala['minimo'];
+                            // $calculoPaquetes = $cantidadIngreso/$cantidadEscala;
+                            $calculoPaquetes = intdiv($cantidadIngreso, $cantidadEscala);
+                            $resto = $cantidadIngreso%$cantidadEscala;
+                            // echo $calculoPaquetes;
+                        @endphp
+                            @if ($de->escala['id'] == 1)
+                                    {{-- {{ $de->escala['id'] }} --}}
+                                {{ $calculoPaquetes }} Unidades
+                            @else
+                                @if ($calculoPaquetes > 0)
+                                    <b>({{ $calculoPaquetes }} {{ $de->escala['nombre'] }}, {{ $resto }} U)</b>
+                                @endif
+                            @endif
+                        @endforeach
+                    </td>
                 </tr>
             @endforeach
             @if($complemento > 0)
@@ -213,7 +244,7 @@
                     <td class="text-right">{{ $producto->producto->codigo }}</td>
                     <td class="text-right">{{ $producto->producto->nombre }}</td>
                     <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
-                    <td class="text-right">{{ round($producto->ingreso) }}</td>
+                    <td class="text-right">{{ round($producto->ingreso) }} Unidades</td>
                 </tr>
             @endforeach
             @if($complemento > 0)
