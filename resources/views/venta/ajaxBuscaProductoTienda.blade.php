@@ -35,10 +35,22 @@
                 }
 
                 $precioProducto = App\Precio::where('producto_id', $p->id)->where('escala_id', 1)->first();
+                // $cantidadEscala = $precioProducto->escala[]
                 $cantidadTotal = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
                 ->where('producto_id', $p->id)
                 ->where('almacene_id', auth()->user()->almacen_id)
                 ->first();
+
+                // calculamos los paquetes
+                /*$detalleEscala = App\Precio::where('producto_id', $p->id)->get();
+                $cantitdadCalculada = intval($cantidadTotal->total);
+                foreach($detalleEscala as $e)
+                {
+                    $cantidadEscala = $e->escala['minimo'];
+                    $calculoPaquetes = intdiv($cantitdadCalculada, $cantidadEscala);
+                    $resto = $cantitdadCalculada%$cantidadEscala;
+                    // echo $calculoPaquetes;
+                }*/
 
                 // sacamos los precios de los productos
                 $preciosProductos = App\Precio::where('producto_id', $p->id)
