@@ -18,7 +18,8 @@
                         </div>
                         <!-- User profile text-->
                         <div class="profile-text py-1 text-white">
-                            {{ auth()->user()->name }}  
+                            {{ auth()->user()->name }}<br />  
+                            {{ auth()->user()->almacen->nombre }}  
                         </div>
                     </div>
                     <!-- End User profile text-->

@@ -42,15 +42,12 @@
                 ->first();
 
                 // calculamos los paquetes
-                /*$detalleEscala = App\Precio::where('producto_id', $p->id)->get();
+                $detalleEscala = App\Precio::where('producto_id', $p->id)->get();
                 $cantitdadCalculada = intval($cantidadTotal->total);
                 foreach($detalleEscala as $e)
                 {
-                    $cantidadEscala = $e->escala['minimo'];
-                    $calculoPaquetes = intdiv($cantitdadCalculada, $cantidadEscala);
-                    $resto = $cantitdadCalculada%$cantidadEscala;
                     // echo $calculoPaquetes;
-                }*/
+                }
 
                 // sacamos los precios de los productos
                 $preciosProductos = App\Precio::where('producto_id', $p->id)
@@ -90,7 +87,16 @@
                     <td>{{ $p->tipo }}</td>
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
-                    <td><h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3></td>
+                    <td>
+                        @foreach ($array as $element)
+                            @php
+                                $cantidadEscala = $e->escala['minimo'];
+                                $calculoPaquetes = intdiv($cantitdadCalculada, $cantidadEscala);
+                                $resto = $cantitdadCalculada%$cantidadEscala;
+                            @endphp
+                        @endforeach
+                        <h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3>
+                    </td>
                     <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
                     <td>
                         @if ($cantidadTotal->total > 0)
