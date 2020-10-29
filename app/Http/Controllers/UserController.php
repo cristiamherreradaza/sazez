@@ -180,7 +180,7 @@ class UserController extends Controller
         $usuario = User::find($request->id_password);
         $usuario->password = Hash::make($request->password);
         $usuario->save();
-        return redirect('User/listado');
+        return back();
     }
 
     public function eliminar(Request $request)
