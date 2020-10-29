@@ -19,14 +19,13 @@
                         <!-- User profile text-->
                         <div class="profile-text py-1 text-white">
                             {{ auth()->user()->name }}<br />  
-                            {{ auth()->user()->almacen->nombre }}  
+                            <b>{{ auth()->user()->perfil->nombre }}-{{ auth()->user()->almacen->nombre }}</b>
                         </div>
                     </div>
                     <!-- End User profile text-->
                 </li>
                 <!-- User Profile-->
-                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">ADMINISTRACION</span></li>
-
+                <br />
                 @php
                     $menus = App\Menu::orderBy('orden', 'asc')
                                 ->get();

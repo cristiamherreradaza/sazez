@@ -53,6 +53,22 @@
                             </select>
                         </div>
                     </div>
+                    @if (auth()->user()->perfil_id == 1)
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Sucursal</label>
+                            <select name="almacen_id" id="almacen_id" class="form-control">
+                                @if(auth()->user()->rol == 'Administrador')
+                                @foreach($almacenes as $almacen)
+                                <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
+                                @endforeach
+                                @else
+                                <option value="{{ auth()->user()->almacen->id }}">{{ auth()->user()->almacen->nombre }}</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>    
+                    @endif
                     <div class="col">
                         <div class="form-group">
                             <label>Tipo</label>
