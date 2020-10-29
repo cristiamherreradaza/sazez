@@ -39,10 +39,11 @@
                             <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" value="{{ date('Y-m-d') }}"required>
                         </div>                    
                     </div>
+                    @if (auth()->user()->perfil_id == 1)
                     <div class="col">
                         <div class="form-group">
                             <label>Sucursal</label>
-                            <select name="almacen_id" id="almacen_id" class="form-control">
+                            <select name="almacen_id" id="almacen_id" class="form-control" onchange="muestraVendedores();">
                                 @if(auth()->user()->rol == 'Administrador')
                                     @foreach($almacenes as $almacen)
                                         <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
@@ -53,19 +54,17 @@
                             </select>
                         </div>
                     </div>
-                    @if (auth()->user()->perfil_id == 1)
-                    <div class="col">
-                        <div class="form-group">
-                            <label>Sucursal</label>
-                            <select name="almacen_id" id="almacen_id" class="form-control">
-                                @if(auth()->user()->rol == 'Administrador')
-                                @foreach($almacenes as $almacen)
-                                <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
-                                @endforeach
-                                @else
-                                <option value="{{ auth()->user()->almacen->id }}">{{ auth()->user()->almacen->nombre }}</option>
-                                @endif
-                            </select>
+                    <div id="muestraVendedores">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Usuarios</label>
+                                <select name="usuario_id" id="usuario_id" class="form-control">
+                                    <option value="todos">Todos</option>
+                                    @foreach($vendedores as $v)
+                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>    
                     @endif
@@ -152,17 +151,19 @@
     function buscar()
     {
         var fecha_inicio = $("#fecha_inicio").val();
-        var fecha_fin = $("#fecha_fin").val();
-        var almacen_id = $("#almacen_id").val();
-        var tipo_id = $("#tipo_id").val();
-        // var continuo = $("#continuo").val();
+        var fecha_fin    = $("#fecha_fin").val();
+        var almacen_id   = $("#almacen_id").val();
+        var tipo_id      = $("#tipo_id").val();
+        var usuario_id   = $("#usuario_id").val();
+        // var continuo  = $("#continuo").val();
         $.ajax({
             url: "{{ url('Reporte/ajax_listado_ventas_accesorio') }}",
             data: {
                 fecha_inicio: fecha_inicio,
                 fecha_fin: fecha_fin,
                 almacen_id: almacen_id,
-                tipo_id: tipo_id
+                tipo_id: tipo_id,
+                usuario_id: usuario_id
                 },
             type: 'get',
             success: function(data) {
@@ -171,70 +172,24 @@
             }
         });
     }
-    
 
-    
-    /*function buscar()
+    function muestraVendedores()
     {
-        $("#mostrar").show('slow');
-        var table = $('#tabla-tienda').DataTable();
-        table.destroy();
-        var fecha = $("#fecha").val();
-        var almacen_id = $("#almacen_id").val();
-        var tipo_id = $("#tipo_id").val();
-
-        $("#tabla-tienda thead th").each(function() {
-            var title = $(this).text();
-            $(this).html('<input type="text" placeholder=" ' + title + '" />');
-          });
-
-        // DataTable
-        table = $('#tabla-tienda').DataTable( {
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            iDisplayLength: 10,
-            processing: true,
-            serverSide: true,
-            scrollX: true,
-            ajax: { 
-                url : "{{ url('Reporte/ajax_listado_saldos') }}",
-                type: "GET",
-                data: {
-                    fecha : fecha,
-                    almacen_id : almacen_id,
-                    tipo_id : tipo_id
-                    } 
+        let almacenId = $("#almacen_id").val();
+        console.log(almacenId);
+        $.ajax({
+            url: "{{ url('Reporte/ajaxMuestraVendedores') }}",
+            data: {
+                almacenId: almacenId,
                 },
-            columns: [
-                {data: 'almacen_nombre', name: 'almacenes.nombre'},
-                {data: 'tipo_nombre', name: 'productos.tipo_id'},
-                {data: 'producto_nombre', name: 'productos.nombre'},
-            ],
-            language: {
-                url: '{{ asset('datatableEs.json') }}'
-            },
-        } );
-
-        table.columns().every(function(index) {
-            var that = this;
-
-            $("input", this.header()).on("keyup change clear", function() {
-              if (that.search() !== this.value) {
-                that.search(this.value).draw();
-                table
-                  .rows()
-                  .$("tr", { filter: "applied" })
-                  .each(function() {
-                    // console.log(table.row(this).data());
-                  });
-              }
-            });
-          });
+            type: 'get',
+            success: function(data) {
+                $("#muestraVendedores").html(data);
+                // $("#mostrar").show('slow');
+            }
+        });
     }
-    */
-    
+
 </script>
 
 @endsection
