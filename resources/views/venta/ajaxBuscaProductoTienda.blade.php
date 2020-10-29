@@ -88,14 +88,14 @@
                     <td>{{ $p->modelo }}</td>
                     <td>{{ $p->colores }}</td>
                     <td>
-                        @foreach ($array as $element)
+{{--                         @foreach ($array as $element)
                             @php
                                 $cantidadEscala = $e->escala['minimo'];
                                 $calculoPaquetes = intdiv($cantitdadCalculada, $cantidadEscala);
                                 $resto = $cantitdadCalculada%$cantidadEscala;
                             @endphp
                         @endforeach
-                        <h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3>
+ --}}                        <h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3>
                     </td>
                     <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
                     <td>
