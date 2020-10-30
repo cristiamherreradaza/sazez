@@ -130,13 +130,13 @@
                                     <td>{{ $producto->producto->nombre }}</td>
                                     <td>{{ $producto->producto->marca->nombre }}</td>
                                     <td>{{ $producto->producto->tipo->nombre }}</td>
-                                    <td>{{ $producto->escala->nombre }}</td>
-                                    @php
+                                    <td></td>
+                                    {{-- @php
                                         $cantidadIngresada = round($producto->ingreso);
                                         $cantidadPaquete = $producto->escala->minimo;
                                         $cantidadTotal = $cantidadIngresada/$cantidadPaquete;
-                                    @endphp
-                                    <td class="text-center">{{ $cantidadTotal }}</td>
+                                    @endphp --}}
+                                    <td class="text-center">{{ round($producto->ingreso) }}</td>
                                     <td>
                                         @if(auth()->user()->perfil_id == 1)
                                             <button type="button" class="btn btn-danger" title="Eliminar marca" onclick="eliminar('{{ $producto->id }}', '{{ $producto->producto->nombre }}')"><i class="fas fa-trash-alt"></i></button>
