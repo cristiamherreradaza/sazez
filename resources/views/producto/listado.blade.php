@@ -2,6 +2,7 @@
 
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('metadatos')
@@ -32,18 +33,19 @@
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>Seleccionar Tipo</label>
-                            <select name="tipo" id="tipo" class="form-control">
-                            <option value="" selected>Todos</option>
-                                @foreach($tipos as $tipo)
-                                    <option value="{{ $tipo->id }}"> {{ $tipo->nombre }} </option>
+                                
+                            <select name="tipo" id="tipo" class="select2 form-control custom-select" style="width: 100%; height:36px;">
+                                @foreach($tipos as $t)
+                                    <option value="{{ $t->id }}"> {{ $t->nombre }} </option>
                                 @endforeach
                             </select>
+                            
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>Seleccionar Marca</label>
-                            <select name="marca" id="marca" class="form-control">
+                            <select name="marca" id="marca" class="select2 form-control custom-select" style="width: 100%; height:36px;">
                             <option value="" selected>Todos</option>
                                 @foreach($marcas as $marca)
                                     <option value="{{ $marca->id }}"> {{ $marca->nombre }} </option>
@@ -316,12 +318,18 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script>
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+    $(document).ready(function () {
+        $(".select2").select2();
     });
 
     function buscar()
