@@ -152,34 +152,15 @@
         <tbody>
             @foreach($productos_envio as $key => $producto)
             @php
-                $detalleEscala = App\Precio::where('producto_id', $producto->producto->id)->get();
+                // $detalleEscala = App\Precio::where('producto_id', $producto->producto->id)->get();
                 // dd($detalleEscala);
             @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
-                    <td class="text-right">{{ $producto->producto->codigo }}</td>
-                    <td class="text-right">{{ $producto->producto->nombre }}</td>
-                    <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
-                    <td class="text-right">
-                        @foreach ($detalleEscala as $de)
-                        @php
-                            $cantidadIngreso  = round($producto->ingreso);
-                            // echo $de->escala['minimo'];
-                            $cantidadEscala = $de->escala['minimo'];
-                            // $calculoPaquetes = $cantidadIngreso/$cantidadEscala;
-                            $calculoPaquetes = intdiv($cantidadIngreso, $cantidadEscala);
-                            $resto = $cantidadIngreso%$cantidadEscala;
-                            // echo $calculoPaquetes;
-                        @endphp
-                            @if ($de->escala['id'] == 1)
-                                {{ $cantidadIngreso }} Unid
-                            @else
-                                @if ($calculoPaquetes > 0)
-                                    <b>({{ $calculoPaquetes }} {{ $de->escala['nombre'] }}, {{ $resto }} U)</b>
-                                @endif
-                            @endif
-                        @endforeach
-                    </td>
+                    <td style="text-align: left;">{{ $producto->producto->codigo }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->nombre }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->tipo->nombre }}</td>
+                    <td style="text-align: right;"><b>{{ round($producto->ingreso) }}</b></td>
                 </tr>
             @endforeach
             @if($complemento > 0)
@@ -240,10 +221,10 @@
             @foreach($productos_envio as $key => $producto)
                 <tr>
                     <td>{{ ($key+1) }}</td>
-                    <td class="text-right">{{ $producto->producto->codigo }}</td>
-                    <td class="text-right">{{ $producto->producto->nombre }}</td>
-                    <td class="text-right">{{ $producto->producto->tipo->nombre }}</td>
-                    <td class="text-right">{{ round($producto->ingreso) }} Unidades</td>
+                    <td style="text-align: left;">{{ $producto->producto->codigo }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->nombre }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->tipo->nombre }}</td>
+                    <td style="text-align: right;"><b>{{ round($producto->ingreso) }}</b></td>
                 </tr>
             @endforeach
             @if($complemento > 0)
