@@ -446,15 +446,14 @@ class ReporteController extends Controller
 
     public function ajax_listado_ventas_accesorio(Request $request)
     {
-        // dd($request->all());
         // Ejecutamos la consulta, incluyendo a los usuarios pertenecientes al almacen X
         $query = VentasProducto::whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])
                                 ->orderBy('tipo_id');
 
-        if($request->has('usuario_id')){
-            if ($request->usuario_id == 'todos') {
+        if(Auth::user()->perfil_id == 1){
+
+            if ($request->almacen_id == 'todos') {
                 // Encontramos a los usuarios pertenecientes al almacen X
-                // $users = User::where('almacen_id', $request->almacen_id)->get();
                 $users = User::where('perfil_id', 3)->get();
                 // En un array guardaremos el atributo id de la tabla Users de los registros capturados
                 $array_user_id = array();
@@ -463,11 +462,25 @@ class ReporteController extends Controller
                 }
                 $query = $query->whereIn('user_id', $array_user_id);
             }else{
-                $query = $query->where('user_id', $request->usuario_id);
+                if($request->usuario_id == 'todos'){
+                    $users = User::where('perfil_id', 3)
+                            ->where('almacen_id', $request->almacen_id)
+                            ->get();
+                    // En un array guardaremos el atributo id de la tabla Users de los registros capturados
+                    $array_user_id = array();
+                    foreach($users as $row){
+                        array_push($array_user_id, $row->id);
+                    }
+                    $query = $query->whereIn('user_id', $array_user_id);
+                }else{
+                    $query = $query->where('user_id', $request->usuario_id);
+                }
             }
+
         }else{
             $query = $query->where('user_id', Auth::user()->id);
         }
+        
         // Si se buscara un tipo_id X
         if ($request->tipo_id) {
             $query = $query->where('tipo_id', $request->tipo_id);

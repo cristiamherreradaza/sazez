@@ -44,6 +44,7 @@
                             <label>Sucursal</label>
                             <select name="almacen_id" id="almacen_id" class="form-control" onchange="muestraVendedores();">
                                 @if(auth()->user()->rol == 'Administrador')
+                                    <option value="todos">Todos</option>
                                     @foreach($almacenes as $almacen)
                                         <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
                                     @endforeach
@@ -53,7 +54,7 @@
                             </select>
                         </div>
                     </div>
-                    <div id="muestraVendedores">
+                    <div id="muestraVendedores" style="display: none;">
                         <div class="col">
                             <div class="form-group">
                                 <label>Usuarios</label>
@@ -180,7 +181,11 @@
     function muestraVendedores()
     {
         let almacenId = $("#almacen_id").val();
-        console.log(almacenId);
+        if(almacenId == 'todos'){
+            $("#muestraVendedores").hide();
+        }else{
+            $("#muestraVendedores").show();
+        }
         $.ajax({
             url: "{{ url('Reporte/ajaxMuestraVendedores') }}",
             data: {
@@ -189,7 +194,6 @@
             type: 'get',
             success: function(data) {
                 $("#muestraVendedores").html(data);
-                // $("#mostrar").show('slow');
             }
         });
     }

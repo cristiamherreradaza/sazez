@@ -50,6 +50,7 @@
     $(function () {
         
         $('#tabla-usuarios').DataTable({
+            paging: true,
             dom: 'Bfrtip',
             buttons: [{
                 // 'copy', 'excel', 'pdf'

@@ -35,6 +35,7 @@
                             <label>Seleccionar Tipo</label>
                                 
                             <select name="tipo" id="tipo" class="select2 form-control custom-select" style="width: 100%; height:36px;">
+                                <option value=""> Todos </option>
                                 @foreach($tipos as $t)
                                     <option value="{{ $t->id }}"> {{ $t->nombre }} </option>
                                 @endforeach
