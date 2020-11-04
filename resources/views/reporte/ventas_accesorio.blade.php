@@ -3,9 +3,8 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
-
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 <link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css" rel="stylesheet">
-
 @endsection
 
 @section('metadatos')
@@ -71,7 +70,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label>Tipo</label>
-                            <select name="tipo_id" id="tipo_id" class="form-control">
+                            <select name="tipo_id" id="tipo_id" class="select2 form-control custom-select" style="width: 100%; height:36px;">
                                 <option value="" selected>Todos</option>
                                 @foreach($tipos as $tipo)
                                     <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
@@ -129,6 +128,8 @@
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
@@ -146,7 +147,10 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    
+
+    $(document).ready(function () {
+        $(".select2").select2();
+    });
     
     function buscar()
     {

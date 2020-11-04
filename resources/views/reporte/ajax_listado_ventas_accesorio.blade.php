@@ -5,8 +5,6 @@
                 <th>Fecha</th>
                 <th>Tienda</th>
                 <th>Usuario</th>
-                <th>Tipo</th>
-                <th>Codigo</th>
                 <th>Nombre Producto</th>
                 <th>Precio Venta</th>
                 <th>Precio Cobrado</th>
@@ -25,14 +23,12 @@
                 <td>{{ $venta->fecha }}</td>
                 <td>{{ $venta->user->almacen->nombre }}</td>
                 <td>{{ $venta->user->name }}</td>
-                <td>{{ $venta->tipo->nombre }}</td>
-                <td>{{ $venta->producto->codigo }}</td>
                 <td>{{ $venta->producto->nombre }}</td>
-                <td>{{ $venta->precio_venta }}</td>
-                <td>{{ $venta->precio_cobrado }}</td>
-                <td>{{ round($venta->cantidad) }}</td>
-                <td>{{ ($venta->cantidad * $venta->precio_venta) }}</td>
-                <td>{{ ($venta->cantidad * $venta->precio_cobrado) }}</td>
+                <td style="text-align: right">{{ $venta->precio_venta }}</td>
+                <td style="text-align: right">{{ $venta->precio_cobrado }}</td>
+                <td style="text-align: right">{{ round($venta->cantidad) }}</td>
+                <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_venta) }}</td>
+                <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_cobrado) }}</td>
                 @php
                     $totalventa=$totalventa+($venta->cantidad * $venta->precio_venta);
                     $totalcobrado=$totalcobrado+($venta->cantidad * $venta->precio_cobrado);
@@ -42,9 +38,9 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="9"></td>
-                <td>{{ $totalventa }}</td>
-                <td>{{ $totalcobrado }}</td>
+                <th colspan="7"></th>
+                <th style="text-align: right">{{ $totalventa }}</th>
+                <th style="text-align: right">{{ $totalcobrado }}</th>
             </tr>
         </tfoot>
     </table>
@@ -52,11 +48,18 @@
 
 <script>
     $(function () {
+        
         $('#tabla-usuarios').DataTable({
             dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
+            buttons: [{
+                // 'copy', 'excel', 'pdf'
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL',
+                title: 'REPORTE',
+                footer: true
+            },
+            'excel', 'copy'],
             language: {
                 url: '{{ asset('datatableEs.json') }}'
             },
