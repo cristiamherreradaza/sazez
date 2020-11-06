@@ -275,7 +275,6 @@
                                             <th>CODIGO</th>
                                             <th>NOMBRE</th>
                                             <th>MARCA</th>
-                                            <th>Tipo</th>
                                             <th class="w-10 text-center text-info"><i class="fas fa-archive"></i></th>
                                             <th>CANTIDAD</th>
                                             <th class="w-10 text-center">PRECIO</th>

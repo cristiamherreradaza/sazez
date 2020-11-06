@@ -156,7 +156,7 @@ class VentaController extends Controller
                     ->leftJoin('marcas', 'productos.marca_id', '=', 'marcas.id')
                     ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
                     ->where('productos.nombre', 'like', "%$request->termino%")
-                    ->orWhere('productos.codigo', 'like', "%$request->termino%")
+                    // ->orWhere('productos.codigo', 'like', "%$request->termino%")
                     ->groupBy('productos.id')
                     ->limit(8)
                     ->get();

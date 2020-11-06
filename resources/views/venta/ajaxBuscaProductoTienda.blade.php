@@ -145,7 +145,6 @@
                         codigo,
                         nombre,
                         marca,
-                        tipo,
                         stock,
                         `<input type="number" class="form-control text-right cantidad" name="cantidad[`+id+`]" id="cantidad_`+id+`" value="1" data-id="`+id+`" min="1" max="`+stockNum+`" style="width: 70px;">`,
                         `<input type="number" class="form-control text-right precio" name="precio[`+id+`]" id="precio_`+id+`" value="`+precio+`" data-id="`+id+`" step="any" min="1" style="width: 100px;">

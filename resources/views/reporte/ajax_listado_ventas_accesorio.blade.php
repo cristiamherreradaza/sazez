@@ -15,8 +15,10 @@
         </thead>
         <tbody>
             @php
-                $totalventa=0;
-                $totalcobrado=0;
+                $totalventa        = 0;
+                $totalventaMayor   = 0;
+                $totalcobrado      = 0;
+                $totalcobradoMayor = 0;
             @endphp
             @foreach($ventas as $venta)
             <tr>
@@ -24,14 +26,39 @@
                 <td>{{ $venta->user->almacen->nombre }}</td>
                 <td>{{ $venta->user->name }}</td>
                 <td>{{ $venta->producto->nombre }}</td>
-                <td style="text-align: right">{{ $venta->precio_venta }}</td>
-                <td style="text-align: right">{{ $venta->precio_cobrado }}</td>
+                @if ($venta->precio_cobrado_mayor > 0)
+                    <td style="text-align: right">
+                        <span class="text-info"><b>{{ ($venta->precio_cobrado_mayor>0)?$venta->escala->nombre:"" }}</b></span>&nbsp;&nbsp;
+                        {{ $venta->precio_venta_mayor }}
+                    </td>
+                    <td style="text-align: right">{{ $venta->precio_cobrado_mayor }}</td>
+                @else
+                    <td style="text-align: right">{{ $venta->precio_venta }}</td>
+                    <td style="text-align: right">{{ $venta->precio_cobrado }}</td>
+                @endif
                 <td style="text-align: right">{{ round($venta->cantidad) }}</td>
-                <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_venta) }}</td>
-                <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_cobrado) }}</td>
+                @if ($venta->precio_cobrado_mayor > 0)
+                    <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_venta_mayor) }}</td>
+                    <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_cobrado_mayor) }}</td>
+                @else
+                    <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_venta) }}</td>
+                    <td style="text-align: right">{{ ($venta->cantidad * $venta->precio_cobrado) }}</td>
+                @endif
                 @php
-                    $totalventa=$totalventa+($venta->cantidad * $venta->precio_venta);
-                    $totalcobrado=$totalcobrado+($venta->cantidad * $venta->precio_cobrado);
+                    if ($venta->precio_cobrado_mayor > 0) {
+                        $totalventaMayor += $venta->cantidad * $venta->precio_venta_mayor;
+                    }else{
+                        $totalventa=$totalventa+($venta->cantidad * $venta->precio_venta);
+                    }
+                    $totalVentas = $totalventa + $totalventaMayor;
+
+                    if ($venta->precio_cobrado_mayor > 0) {
+                        $totalcobradoMayor += $venta->cantidad * $venta->precio_cobrado_mayor;
+                    }else{
+                        $totalcobrado=$totalcobrado+($venta->cantidad * $venta->precio_cobrado);
+                    }
+                    $cobradoMayor = $totalcobradoMayor + $totalcobrado;
+
                 @endphp
             </tr>
             @endforeach
@@ -39,8 +66,8 @@
         <tfoot>
             <tr>
                 <th colspan="7"></th>
-                <th style="text-align: right">{{ $totalventa }}</th>
-                <th style="text-align: right">{{ $totalcobrado }}</th>
+                <th style="text-align: right">{{ $totalVentas }}</th>
+                <th style="text-align: right">{{ $cobradoMayor }}</th>
             </tr>
         </tfoot>
     </table>
