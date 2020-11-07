@@ -49,10 +49,14 @@
                     </td>
                     <td>{{ $fecha->fecha }}</td>
                     @php
-                        $total = 0;
+                        // $total = 0;
+                        $totalAcumulado = 0;
+                        $descuentoTotal = 0;
                     @endphp
                     @foreach($users as $usuario)
                         @php
+                            $total = 0;
+                            // costos de venta de menor
                             $accesorios_venta = App\VentasProducto::select(DB::raw("(precio_venta * cantidad) as total"))
                                                             ->whereDate('fecha', $fecha->fecha)
                                                             ->where('user_id', $usuario->id)
@@ -61,14 +65,31 @@
                                                             ->whereDate('fecha', $fecha->fecha)
                                                             ->where('user_id', $usuario->id)
                                                             ->get();
+
+                            // costos de venta al por mayor
+                            $accesorios_venta_mayor = App\VentasProducto::select(DB::raw("(precio_venta_mayor * cantidad) as total"))
+                                                            ->whereDate('fecha', $fecha->fecha)
+                                                            ->where('user_id', $usuario->id)
+                                                            ->get();
+
+                            $accesorios_cobrado_mayor = App\VentasProducto::select(DB::raw("(precio_cobrado_mayor * cantidad) as total"))
+                                                            ->whereDate('fecha', $fecha->fecha)
+                                                            ->where('user_id', $usuario->id)
+                                                            ->get();
+
+                            $descuentoMayor = $accesorios_venta_mayor->sum('total') - $accesorios_cobrado_mayor->sum('total');
                             $descuento = $accesorios_venta->sum('total') - $accesorios_cobrado->sum('total');
-                            $total = $total + ($accesorios_cobrado->sum('total'));
+
+                            $descuentoTotal = $descuentoMayor + $descuento;
+
+                            $total += ($accesorios_cobrado->sum('total') + $accesorios_cobrado_mayor->sum('total'));
+                            $totalAcumulado += ($accesorios_cobrado->sum('total') + $accesorios_cobrado_mayor->sum('total'));
                         @endphp
-                        <td>{{ $accesorios_venta->sum('total') }}</td>
-                        <td>{{ $descuento }}</td>
-                        <td>{{ ($accesorios_venta->sum('total') - $descuento) }}</td>
+                        <td>{{ $accesorios_venta->sum('total') + $accesorios_venta_mayor->sum('total') }}</td>
+                        <td>{{ $descuento + $descuentoMayor }}</td>
+                        <td>{{ ($total - $descuentoTotal) }}</td>
                     @endforeach
-                    <td>{{ $total }}</td>
+                    <td>{{ $totalAcumulado }}</td>
                 </tr>
             @endforeach
         </tbody>
@@ -78,10 +99,17 @@
 <script>
     $(function () {
         $('#tabla-usuarios').DataTable({
+            paging: true,
             dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
+            buttons: [{
+                // 'copy', 'excel', 'pdf'
+                extend: 'pdfHtml5',
+                orientation: 'vertical',
+                pageSize: 'LEGAL',
+                title: 'REPORTE',
+                footer: true
+            },
+            'excel', 'copy'],
             language: {
                 url: '{{ asset('datatableEs.json') }}'
             },
