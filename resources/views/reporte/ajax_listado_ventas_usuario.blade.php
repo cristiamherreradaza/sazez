@@ -86,8 +86,8 @@
                             $totalAcumulado += ($accesorios_cobrado->sum('total') + $accesorios_cobrado_mayor->sum('total'));
                         @endphp
                         <td>{{ $accesorios_venta->sum('total') + $accesorios_venta_mayor->sum('total') }}</td>
-                        <td>{{ $descuento + $descuentoMayor }}</td>
-                        <td>{{ ($total - $descuentoTotal) }}</td>
+                        <td>{{ $descuentoTotal }}</td>
+                        <td>{{ $total }} </td>
                     @endforeach
                     <td>{{ $totalAcumulado }}</td>
                 </tr>
