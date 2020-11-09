@@ -661,10 +661,14 @@ class VentaController extends Controller
             if($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
             {
                 // tramemos los parametros de la facturacion
-                $parametrosFactura = Parametros::where('estado', 'Activo')->first();
+                $parametrosFactura = Parametros::where('estado', 'Activo')
+                                    ->where('almacene_id', Auth::user()->almacen_id)
+                                    ->first();
 
                 // obtenemos el ultimo numero de factura
-                $ultimoNumeroFactura = Factura::latest()->first();
+                $ultimoNumeroFactura = Factura::latest()
+                                        ->where('almacene_id', Auth::user()->almacen_id)
+                                        ->first();
 
                 if($ultimoNumeroFactura == null){
                     $nuevoNumeroFactura = $parametrosFactura->numero_factura;
