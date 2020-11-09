@@ -5,6 +5,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Factura</title>
 	<style type="text/css">
+		@media print {
+		  #btnImprimir {
+		    display: none;
+		  }
+		}
+
+		#botonImpresion {
+		    background: #17aa56;
+		    color: #fff;
+		    border-radius: 7px;
+		    /*box-shadow: 0 5px #119e4d;*/
+		    padding: 15px;
+		}
+
 		body{
 				font-family: Arial, Helvetica, sans-serif;
 				}
@@ -224,6 +238,10 @@
 		<center>
 		"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A LEY"<br />
 		<b>Ley N&deg; 453: El proveedor debera suministrar el servicio en las modalidades y terminos ofertados o convenidos.</b>
+		<p>&nbsp;</p>
+		<div id="btnImprimir">
+			<input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
+		</div>
 		</center>
 		</div>
 
