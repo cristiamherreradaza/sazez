@@ -195,7 +195,7 @@
 							<span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
 							&nbsp;&nbsp;&nbsp; <b>{{ $pv->cantidad }}
 						</td>
-						<td width="425px">{{ $pv->producto->nombre }}</td>
+						<td width="425px" style="text-align: left;">{{ $pv->producto->nombre }}</td>
 
 						@php
 							if ($pv->precio_cobrado_mayor>0) {
@@ -251,6 +251,14 @@
 		<div id="direccionEmpresa">{{ $datosEmpresa->direccion }}</div>
 	</div>
 
+	@php
+		// $fechaFecha = $datosVenta->fecha;
+		$fechaFactura = new DateTime($datosVenta->fecha);
+		// $datosFecha = explode("/", "$fechaFecha");
+		// $nuevaFecha = $datosFecha[2]."/".$datosFecha[1]."/".$datosFecha[0];
+		$fechaQr = $fechaFactura->format('d/m/Y');
+	@endphp
+
 	<script>
 		let valorTotal = Number({{ $sumaSubTotal }});
 		var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -274,7 +282,7 @@
 		}
 
 		window.onload = numerosALetras;
-		let cadenaQr = "{{ $datosEmpresa->nit }}|{{ $datosFactura->numero_factura }}|{{ $datosFactura->numero_autorizacion }}|{{ $datosVenta->fecha }}|{{ number_format($sumaSubTotal, 2, '.', '') }}|{{ round($sumaSubTotal, 0, PHP_ROUND_HALF_UP) }}|{{ $datosFactura->codigo_control }}|{{ $datosFactura->nit_cliente }}|0|0|0|0";
+		let cadenaQr = "{{ $datosEmpresa->nit }}|{{ $datosFactura->numero_factura }}|{{ $datosFactura->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($sumaSubTotal, 2, '.', '') }}|{{ round($sumaSubTotal, 0, PHP_ROUND_HALF_UP) }}|{{ $datosFactura->codigo_control }}|{{ $datosFactura->nit_cliente }}|0|0|0|0";
 		console.log(cadenaQr);
 		var qrcode = new QRCode("qrcode", {
 			text: cadenaQr,
