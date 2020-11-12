@@ -88,7 +88,7 @@
 			top: 180px;
 			left: 0px;
 			padding: 5px;
-			border: 1px solid black;
+			/*border: 1px solid black;*/
 			width: 891px;
 		}
 
@@ -104,12 +104,12 @@
 
 		#txtActividad{
 			/* font-weight: bold; */
-			font-size: 8pt;
+			font-size: 6pt;
 			position: absolute;
 			top: 110px;
-			left: 550px;
-			width: 330px;
-			text-align: center;
+			left: 600px;
+			width: 280px;
+			text-align: left;
 		}
 
 		#txtFactura{
@@ -157,7 +157,7 @@
 				<td>{{ $datosFactura->numero_factura }}</td>
 			</tr>
 			<tr>
-				<th style="text-align: left;">NIT&deg;:</th>
+				<th style="text-align: left;">N&deg; AUTORIZACION:</th>
 				<td>{{ $datosFactura->numero_autorizacion }}</td>
 			</tr>
 		</table>
