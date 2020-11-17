@@ -179,32 +179,41 @@ class VentaController extends Controller
         $errorVenta = 0;
         $mensajeError = "";
 
-        // procesamos para el nit del cliente
-        $buscaNitCliente = User::where('nit', $request->nit_cliente)->first();
+        $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
+            ->latest()
+            ->first();
 
-        // verificamos si es publico general para guardar un nuevo cliente
-        if ($buscaNitCliente == null) {
-            // creamos un correo temporal
-            $correoTemporal = date("YmdHis").'@notiene.com';
+        // preguntamos si la venta ya tiene una factura creada
+        if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo') {
+            // procesamos para el nit del cliente
+            $buscaNitCliente = User::where('nit', $request->nit_cliente)->first();
 
-            $cliente               = new User();
-            $cliente->name         = $request->razon_social_cliente;
-            $cliente->rol          = 'Cliente';
-            $cliente->email        = $correoTemporal;
-            $cliente->password     = Hash::make('123456789');
-            $cliente->nit          = $request->nit_cliente;
-            $cliente->razon_social = $request->razon_social_cliente;
-            $cliente->save();
-            $clienteId = $cliente->id;
-        } else {
-            // modificamos el nit y razon social del cliente
-            $cliente               = User::find($buscaNitCliente->id);
-            $cliente->nit          = $request->nit_cliente;
-            $cliente->razon_social = $request->razon_social_cliente;
-            $cliente->save();
-            $clienteId = $cliente->id;
+            // verificamos si es publico general para guardar un nuevo cliente
+            if ($buscaNitCliente == null) {
+                // creamos un correo temporal
+                $correoTemporal = date("YmdHis") . '@notiene.com';
+
+                $cliente               = new User();
+                $cliente->name         = $request->razon_social_cliente;
+                $cliente->rol          = 'Cliente';
+                $cliente->email        = $correoTemporal;
+                $cliente->password     = Hash::make('123456789');
+                $cliente->nit          = $request->nit_cliente;
+                $cliente->razon_social = $request->razon_social_cliente;
+                $cliente->save();
+                $clienteId = $cliente->id;
+            } else {
+                // modificamos el nit y razon social del cliente
+                $cliente               = User::find($buscaNitCliente->id);
+                $cliente->nit          = $request->nit_cliente;
+                $cliente->razon_social = $request->razon_social_cliente;
+                $cliente->save();
+                $clienteId = $cliente->id;
+            }
+            // fin del registro del cliente
+        }else{
+            $clienteId = $request->cliente_id;
         }
-        // fin del registro del cliente
         
         // creamos la venta
         $venta              = new Venta();

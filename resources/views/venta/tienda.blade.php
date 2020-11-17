@@ -29,6 +29,22 @@
 </div><!-- /.modal -->
 {{-- fin modal promo --}}
 
+<!-- inicio modal imagen producto -->
+<div id="imagen_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">IMAGEN PRODUCTO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body" id="muestraImagenProducto">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal imagen producto -->
+
 {{-- modal promo --}}
 <div id="warning-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel"
     aria-hidden="true">
@@ -272,6 +288,7 @@
                                 <table id="tablaPedido" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>CODIGO</th>
                                             <th>NOMBRE</th>
                                             <th>MARCA</th>
@@ -334,6 +351,7 @@
                                 <table id="tablaPedidoMayor" class="tablesaw table-striped table-hover table-bordered table no-wrap">
                                     <thead>
                                         <tr>
+                                            <th></th>
                                             <th>CODIGO</th>
                                             <th>NOMBRE</th>
                                             <th>MARCA</th>
@@ -967,7 +985,12 @@
         }
     });
 
-
-
+    function muestraImagenProducto(nombre){
+        let imagen = `<img src="{{ asset('imagenesProductos')}}/`+nombre+`" width="100%">`;
+        console.log(imagen);
+        $("#muestraImagenProducto").html(imagen);
+        $("#imagen_producto").modal("show");
+    }
+    
 </script>
 @endsection

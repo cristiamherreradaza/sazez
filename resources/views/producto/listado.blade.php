@@ -567,7 +567,6 @@
 
     function muestraImagenProducto(nombre){
         let imagen = `<img src="{{ asset('imagenesProductos')}}/`+nombre+`" width="100%">`;
-        console.log(imagen);
         $("#muestraImagenProducto").html(imagen);
         $("#imagen_producto").modal("show");
     }

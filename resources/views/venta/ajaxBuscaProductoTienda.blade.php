@@ -3,6 +3,7 @@
         <thead>
             <tr>
                 <th>ID</th>
+                <th></th>
                 <th>CODIGO</th>
                 <th>NOMBRE</th>
                 <th>MARCA</th>
@@ -32,6 +33,13 @@
                     if ($valida != null) {
                         $promosArray[$contador] = $pro->combo_id;
                     }
+                }
+
+                $imagen = App\ImagenesProducto::where('producto_id', $p->id)->first();
+                if($imagen){
+                    $nombre = $imagen->imagen;
+                }else{
+                    $nombre = "sinImagen.jpg";
                 }
 
                 $precioProducto = App\Precio::where('producto_id', $p->id)->where('escala_id', 1)->first();
@@ -67,6 +75,8 @@
             @endphp
                 <tr class="item_{{ $p->id }}">                    
                     <td>{{ $p->id }}</td>
+                    <td><img src="{{ asset('imagenesProductos')."/".$nombre }}" alt="" height="36"
+                        onclick="muestraImagenProducto('{{ $nombre }}')"></td>
                     <td>
                         {{ $p->codigo }}
                         <input type="hidden" id="preciosEscalas_{{ $p->id }}" name="preciosEscalas_{{ $p->id }}" value="{{ $arrayPreciosProductosJson }}">
@@ -122,15 +132,16 @@
 
             let currentRow = $(this).closest("tr"); //agarramos toda la fila de la tabla
             let id      = currentRow.find("td:eq(0)").text();
-            let codigo  = currentRow.find("td:eq(1)").html();
-            let nombre  = currentRow.find("td:eq(2)").html();
-            let marca   = currentRow.find("td:eq(3)").text();
-            let tipo    = currentRow.find("td:eq(4)").text();
-            let modelo  = currentRow.find("td:eq(5)").text();
-            let colores = currentRow.find("td:eq(6)").text();
-            let stock   = currentRow.find("td:eq(7)").html();
-            let precio  = currentRow.find("td:eq(8)").text();
-            let stockNum = currentRow.find("td:eq(7)").text();
+            let imagen      = currentRow.find("td:eq(1)").html();
+            let codigo  = currentRow.find("td:eq(2)").html();
+            let nombre  = currentRow.find("td:eq(3)").html();
+            let marca   = currentRow.find("td:eq(4)").text();
+            let tipo    = currentRow.find("td:eq(5)").text();
+            let modelo  = currentRow.find("td:eq(6)").text();
+            let colores = currentRow.find("td:eq(7)").text();
+            let stock   = currentRow.find("td:eq(8)").html();
+            let precio  = currentRow.find("td:eq(9)").text();
+            let stockNum = currentRow.find("td:eq(10)").text();
 
             precios = $("#preciosEscalas_"+id).val(); //capturamos los precios del input
             let tipoVenta = $(this).data('venta');
@@ -142,6 +153,7 @@
                 {
                     itemsPedidoArray.push(id);
                     t.row.add([
+                        imagen,
                         codigo,
                         nombre,
                         marca,
@@ -163,6 +175,7 @@
                 {
                     itemsPedidoArrayMayor.push(id);
                     tm.row.add([
+                        imagen,
                         codigo,
                         nombre,
                         marca,
