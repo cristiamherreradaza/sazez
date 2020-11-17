@@ -20,8 +20,16 @@
                 </thead>
                 <tbody>
                     @foreach($productos as $key => $producto)
+                    @php
+                        $imagen = App\ImagenesProducto::where('producto_id', $producto->id)->first();
+                        if($imagen){
+                            $nombre = $imagen->imagen;
+                        }else{
+                            $nombre = "sinImagen.jpg";
+                        }
+                    @endphp
                         <tr>
-                            <td>{{ ($key+1) }}</td>
+                            <td><img src="{{ asset('imagenesProductos')."/".$nombre }}" alt="" height="36" onclick="muestraImagenProducto('{{ $nombre }}')"></td>
                             <td>{{ $producto->codigo }}</td>
                             <td>{{ $producto->nombre }}</td>
                             <td>{{ $producto->tipo->nombre }}</td>

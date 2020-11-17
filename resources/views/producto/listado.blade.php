@@ -138,6 +138,22 @@
 </div>
 <!-- fin modal reportar producto -->
 
+<!-- inicio modal imagen producto -->
+<div id="imagen_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">IMAGEN PRODUCTO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            </div>
+            <div class="modal-body" id="muestraImagenProducto">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal imagen producto -->
+
 <!-- inicio modal informacion producto -->
 <div id="detalle_producto" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -547,6 +563,13 @@
             $("#formularioGeneraQr")[0].reportValidity();
         }
         
+    }
+
+    function muestraImagenProducto(nombre){
+        let imagen = `<img src="{{ asset('imagenesProductos')}}/`+nombre+`" width="100%">`;
+        console.log(imagen);
+        $("#muestraImagenProducto").html(imagen);
+        $("#imagen_producto").modal("show");
     }
 
 </script>
