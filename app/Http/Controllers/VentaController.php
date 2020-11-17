@@ -518,7 +518,7 @@ class VentaController extends Controller
             ->addColumn('action', function ($ventas) {
                 return '<button onclick="muestra(' . $ventas->id . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>
                         <button onclick="imprimir(' .$ventas->id. ')" class="btn btn-primary" title="Imprimir garantia"><i class="fas fa-print"></i> </button>
-                        <button onclick="pagos(' .$ventas->id. ')" class="btn btn-success" title="Imprimir garantia"><i class="fas fa-donate"></i> </button>';
+                        <button onclick="pagos(' .$ventas->id. ')" class="btn btn-success" title="Pagos Venta"><i class="fas fa-donate"></i> </button>';
             })
             ->make(true);
     }
