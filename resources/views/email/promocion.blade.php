@@ -8,9 +8,7 @@ Fuiste acreedor a {{ $promocion->nombre }} que contiene:
 <br>
 Puedes efectuar esta promocion en:
 <br>
-@foreach($tienda as $sucursal)
-+ {{ $sucursal->nombre }}, {{ $sucursal->direccion }}. <br>
-@endforeach
+{{ $tienda }}
 
 @component('mail::promotion')
 
@@ -18,6 +16,8 @@ Puedes efectuar esta promocion en:
 
 [qr]: {{ asset('qrs/' .$codigo. '.png') }}
 
+<br>
+Codigo {{ $codigo }}
 <br>
 Cupón valido hasta {{ $fecha_final }}.
 

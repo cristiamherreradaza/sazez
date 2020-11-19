@@ -14,6 +14,8 @@ Fuiste acreedor a un nuevo cupón de descuento de:
 [qr]: {{ asset('qrs/' .$codigo. '.png') }}
 
 <br>
+Codigo {{ $codigo }}
+<br>
 Cupón valido hasta {{ $msg['fecha_final'] }}.
 
 @endcomponent
