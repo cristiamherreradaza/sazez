@@ -110,7 +110,7 @@
 
                     <div class="form-group">
                         @if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success text-white">REGISTRAR VENTA</button>
+                            <button type="button" onclick="validaForm();" class="btn waves-effect waves-light btn-block btn-success text-white">REGISTRAR VENTA</button>
                         @else
                             <h2 class="text-danger text-center">NO PUEDES FACTURAR POR QUE NO TIENES PARAMETROS ACTIVOS</h2>
                         @endif
@@ -129,6 +129,7 @@
 <script>
 
     var totalImporte = 0;
+    var productos = 0;
 
     var cantidad = document.getElementById('cantidad');
     cantidad.addEventListener('keyup', multiplicaCantidad);
@@ -181,6 +182,7 @@
 
     function adicionar()
     {
+        productos = 1;
         let producto = document.getElementById("producto").value;
         let cantidad = document.getElementById("cantidad").value;
         let precio   = document.getElementById("precio").value;
@@ -207,6 +209,16 @@
         document.getElementById("producto").focus();
         
 
+    }
+
+    function validaForm()
+    {
+        if(productos == 0)
+        {
+            alert("Debes introducir un producto");
+        }else{
+            $("#formularioVenta").submit();
+        }
     }
 
 </script>
