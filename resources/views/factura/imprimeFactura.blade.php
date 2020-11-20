@@ -1,153 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Factura</title>
 	<style type="text/css">
-		body{
-				font-family: Arial, Helvetica, sans-serif;
-				}
-		#fondo{
-			background-image: url("{{ asset('assets/images/factura_szone.jpg') }}");
-			width: 792px;
-			height: 514px;
+		@media print {
+			#btnImprimir {
+				display: none;
+			}
 		}
 
-		#tablaProductos{
+		#botonImpresion {
+			background: #17aa56;
+			color: #fff;
+			border-radius: 7px;
+			/*box-shadow: 0 5px #119e4d;*/
+			padding: 15px;
+		}
+
+		body {
+			font-family: Arial, Helvetica, sans-serif;
+		}
+
+		#fondo {
+			/*background-image: url("{{ asset('assets/images/factura_szone.jpg') }}");*/
+			/* width: 892px; */
+			/* height: 514px; */
+		}
+
+		#tablaProductos {
 			font-size: 8pt;
 			position: absolute;
-			top: 260px;
-			left: 50px;
+			top: 230px;
+			left: 0px;
+			/* width: 718px; */
 		}
 
-		#total{
-			font-weight: bold;
+		#codigoControlQr {
+			font-size: 8pt;
+			/* position: relative; */
+			/*top: 230px;
+			left: 0px;*/
+			/* width: 718px; */
+		}
+
+
+		/*estilos para tablas de datos*/
+		table.datos {
+			/*font-size: 13px;*/
+			/*line-height:14px;*/
+			/* width: 1000; */
+			border-collapse: collapse;
+			background-color: #fff;
+		}
+
+		.datos th {
+			height: 10px;
+			background-color: #abd4ed;
+			color: #000;
+		}
+
+		.datos td {
+			height: 12px;
+		}
+
+		.datos th,
+		.datos td {
+			border: 1px solid #ddd;
+			padding: 2px;
+			text-align: center;
+		}
+
+		.datos tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		#literalTotal {
+			font-size: 8pt;
+		}
+
+		#datosEmpresaNit {
+			/* font-weight: bold; */
 			font-size: 10pt;
 			position: absolute;
-			top: 402px;
-			left: 720px;
+			top: 0px;
+			left: 595px;
+			padding: 10px;
+			border: 1px solid black;
 		}
 
-		#literalTotal{
-			font-weight: bold;
+		#datosEmpresaFactura {
+			/* font-weight: bold; */
 			font-size: 10pt;
 			position: absolute;
-			top: 402px;
-			left: 90px;
+			top: 180px;
+			left: 0px;
+			padding: 5px;
+			/*border: 1px solid black;*/
+			width: 891px;
 		}
 
-		#qrcode{
+		#txtOriginal {
 			font-weight: bold;
-			font-size: 10pt;
+			font-size: 12pt;
 			position: absolute;
-			top: 420px;
-			left: 660px;
+			top: 85px;
+			left: 670px;
+			width: 150px;
+			text-align: center;
 		}
 
-		#codigoControl{
-			font-weight: bold;
-			font-size: 10pt;
+		#txtActividad {
+			/* font-weight: bold; */
+			font-size: 6pt;
 			position: absolute;
-			top: 425px;
-			left: 180px;
+			top: 110px;
+			left: 600px;
+			width: 280px;
+			text-align: left;
 		}
 
-		#fechaLimite{
+		#txtFactura {
 			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 450px;
-			left: 217px;
-		}
-
-		#nitEmpresa{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 122px;
-			left: 358px;
-		}
-
-		#numeroFactura{
-			font-weight: bold;
-			font-size: 10pt;
+			font-size: 19pt;
 			position: absolute;
 			top: 140px;
-			left: 420px;
+			left: 350px;
+			width: 150px;
+			text-align: center;
 		}
 
-		#numeroAutorizacion{
-			font-weight: bold;
-			font-size: 10pt;
+		#logo {
 			position: absolute;
-			top: 158px;
-			left: 430px;
-		}
-		#lugarFecha{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 193px;
-			left: 155px;
-		}
-		#razonCliente{
-			font-weight: bold;
-			font-size: 10pt;
-			position: absolute;
-			top: 213px;
-			left: 125px;
+			top: 20px;
+			left: 20px;
 		}
 
-		#nitCliente{
+		#direccionEmpresa {
 			font-weight: bold;
-			font-size: 10pt;
+			font-size: 6pt;
 			position: absolute;
-			top: 193px;
-			left: 480px;
+			top: 85px;
+			left: 20px;
+			width: 150px;
+			text-align: center;
 		}
-
 	</style>
 	<script src="{{ asset('js/NumeroALetras.js') }}"></script>
 	<script src="{{ asset('dist/js/qrcode.min.js') }}"></script>
 </head>
+
 <body>
+@php
+	function fechaCastellano ($fecha) {
+	$fecha = substr($fecha, 0, 10);
+	$numeroDia = date('d', strtotime($fecha));
+	$dia = date('l', strtotime($fecha));
+	$mes = date('F', strtotime($fecha));
+	$anio = date('Y', strtotime($fecha));
+	$dias_ES = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+	$dias_EN = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+	$nombredia = str_replace($dias_EN, $dias_ES, $dia);
+	$meses_ES = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+	"Noviembre", "Diciembre");
+	$meses_EN = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+	"November", "December");
+	$nombreMes = str_replace($meses_EN, $meses_ES, $mes);
+	return $numeroDia." de ".$nombreMes." de ".$anio;
+	}
+@endphp
 	<div id="fondo">
 
-		<table id="tablaProductos">
+		<div id="logo"><img src="{{ asset('assets/images/logoSmartZone.jpg') }}" width="150"></div>
 			
+			<table id="datosEmpresaNit" width="300">
+				<tr>
+					<th style="text-align: left;">NIT:</th>
+					<td>{{ $datosEmpresa->nit }}</td>
+				</tr>
+				<tr>
+					<th style="text-align: left;">FACTURA N&deg;:</th>
+					<td>{{ $datosFactura->numero_factura }}</td>
+				</tr>
+				<tr>
+					<th style="text-align: left;">N&deg; AUTORIZACION:</th>
+					<td>{{ $datosFactura->numero_autorizacion }}</td>
+				</tr>
+			</table>
+			
+			<table id="datosEmpresaFactura">
+				<tr>
+					<td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La Paz,
+						{{ fechaCastellano($datosFactura->fecha_compra) }}</span></td>
+					<td><b>NIT/CI:<b /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosFactura->nit_cliente }}</td>
+				</tr>
+				<tr>
+					<td style="text-align: left;"><b>Se&ntilde;or(es):</b>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $productosVenta[0]->nombre }}</td>
+					<td></td>
+				</tr>
+			</table>
+		<div id="tablaProductos">
+		<table class="datos" width="892">
+			<thead>
+				<tr>
+					<th style="padding-top: 5px;padding-bottom: 5px;">N&deg;</th>
+					<th>CANTIDAD</th>
+					<th>DESCRIPCION</th>
+					<th>PRECIO UNITARIO</th>
+					<th>SUBTOTAL</th>
+				</tr>
+			</thead>			
 			<tbody>
 				@php
 					$sumaSubTotal = 0;
 				@endphp
 				@foreach ($productosVenta as $con => $pv)
 					<tr>
-						<td width="65px">&nbsp;&nbsp;
-							{{ str_pad($pv->id, 5, "0", STR_PAD_LEFT) }}
+						<td width="25px">&nbsp;&nbsp;
+							{{ ++$con }}
 						</td>
-						<td width="425px">{{ $pv->producto }}</td>
 						<td style="text-align: right;" width="100px">{{ $pv->cantidad }}</td>
+						<td width="425px" style="text-align: left;">{{ $pv->producto }}</td>
+						<td style="text-align: right;" width="100px">{{ $pv->precio_unitario }}</td>
 						<td style="text-align: right;" width="100px"><b>{{ $pv->subtotal }}</b></td>
-						
 					</tr>
 				@endforeach
+				@php
+					$numeroParaDecimal = number_format($datosFactura->monto_compra, 2, '.', '');
+					list($numero, $decimal) = explode('.', $numeroParaDecimal);
+				@endphp
 			</tbody>
+			<tfoot>
+				<td colspan="3" style="text-align: left;">SON: <span id="literalTotal"> </span>{{ $decimal }}/100 BOLIVIANOS</td>
+				<td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
+				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($datosFactura->monto_compra, 2, '.', '') }}</td>
+			</tfoot>
 			
 		</table>
-		<div id="total">
-			{{ $datosFactura->monto_compra }}
+		<br />
+			<table class="codigoControlQr" width="100%">
+				<tr>
+					<td>
+						Codigo de Control: {{ $datosFactura->codigo_control }}<br />
+						Fecha limite de Emision: {{ $datosFactura->fecha_limite }}
+					</td>
+					<td>
+						<div id="qrcode"></div>
+					</td>
+				</tr>
+			</table>
+		<br />
+		<center>
+			"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A LEY"<br />
+			<b>Ley N&deg; 453: El proveedor debera suministrar el servicio en las modalidades y terminos ofertados o
+				convenidos.</b>
+			<p>&nbsp;</p>
+			<div id="btnImprimir">
+				<input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
+			</div>
+		</center>
 		</div>
-		<div id="literalTotal"></div>
-		<div id="codigoControl">{{ $datosFactura->codigo_control }}</div>
-		<div id="fechaLimite">{{ $datosFactura->fecha_limite }}</div>
-		<div id="nitEmpresa">{{ $datosEmpresa->nit }}</div>
-		<div id="numeroFactura">{{ $datosFactura->numero_factura }}</div>
-		<div id="numeroAutorizacion">{{ $datosFactura->numero_autorizacion }}</div>
-		<div id="lugarFecha"></div>
-		<div id="razonCliente">{{ $productosVenta[0]->nombre }}</div>
-		<div id="nitCliente">{{ $datosFactura->nit_cliente }}</div>
-		<div id="qrcode"></div>
-	</div>
+
+		<div id="txtOriginal">ORIGINAL</div>
+		<div id="txtActividad">{{ $datosEmpresa->actividad }}</div>
+		<div id="txtFactura">FACTURA</div>
+		<div id="direccionEmpresa">{{ $datosEmpresa->direccion }}</div>
+		
+		</div>
+
+	@php
+		$fechaFactura = new DateTime($productosVenta[0]->fecha);
+		$fechaQr = $fechaFactura->format('d/m/Y');
+	@endphp
 
 	<script>
 		let valorTotal = Number({{ $datosFactura->monto_compra }});
@@ -170,13 +297,14 @@
 			let fechaHora="{{ $datosFactura->fecha_compra }}";
 			let fechaSinHora = fechaHora.split(" ");
 			let fecha = new Date(fechaSinHora[0]);
-			document.getElementById("lugarFecha").innerHTML = "La Paz, " + fecha.toLocaleDateString("es-ES", options);
+			// document.getElementById("lugarFecha").innerHTML = "La Paz, " + fecha.toLocaleDateString("es-ES", options);
 		}
 
 		window.onload = numerosALetras;
-
+		let cadenaQr = "{{ $datosEmpresa->nit }}|{{ $datosFactura->numero_factura }}|{{ $datosFactura->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($datosFactura->monto_compra, 2, '.', '') }}|{{ round($datosFactura->monto_compra, 0, PHP_ROUND_HALF_UP) }}|{{ $datosFactura->codigo_control }}|{{ $datosFactura->nit_cliente }}|0|0|0|0";
+		console.log(cadenaQr);
 		var qrcode = new QRCode("qrcode", {
-			text: "http://jindo.dev.naver.com/collie",
+			text: cadenaQr,
 			width: 98,
 			height: 90,
 			colorDark : "#000000",

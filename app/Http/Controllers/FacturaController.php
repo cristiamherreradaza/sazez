@@ -309,7 +309,11 @@ class FacturaController extends Controller
     
     public function formulario()
     {
-        return view('factura.formulario');
+        $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
+            ->latest()
+            ->first();
+
+        return view('factura.formulario')->with(compact('ultimoParametro'));
     }
 
     public function guardaVenta(Request $request)
@@ -368,7 +372,7 @@ class FacturaController extends Controller
         $cantidadItems = count($request->cantidad);
         for ($i=0; $i < $cantidadItems; $i++) { 
 
-            echo $request->cantidad[$i].' - '.$request->precio[$i].' - '.$request->subtotal[$i]."<br />";
+            // echo $request->cantidad[$i].' - '.$request->precio[$i].' - '.$request->subtotal[$i]."<br />";
             $venta                  = new Ventasfac();
             $venta->user_id         = Auth::user()->id;
             $venta->almacene_id     = Auth::user()->almacen_id;

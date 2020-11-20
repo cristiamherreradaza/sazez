@@ -304,7 +304,7 @@
 
 		window.onload = numerosALetras;
 		let cadenaQr = "{{ $datosEmpresa->nit }}|{{ $datosFactura->numero_factura }}|{{ $datosFactura->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($sumaSubTotal, 2, '.', '') }}|{{ round($sumaSubTotal, 0, PHP_ROUND_HALF_UP) }}|{{ $datosFactura->codigo_control }}|{{ $datosFactura->nit_cliente }}|0|0|0|0";
-		console.log(cadenaQr);
+		// console.log(cadenaQr);
 		var qrcode = new QRCode("qrcode", {
 			text: cadenaQr,
 			width: 70,

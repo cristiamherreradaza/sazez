@@ -109,7 +109,11 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success text-white">REGISTRAR VENTA</button>
+                        @if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success text-white">REGISTRAR VENTA</button>
+                        @else
+                            <h2 class="text-danger text-center">NO PUEDES FACTURAR POR QUE NO TIENES PARAMETROS ACTIVOS</h2>
+                        @endif
                     </div>
                     
                 </form>
