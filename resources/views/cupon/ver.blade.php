@@ -30,13 +30,14 @@
                             @if($cupon->almacene_id)
                                 {{ $cupon->almacen->nombre }}, ubicado en {{ $cupon->almacen->direccion }}
                             @else
-                                <table>
+                            <!-- <table>
                                     @foreach($almacenes as $almacen)
                                         <tr>
                                             <td>{{ $almacen->nombre }}, ubicado en {{ $almacen->direccion }}</td>
                                         </tr>
                                     @endforeach
-                                </table>
+                                </table> -->
+                                Cualquier Sucursal
                             @endif
                         </li>
                     </ul>

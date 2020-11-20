@@ -89,18 +89,18 @@ class CuponController extends Controller
                     if(strtotime($cupones->fecha_final) >= strtotime(date('Y-m-d H:i:s')))
                     {
                         return '<button onclick="cobrar('.$cupones->id.')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
-                                <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>
+                                <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>
                                 <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
                     }
                     else
                     {
-                        return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                        return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
                     }
                 }
                 // Si se cobró el cupón, muestra el boton Ver Cupon
                 else
                 {
-                    return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                    return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
                 }
             }
             // Si el usuario no tiene perfil de administrador
@@ -114,17 +114,17 @@ class CuponController extends Controller
                     //if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final))
                     {
                         return '<button onclick="cobrar('.$cupones->id.')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
-                                <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                                <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
                     }
                     else
                     {
-                        return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                        return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
                     }
                 }
                 // Si se cobró el cupón, muestra el boton Ver Cupon
                 else
                 {
-                    return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>';
+                    return '<button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
                 }
             }
             // if(is_null($cupones->cobrado)){
@@ -132,7 +132,7 @@ class CuponController extends Controller
             //         return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
             //     }else{
             //         return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\', \''.$cupones->combo_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
-            //         <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Ver cupon"><i class="fas fa-eye"></i> </button>
+            //         <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>
             //         <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
             //     }
             // }
@@ -164,7 +164,7 @@ class CuponController extends Controller
     public function ver($id)
     {
         $cupon = Cupone::find($id);
-        $almacenes = Almacene::get();
+        $almacenes = Almacene::whereNull('estado')->get();
         if($cupon->producto_id)             // Es un cupon por un producto
         {
             return view('cupon.ver')->with(compact('cupon', 'almacenes'));
@@ -234,7 +234,7 @@ class CuponController extends Controller
                             $tienda = Almacene::find($request->tienda);
                             if($tienda)             // Si existe una tienda especifica
                             {
-                                $tienda = $tienda->nombre;
+                                $tienda = $tienda->nombre.', '.$tienda->direccion;
                             }
                             else                    // Si puede cobrar en cualquier tienda
                             {
@@ -312,7 +312,7 @@ class CuponController extends Controller
                         $tienda = Almacene::find($request->tienda);
                         if($tienda)             // Si existe una tienda especifica
                         {
-                            $tienda = $tienda->nombre;
+                            $tienda = $tienda->nombre.', '.$tienda->direccion;
                         }
                         else                    // Si puede cobrar en cualquier tienda
                         {
@@ -390,7 +390,7 @@ class CuponController extends Controller
                             if($tienda)
                             {
                                 //Si existe una tienda especifica
-                                $tienda = $tienda->nombre;
+                                $tienda = $tienda->nombre.', '.$tienda->direccion;
                             }
                             else
                             {
@@ -469,11 +469,12 @@ class CuponController extends Controller
                             if($request->tienda)            // Si existe una tienda especifica
                             {
                                 //$tienda = Almacene::find($request->tienda);
-                                $tienda = Almacene::where('id', $request->tienda)->get();
+                                $tienda = Almacene::where('id', $request->tienda)->first();
+                                $tienda = $tienda->nombre.', '.$tienda->direccion;
                             }
                             else                            // Si puede cobrar en cualquier tienda
                             {
-                                $tienda = Almacene::get();
+                                $tienda = "Cualquier sucursal";
                             }
                             // Creando imagen de QR
                             $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
@@ -547,11 +548,12 @@ class CuponController extends Controller
                         if($request->tienda)            // Si existe una tienda especifica
                         {
                             //$tienda = Almacene::find($request->tienda);
-                            $tienda = Almacene::where('id', $request->tienda)->get();
+                            $tienda = Almacene::where('id', $request->tienda)->first();
+                            $tienda = $tienda->nombre.', '.$tienda->direccion;
                         }
                         else                            // Si puede cobrar en cualquier tienda
                         {
-                            $tienda = Almacene::get();
+                            $tienda = "Cualquier sucursal";
                         }
                         // Creando imagen de QR
                         $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
@@ -625,11 +627,12 @@ class CuponController extends Controller
                             if($request->tienda)            // Si existe una tienda especifica
                             {
                                 //$tienda = Almacene::find($request->tienda);
-                                $tienda = Almacene::where('id', $request->tienda)->get();
+                                $tienda = Almacene::where('id', $request->tienda)->first();
+                                $tienda = $tienda->nombre.', '.$tienda->direccion;
                             }
                             else                            // Si puede cobrar en cualquier tienda
                             {
-                                $tienda = Almacene::get();
+                                $tienda = "Cualquier sucursal";
                             }
                             // Creando imagen de QR
                             $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
