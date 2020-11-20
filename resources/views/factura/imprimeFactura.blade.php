@@ -20,6 +20,14 @@
 			padding: 15px;
 		}
 
+		#botonRegresa {
+			background: #009efb;
+			color: #fff;
+			border-radius: 7px;
+			/*box-shadow: 0 5px #119e4d;*/
+			padding: 15px;
+		}
+
 		body {
 			font-family: Arial, Helvetica, sans-serif;
 		}
@@ -260,6 +268,7 @@
 			<p>&nbsp;</p>
 			<div id="btnImprimir">
 				<input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
+				<input type="button" id="botonRegresa" value="VOLVER" onClick="vuelveSistema()">
 			</div>
 		</center>
 		</div>
@@ -300,9 +309,13 @@
 			// document.getElementById("lugarFecha").innerHTML = "La Paz, " + fecha.toLocaleDateString("es-ES", options);
 		}
 
+		function vuelveSistema(){
+			window.location.href = "{{ url('Venta/tienda') }}";
+		}
+
 		window.onload = numerosALetras;
 		let cadenaQr = "{{ $datosEmpresa->nit }}|{{ $datosFactura->numero_factura }}|{{ $datosFactura->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($datosFactura->monto_compra, 2, '.', '') }}|{{ round($datosFactura->monto_compra, 0, PHP_ROUND_HALF_UP) }}|{{ $datosFactura->codigo_control }}|{{ $datosFactura->nit_cliente }}|0|0|0|0";
-		console.log(cadenaQr);
+		// console.log(cadenaQr);
 		var qrcode = new QRCode("qrcode", {
 			text: cadenaQr,
 			width: 98,
