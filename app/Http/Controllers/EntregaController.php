@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use DataTables;
-use App\Producto;
-use App\Pedido;
-use App\Almacene;
-use App\PedidosProducto;
-use App\Movimiento;
 use DB;
-use App\Exports\PedidosProductosExport;
-use App\Imports\MovimientosImport;
-use Maatwebsite\Excel\Facades\Excel;
 use Validator;
+use App\Pedido;
+use DataTables;
+use App\Almacene;
+use App\Producto;
+use App\Movimiento;
+use App\PedidosProducto;
+use Illuminate\Http\Request;
+use App\Imports\EnviosImport;
+use App\Imports\MovimientosImport;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PedidosProductosExport;
 
 class EntregaController extends Controller
 {
@@ -137,7 +138,7 @@ class EntregaController extends Controller
         return view('envio.envio')->with(compact('almacenes'));
     }  
 
-    // No usado
+    // funcion para importar los envios
     public function ajax_importar(Request $request)
     {
         $num = DB::select("SELECT MAX(numero) as nro
@@ -148,7 +149,7 @@ class EntregaController extends Controller
             $numero = 1;
         }
         // $file = $request->file('file');
-        // Excel::import(new MovimientosImport, $file);
+        // Excel::import(new EnviosImport, $file);
         $validation = Validator::make($request->all(), [
             'select_file' => 'required|mimes:xlsx|max:2048'
         ]);
@@ -156,7 +157,7 @@ class EntregaController extends Controller
         {
             session(['numero' => $numero]);
             $file = $request->file('select_file');
-            Excel::import(new MovimientosImport, $file);
+            Excel::import(new EnviosImport, $file);
             session()->forget('numero');
             return response()->json([
                 'message' => 'Importacion realizada con exito',
