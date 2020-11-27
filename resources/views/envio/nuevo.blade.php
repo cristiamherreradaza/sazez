@@ -153,7 +153,7 @@
 
                             </div>
                             <div class="col-md-3">
-                                <a href="{{ asset('excels/prototipo_pedidos.xlsx') }}" rel="noopener noreferrer">
+                                <a href="{{ asset('excels/muestra_excel_envios.xlsx') }}" rel="noopener noreferrer">
                                     <button type="button" class="btn waves-effect waves-light btn-block btn-warning">Descargar formato excel</button>
                                 </a>
                             </div>
@@ -177,7 +177,7 @@
                             </div>
                             <div class="col-md-12">
                                 <span class='zoom' id='ex1'>
-                                    <img src="{{ asset('assets/images/muestra_excel_envios.png') }}" class="img-thumbnail" alt='Daisy on the Ohoopee' />
+                                    <img src="{{ asset('assets/images/muestra_excel_envios_productos.png') }}" class="img-thumbnail" alt='Daisy on the Ohoopee' />
                                 </span>
                             </div>
                         </div>
