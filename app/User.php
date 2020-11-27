@@ -121,5 +121,11 @@ class User extends Authenticatable
         return $this->hasMany('App\MenusUser');
     }
 
+    public function movimiento()
+    {
+        return $this->hasMany('App\Movimiento');
+    }
+
+
     
 }
