@@ -17,7 +17,7 @@
     <div class="col-md-12">
         <div class="card border-info">
             <div class="card-header bg-info">
-                <h4 class="mb-0 text-white">REPORTE DE FACTURAS {{ date('Y-m-d H:i:s') }}</h4>
+                <h4 class="mb-0 text-white">REPORTE DE FACTURAS</h4>
             </div>
             <div class="card-body">
                 <div class="row">

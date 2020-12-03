@@ -45,6 +45,10 @@ Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallba
 Route::get('login/google', 'Auth\LoginController@redirectToProviderGoogle');
 Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallbackGoogle');
 
+//REPORTE DE TIENDA
+Route::get('Tienda/publico', 'TiendaController@publico');
+
+
 // Aqui colocar todas las rutas para los usuarios que no sean clientes.... todavia por definir.
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/home', 'ProductoController@panelControl')->name('home');
@@ -296,9 +300,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Alcance/ajax_ventas_meses', 'AlcanceController@ajax_ventas_meses');
 
     Route::post('Alcance/guarda', 'AlcanceController@guarda');
-
-    //REPORTE DE TIENDA
-    Route::get('Tienda/publico', 'TiendaController@publico');
     
     Route::get('Reporte/reporte_tienda', 'ReporteController@reporte_tienda');
     Route::get('Reporte/ajax_tienda_listado', 'ReporteController@ajax_tienda_listado');
