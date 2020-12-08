@@ -70,9 +70,9 @@
                                 <th>Nombre</th>
                                 <th>Marca</th>
                                 <th>Tipo</th>
-                                <th>Modelo</th>
-                                <th>Stock</th>
-                                <th>Cantidad Solicitada</th>
+                                {{-- <th>Modelo</th> --}}
+                                <th>Mi Stock</th>
+                                <th>Solicitado</th>
                                 <th>Cantidad</th>
                             </tr>
                         </thead>
@@ -87,7 +87,7 @@
                                     <td>{{ $producto->producto->nombre }}</td>
                                     <td>{{ $producto->producto->marca->nombre }}</td>
                                     <td>{{ $producto->producto->tipo->nombre }}</td>
-                                    <td>{{ $producto->producto->modelo }}</td>
+                                    {{-- <td>{{ $producto->producto->modelo }}</td> --}}
                                     @php
                                         $ingreso = App\Movimiento::where('producto_id', $producto->producto_id)
                                                                 ->where('almacene_id', $pedido->almacene_id)
@@ -98,10 +98,21 @@
                                                                 ->where('salida', '>', 0)
                                                                 ->sum('salida');
                                         $cantidad_disponible = $ingreso - $salida;
+
+                                        $ingresoSolicitante = App\Movimiento::where('producto_id', $producto->producto_id)
+                                                                ->where('almacene_id', $pedido->almacene_solicitante_id)
+                                                                ->where('ingreso', '>', 0)
+                                                                ->sum('ingreso');
+                                        $salidaSolicitante = App\Movimiento::where('producto_id', $producto->producto_id)
+                                                                ->where('almacene_id', $pedido->almacene_solicitante_id)
+                                                                ->where('salida', '>', 0)
+                                                                ->sum('salida');
+                                        $cantidad_disponible_solicitante = $ingresoSolicitante - $salidaSolicitante;
                                         
                                     @endphp
-                                    <td style="text-align:center;">{{ $cantidad_disponible }}</td>
-                                    <td style="text-align:center;">{{ $producto->cantidad }}</td>
+                                    <td style="text-align:center;"><h3 class="text-info">{{ $cantidad_disponible }}</h3></td>
+                                    <td style="text-align:center;"><h3>{{ $producto->cantidad }}</h3></td>
+                                    <td style="text-align:center;"><h3 class="text-success">{{ $cantidad_disponible_solicitante }}</h3></td>
                                     <td>
                                         <div class="form-group">
                                             <input type="number" class="form-control" id="cantidad_{{ $producto->producto->id }}" name="cantidad_{{ $producto->producto->id }}" value="0" min="0" max="{{ $cantidad_disponible }}" required>

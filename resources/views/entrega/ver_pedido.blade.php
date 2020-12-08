@@ -105,9 +105,9 @@
                                 <th>Nombre</th>
                                 <th>Marca</th>
                                 <th>Tipo</th>
-                                <th>Modelo</th>
-                                <th class="text-center">Cantidad Disponible</th>
-                                <th class="text-center">Cantidad a Solicitar</th>
+                                {{-- <th>Modelo</th> --}}
+                                <th class="text-center">Mi Stock</th>
+                                <th class="text-center">Solicitado</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -119,7 +119,7 @@
                                     <td>{{ $producto->producto->nombre }}</td>
                                     <td>{{ $producto->producto->marca->nombre }}</td>
                                     <td>{{ $producto->producto->tipo->nombre }}</td>
-                                    <td>{{ $producto->producto->modelo }}</td>
+                                    {{-- <td>{{ $producto->producto->modelo }}</td> --}}
                                     @php
                                         $ingreso = App\Movimiento::where('producto_id', $producto->producto_id)
                                                                 ->where('almacene_id', $pedido->almacene_id)
@@ -131,8 +131,8 @@
                                                                 ->sum('salida');
                                         $total = $ingreso - $salida;
                                     @endphp
-                                    <td class="text-center">{{ $total }}</td>
-                                    <td class="text-center">{{ $producto->cantidad }}</td>
+                                    <td class="text-center"><h3 class="text-info">{{ $total }}</h3></td>
+                                    <td class="text-center"><h3>{{ $producto->cantidad }}</h3></td>
                                     <td>
                                         @if(auth()->user()->almacen_id == $pedido->almacen->id || auth()->user()->perfil_id == 1)
                                             <button type="button" class="btn btn-danger" title="Eliminar producto" onclick="eliminar('{{ $producto->id }}', '{{ $producto->producto->nombre }}')"><i class="fas fa-trash-alt"></i></button>
