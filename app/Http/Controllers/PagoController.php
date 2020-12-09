@@ -55,4 +55,12 @@ class PagoController extends Controller
         return redirect("Pago/muestraPagos/$datosPago->venta_id");
     }
 
+    public function deudaTotal(Request $request, $clienteId)
+    {
+        $ventas = Venta::where('cliente_id', $clienteId)
+                        ->where('saldo >', 0)
+                        ->get();
+        dd($ventas);
+    }
+
 }

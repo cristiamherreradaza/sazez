@@ -214,7 +214,8 @@ class FacturaController extends Controller
 
     public function ajax_listado(Request $request)
     {
-        $facturas = DB::table('facturas')
+        // dd($request->all());
+        /*$facturas = DB::table('facturas')
                         ->whereNull('facturas.deleted_at')
                         ->where('facturas.almacene_id', $request->almacen_id)
                         ->whereBetween('facturas.fecha_compra', [$request->fecha_inicial, $request->fecha_final])
@@ -228,7 +229,14 @@ class FacturaController extends Controller
                             'facturas.fecha_compra as fecha_compra',
                             'facturas.monto_compra as monto_compra'
                         );
-        return Datatables::of($facturas)->make(true);
+        return Datatables::of($facturas)->make(true);*/
+
+        $facturas = Factura::where('almacene_id', $request->almacen_id)
+                        ->whereDate('fecha_compra', '>=', $request->fecha_inicial)
+                        ->whereDate('fecha_compra', '<=', $request->fecha_final)
+                        ->get();
+        // dd($facturas);
+        return view('factura.ajax_listado')->with(compact('facturas'));
     }
     
     /**

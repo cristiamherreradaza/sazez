@@ -96,7 +96,7 @@
                                         <th>Tipo</th>
                                         <th>Modelo</th>
                                         <th>Colores</th>
-                                        <th>Stock</th>
+                                        <th>Stock Origen</th>
                                         <th style="width: 5%">Cantidad</th>
                                         <th></th>
                                     </tr>

@@ -73,7 +73,8 @@
                                 {{-- <th>Modelo</th> --}}
                                 <th>Mi Stock</th>
                                 <th>Solicitado</th>
-                                <th>Cantidad</th>
+                                <th>Cant. Tienda</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>

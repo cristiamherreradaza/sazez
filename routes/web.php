@@ -341,6 +341,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Pago/muestraPagos/{id}', 'PagoController@muestraPagos');
     Route::post('Pago/guardaPago', 'PagoController@guardaPago');
     Route::get('Pago/eliminar/{pagoId}', 'PagoController@eliminar');
+    Route::get('Pago/deudaTotal/{pagoId}', 'PagoController@deudaTotal');
 
     // FACTURACION Y EMPRESA
     Route::get('Empresa/formulario', 'EmpresaController@formulario');
@@ -350,7 +351,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Factura/formulario_empresa/{id}', 'FacturaController@formulario_empresa');
     Route::post('Factura/guarda_formulario', 'FacturaController@guarda_formulario');
     Route::get('Factura/reporte', 'FacturaController@reporte');
-    Route::get('Factura/ajax_listado', 'FacturaController@ajax_listado');
+    Route::post('Factura/ajax_listado', 'FacturaController@ajax_listado');
     Route::get('Factura/formulario', 'FacturaController@formulario');
     Route::post('Factura/guardaVenta', 'FacturaController@guardaVenta');
     Route::get('Factura/imprimeFactura/{id}', 'FacturaController@imprimeFactura');
