@@ -58,7 +58,12 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
-                                <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                                <button type="button" onclick="buscar()" class="btn btn-block btn-primary" id="btnBusca">Buscar</button>
+                                <button class="btn btn-primary btn-block" type="button" id="btnTrabajando" disabled style="display: none;">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
+                                    </button>
                             </div>                    
                         </div>
                     </div>
@@ -124,6 +129,8 @@
     function buscar()
     {
         if ($("#formularioFacturas")[0].checkValidity()) {
+            $("#btnTrabajando").show();
+            $("#btnBusca").hide();
             // $("#formularioFacturas").submit();
 
             let datosFormulario = $("#formularioFacturas").serializeArray();
@@ -136,6 +143,8 @@
                     // console.log(data);
                     $("#mostrar").show();
                     $("#muestraFacturas").html(data);
+                    $("#btnTrabajando").hide();
+                    $("#btnBusca").show();
                 }
             });
 

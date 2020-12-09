@@ -1,3 +1,4 @@
+@if ($facturas->count() > 0)
 <div class="table-responsive m-t-40">
     <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
         <thead>
@@ -59,3 +60,6 @@
         });
     });
 </script>
+@else
+    <h2 class="text-info text-center">No existen registros</h2>
+@endif
