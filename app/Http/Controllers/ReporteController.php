@@ -585,7 +585,7 @@ class ReporteController extends Controller
                 // ->get();
 
         if($request->almacen_id != "todos"){
-            $query->where('almacene_id', $request->almacene_id);
+            $query->where('almacene_id', $request->almacen_id);
         }
 
         if($request->usuario_id != "todos"){

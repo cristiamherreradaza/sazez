@@ -159,6 +159,27 @@
         var fecha_final = $("#fecha_final").val();
         var almacen_id = $("#almacen_id").val();*/
     }
+
+    function muestraVendedores()
+    {
+        let almacenId = $("#almacen_id").val();
+        if(almacenId == 'todos'){
+            $("#muestraVendedores").hide();
+        }else{
+            $("#muestraVendedores").show();
+        }
+        $.ajax({
+            url: "{{ url('Reporte/ajaxMuestraVendedores') }}",
+            data: {
+                almacenId: almacenId,
+                },
+            type: 'get',
+            success: function(data) {
+                $("#muestraVendedores").html(data);
+            }
+        });
+    }
+
 </script>
 
 @endsection
