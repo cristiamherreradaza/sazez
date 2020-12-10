@@ -91,9 +91,9 @@ class ReporteController extends Controller
     {
         $ventas = DB::table('ventas')
                     ->whereNull('ventas.deleted_at')
-                    ->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
-                    //->whereDate('ventas.fecha', '>=', $request->fecha_inicial)
-                    //->whereDate('ventas.fecha', '<=', $request->fecha_final)
+                    // ->whereBetween('fecha', [$request->fecha_inicial, $request->fecha_final])
+                    ->whereDate('ventas.fecha', '>=', $request->fecha_inicial)
+                    ->whereDate('ventas.fecha', '<=', $request->fecha_final)
                     ->leftJoin('users', 'ventas.user_id', '=', 'users.id')
                     ->leftJoin('users as clientes', 'ventas.cliente_id', '=', 'clientes.id')
                     ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
@@ -106,13 +106,11 @@ class ReporteController extends Controller
                             'ventas.total as monto',
                             'ventas.saldo as saldo'
                     );
-        // if($request->has('almacen_id')){
-        //     $ventas->where('almacene_id', $request->almacen_id);
-        // }
+        
         if($request->almacen_id){
             $ventas->where('ventas.almacene_id', $request->almacen_id);
         }
-        if($request->usuario_id){
+        if($request->usuario_id != 'todos'){
             $ventas->where('ventas.user_id', $request->usuario_id);
             //leftJoin('users', 'ventas.user_id', '=', $request->usuario_id);
         }
@@ -554,8 +552,55 @@ class ReporteController extends Controller
 
     public function ajaxMuestraVendedores(Request $request)
     {
-        $vendedores = User::where('almacen_id', $request->almacenId)->get();
+        if($request->almacenId){
+            $vendedores = User::where('almacen_id', $request->almacenId)
+                            ->whereNotIn('rol', ['Cliente', 'Mayorista'])
+                            ->get();
+        }else{
+            $vendedores = User::whereNotIn('rol', ['Cliente', 'Mayorista'])
+                            ->get();
+        }
         // dd($vendedores);
         return view('reporte.ajax_muestra_vendedores')->with(compact('vendedores'));
+    }
+
+    public function auditoria(Request $request)
+    {
+        $almacenes = Almacene::whereNull('estado')
+                    ->get();
+
+        $usuarios = User::whereIn('rol', ['Administrador', 'Tienda'])
+                    ->get();
+
+        return view('reporte.auditoria')->with(compact('almacenes', 'usuarios'));
+    }
+
+    public function ajaxAuditoria(Request $request)
+    {
+        // dd($request->all());
+
+        $query = Venta::whereDate('fecha', '>=', $request->fecha_inicial)
+                        ->whereDate('fecha', '<=', $request->fecha_final);
+        // Venta::withTrashed()
+                // ->get();
+
+        if($request->almacen_id != "todos"){
+            $query->where('almacene_id', $request->almacene_id);
+        }
+
+        if($request->usuario_id != "todos"){
+            $query->where('user_id', $request->usuario_id);
+        }
+
+        if($request->eliminados == "Si"){
+            $query->onlyTrashed();
+        }else{
+            $query->withTrashed();
+        }
+
+        $ventas = $query->get();
+
+        return view('reporte.ajaxAuditoria')->with(compact('ventas'));
+
     }
 }

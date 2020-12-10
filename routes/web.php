@@ -326,6 +326,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/saldos_diarios', 'ReporteController@saldos_diarios');
     Route::get('Reporte/ajax_listado_saldos_diarios', 'ReporteController@ajax_listado_saldos_diarios');
     Route::get('Reporte/ajaxMuestraVendedores', 'ReporteController@ajaxMuestraVendedores');
+    Route::get('Reporte/auditoria', 'ReporteController@auditoria');
+    Route::post('Reporte/ajaxAuditoria', 'ReporteController@ajaxAuditoria');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');

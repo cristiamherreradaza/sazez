@@ -21,7 +21,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col">
                         <div class="form-group">
                             <label class="control-label">Fecha de inicio</label>
                             <span class="text-danger">
@@ -30,7 +30,7 @@
                             <input type="date" name="fecha_inicial" id="fecha_inicial" class="form-control" value="{{ date('Y-m-d') }}" required>
                         </div>                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col">
                         <div class="form-group">
                             <label class="control-label">Fecha final</label>
                             <span class="text-danger">
@@ -39,10 +39,10 @@
                             <input type="date" name="fecha_final" id="fecha_final" class="form-control" value="{{ date('Y-m-d') }}" required>
                         </div>                    
                     </div>
-                    <div class="col-md-2">
+                    <div class="col">
                         <div class="form-group">
                             <label>Seleccionar Tienda</label>
-                            <select name="almacen_id" id="almacen_id" class="form-control">
+                            <select name="almacen_id" id="almacen_id" class="form-control" onchange="muestraVendedores();">
                                 @if(auth()->user()->rol == 'Administrador')
                                     <option value="" selected>Todos</option>
                                     @foreach($almacenes as $almacen)
@@ -54,24 +54,24 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Seleccionar Vendedor</label>
-                            <select name="usuario_id" id="usuario_id" class="form-control">
-                                @if(auth()->user()->rol == 'Administrador')
-                                    <option value="" selected>Todos</option>
-                                    @foreach($usuarios as $usuario)
-                                        <option value="{{ $usuario->id }}"> {{ $usuario->name }} </option>
+
+                    <div id="muestraVendedores">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Usuarios</label>
+                                <select name="usuario_id" id="usuario_id" class="form-control">
+                                    <option value="todos" selected>Todos</option>
+                                    @foreach($usuarios as $v)
+                                        <option value="{{ $v->id }}">{{ $v->name }}</option>
                                     @endforeach
-                                @else
-                                <option value="{{ auth()->user()->id }}"> {{ auth()->user()->name }} </option>
-                                @endif
-                            </select>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-2">
+                    </div>    
+
+                    <div class="col">
                         <div class="form-group">
-                            <label>Incluir Deudores</label>
+                            <label>Deudores</label>
                             <select name="deudores" id="deudores" class="form-control">
                             <option value="" selected>Todos</option>
                                 <option value="Si"> Si </option>
@@ -79,6 +79,7 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
@@ -186,7 +187,7 @@
                     fecha_final : fecha_final,
                     almacen_id : almacen_id,
                     usuario_id : usuario_id,
-                    deudores : deudores
+                    deudores : deudores,
                     } 
                 },
             columns: [
@@ -218,6 +219,26 @@
               }
             });
           });
+    }
+
+    function muestraVendedores()
+    {
+        let almacenId = $("#almacen_id").val();
+        if(almacenId == 'todos'){
+            $("#muestraVendedores").hide();
+        }else{
+            $("#muestraVendedores").show();
+        }
+        $.ajax({
+            url: "{{ url('Reporte/ajaxMuestraVendedores') }}",
+            data: {
+                almacenId: almacenId,
+                },
+            type: 'get',
+            success: function(data) {
+                $("#muestraVendedores").html(data);
+            }
+        });
     }
 </script>
 

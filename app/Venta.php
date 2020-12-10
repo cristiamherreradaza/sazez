@@ -44,4 +44,10 @@ class Venta extends Model
     {
         return $this->hasMany('App\VentasProducto');
     }
+
+    public function factura()
+    {
+        return $this->belongsTo('App\Factura');
+    }
+
 }
