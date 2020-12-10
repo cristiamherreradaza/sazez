@@ -32,7 +32,7 @@
                 <td>{{ $v->deleted_at }}</td>
                 <td>{{ $v->descripcion }}</td>
                 @php
-                    $movimientos = App\movimiento::where('venta_id', $v->id)
+                    $movimientos = App\Movimiento::where('venta_id', $v->id)
                                     ->withTrashed()
                                     ->get();
                     
