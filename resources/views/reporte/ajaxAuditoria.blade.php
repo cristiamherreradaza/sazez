@@ -38,7 +38,7 @@
                     
                 @endphp    
                     <td>
-                        <table>
+                        {{-- <table>
                             <thead>
                                 <tr>
                                     <th>Nombre</th>
@@ -64,7 +64,19 @@
                                     
                                 @endif
                             </tbody>
-                        </table>
+                        </table> --}}
+
+                                @if ($movimientos->count() > 0)
+                                    @foreach ($movimientos as $m)
+                                            <b>Nombre:</b> {{ $m->producto->nombre }}
+                                            <b>Cantidad:</b> {{ $m->salida }}
+                                            <b>Precio:</b> {{ $m->precio_venta }}
+                                        <br/ >
+                                    @endforeach
+                                @else
+                                    No tiene
+                                @endif
+
                     </td>
             </tr>
             @endforeach
