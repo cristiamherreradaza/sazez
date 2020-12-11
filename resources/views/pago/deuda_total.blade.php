@@ -6,7 +6,6 @@
 
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -76,29 +75,16 @@
 @stop
 
 @section('js')
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
-    function eliminar(id, nombre)
-{
-    Swal.fire({
-        title: 'Quieres borrar ' + nombre + '?',
-        text: "Luego no podras recuperarlo!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Si, estoy seguro!',
-        cancelButtonText: "Cancelar",
-    }).then((result) => {
-        if (result.value) {
-            Swal.fire(
-                'Excelente!',
-                'El importe fue eliminado',
-                'success'
-            );
-            window.location.href = "{{ url('Pago/eliminar') }}/"+id;
-        }
-    })
-}
+    $(function () {
+        $('#myTable').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
+    });
 </script>
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
