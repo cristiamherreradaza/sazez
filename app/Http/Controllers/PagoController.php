@@ -55,12 +55,21 @@ class PagoController extends Controller
         return redirect("Pago/muestraPagos/$datosPago->venta_id");
     }
 
-    public function deudaTotal(Request $request, $clienteId)
+    public function deuda_total(Request $request, $clienteId)
     {
         $ventas = Venta::where('cliente_id', $clienteId)
-                        ->where('saldo >', 0)
+                        ->where('saldo', '>', 0)
                         ->get();
-        dd($ventas);
+
+        $saldoTotal = Venta::where('cliente_id', $clienteId)
+                    ->sum('saldo');
+
+        $cantidadVentas = Venta::where('cliente_id', $clienteId)
+                        ->where('saldo', '>', 0)
+                        ->count('*');
+
+        return view('pago.deuda_total')->with(compact('ventas', 'saldoTotal', 'cantidadVentas'));
+        // dd($saldoTotal);
     }
 
 }

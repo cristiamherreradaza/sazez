@@ -118,6 +118,11 @@ function pagos(venta_id)
     window.location.href = "{{ url('Pago/muestraPagos') }}/" + venta_id;
 }
 
+function deuda_total(clienteId)
+{
+    window.location.href = "{{ url('Pago/deuda_total') }}/" + clienteId;
+}
+
 </script>
 
 <script type="text/javascript">

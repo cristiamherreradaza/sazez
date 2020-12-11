@@ -343,7 +343,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Pago/muestraPagos/{id}', 'PagoController@muestraPagos');
     Route::post('Pago/guardaPago', 'PagoController@guardaPago');
     Route::get('Pago/eliminar/{pagoId}', 'PagoController@eliminar');
-    Route::get('Pago/deudaTotal/{pagoId}', 'PagoController@deudaTotal');
+    Route::get('Pago/deuda_total/{pagoId}', 'PagoController@deuda_total');
 
     // FACTURACION Y EMPRESA
     Route::get('Empresa/formulario', 'EmpresaController@formulario');
