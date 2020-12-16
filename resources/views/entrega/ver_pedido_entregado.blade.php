@@ -61,7 +61,8 @@
                     <div class="row">
                         <div class="col-md-4"><h4><span class="text-info">Numero de envio:</span> {{ $envio->numero }} </h4></div>
                         <div class="col-md-4"><h4><span class="text-info">Sucursal que envia:</span> {{ $envio->almacen_origen->nombre }} </h4></div>
-                        <div class="col-md-4"><h4><span class="text-info">Fecha:</span> {{ $envio->fecha }} </h4></div>
+                        {{-- <div class="col-md-4"><h4><span class="text-info">Fecha:</span> {{ $envio->fecha }} </h4></div> --}}
+                        <div class="col-md-4"><h4><span class="text-info">Fecha:</span> {{ $pedido->fecha }} </h4></div>
                     </div>
                     <table class="table table-hover">
                         <thead class="bg-inverse text-white">
