@@ -197,8 +197,9 @@
                                 <div id="ajaxComboClienteNuevo">
                                     <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
                                         style="width: 100%; height:36px;" onchange="seleccionaCliente()">
+                                        <option value="2" data-tipo="Cliente" data-nit="" data-razon="" data-select2-id="2"> Publico General </option>
                                         @foreach($clientes as $c)
-                                            <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}" data-nit="{{ $c->nit }}" data-razon="{{ $c->razon_social }}"> {{ $c->name }} </option>
+                                            <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}" data-nit="{{ $c->nit }}" data-razon="{{ $c->razon_social }}"> {{ $c->nit }} - {{ $c->razon_social }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -833,6 +834,7 @@
         // console.log($("#email_usuario").val());
     }
 
+    // ajax edita los datos del cliente
     function editaCliente()
     {
         let clienteId = $("#cliente_id").find(':selected').val();
@@ -848,7 +850,7 @@
         $("#modalEditaCliete").modal("show");
 
     }
-
+    // ajax guarda los datos del cliete
     function guardaAjaxCLienteEdicion()
     {
         // capturamos lo datos del formulario
@@ -870,16 +872,14 @@
                     } else {
 
                         $("#ajaxComboClienteNuevo").load('{{ url("Cliente/ajaxComboClienteNuevo") }}/'+data.clienteId);
-                        // $("#success-header-modal").modal("hide");
+                        let razonSocialCliente = $("#razon_social_usuario").val();
+                        $("#razon_social_cliente").val(razonSocialCliente);
 
                         Swal.fire({
                             type: 'success',
                             title: 'Excelente!',
                             text: 'Cliente registrado'
                         })
-                        // console.log(data.clienteId);
-                        // $("#cliente_id").val(data.clienteId);
-
                     }
                     $("#modalEditaCliete").modal("hide");
                     // $("#ajaxMuestraTotalesAlmacenes").html(data);
