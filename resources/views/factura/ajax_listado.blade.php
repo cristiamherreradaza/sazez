@@ -22,7 +22,13 @@
                     <td>{{ $f->almacen->nombre }}</td>
                     <td>{{ $f->user->name }}</td>
                     <td>{{ $f->created_at }}</td>
-                    <td>{{ $f->numero_factura }}</td>
+                    <td>
+                        @if ($f->venta_id == null)
+                            <a href="{{ url("Factura/imprimeFactura/$f->id") }}" target="_blank">{{ $f->numero_factura }}</a>
+                        @else 
+                            <a href="{{ url("Venta/imprimeFactura/$f->venta_id") }}" target="_blank">{{ $f->numero_factura }}</a>
+                        @endif
+                    </td>
                     <td>{{ $f->estado }}</td>
                     <td>{{ $f->nit_cliente }}</td>
                     <td>{{ $f->cliente['razon_social'] }}</td>
