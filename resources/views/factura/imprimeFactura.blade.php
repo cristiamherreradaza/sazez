@@ -300,7 +300,7 @@
 		        centSingular: 'Centavo'
 		    });
 			// console.log(valorLiteral);
-			document.getElementById("literalTotal").innerHTML = valorLiteral+"con 00/100 Bs.";
+			document.getElementById("literalTotal").innerHTML = valorLiteral;
 
 			// cambiamos la fecha para mejor lectura
 			let fechaHora="{{ $datosFactura->fecha_compra }}";
