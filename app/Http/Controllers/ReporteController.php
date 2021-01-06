@@ -393,9 +393,17 @@ class ReporteController extends Controller
         //                     ->get();
         $fecha = $request->fecha;
         $almacen = Almacene::find($request->almacen_id);
-        $productos = Producto::whereNull('estado')
-                                    ->orderBy('marca_id', 'asc')
-                                    ->get();
+        if($request->tipo_id == "todos"){
+
+            $productos = Producto::whereNull('estado')
+                            ->orderBy('marca_id', 'asc')
+                            ->get();
+        }else{
+            $productos = Producto::whereNull('estado')
+                            ->where('tipo_id', $request->tipo_id)
+                            ->orderBy('marca_id', 'asc')
+                            ->get();
+        }
 
         return view('reporte.ajax_listado_saldos')->with(compact('productos', 'fecha', 'almacen'));
         //return view('reporte.ajax_listado_saldos')->with(compact('datosMovimientos'));
