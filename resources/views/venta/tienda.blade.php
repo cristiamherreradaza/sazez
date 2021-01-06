@@ -187,7 +187,7 @@
                 <div class="card-body">
                     <div class="row">
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">
                                     CLIENTE 
@@ -229,6 +229,34 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
+                                <label class="control-label">TIPO</label>
+                                <div class="input-group mb-3">
+                                    <select name="venta_tipo_id" id="venta_tipo_id" class="select2 form-control custom-select" style="width: 100%; height:36px;" onchange="filtraTipo();">
+                                        <option value=""> Selecione una </option>
+                                        @foreach($tipos as $t)
+                                            <option value="{{ $t['id'] }}"> {{ $t['nombre'] }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">MARCA</label>
+                                <div class="input-group mb-3">
+                                    <select name="venta_marca_id" id="venta_marca_id" class="select2 form-control custom-select" style="width: 100%; height:36px;" onchange="filtraMarca();">
+                                        <option value=""> Selecione una </option>
+                                        @foreach($marcas as $m)
+                                            <option value="{{ $m['id'] }}"> {{ $m['nombre'] }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
                                 <label class="control-label">PRODUCTO (NOM/COD)</label>
                                 <div class="input-group mb-3">
                                     <input type="text" class="form-control" id="termino" name="termino">
@@ -239,7 +267,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">PROMOCIONES</label>
                                 <div class="input-group mb-3">
@@ -613,11 +641,14 @@
     }
 
     $(document).on('keyup', '#termino', function(e) {
-        termino_busqueda = $('#termino').val();
+        let termino_busqueda = $('#termino').val();
+        let tipo = $('#venta_tipo_id').val();
+        let marca = $('#venta_marca_id').val();
+
         if (termino_busqueda.length > 2) {
             $.ajax({
                 url: "{{ url('Venta/ajaxBuscaProductoTienda') }}",
-                data: {termino: termino_busqueda},
+                data: {termino: termino_busqueda, tipo: tipo, marca: marca},
                 type: 'POST',
                 success: function(data) {
                     $("#listadoProductosAjax").show('slow');
@@ -990,6 +1021,40 @@
         console.log(imagen);
         $("#muestraImagenProducto").html(imagen);
         $("#imagen_producto").modal("show");
+    }
+
+    function filtraTipo(){
+
+        let termino_busqueda = $('#termino').val();
+        let tipo = $("#venta_tipo_id").val();
+        let marca = $("#venta_marca_id").val();
+
+        $.ajax({
+            url: "{{ url('Venta/ajaxBuscaProductoTienda') }}",
+            data: {termino: termino_busqueda, tipo: tipo, marca: marca},
+            type: 'POST',
+            success: function(data) {
+                $("#listadoProductosAjax").show('slow');
+                $("#listadoProductosAjax").html(data);
+            }
+        });
+    }
+
+    function filtraMarca(){
+
+        let termino_busqueda = $('#termino').val();
+        let tipo = $("#venta_tipo_id").val();
+        let marca = $("#venta_marca_id").val();
+
+        $.ajax({
+            url: "{{ url('Venta/ajaxBuscaProductoTienda') }}",
+            data: {termino: termino_busqueda, tipo: tipo, marca: marca},
+            type: 'POST',
+            success: function(data) {
+                $("#listadoProductosAjax").show('slow');
+                $("#listadoProductosAjax").html(data);
+            }
+        });
     }
     
 </script>

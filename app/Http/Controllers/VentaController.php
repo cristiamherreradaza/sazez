@@ -8,6 +8,8 @@ use App\Combo;
 use App\Grupo;
 use App\Venta;
 use App\Precio;
+use App\Tipo;
+use App\Marca;
 use DataTables;
 use App\Empresa;
 use App\Factura;
@@ -105,6 +107,9 @@ class VentaController extends Controller
     {
         $hoy = date('Y-m-d');
 
+        $tipos = Tipo::get();
+        $marcas = Marca::get();
+
         $arrayPromociones = [];
         $almacenes = Almacene::get();
         $grupos = Grupo::all();
@@ -128,7 +133,7 @@ class VentaController extends Controller
         }
         // dd($arrayPromociones);
 
-        return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos', 'arrayPromociones'));
+        return view('venta.tienda')->with(compact('almacenes', 'clientes', 'grupos', 'arrayPromociones', 'marcas', 'tipos'));
     }
 
     public function mayorista()
@@ -141,9 +146,25 @@ class VentaController extends Controller
 
     public function ajaxBuscaProductoTienda(Request $request)
     {
+        // dd($request->all());
+        if($request->tipo != null){
+            $tipo = $request->tipo;
+        }else{
+            $tipo = '%';
+        }
+
+        if($request->marca != null){
+            $marca = $request->marca;
+        }else{
+            $marca = '%';
+        }
+
+        // dd($tipo);
+
         $almacen_id = Auth::user()->almacen_id;
         $productos = Movimiento::select(
                             'productos.id',
+                            // 'tipos.id',
                             'productos.codigo as codigo',
                             'productos.nombre as nombre',
                             'marcas.nombre as marca',
@@ -152,14 +173,22 @@ class VentaController extends Controller
                             'productos.colores as colores'
                         )
                     ->where('movimientos.almacene_id', $almacen_id)
+                    ->where('tipos.id', 'like',  $tipo)
+                    ->where('marcas.id', 'like',  $marca)
+                    ->where('productos.nombre', 'like', "%$request->termino%")
                     ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
                     ->leftJoin('marcas', 'productos.marca_id', '=', 'marcas.id')
                     ->leftJoin('tipos', 'productos.tipo_id', '=', 'tipos.id')
-                    ->where('productos.nombre', 'like', "%$request->termino%")
-                    // ->orWhere('productos.codigo', 'like', "%$request->termino%")
                     ->groupBy('productos.id')
-                    ->limit(8)
+                    ->limit(10)
                     ->get();
+                    
+                    // ->orWhere('productos.codigo', 'like', "%$request->termino%")
+                   
+                    // ->get();
+
+        // $productos->get();
+
         // dd($productos);
         return view('venta.ajaxBuscaProductoTienda')->with(compact('productos'));
     }

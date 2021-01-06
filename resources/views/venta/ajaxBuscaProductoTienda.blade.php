@@ -1,4 +1,7 @@
 <div class="table-responsive">
+    @if ($productos->count()>0)
+        
+    
     <table class="tablesaw table-striped table-hover table-bordered table no-wrap" id="tablaProductosEncontrados">
         <thead>
             <tr>
@@ -50,12 +53,12 @@
                 ->first();
 
                 // calculamos los paquetes
-                $detalleEscala = App\Precio::where('producto_id', $p->id)->get();
+                /*$detalleEscala = App\Precio::where('producto_id', $p->id)->get();
                 $cantitdadCalculada = intval($cantidadTotal->total);
                 foreach($detalleEscala as $e)
                 {
                     // echo $calculoPaquetes;
-                }
+                }*/
 
                 // sacamos los precios de los productos
                 $preciosProductos = App\Precio::where('producto_id', $p->id)
@@ -120,6 +123,9 @@
             @endforeach
         </tbody>
     </table>
+    @else
+        <h3 class="text-danger text-center">No existen registros</h3>
+    @endif
 </div>
 <script>
     $(document).ready(function () {
