@@ -82,7 +82,12 @@
                     <div class="col">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                            <button type="button" onclick="buscar()" class="btn btn-block btn-primary" id="btnBuscar">Buscar</button>
+                            <button class="btn btn-primary btn-block" type="button" id="btnTrabajando" disabled style="display: none;">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
+                            </button>
+
                         </div>                    
                     </div>
                 </div>
@@ -160,6 +165,10 @@
         var almacen_id   = $("#almacen_id").val();
         var tipo_id      = $("#tipo_id").val();
         var usuario_id   = $("#usuario_id").val();
+
+        $("#btnBuscar").hide();
+        $("#btnTrabajando").show();
+
         // var continuo  = $("#continuo").val();
         $.ajax({
             url: "{{ url('Reporte/ajax_listado_ventas_accesorio') }}",
@@ -174,6 +183,8 @@
             success: function(data) {
                 $("#mostrar").html(data);
                 $("#mostrar").show('slow');
+                $("#btnBuscar").show();
+                $("#btnTrabajando").hide();
             }
         });
     }

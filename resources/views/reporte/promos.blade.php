@@ -57,7 +57,12 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
-                            <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                            <button type="button" onclick="buscar()" class="btn btn-block btn-primary" id="btnBuscar">Buscar</button>
+                            <button class="btn btn-primary btn-block" type="button" id="btnTrabajando" disabled style="display: none;">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
+                            </button>
+
                         </div>                    
                     </div>
                 </div>
@@ -83,7 +88,7 @@
                         <th>Tienda</th>
                         <th>Usuario</th>
                         <th>Fecha</th>
-                        <th>Cliente</th>
+                        {{-- <th>Cliente</th> --}}
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -96,7 +101,7 @@
                         <th>Tienda</th>
                         <th>Usuario</th>
                         <th>Fecha</th>
-                        <th>Cliente</th>
+                        {{-- <th>Cliente</th> --}}
                         <th>Total</th>
                     </tr>
                 </tfoot>
@@ -168,6 +173,10 @@
     function buscar()
     {
         $("#mostrar").show('slow');
+
+        $("#btnBuscar").hide();
+        $("#btnTrabajando").show();
+
         var table = $('#tabla-tienda').DataTable();
         table.destroy();
         var fecha_inicial = $("#fecha_inicial").val();
@@ -204,12 +213,12 @@
                 },
             columns: [
                 {data: 'nro_venta', name: 'ventas.id'},
-                //{data: 'combo', name: 'ventas_productos.combo_id'},
+                // {data: 'combo', name: 'ventas_productos.combo_id'},
                 {data: 'combo', name: 'combos.nombre'},
                 {data: 'tienda', name: 'almacenes.nombre'},
                 {data: 'usuario', name: 'users.name'},
                 {data: 'fecha', name: 'ventas.fecha'},
-                {data: 'cliente', name: 'clientes.name'},
+                // {data: 'cliente', name: 'clientes.name'},
                 {data: 'total', name: 'ventas.total'},
             ],
             language: {
@@ -232,6 +241,9 @@
               }
             });
           });
+
+        $("#btnBuscar").show();
+        $("#btnTrabajando").hide();
     }
 </script>
 
