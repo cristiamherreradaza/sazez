@@ -79,13 +79,26 @@
                             </select>
                         </div>
                     </div>
+
+                    <div class="col">
+                        <div class="form-group">
+                            <label>Marcas</label>
+                            <select name="marca_id" id="marca_id" class="select2 form-control custom-select" style="width: 100%; height:36px;">
+                                <option value="todos" selected>Todos</option>
+                                @foreach($marcas as $m)
+                                    <option value="{{ $m->id }}">{{ $m->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="col">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary" id="btnBuscar">Buscar</button>
                             <button class="btn btn-primary btn-block" type="button" id="btnTrabajando" disabled style="display: none;">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                &nbsp;&nbsp;Estamos trabajando, ten paciencia ;-)
+                                &nbsp;&nbsp;Estamos trabajando ;-)
                             </button>
 
                         </div>                    
@@ -165,6 +178,7 @@
         var almacen_id   = $("#almacen_id").val();
         var tipo_id      = $("#tipo_id").val();
         var usuario_id   = $("#usuario_id").val();
+        var marca_id     = $("#marca_id").val();
 
         $("#btnBuscar").hide();
         $("#btnTrabajando").show();
@@ -177,7 +191,8 @@
                 fecha_fin: fecha_fin,
                 almacen_id: almacen_id,
                 tipo_id: tipo_id,
-                usuario_id: usuario_id
+                usuario_id: usuario_id,
+                marca_id: marca_id
                 },
             type: 'get',
             success: function(data) {

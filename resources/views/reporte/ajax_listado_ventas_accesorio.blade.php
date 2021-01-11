@@ -1,3 +1,4 @@
+@if ($ventas->count() > 0)
 <div class="table-responsive m-t-40">
     <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
         <thead>
@@ -6,6 +7,7 @@
                 <th>Tienda</th>
                 <th>Usuario</th>
                 <th>Nombre Producto</th>
+                <th>Marca</th>
                 <th>Precio Venta</th>
                 <th>Precio Cobrado</th>
                 <th>Cantidad</th>
@@ -26,6 +28,7 @@
                 <td>{{ $venta->user->almacen->nombre }}</td>
                 <td>{{ $venta->user->name }}</td>
                 <td>{{ $venta->producto->nombre }}</td>
+                <td>{{ $venta->producto->marca->nombre }}</td>
                 @if ($venta->precio_cobrado_mayor > 0)
                     <td style="text-align: right">
                         <span class="text-info"><b>{{ ($venta->precio_cobrado_mayor>0)?$venta->escala->nombre:"" }}</b></span>&nbsp;&nbsp;
@@ -72,6 +75,9 @@
         </tfoot>
     </table>
 </div>
+@else
+    <h3 class="text-info text-center">No existen registros.</h3>
+@endif
 
 <script>
     $(function () {

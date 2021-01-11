@@ -373,14 +373,23 @@ class ReporteController extends Controller
         $vendedores = User::where('almacen_id', 1)->get();
         $tipos = Tipo::get();
         $marcas = Marca::get();
-        return view('reporte.ventas_accesorio')->with(compact('almacenes', 'tipos', 'vendedores'));
+        return view('reporte.ventas_accesorio')->with(compact('almacenes', 'tipos', 'vendedores', 'marcas'));
     }
 
     public function ajax_listado_ventas_accesorio(Request $request)
     {
+        // dd($request->all());
         // Ejecutamos la consulta, incluyendo a los usuarios pertenecientes al almacen X
-        $query = VentasProducto::whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])
-                                ->orderBy('tipo_id');
+        // $query = VentasProducto::whereBetween('fecha', [$request->fecha_inicio, $request->fecha_fin])
+                                // ->orderBy('tipo_id');
+        $query = VentasProducto::whereDate('ventas_productos.fecha', '>=', $request->fecha_inicio)
+                            ->whereDate('ventas_productos.fecha', '<=', $request->fecha_fin)
+                            ->orderBy('ventas_productos.tipo_id');
+
+        if($request->marca_id != 'todos'){
+            $query = $query->leftJoin('productos', 'ventas_productos.producto_id', '=', 'productos.id');
+            $query = $query->where('productos.marca_id', $request->marca_id);
+        }
 
         if(Auth::user()->perfil_id == 1){
 
@@ -392,7 +401,7 @@ class ReporteController extends Controller
                 foreach($users as $row){
                     array_push($array_user_id, $row->id);
                 }
-                $query = $query->whereIn('user_id', $array_user_id);
+                $query = $query->whereIn('ventas_productos.user_id', $array_user_id);
             }else{
                 if($request->usuario_id == 'todos'){
                     $users = User::where('perfil_id', 3)
@@ -403,22 +412,23 @@ class ReporteController extends Controller
                     foreach($users as $row){
                         array_push($array_user_id, $row->id);
                     }
-                    $query = $query->whereIn('user_id', $array_user_id);
+                    $query = $query->whereIn('ventas_productos.user_id', $array_user_id);
                 }else{
-                    $query = $query->where('user_id', $request->usuario_id);
+                    $query = $query->where('ventas_productos.user_id', $request->usuario_id);
                 }
             }
 
         }else{
-            $query = $query->where('user_id', Auth::user()->id);
+            $query = $query->where('ventas_productos.user_id', Auth::user()->id);
         }
         
         // Si se buscara un tipo_id X
         if ($request->tipo_id) {
-            $query = $query->where('tipo_id', $request->tipo_id);
+            $query = $query->where('ventas_productos.tipo_id', $request->tipo_id);
         }
         // Guardamos el resultado en la variable $ventas
         $ventas = $query->get();
+        // dd($ventas);
         return view('reporte.ajax_listado_ventas_accesorio')->with(compact('ventas'));
     }
 
