@@ -11,8 +11,9 @@
                 <th>Cliente</th>
                 <th>Monto</th>
                 <th>Saldo</th>
-                <th>Fecha Sistema</th>
-                <th>Fecha Eliminacion</th>
+                <th>F/Usuario</th>
+                <th>F/Sistema</th>
+                <th>F/Eliminacion</th>
                 <th>Desc. Eliminacion</th>
                 <th>Productos</th>
             </tr>
@@ -28,6 +29,7 @@
                 <td>{{ $v->cliente->name }}</td>
                 <td>{{ $v->total }}</td>
                 <td>{{ $v->saldo }}</td>
+                <td>{{ $v->fecha }}</td>
                 <td>{{ $v->created_at }}</td>
                 <td>{{ $v->deleted_at }}</td>
                 <td>{{ $v->descripcion }}</td>
