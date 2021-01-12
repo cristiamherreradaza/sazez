@@ -74,7 +74,7 @@
                                 <th>Mi Stock</th>
                                 <th>Solicitado</th>
                                 <th>Cant. Tienda</th>
-                                <th></th>
+                                <th>Entregar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -114,7 +114,7 @@
                                     <td style="text-align:center;"><h3 class="text-info">{{ $cantidad_disponible }}</h3></td>
                                     <td style="text-align:center;"><h3>{{ $producto->cantidad }}</h3></td>
                                     <td style="text-align:center;"><h3 class="text-success">{{ $cantidad_disponible_solicitante }}</h3></td>
-                                    <td>
+                                    <td style="width: 150px;">
                                         <div class="form-group">
                                             <input type="number" class="form-control" id="cantidad_{{ $producto->producto->id }}" name="cantidad_{{ $producto->producto->id }}" value="0" min="0" max="{{ $cantidad_disponible }}" required>
                                         </div>
