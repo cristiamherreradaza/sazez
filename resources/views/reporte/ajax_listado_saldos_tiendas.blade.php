@@ -23,10 +23,12 @@
                     @foreach($almacenes as $almacen)
                         @php
                             $ingreso = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) as total'))
+                                    ->whereNull('deleted_at')
                                     ->where('producto_id', $producto->id)
                                     ->where('almacene_id', $almacen->id)
                                     ->first();
                             $salida = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(salida) as total'))
+                                                    ->whereNull('deleted_at')
                                                     ->where('producto_id', $producto->id)
                                                     ->where('almacene_id', $almacen->id)
                                                     ->first();

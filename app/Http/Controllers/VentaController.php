@@ -644,6 +644,7 @@ class VentaController extends Controller
         $nuevoMovimiento->descripcion  = $request->opcionCambia;
         $nuevoMovimiento->ingreso      = $cantidadMultiplicada;
         $nuevoMovimiento->deleted_at   = date("Y-m-d H:i:s");
+        $nuevoMovimiento->fecha        = date("Y-m-d H:i:s");
         $nuevoMovimiento->estado       = "Devuelto";
         $nuevoMovimiento->save();
 
@@ -655,6 +656,7 @@ class VentaController extends Controller
         $nuevoMovimientoSalida->venta_id     = $consultaMovimiento->venta_id;
         $nuevoMovimientoSalida->precio_venta = $consultaMovimiento->precio_venta;
         $nuevoMovimientoSalida->salida       = $cantidadMultiplicada;
+        $nuevoMovimientoSalida->fecha        = date("Y-m-d H:i:s");
         $nuevoMovimientoSalida->estado       = $consultaMovimiento->estado;
         $nuevoMovimientoSalida->save();
 

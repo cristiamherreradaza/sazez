@@ -20,6 +20,7 @@
                     <td>{{ $producto->marca->nombre }}</td>
                     @php
                         $saldo = App\Movimiento::select(DB::raw("(SUM(ingreso) - SUM(salida)) as total"))
+                                                        ->whereNull('deleted_at')
                                                         ->where('producto_id', $producto->id)
                                                         ->where('almacene_id', $almacen->id)
                                                         ->whereDate('fecha', '<=', $fecha)
