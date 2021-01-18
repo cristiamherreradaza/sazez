@@ -8,6 +8,7 @@
                 <th>Usuario</th>
                 <th>Nombre Producto</th>
                 <th>Marca</th>
+                <th>Tipo</th>
                 <th>Precio Venta</th>
                 <th>Precio Cobrado</th>
                 <th>Cantidad</th>
@@ -29,6 +30,7 @@
                 <td>{{ $venta->user->name }}</td>
                 <td>{{ $venta->producto->nombre }}</td>
                 <td>{{ $venta->producto->marca->nombre }}</td>
+                <td>{{ $venta->producto->tipo->nombre }}</td>
                 @if ($venta->precio_cobrado_mayor > 0)
                     <td style="text-align: right">
                         <span class="text-info"><b>{{ ($venta->precio_cobrado_mayor>0)?$venta->escala->nombre:"" }}</b></span>&nbsp;&nbsp;
