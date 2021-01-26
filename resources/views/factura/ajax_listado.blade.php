@@ -33,7 +33,15 @@
                     <td>{{ $f->nit_cliente }}</td>
                     <td>{{ $f->cliente['razon_social'] }}</td>
                     <td>{{ $f->monto_compra }}</td>
-                    <td>{{ $f->codigo_control }}</td>
+                    <td>
+                        @if ($f->venta_id == null)
+                            <a href="{{ url("Factura/imprimeFactura/$f->id") }}" target="_blank">{{ $f->numero_factura }}</a>
+                        @else 
+                            <a href="{{ url("Venta/imprimeFactura/$f->venta_id") }}" target="_blank">{{ $f->numero_factura }}</a>
+                        @endif
+
+                        {{ $f->codigo_control }}
+                    </td>
                 </tr>
             @endforeach
         </tbody>
