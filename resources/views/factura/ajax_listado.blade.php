@@ -34,13 +34,7 @@
                     <td>{{ $f->cliente['razon_social'] }}</td>
                     <td>{{ $f->monto_compra }}</td>
                     <td>
-                        @if ($f->venta_id == null)
-                            <a href="{{ url("Factura/imprimeFactura/$f->id") }}" target="_blank">{{ $f->numero_factura }}</a>
-                        @else 
-                            <a href="{{ url("Venta/imprimeFactura/$f->venta_id") }}" target="_blank">{{ $f->numero_factura }}</a>
-                        @endif
-
-                        {{ $f->codigo_control }}
+                        <a href="#" onclick="modifica({{ $f->id }})">{{ $f->codigo_control }}</a>
                     </td>
                 </tr>
             @endforeach

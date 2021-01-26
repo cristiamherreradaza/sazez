@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DataTables;
 use App\Empresa;
+use App\User;
 use App\Factura;
 use App\Almacene;
 use App\Ventasfac;
@@ -420,5 +421,50 @@ class FacturaController extends Controller
                     ->get();
 
         return view('factura.listadoVentas')->with(compact('productosVenta', 'datosFactura', 'datosEmpresa'));
+    }
+
+    public function ajaxMod(Request $request)
+    {
+        // dd($request->facturaId);
+        $datosFactura = Factura::find($request->facturaId);
+        return view('factura.ajaxMod')->with(compact('datosFactura'));
+        // dd($datosFactura);
+    }
+
+    public function ajaxModificaFactura(Request $request)
+    {
+        // dd($request->nit);
+        $datosFactura = Factura::find($request->facturaId);
+
+        $cliente = User::where('id', $datosFactura->cliente_id)
+                    ->update(['razon_social'=>$request->razon]);
+
+        $fechaArray = explode(" ", $datosFactura->fecha_compra);
+        $fechaParaCodigo = str_replace("-", "", $fechaArray[0]);
+        // dd($fechaParaCodigo);
+
+        $montoParaCodigo = round($request->monto, 0, PHP_ROUND_HALF_UP);
+
+        $facturador          = new CodigoControlV7();
+        $numero_autorizacion = $datosFactura->numero_autorizacion;
+        $numero_factura      = $datosFactura->numero_factura;
+        $nit_cliente         = $request->nit;
+        $fecha_compra        = $fechaParaCodigo;
+        $monto_compra        = $montoParaCodigo;
+        $clave               = $datosFactura->clave;
+        $codigoControl       = $facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+
+        $modFactura = Factura::find($request->facturaId);
+        $modFactura->nit_cliente = $request->nit;
+        $modFactura->monto_compra = $montoParaCodigo;
+        $modFactura->original = $datosFactura->venta->total;
+        $modFactura->codigo_control = $codigoControl;
+        if($modFactura->save()){
+            $sw = 1;
+        }else{
+            $sw = 0;
+        }
+
+        return response()->json(['sw'=>$sw]);
     }
 }

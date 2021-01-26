@@ -13,6 +13,23 @@
 @endsection
 
 @section('content')
+{{-- modal mod --}}
+<div id="modalModificacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-danger">
+                <h4 class="modal-title text-white" id="danger-header-modalLabel">MODFICACION</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body" id="ajaxMod">
+                
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{{-- fin modal mod --}}
+
 <div class="row">
     <div class="col-md-12">
         <div class="card border-info">
@@ -156,6 +173,57 @@
         var fecha_inicial = $("#fecha_inicial").val();
         var fecha_final = $("#fecha_final").val();
         var almacen_id = $("#almacen_id").val();*/
+    }
+
+    function modifica(facturaId)
+    {
+        $.ajax({
+            url: "{{ url('Factura/ajaxMod') }}",
+            data: {facturaId: facturaId},
+            type: 'GET',
+            success: function (data) {
+                $("#ajaxMod").html(data);
+            }
+        });
+
+        $("#modalModificacion").modal("show");
+    }
+
+    function cambiaMonto()
+    {
+        let monto = $("#cambio").val();
+        let facturaId = $("#facturaId").val();
+        let razon = $("#razon_social").val();
+        let nit = $("#nit").val();
+        $.ajax({
+            url: "{{ url('Factura/ajaxModificaFactura') }}",
+            data: {
+                    facturaId: facturaId, 
+                    monto: monto,
+                    razon: razon,
+                    nit: nit
+                },
+            type: 'GET',
+            success: function (data) {
+                // let objData = JSON.parse(data);
+                console.log(data.sw);
+                if(data.sw == 1){
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Excelente!',
+                        text: 'Se modifico la factura'
+                    }).then((value) => {
+                        $("#modalModificacion").modal("hide");
+                    });
+                }else{
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Error',
+                        text: 'Paso algo no se puedo modificar'
+                    });
+                }
+            }
+        });
     }
 </script>
 
