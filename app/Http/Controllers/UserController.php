@@ -6,6 +6,7 @@ use App\Menu;
 use App\Meta;
 use App\User;
 use App\Turno;
+use App\Venta;
 use Validator;
 use DataTables;
 use App\Perfile;
@@ -15,6 +16,7 @@ use App\Asignatura;
 use App\MenusPerfile;
 use App\NotasPropuesta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -319,6 +321,13 @@ class UserController extends Controller
     {
         $metasUsuario = Meta::where('user_id', $request->usuarioId)
                         ->get();
+
+        $totalVentas = Venta::select(DB::raw('SUM(total) as total'))
+                        ->whereMonth('fecha', '=', '1')
+                        ->whereYear('fecha', '=', '2021')
+                        ->where('user_id', 22)
+                        ->get();
+        // dd($totalVentas);
 
         $datosUsuario = User::find($request->usuarioId);
         // dd($metasUsuario);      
