@@ -328,9 +328,14 @@ class UserController extends Controller
 
     public function guardaMeta(Request $request)
     {
-        // dd($request->all());
         $fecha = date('Y-m-d');
-        $meta = new Meta();
+
+        if($request->meta_id == ""){
+            $meta = new Meta();
+        }else{
+            $meta = Meta::find($request->meta_id);
+        }
+
         $meta->user_id = $request->user_id;
         $meta->almacene_id = $request->almacen_id;
         $meta->meta = $request->meta;

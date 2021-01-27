@@ -23,8 +23,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Tienda</th>
                         <th>Meta</th>
+                        <th>Alcanzado</th>
+                        <th>Porcentaje</th>
                         <th>Mes</th>
                         <th>Gestion</th>
                         <th>Opciones</th>
@@ -34,13 +35,14 @@
                     @foreach($metasUsuario as $key => $m)
                         <tr>
                             <td>{{ $m->id }}</td>
-                            <td>{{ $m->almacen->nombre }}</td>
                             <td>{{ $m->meta }}</td>
+                            <td></td>
+                            <td></td>
                             <td>{{ $m->mes }}</td>
                             <td>{{ $m->gestion }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar marca"  onclick="editar('{{ $m->id }}', '{{ $m->nombre }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar marca"  onclick="eliminar('{{ $m->id }}', '{{ $m->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar marca" onclick="editar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}' )"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar marca" onclick="eliminar('{{ $m->id }}', '{{ $m->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -63,6 +65,7 @@
                 @csrf
                 <input type="hidden" name="user_id" id="user_id" value="{{ $datosUsuario->id }}">
                 <input type="hidden" name="almacen_id" id="almacen_id" value="{{ $datosUsuario->almacen_id }}">
+                <input type="hidden" name="meta_id" id="meta_id" value="">
                 <div class="modal-body">
                     <div class="row">
 
@@ -112,7 +115,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_marca()">GUARDAR META</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_marca()">GUARDA META</button>
                 </div>
             </form>
         </div>
@@ -120,38 +123,6 @@
 </div>
 <!-- fin modal marca nueva -->
 
-<!-- inicio modal editar marca -->
-<div id="editar_marcas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">EDITAR MARCA</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <form action="{{ url('Marca/actualizar') }}" method="POST">
-                @csrf
-                <div class="modal-body">
-                    <input type="hidden" name="id" id="id" value="">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Nombre</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="nombre" type="text" id="nombre" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualiza_marca()">ACTUALIZAR MARCA</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- fin modal editar marca -->
 
 @stop
 
@@ -161,6 +132,7 @@
 <script>
     $(function () {
         $('#myTable').DataTable({
+            "order": [[ 0, "desc" ]],
             language: {
                 url: '{{ asset('datatableEs.json') }}'
             },
@@ -171,6 +143,9 @@
 <script>
     function nueva_meta()
     {
+        $("#meta").val("");
+        $("#meta_id").val("");
+        $("#mes").val("Enero");
         $("#modal_meta").modal('show');
     }
 
@@ -187,21 +162,15 @@
         }else{
             $("#formularioMeta")[0].reportValidity();
         }
-
-        if(nombre_marca.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Una nueva marca fue registrada.',
-                'success'
-            )
-        }
     }
 
-    function editar(id, nombre)
+    function editar(id, meta, mes, gestion)
     {
-        $("#id").val(id);
-        $("#nombre").val(nombre);
-        $("#editar_marcas").modal('show');
+        $("#meta_id").val(id);
+        $("#meta").val(meta);
+        $("#mes").val(mes);
+        $("#gestion").val(gestion);
+        $("#modal_meta").modal('show');
     }
 
     function actualiza_marca()
