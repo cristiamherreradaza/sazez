@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Menu;
+use App\Meta;
+use App\User;
+use App\Turno;
+use Validator;
+use DataTables;
+use App\Perfile;
+use App\Almacene;
+use App\MenusUser;
+use App\Asignatura;
+use App\MenusPerfile;
+use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use DataTables;
-use App\Almacene;
-use App\Asignatura;
-use App\Perfile;
-use App\NotasPropuesta;
-use App\Turno;
-use App\User;
-use App\Menu;
-use App\MenusPerfile;
-use App\MenusUser;
-use Validator;
 
 class UserController extends Controller
 {
@@ -313,4 +314,13 @@ class UserController extends Controller
             return redirect('User/perfil')->with('flash', $mensaje);
         }
     }
+
+    public function metasListado(Request $request)
+    {
+        $metasUsuario = Meta::where('user_id', $request->usuarioId)
+                        ->get();
+        // dd($metasUsuario);      
+        return view('user.metasListado')->with(compact('metasUsuario'));
+
+    } 
 }
