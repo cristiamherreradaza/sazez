@@ -41,8 +41,8 @@
                             <td>{{ $m->mes }}</td>
                             <td>{{ $m->gestion }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar marca" onclick="editar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}' )"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar marca" onclick="eliminar('{{ $m->id }}', '{{ $m->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar meta" onclick="editar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}' )"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar meta" onclick="eliminar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -186,10 +186,10 @@
         }
     }
 
-    function eliminar(id, nombre)
+    function eliminar(id, meta, mes, gestion)
     {
         Swal.fire({
-            title: 'Quieres borrar ' + nombre + '?',
+            title: 'Quieres borrar la meta de ' + meta + ' ' + mes + ', ' +gestion+ '?',
             text: "Luego no podras recuperarlo!",
             type: 'warning',
             showCancelButton: true,
@@ -204,7 +204,7 @@
                     'La marca fue eliminada',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Marca/eliminar') }}/"+id;
+                    window.location.href = "{{ url('User/eliminaMeta') }}/"+id;
                 });
             }
         })

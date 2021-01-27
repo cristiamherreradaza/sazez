@@ -345,7 +345,15 @@ class UserController extends Controller
         $meta->save();
 
         return redirect("User/metasListado/$request->user_id");
+    }
 
+    public function eliminaMeta(Request $request)
+    {
+        $meta = Meta::find($request->metaId);
+        $meta->delete();
 
+        $datosUsuario = User::find($meta->user_id);
+
+        return redirect("User/metasListado/$datosUsuario->id");
     }
 }
