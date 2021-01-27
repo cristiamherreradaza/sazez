@@ -259,6 +259,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('User/ajaxEditaPerfil', 'UserController@ajaxEditaPerfil');
     Route::post('User/actualizaMenus', 'UserController@actualizaMenus');
     Route::get('User/metasListado/{usuarioId}', 'UserController@metasListado');
+    Route::post('User/guardaMeta', 'UserController@guardaMeta');
 
     //VENTAS
     Route::post('Venta/ajaxBuscaProducto', 'VentaController@ajaxBuscaProducto');

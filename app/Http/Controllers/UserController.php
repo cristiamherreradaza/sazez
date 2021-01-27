@@ -319,8 +319,28 @@ class UserController extends Controller
     {
         $metasUsuario = Meta::where('user_id', $request->usuarioId)
                         ->get();
+
+        $datosUsuario = User::find($request->usuarioId);
         // dd($metasUsuario);      
-        return view('user.metasListado')->with(compact('metasUsuario'));
+        return view('user.metasListado')->with(compact('metasUsuario', 'datosUsuario'));
 
     } 
+
+    public function guardaMeta(Request $request)
+    {
+        // dd($request->all());
+        $fecha = date('Y-m-d');
+        $meta = new Meta();
+        $meta->user_id = $request->user_id;
+        $meta->almacene_id = $request->almacen_id;
+        $meta->meta = $request->meta;
+        $meta->mes = $request->mes;
+        $meta->gestion = $request->gestion;
+        $meta->fecha = $request->fecha;
+        $meta->save();
+
+        return redirect("User/metasListado/$request->user_id");
+
+
+    }
 }
