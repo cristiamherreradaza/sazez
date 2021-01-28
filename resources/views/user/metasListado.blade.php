@@ -18,15 +18,6 @@
             <div class="col-md-4"><h3><span class="text-info"> Tienda:</span> {{ $datosUsuario->almacen->nombre }}</h3></div>
             <div class="col-md-4"><h3><span class="text-info"> Email:</span> {{ $datosUsuario->email }}</h3></div>
         </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="progress" style="height: 25px;">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%; height:" aria-valuenow="25"
-                        aria-valuemin="0" aria-valuemax="100">25%</div>
-                </div>
-            </div>
-        </div>
         
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped">
@@ -34,27 +25,23 @@
                     <tr>
                         <th>#</th>
                         <th>Meta</th>
-                        <th>Alcanzado</th>
-                        <th>Porcentaje</th>
                         <th>Mes</th>
                         <th>Gestion</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($metasUsuario as $key => $m)
-                        <tr>
-                            <td>{{ $m->id }}</td>
-                            <td>{{ $m->meta }}</td>
-                            <td></td>
-                            <td></td>
-                            <td>{{ $m->mes }}</td>
-                            <td>{{ $m->gestion }}</td>
-                            <td>
-                                <button type="button" class="btn btn-warning" title="Editar meta" onclick="editar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}' )"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar meta" onclick="eliminar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}')"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
+                @foreach($metasUsuario as $key => $m)
+                <tr>
+                    <td>{{ $m->id }}</td>
+                    <td>{{ $m->meta }}</td>
+                    <td>{{ $m->mes }}</td>
+                    <td>{{ $m->gestion }}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning" title="Editar meta" onclick="editar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}' )"><i class="fas fa-edit"></i></button>
+                        <button type="button" class="btn btn-danger" title="Eliminar meta" onclick="eliminar('{{ $m->id }}', '{{ $m->meta }}', '{{ $m->mes }}', '{{ $m->gestion }}')"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -86,18 +73,18 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <select name="mes" id="mes" class="form-control">
-                                    <option value="Enero">Enero</option>
-                                    <option value="Febrero">Febrero</option>
-                                    <option value="Marzo">Marzo</option>
-                                    <option value="Abril">Abril</option>
-                                    <option value="Mayo">Mayo</option>
-                                    <option value="Junio">Junio</option>
-                                    <option value="Julio">Julio</option>
-                                    <option value="Agosto">Agosto</option>
-                                    <option value="Septiembre">Septiembre</option>
-                                    <option value="Octubre">Octubre</option>
-                                    <option value="Noviembre">Noviembre</option>
-                                    <option value="Diciembre">Diciembre</option>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6">Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
                                 </select>
                             </div>
                         </div>

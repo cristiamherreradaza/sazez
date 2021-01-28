@@ -120,7 +120,7 @@
                 break;
         }
 
-        $metasUsuario = App\Meta::where('mes', $mes)
+        $metasUsuario = App\Meta::where('numero_mes', $mesActual)
                         ->where('user_id', $usuarioActual)
                         ->first();
 
@@ -137,7 +137,7 @@
             $porcentaje = ((float)$totalVentas->total * 100) / $meta;
             $porcentaje = round($porcentaje, 0); 
             $calculaFaltante = $meta - $totalVentas->total;
-            $faltante = ($calculaFaltante < 1)?0:$canculaFaltante;
+            $faltante = ($calculaFaltante < 1)?0:$calculaFaltante;
             
 
         }else{
