@@ -18,6 +18,16 @@
             <div class="col-md-4"><h3><span class="text-info"> Tienda:</span> {{ $datosUsuario->almacen->nombre }}</h3></div>
             <div class="col-md-4"><h3><span class="text-info"> Email:</span> {{ $datosUsuario->email }}</h3></div>
         </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%; height:" aria-valuenow="25"
+                        aria-valuemin="0" aria-valuemax="100">25%</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>

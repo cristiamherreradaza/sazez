@@ -322,11 +322,6 @@ class UserController extends Controller
         $metasUsuario = Meta::where('user_id', $request->usuarioId)
                         ->get();
 
-        $totalVentas = Venta::select(DB::raw('SUM(total) as total'))
-                        ->whereMonth('fecha', '=', '1')
-                        ->whereYear('fecha', '=', '2021')
-                        ->where('user_id', 22)
-                        ->get();
         // dd($totalVentas);
 
         $datosUsuario = User::find($request->usuarioId);
