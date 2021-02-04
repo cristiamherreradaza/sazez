@@ -13,6 +13,7 @@
                 <th>Razon Social</th>
                 <th>Importe</th>
                 <th>Codigo Control</th>
+                <th>Numero Autorizacion</th>
             </tr>
         </thead>
         <tbody>
@@ -21,7 +22,12 @@
                     <td>{{ ++$k }}</td>
                     <td>{{ $f->almacen->nombre }}</td>
                     <td>{{ $f->user->name }}</td>
-                    <td>{{ $f->created_at }}</td>
+                    <td>
+                        @php
+                            $fechaArray = explode(" ", $f->created_at);
+                        @endphp
+                        {{ $fechaArray[0] }}
+                    </td>
                     <td>
                         @if ($f->venta_id == null)
                             <a href="{{ url("Factura/imprimeFactura/$f->id") }}" target="_blank">{{ $f->numero_factura }}</a>
@@ -36,6 +42,7 @@
                     <td>
                         <a href="#" onclick="modifica({{ $f->id }})">{{ $f->codigo_control }}</a>
                     </td>
+                    <td>{{ $f->numero_autorizacion }}</td>
                 </tr>
             @endforeach
         </tbody>
