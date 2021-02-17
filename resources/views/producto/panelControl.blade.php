@@ -75,16 +75,132 @@
 </div>
 <!-- End Row -->
 
-<!-- Row -->
-<div class="col-lg-12">
-    <div class="card">
-        <div class="card-body analytics-info">
-            <h4 class="card-title">Registro Anual de Ventas</h4>
-            <div id="basic-bar" style="height:400px;"></div>
+<div class="row">
+    @php
+        $mesActual = date('m');
+        $anioActual = date('Y');
+        $usuarioActual = auth()->user()->id;
+
+        switch ($mesActual) {
+            case 1:
+                $mes = "Enero";
+                break;
+            case 2:
+                $mes = "Febrero";
+                break;
+            case 3:
+                $mes = "Marzo";
+                break;
+            case 4:
+                $mes = "Abril";
+                break;
+            case 5:
+                $mes = "Mayo";
+                break;
+            case 6:
+                $mes = "Junio";
+                break;
+            case 7:
+                $mes = "Julio";
+                break;
+            case 8:
+                $mes = "Agosto";
+                break;
+            case 9:
+                $mes = "Septiembre";
+                break;
+            case 10:
+                $mes = "Octubre";
+                break;
+            case 11:
+                $mes = "Noviembre";
+                break;
+            case 12:
+                $mes = "Diciembre";
+                break;
+        }
+
+        $metasUsuario = App\Meta::where('numero_mes', $mesActual)
+                        ->where('user_id', $usuarioActual)
+                        ->first();
+
+        $totalVentas = App\Venta::select(Illuminate\Support\Facades\DB::raw('SUM(total) as total'))
+                ->whereMonth('fecha', '=', $mesActual)
+                ->whereYear('fecha', '=', $anioActual)
+                ->where('user_id', $usuarioActual)
+                ->first();
+
+
+        if ($metasUsuario) {
+
+            $meta = $metasUsuario->meta;
+            $porcentaje = ((float)$totalVentas->total * 100) / $meta;
+            $porcentaje = round($porcentaje, 0); 
+            $calculaFaltante = $meta - $totalVentas->total;
+            $faltante = ($calculaFaltante < 1)?0:$calculaFaltante;
+            
+
+        }else{
+
+            $meta = 0;
+            $porcentaje = 0;
+            $faltante = 0;
+        }
+        // dd($totalVentas->total);
+
+    @endphp
+
+    <div class="col-md-2">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-info">METAS</h4>
+                <center>
+                    @if ($porcentaje < 20)
+                        <img src="{{ asset('assets/images/mitu01.jpg') }}">
+                    @elseif($porcentaje > 21 && $porcentaje < 95)
+                        <img src="{{ asset('assets/images/mitu50.jpg') }}">
+                    @elseif($porcentaje > 96)
+                        <img src="{{ asset('assets/images/mitu100.jpg') }}">
+                    @endif
+
+                    <h4> {{ $mes }} - {{ date('Y') }} </h4>
+                </center>
+                <p></p>
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ $porcentaje }}%; height:" aria-valuenow="{{ $porcentaje }}" aria-valuemin="0" aria-valuemax="100">{{ $porcentaje }}%</div>
+                </div>
+                <br>
+                <table width="100%">
+                    <tr>
+                        <td><h5><span class="text-info">META</span></h5></td>
+                        <td style="text-align: right;"><h5> {{ number_format($meta, 0) }}</h5></td>
+                    </tr>
+
+                    <tr>
+                        <td><h5><span class="text-success">LOGRADO</span></h5></td>
+                        <td style="text-align: right;"><h5> {{ number_format($totalVentas->total, 0) }}</h5></td>
+                    </tr>
+
+                    <tr>
+                        <td><h5><span class="text-warning">FALTANTE</span></h5></td>
+                        <td style="text-align: right;"><h5> {{ number_format($faltante, 0) }}</h5></td>
+                    </tr>
+
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title text-info">VENTAS</h4>
+                <div id="basic-bar" style="height:400px;"></div>
+            </div>
         </div>
     </div>
 </div>
-<!-- end Row -->
 
 {{-- row  --}}
 <div class="row">

@@ -143,7 +143,7 @@
 		#logo {
 			position: absolute;
 			top: 20px;
-			left: 20px;
+			left: 50px;
 		}
 
 		#direccionEmpresa {
@@ -152,7 +152,7 @@
 			position: absolute;
 			top: 85px;
 			left: 20px;
-			width: 150px;
+			width: 220px;
 			text-align: center;
 		}
 	</style>
@@ -276,7 +276,10 @@
 		<div id="txtOriginal">ORIGINAL</div>
 		<div id="txtActividad">{{ $datosEmpresa->actividad }}</div>
 		<div id="txtFactura">FACTURA</div>
-		<div id="direccionEmpresa">{{ $datosEmpresa->direccion }}</div>
+		<div id="direccionEmpresa">
+			<span style="font-size: 8pt;">{{ $datosEmpresa->nombre }}</span><br>
+			{{ $datosEmpresa->direccion }}
+		</div>
 		
 		</div>
 

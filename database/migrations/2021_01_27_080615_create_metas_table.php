@@ -20,6 +20,7 @@ class CreateMetasTable extends Migration
             $table->unsignedBigInteger('almacene_id');
             $table->foreign('almacene_id')->references('id')->on('almacenes');
             $table->string('mes', 15)->nullable();
+            $table->integer('numero_mes')->nullable();
             $table->integer('meta')->nullable();
             $table->integer('alcance')->nullable();
             $table->integer('gestion')->nullable();

@@ -6,6 +6,7 @@ use App\Menu;
 use App\Meta;
 use App\User;
 use App\Turno;
+use App\Venta;
 use Validator;
 use DataTables;
 use App\Perfile;
@@ -15,6 +16,7 @@ use App\Asignatura;
 use App\MenusPerfile;
 use App\NotasPropuesta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -319,8 +321,81 @@ class UserController extends Controller
     {
         $metasUsuario = Meta::where('user_id', $request->usuarioId)
                         ->get();
+
+        $datosUsuario = User::find($request->usuarioId);
         // dd($metasUsuario);      
-        return view('user.metasListado')->with(compact('metasUsuario'));
+        return view('user.metasListado')->with(compact('metasUsuario', 'datosUsuario'));
 
     } 
+
+    public function guardaMeta(Request $request)
+    {
+        $fecha = date('Y-m-d');
+
+        switch ($request->mes) {
+            case 1:
+                $mes = "Enero";
+                break;
+            case 2:
+                $mes = "Febrero";
+                break;
+            case 3:
+                $mes = "Marzo";
+                break;
+            case 4:
+                $mes = "Abril";
+                break;
+            case 5:
+                $mes = "Mayo";
+                break;
+            case 6:
+                $mes = "Junio";
+                break;
+            case 7:
+                $mes = "Julio";
+                break;
+            case 8:
+                $mes = "Agosto";
+                break;
+            case 9:
+                $mes = "Septiembre";
+                break;
+            case 10:
+                $mes = "Octubre";
+                break;
+            case 11:
+                $mes = "Noviembre";
+                break;
+            case 12:
+                $mes = "Diciembre";
+                break;
+        }
+
+        if($request->meta_id == ""){
+            $meta = new Meta();
+        }else{
+            $meta = Meta::find($request->meta_id);
+        }
+
+        $meta->user_id     = $request->user_id;
+        $meta->almacene_id = $request->almacen_id;
+        $meta->meta        = $request->meta;
+        $meta->mes         = $mes;
+        $meta->numero_mes  = $request->mes;
+        $meta->gestion     = $request->gestion;
+        $meta->fecha       = $request->fecha;
+        $meta->save();
+
+        return redirect("User/metasListado/$request->user_id");
+    }
+
+    public function eliminaMeta(Request $request)
+    {
+        $meta = Meta::find($request->metaId);
+        $meta->delete();
+
+        $datosUsuario = User::find($meta->user_id);
+
+        return redirect("User/metasListado/$datosUsuario->id");
+    }
 }
