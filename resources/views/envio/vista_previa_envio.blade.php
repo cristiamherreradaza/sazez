@@ -132,6 +132,8 @@
                 <th>#</th>
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
+                <th>Marca</th>
+                <th>Tipo</th>
                 <!-- <th class="text-right">Tipo</th> -->
                 <th class="text-right">Cantidad Ingresada</th>
                 <th class="text-right">Stock actual en {{ $detalle->almacen->nombre }} </th>
@@ -142,8 +144,10 @@
             @foreach($productos_envio as $key => $producto)
                 <tr>
                     <td>{{ ($key+1) }}</td>
-                    <td class="text-right">{{ $producto->producto->codigo }}</td>
-                    <td class="text-right">{{ $producto->producto->nombre }}</td>
+                    <td>{{ $producto->producto->codigo }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->nombre }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->marca->nombre }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->tipo->nombre }}</td>
                     <!-- <td class="text-right">{{ $producto->producto->tipo->nombre }}</td> -->
                     <td class="text-right">{{ round($producto->ingreso) }}</td>
                     @php
@@ -165,6 +169,8 @@
             @if($complemento > 0)
                 @for($i=1; $i<=$complemento; $i++)
                     <tr>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -207,6 +213,8 @@
                 <th>#</th>
                 <th class="text-right">Codigo</th>
                 <th class="text-right">Nombre</th>
+                <th>Marca</th>
+                <th>Tipo</th>
                 <!-- <th class="text-right">Tipo</th> -->
                 <th class="text-right">Cantidad Ingresada</th>
                 <th class="text-right">Stock actual en {{ $detalle->almacen->nombre }} </th>
@@ -218,7 +226,10 @@
                 <tr>
                     <td>{{ ($key+1) }}</td>
                     <td class="text-right">{{ $producto->producto->codigo }}</td>
-                    <td class="text-right">{{ $producto->producto->nombre }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->nombre }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->marca->nombre }}</td>
+                    <td style="text-align: left;">{{ $producto->producto->tipo->nombre }}</td>
+
                     <!-- <td class="text-right">{{ $producto->producto->tipo->nombre }}</td> -->
                     <td class="text-right">{{ round($producto->ingreso) }}</td>
                     @php
@@ -240,6 +251,8 @@
             @if($complemento > 0)
                 @for($i=1; $i<=$complemento; $i++)
                     <tr>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
