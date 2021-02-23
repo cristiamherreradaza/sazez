@@ -13,18 +13,20 @@
         </thead>
         <tbody>
             @foreach($productos as $p)
-            @php
-                $almacen = App\Almacene::find($p->almacene_id);
-                $marca = App\Marca::find($p->marca_id);
-            @endphp
-            <tr>
-                <td>{{ $almacen->nombre }}</td>
-                <td>{{ $p->nombre }}</td>
-                <td>{{ $p->tipo->nombre }}</td>
-                <td>{{ $marca->nombre }}</td>
-                <td>{{ $p->ingreso }}</td>
-                <td>{{ $p->created_at }}</td>
-            </tr>
+                @if ($p->ingreso > 0)
+                    @php
+                        $almacen = App\Almacene::find($p->almacene_id);
+                        $marca = App\Marca::find($p->marca_id);
+                    @endphp
+                    <tr>
+                        <td>{{ $almacen->nombre }}</td>
+                        <td>{{ $p->nombre }}</td>
+                        <td>{{ $p->tipo->nombre }}</td>
+                        <td>{{ $marca->nombre }}</td>
+                        <td>{{ $p->ingreso }}</td>
+                        <td>{{ $p->created_at }}</td>
+                    </tr>
+                @endif
             @endforeach
         </tbody>
     </table>
