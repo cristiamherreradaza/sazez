@@ -333,6 +333,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/ajaxMuestraVendedores', 'ReporteController@ajaxMuestraVendedores');
     Route::get('Reporte/auditoria', 'ReporteController@auditoria');
     Route::post('Reporte/ajaxAuditoria', 'ReporteController@ajaxAuditoria');
+    Route::get('Reporte/ingresos', 'ReporteController@ingresos');
+    Route::get('Reporte/ajax_ingresos', 'ReporteController@ajax_ingresos');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');

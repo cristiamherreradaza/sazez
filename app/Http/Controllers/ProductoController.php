@@ -463,6 +463,7 @@ class ProductoController extends Controller
             $movimiento->precio_compra = $request->precio_compra;
             $movimiento->ingreso       = $request->cantidad;
             $movimiento->dispositivo   = session('dispositivo');
+            $movimiento->estado        = "Ingreso";
             $movimiento->save();
         }
 

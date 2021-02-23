@@ -192,6 +192,7 @@ class ProductosImport implements ToModel, WithStartRow
         $movimiento->precio_compra = $row[7];
         $movimiento->precio_venta  = 0;
         $movimiento->ingreso       = $row[9];
+        $movimiento->estado        = "Ingreso";
         $movimiento->save();
 
         $categoriasProducto = new CategoriasProducto();

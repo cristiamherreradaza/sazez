@@ -539,4 +539,44 @@ class ReporteController extends Controller
         return view('reporte.ajaxAuditoria')->with(compact('ventas'));
 
     }
+
+    public function ingresos()
+    {
+        $almacenes = Almacene::whereNull('estado')->get();
+        $vendedores = User::where('almacen_id', 1)->get();
+        $tipos = Tipo::get();
+        $marcas = Marca::get();
+        return view('reporte.ingresos')->with(compact('almacenes', 'tipos', 'vendedores', 'marcas'));
+    }
+
+    public function ajax_ingresos(Request $request)
+    {
+        $q = Movimiento::select(
+                                    'productos.nombre',
+                                    'productos.marca_id',
+                                    'productos.tipo_id',
+                                    'movimientos.ingreso',
+                                    'movimientos.almacene_id',
+                                    'movimientos.created_at'
+                                )
+                                ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
+                                ->whereDate('movimientos.fecha', '>=', $request->fecha_inicio)
+                                ->whereDate('movimientos.fecha', '<=', $request->fecha_fin);
+            
+        if($request->almacen_id != "todos"){
+            $q->where('movimientos.almacene_id', $request->almacen_id);
+        }
+
+        if($request->marca_id != "todos"){
+            $q->where('productos.marca_id', $request->marca_id);
+        }
+
+        if($request->tipo_id != "todos"){
+            $q->where('productos.tipo_id', $request->tipo_id);
+        }
+
+        $productos = $q->get();
+        return view('reporte.ajax_ingresos')->with(compact('productos'));
+        // dd($productos);
+    }
 }
