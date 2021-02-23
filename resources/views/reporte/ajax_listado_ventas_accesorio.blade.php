@@ -25,7 +25,7 @@
             @endphp
             @foreach($ventas as $venta)
             <tr>
-                <td>{{ $venta->fecha }}</td>
+                <td>{{ $venta->created_at }}</td>
                 <td>{{ $venta->user->almacen->nombre }}</td>
                 <td>{{ $venta->user->name }}</td>
                 <td>{{ $venta->producto->nombre }}</td>
