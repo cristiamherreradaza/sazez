@@ -561,7 +561,8 @@ class ReporteController extends Controller
                                 )
                                 ->leftJoin('productos', 'movimientos.producto_id', '=', 'productos.id')
                                 ->whereDate('movimientos.fecha', '>=', $request->fecha_inicio)
-                                ->whereDate('movimientos.fecha', '<=', $request->fecha_fin);
+                                ->whereDate('movimientos.fecha', '<=', $request->fecha_fin)
+                                ->where('movimientos.estado', 'Ingreso');
             
         if($request->almacen_id != "todos"){
             $q->where('movimientos.almacene_id', $request->almacen_id);
