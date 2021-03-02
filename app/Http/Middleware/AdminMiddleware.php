@@ -19,7 +19,9 @@ class AdminMiddleware
             if(auth()->user()->rol != 'Mayorista'){
                 if(auth()->user()->rol != 'Almacen'){
                     if(auth()->user()->rol != 'Tienda'){
-                        return redirect('/');
+                        if(auth()->user()->rol != 'Marketing'){
+                            return redirect('/');
+                        }
                     }
                 }
             }
