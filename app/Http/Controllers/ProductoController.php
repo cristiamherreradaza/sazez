@@ -978,4 +978,54 @@ class ProductoController extends Controller
         Precio::destroy($request->precioId);
     }
 
+    public function marketing()
+    {
+        $marcas = Marca::get();
+        $tipos = Tipo::get();
+        return view('producto.marketing')->with(compact('marcas', 'tipos'));
+    }
+
+    public function ajax_listado_marketing(Request $request)
+    {
+        //Modo Estatico
+        // $productos_en_tienda = Movimiento::where('almacene_id', Auth::user()->almacen->id)
+        //             ->where('estado', $request->estado)
+        //             ->groupBy('producto_id')
+        //             ->get();
+
+        // Se saca el listado de los productos que se encuentran en el almacen correspondiente
+        $consulta = Movimiento::where('almacene_id', Auth::user()->almacen->id);
+        if ($request->estado == 'Defectuoso') {
+            $consulta = $consulta->where('estado', $request->estado);
+        }
+        $productos_en_tienda = $consulta->groupBy('producto_id')->get();
+        
+        // Variable de ayuda para el listado
+        $estado = $request->estado;
+                
+        // En un array guardaremos los id's de los productos de ese almacen
+        $array_productos = array();
+        foreach($productos_en_tienda as $row){
+            array_push($array_productos, $row->producto_id);
+        }
+
+        // Capturaremos los datos de todos los productos en el almacen, de acuerdo a la solicitud del filtro
+        $query = Producto::whereIn('id', $array_productos);
+        if ($request->codigo) {
+            $query = $query->where('codigo', 'like', "%$request->codigo%");
+        }
+        if ($request->nombre) {
+            $query = $query->where('nombre', 'like', "%$request->nombre%");
+        }
+        if ($request->tipo) {
+            $query = $query->where('tipo_id', $request->tipo);
+        }
+        if ($request->marca) {
+            $query = $query->where('marca_id', $request->marca);
+        }
+        $productos = $query->get();
+        return view('producto.ajax_listado_marketing')->with(compact('productos', 'estado'));
+    }
+
+
 }

@@ -19,7 +19,7 @@ class PerfilController extends Controller
 
     public function guardar(Request $request)
     {
-        dd($request->menus);
+        // dd($request->menus);
         $perfil = new Perfile();
         $perfil->user_id = Auth::user()->id;
         $perfil->nombre = $request->nombre_perfil;

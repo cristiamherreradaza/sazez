@@ -21,6 +21,9 @@
     </table>
 </div>
 
+{{-- listado de precios --}}
+@if (auth()->user()->perfil_id == 1)
+    
 <div id="ajaxActualizaPrecios">
     <div class="table-responsive">
         <table class="table table-striped">
@@ -65,6 +68,8 @@
         <button type="button" class="btn waves-effect waves-light btn-success" id="btnAjaxAdicionaPrecio" onclick="adiciona_precio()"><i class="fas fa-plus-circle"></i></button>    
     </div>
 </div>
+@endif
+{{-- fin listado de precios --}}
 
 <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
