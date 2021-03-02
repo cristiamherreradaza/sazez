@@ -1,7 +1,7 @@
 <div class="card border-primary">
     <div class="card-header bg-primary">
         <h4 class="mb-0 text-white">
-            LISTADO DE PRODUCTOS CRT
+            LISTADO DE PRODUCTOS
         </h4>
     </div>
     <div class="card-body" id="lista">
