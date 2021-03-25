@@ -337,6 +337,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Reporte/ajaxAuditoria', 'ReporteController@ajaxAuditoria');
     Route::get('Reporte/ingresos', 'ReporteController@ingresos');
     Route::get('Reporte/ajax_ingresos', 'ReporteController@ajax_ingresos');
+    Route::get('Reporte/metas', 'ReporteController@metas');
+    Route::get('Reporte/ajaxMetas', 'ReporteController@ajaxMetas');
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');

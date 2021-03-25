@@ -581,4 +581,21 @@ class ReporteController extends Controller
         return view('reporte.ajax_ingresos')->with(compact('productos'));
         // dd($productos);
     }
+
+    public function metas()
+    {
+        $vendedores = User::where('rol', 'Tienda')
+                        ->get();
+        return view('reporte.metas')->with(compact('vendedores'));        
+    }
+
+    public function ajaxMetas(Request $request)
+    {
+        $vendedores = User::where('rol', 'Tienda')
+                     ->get();
+                     
+        $gestion  = $request->gestion;
+   
+        return view('reporte.ajaxMetas')->with(compact('vendedores', 'gestion'));        
+    }
 }
