@@ -37,6 +37,14 @@
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
                         </div>
                     </div>
+
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="button" onclick="detalleMetas()" id="btnDetalles" class="btn btn-block btn-info" style="display: none;">Ver Detalles</button>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -76,6 +84,7 @@
             type: 'get',
             success: function(data) {
                 $("#listadoMetasAjax").html(data);
+                $("#btnDetalles").show('slow');
             }
         });
 
