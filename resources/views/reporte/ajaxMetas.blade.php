@@ -1,5 +1,5 @@
 <div class="table-responsive m-t-40">
-    <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
+    <table id="tabla-usuarios" class="table table-striped table-bordered table-hover no-wrap">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -62,99 +62,99 @@
                 <td>{{ $v->almacen->nombre }}</td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[1]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[1]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[1]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[1]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[1]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[1]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[1]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[1]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[2]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[2]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[2]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[2]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[2]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[2]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[2]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[2]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[3]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[3]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[3]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[3]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[3]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[3]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[3]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[3]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[4]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[4]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[4]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[4]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[4]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[4]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[4]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[4]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[5]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[5]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[5]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[5]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[5]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[5]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[5]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[5]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[6]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[6]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[6]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[6]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[6]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[6]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[6]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[6]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[7]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[7]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[7]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[7]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[7]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[7]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[7]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[7]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[8]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[8]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[8]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[8]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[8]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[8]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[8]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[8]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[9]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[9]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[9]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[9]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[9]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[9]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[9]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[9]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[10]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[10]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[10]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[10]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[10]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[10]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[10]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[10]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[11]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[11]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[11]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[11]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[11]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[11]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[11]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[11]['porcentaje'] }} %</span>
                 </td>
                 <td class="text-right">
                     <div class="metas" style="display: none;">
-                        <b>META:</b> <span class="text-right">{{ number_format($datos[12]['meta'], 0) }}</span><br>
-                        <b>LOGRADO:</b> {{ number_format($datos[12]['totalVentas'], 0) }}<br>
-                        <b>FALTANTE:</b> {{ number_format($datos[12]['faltante'], 0) }}<br />
+                        <span class="text-info">META:</span> <span class="text-right">{{ number_format($datos[12]['meta'], 0) }}</span><br>
+                        <span class="text-success">LOGRADO:</span> {{ number_format($datos[12]['totalVentas'], 0) }}<br>
+                        <span class="text-danger">FALTANTE:</span> {{ number_format($datos[12]['faltante'], 0) }}<br />
                     </div>
-                    <span class="font-weight-bold">{{ $datos[12]['porcentaje'] }} %</span>
+                    <span class="font-weight-normal">{{ $datos[12]['porcentaje'] }} %</span>
                 </td>                            
             </tr>
             @endforeach
