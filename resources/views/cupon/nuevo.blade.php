@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Fecha Inicio</label>
+                                        <label class="control-label">Fecha inicio cobro cupon</label>
                                         <span class="text-danger">
                                             <i class="mr-2 mdi mdi-alert-circle"></i>
                                         </span>
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Fecha Fin</label>
+                                        <label class="control-label">Fecha fin cobro cupon</label>
                                         <span class="text-danger">
                                             <i class="mr-2 mdi mdi-alert-circle"></i>
                                         </span>
@@ -66,6 +66,29 @@
                                         </select>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="row">
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Publicado para registrarse desde</label>
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                        <input type="datetime-local" class="form-control" id="inicio_publicacion" name="inicio_publicacion" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Publicado para registrarse hasta</label>
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                        <input type="datetime-local" class="form-control" id="final_publicacion" name="final_publicacion" required>
+                                    </div>
+                                </div>
+                                
                             </div>
 
                             <div class="row" id="oculta_detalle">
