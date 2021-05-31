@@ -16,7 +16,7 @@
     <!-- Column -->
     <div class="col-md-12">
         <!-- Row -->
-        <form action="{{ url('Cupon/guardar') }}" method="post">
+        <form action="{{ url('Cupon/guardar') }}" method="post" id="formularioCupon">
             @csrf
             <div class="row">
                 <div class="col-lg-12">
@@ -32,9 +32,9 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                     <select name="tipo_oferta" id="tipo_oferta" class="form-control" required>
-                                        <option value="" selected></option>
-                                        <option value="1">Cupon de un Producto</option>
-                                        <option value="2">Cupon de Promocion</option>
+                                        <option value="">Seleccione</option>
+                                        <option value="1">Cupon por Producto</option>
+                                        <option value="2">Cupon por Promocion</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
@@ -59,7 +59,7 @@
                                     <div class="form-group">
                                         <label class="control-label">Tienda</label>
                                         <select name="tienda" id="tienda" class="form-control">
-                                            <option value="" selected></option>
+                                            <option value="">Todas las tiendas</option>
                                             @foreach($almacenes as $almacen)
                                                 <option value="{{ $almacen->id }}"> {{ $almacen->nombre }} </option>
                                             @endforeach
@@ -126,76 +126,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <hr>
-
-                            <div class="row" id="tabsProductos">
-                                <div class="col-md-6">
-                                    <button type="button" id="tab1" class="btn btn-block btn-info activo">ENVIO INDIVIDUAL</button>
-                                </div>
-                                <div class="col-md-6">
-                                    <button type="button" id="tab2" class="btn btn-block btn-primary inactivo">ENVIO MASIVO</button>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12 tabContenido" id="tab1C">
-                                    <div class="card border-info">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label class="control-label">Medio a enviar</label>
-                                                    <select name="tipo_envio" id="tipo_envio" class="form-control">
-                                                        <option value="" selected></option>
-                                                        <option value="1">Cliente</option>
-                                                        <option value="2">Correo Electrónico</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Cliente</label>
-                                                        <select name="cliente" id="cliente" class="form-control">
-                                                            <option value="" selected></option>
-                                                            @foreach($clientes as $cliente)
-                                                                <option value="{{ $cliente->id }}"> {{ $cliente->name }} </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Correo Electrónico</label>
-                                                        <input name="email" type="email" id="email" class="form-control" disabled>
-                                                    </div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">
-                                    <div class="card border-primary">
-                                        <div class="card-body">
-                                            <h4>Seleccione a que clientes va dirigido el cupón: </h4>
-                                            <div class="form-group row pt-3">
-                                                @foreach($grupos as $key => $grupo)
-                                                    <div class="col-sm-3">
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input cajas" value="{{ $grupo->id }}" id="customCheck{{$key}}" name="grupos[]">
-                                                            <label for="customCheck{{$key}}" class="custom-control-label">{{ $grupo->nombre }}</label>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                             
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" id="guarda_cupon" onclick="validaItems()">GUARDAR CUP&Oacute;N</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" id="guarda_cupon" onclick="validaItems()">GUARDAR CUP&Oacute;N</button>
                                 </div>
                             </div>
                         </div>
@@ -329,24 +263,35 @@
     // Funcion para ocultar datos de promocion
     function validaItems()
     {   
-        if(($("#tipo_envio").val().length!=0 && ($("#cliente").val().length!=0 || $("#email").val().length!=0)) || ($(".cajas").is(':checked')) && ($("#producto_id").val().length!=0 || $("#promocion").val().length!=0))
-        {
+        if ($("#formularioCupon")[0].checkValidity()) {
+            $("#formularioCupon").submit();
             Swal.fire(
                 'Excelente!',
                 'Procesando cupon...',
                 'success'
             )
-            swal.showLoading();
+        }else{
+            $("#formularioCupon")[0].reportValidity();
         }
-        else
-        {
-            Swal.fire({
-                type: 'error',
-                title: 'Oops...',
-                text: 'Tienes que completar datos en el formulario!'
-            })
-            event.preventDefault();
-        }
+
+        // if(($("#tipo_envio").val().length!=0 && ($("#cliente").val().length!=0 || $("#email").val().length!=0)) || ($(".cajas").is(':checked')) && ($("#producto_id").val().length!=0 || $("#promocion").val().length!=0))
+        // {
+        //     Swal.fire(
+        //         'Excelente!',
+        //         'Procesando cupon...',
+        //         'success'
+        //     )
+        //     swal.showLoading();
+        // }
+        // else
+        // {
+        //     Swal.fire({
+        //         type: 'error',
+        //         title: 'Oops...',
+        //         text: 'Tienes que completar datos en el formulario!'
+        //     })
+        //     event.preventDefault();
+        // }
 
     }
 
