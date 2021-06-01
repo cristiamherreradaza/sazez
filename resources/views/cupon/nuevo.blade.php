@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Fecha Inicio</label>
+                                        <label class="control-label">Fecha inicio cobro cupon</label>
                                         <span class="text-danger">
                                             <i class="mr-2 mdi mdi-alert-circle"></i>
                                         </span>
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Fecha Fin</label>
+                                        <label class="control-label">Fecha fin cobro cupon</label>
                                         <span class="text-danger">
                                             <i class="mr-2 mdi mdi-alert-circle"></i>
                                         </span>
@@ -68,6 +68,29 @@
                                 </div>
                             </div>
 
+                            <div class="row">
+                                
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Publicado para registrarse desde</label>
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                        <input type="datetime-local" class="form-control" id="inicio_publicacion" name="inicio_publicacion" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Publicado para registrarse hasta</label>
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                        <input type="datetime-local" class="form-control" id="final_publicacion" name="final_publicacion" required>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
                             <div class="row" id="oculta_detalle">
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -80,7 +103,7 @@
                             <div class="row" id="detalle_promocion">
                                 <div class="col-md-12">
                                     <label class="control-label">Seleccione promoción</label>
-                                    <select name="promocion" id="promocion" class="form-control" onchange="validaFechaPromo()">
+                                    <select name="combo_id" id="combo_id" class="form-control" onchange="validaFechaPromo()">
                                         <option value="" selected></option>
                                         @foreach($promociones as $promocion)
                                             <option value="{{ $promocion->id }}" data-fechai="{{ $promocion->fecha_inicio }}" data-fechaf="{{ $promocion->fecha_final }}">{{ $promocion->nombre }} (Fecha Inicio: {{ $promocion->fecha_inicio }} - Fecha Final: {{ $promocion->fecha_final }})</option>
@@ -126,10 +149,12 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <br />
                             
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" id="guarda_cupon" onclick="validaItems()">GUARDAR CUP&Oacute;N</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" id="guarda_cupon" onclick="validaItems()">CREAR CUP&Oacute;N</button>
                                 </div>
                             </div>
                         </div>

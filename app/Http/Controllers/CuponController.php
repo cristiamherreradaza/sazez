@@ -43,6 +43,10 @@ class CuponController extends Controller
 
     public function listado()
     {
+        /*$cupones = Cupone::limit(100)
+                        ->orderBy('id', 'desc')
+                        ->get();*/
+        // dd($cupones);
         $cupones = Cupone::get();
         $almacenes = Almacene::get();
         $clientes = User::where('rol', 'Cliente')->get();
@@ -51,33 +55,65 @@ class CuponController extends Controller
 
     public function ajax_listado()
     {
-        $cupones = DB::table('cupones')
-                    ->whereNull('cupones.deleted_at')
-                    ->where(function($query){
-                        $query->where('cupones.almacene_id', Auth::user()->almacen->id)
-                        ->orwhereNull('cupones.almacene_id');
-                    })
-                    ->leftJoin('productos', 'cupones.producto_id', '=', 'productos.id')
-                    ->leftJoin('combos', 'cupones.combo_id', '=', 'combos.id')
-                    ->leftJoin('users', 'cupones.cliente_id', '=', 'users.id')
-                    ->leftJoin('almacenes', 'cupones.almacene_id', '=', 'almacenes.id')
-                    ->leftJoin('cupones_cobrados', 'cupones.id', '=', 'cupones_cobrados.cupone_id')
-                    ->select(
-                        'cupones.id',
-                        'cupones.codigo as codigo',
-                        'users.id as cliente_id',
-                        'users.name as cliente_nombre',
-                        'productos.id as producto_id',
-                        'productos.nombre as producto_nombre',
-                        'combos.id as combo_id',
-                        'combos.nombre as combo_nombre',
-                        'almacenes.nombre as tienda',
-                        'cupones_cobrados.fecha as cobrado',
-                        'cupones.fecha_inicio as fecha_inicio',
-                        'cupones.fecha_final as fecha_final',
-                        'cupones.estado as estado'
-                    )
-                    ->orderBy('id', 'desc');
+        $rol = Auth::user()->rol;
+
+        if($rol == 'Administrador'){
+
+            $cupones = DB::table('cupones')
+                        ->whereNull('cupones.deleted_at')
+                        ->leftJoin('productos', 'cupones.producto_id', '=', 'productos.id')
+                        ->leftJoin('combos', 'cupones.combo_id', '=', 'combos.id')
+                        ->leftJoin('users', 'cupones.cliente_id', '=', 'users.id')
+                        ->leftJoin('almacenes', 'cupones.almacene_id', '=', 'almacenes.id')
+                        ->leftJoin('cupones_cobrados', 'cupones.id', '=', 'cupones_cobrados.cupone_id')
+                        ->select(
+                            'cupones.id',
+                            'cupones.codigo as codigo',
+                            'users.id as cliente_id',
+                            'users.name as cliente_nombre',
+                            'productos.id as producto_id',
+                            'productos.nombre as producto_nombre',
+                            'combos.id as combo_id',
+                            'combos.nombre as combo_nombre',
+                            'almacenes.nombre as tienda',
+                            'cupones_cobrados.fecha as cobrado',
+                            'cupones.fecha_inicio as fecha_inicio',
+                            'cupones.fecha_final as fecha_final',
+                            'cupones.estado as estado'
+                        )
+                        ->orderBy('id', 'desc');
+
+        }else{
+
+            $cupones = DB::table('cupones')
+                        ->whereNull('cupones.deleted_at')
+                        ->where(function($query){
+                            $query->where('cupones.almacene_id', Auth::user()->almacen->id)
+                            ->orwhereNull('cupones.almacene_id');
+                        })
+                        ->leftJoin('productos', 'cupones.producto_id', '=', 'productos.id')
+                        ->leftJoin('combos', 'cupones.combo_id', '=', 'combos.id')
+                        ->leftJoin('users', 'cupones.cliente_id', '=', 'users.id')
+                        ->leftJoin('almacenes', 'cupones.almacene_id', '=', 'almacenes.id')
+                        ->leftJoin('cupones_cobrados', 'cupones.id', '=', 'cupones_cobrados.cupone_id')
+                        ->select(
+                            'cupones.id',
+                            'cupones.codigo as codigo',
+                            'users.id as cliente_id',
+                            'users.name as cliente_nombre',
+                            'productos.id as producto_id',
+                            'productos.nombre as producto_nombre',
+                            'combos.id as combo_id',
+                            'combos.nombre as combo_nombre',
+                            'almacenes.nombre as tienda',
+                            'cupones_cobrados.fecha as cobrado',
+                            'cupones.fecha_inicio as fecha_inicio',
+                            'cupones.fecha_final as fecha_final',
+                            'cupones.estado as estado'
+                        )
+                        ->orderBy('id', 'desc');
+        }
+
         return Datatables::of($cupones)->addColumn('action', function ($cupones) {
             // Si el usuario tiene perfil de administrador 
             if(Auth::user()->perfil_id == 1)
@@ -189,462 +225,26 @@ class CuponController extends Controller
 
     public function guardar(Request $request)
     {
-        // Debemos preguntarnos si el cupon es por un producto o por una promocion
-        // Si tipo_oferta = 1 -> Producto O tipo_oferta = 2 -> Promocion
-        if($request->tipo_oferta == "1")    // Cupon por un producto
-        {
-            // Debemos preguntarnos si el cupon es masivo o individual
-            if($request->tipo_envio)        // Para una persona (individual)
-            {
-                // Entonces tiene que existir valores en tipo_envio y en (cliente o email)
-                //dd('Existe tipo envio en producto');
-                if($request->tipo_envio == "1")     // Medio a enviar es un cliente
-                {
-                    // Leer datos de id_cliente
-                    if($request->cliente)
-                    {
-                        $cliente = User::find($request->cliente);
-                        if($cliente)
-                        {
-                            // Se crea el codigo unico de cupon
-                            $sw=1;
-                            while($sw==1)
-                            {
-                                $codigo = $this->codigoGenerador();
-                                $valor = Cupone::where('codigo', $codigo)->get();
-                                if(count($valor)==0)
-                                {
-                                    $sw=0;
-                                }
-                            }
-                            // Se crea el Cupon
-                            $cupon = new Cupone();
-                            $cupon->user_id = Auth::user()->id;
-                            $cupon->producto_id = $request->producto_id;    //pendiente validar
-                            $cupon->cliente_id = $cliente->id;
-                            $cupon->almacene_id = $request->tienda;
-                            $cupon->descuento = $request->producto_descuento;
-                            $cupon->monto_total = $request->producto_total;
-                            $cupon->codigo = $codigo;
-                            $cupon->fecha_inicio = $request->fecha_inicio;
-                            $cupon->fecha_final = $request->fecha_fin;
-                            $cupon->save();
-                            // Se preparan los datos para el envio del email
-                            $producto = Producto::find($request->producto_id);
-                            $tienda = Almacene::find($request->tienda);
-                            if($tienda)             // Si existe una tienda especifica
-                            {
-                                $tienda = $tienda->nombre.', '.$tienda->direccion;
-                            }
-                            else                    // Si puede cobrar en cualquier tienda
-                            {
-                                $tienda = "Cualquier sucursal";
-                            }
-                            $message = [
-                                'fecha_final' => $request->fecha_fin,
-                                'producto' => $producto->nombre,
-                                'precio_normal' => $request->producto_precio,
-                                'precio_descuento' => $request->producto_total,
-                                'tienda' => $tienda,
-                            ];
-                            // Creando imagen de QR
-                            $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
-                            Storage::disk('qrs')->put($codigo.'.png', $png);
-                            // Se envia el email
-                            Mail::to($cliente->email)->send(new CuponMail($message, $codigo));
-                        }
-                    }
-                }
-                else                                // Medio a enviar es un email
-                {
-                    // Leer datos de email
-                    if($request->email)
-                    {
-                        $cliente = User::where('email', $request->email)->first();
-                        // preguntar si cliente NO esta definido
-                        if(!$cliente)
-                        {
-                            //dd('no existe email');
-                            // preguntar por query builder si esta definido
-                            $cliente = DB::table('users')->where('email', $request->email)->first();
-                            if($cliente)
-                            {
-                                // SI esta en la bd pero esta borrado, habilitarlo
-                                $cliente = DB::table('users')->where('email', $request->email)->update(['deleted_at' => NULL]);
-                            }
-                            else    
-                            {
-                                // NO esta en la bd crearlo
-                                $cliente = new User();
-                                $cliente->name = $request->email;
-                                $cliente->rol = 'Cliente';
-                                $cliente->email = $request->email;
-                                $cliente->password = Hash::make($cliente->email);
-                                $cliente->save();
-                            }
-                            $cliente = User::where('email', $request->email)->first();
-                        }
-                        // Se crea el codigo unico de cupon
-                        $sw=1;
-                        while($sw==1)
-                        {
-                            $codigo = $this->codigoGenerador();
-                            $valor = Cupone::where('codigo', $codigo)->get();
-                            if(count($valor)==0)
-                            {
-                                $sw=0;
-                            }
-                        }
-                        // Se crea el Cupon
-                        $cupon = new Cupone();
-                        $cupon->user_id = Auth::user()->id;
-                        $cupon->producto_id = $request->producto_id;    //pendiente validar
-                        $cupon->cliente_id = $cliente->id;
-                        $cupon->almacene_id = $request->tienda;
-                        $cupon->descuento = $request->producto_descuento;
-                        $cupon->monto_total = $request->producto_total;
-                        $cupon->codigo = $codigo;
-                        $cupon->fecha_inicio = $request->fecha_inicio;
-                        $cupon->fecha_final = $request->fecha_fin;
-                        $cupon->save();
-                        // Se preparan los datos para el envio del email
-                        $producto = Producto::find($request->producto_id);
-                        $tienda = Almacene::find($request->tienda);
-                        if($tienda)             // Si existe una tienda especifica
-                        {
-                            $tienda = $tienda->nombre.', '.$tienda->direccion;
-                        }
-                        else                    // Si puede cobrar en cualquier tienda
-                        {
-                            $tienda = "Cualquier sucursal";
-                        }
-                        $message = [
-                            'fecha_final' => $request->fecha_fin,
-                            'producto' => $producto->nombre,
-                            'precio_normal' => $request->producto_precio,
-                            'precio_descuento' => $request->producto_total,
-                            'tienda' => $tienda,
-                        ];
-                        // Creando imagen de QR
-                        $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
-                        Storage::disk('qrs')->put($codigo.'.png', $png);
-                        // Se envia el email
-                        Mail::to($cliente->email)->send(new CuponMail($message, $codigo));
-                    }
-                }
-            }
-            else                            // Para una grupo de personas (masivo)
-            {
-                // Entonces tiene que existir valores en $request->grupos, preguntamos si esta definido (si hay valores)
-                if($request->grupos)
-                {
-                    // Elaboramos la consulta dinamica donde se guardara en la variable $resultado, todos los grupos enviados de interfaz
-                    $consulta = DB::table("grupos_users");
-                    foreach($request->grupos as $grupo){
-                        $consulta->orWhere('grupo_id', $grupo);
-                    }
-                    $resultado = $consulta->get('user_id');
-                    // Eliminaremos resultados duplicados guardando el resultado en la variable $final
-                    $final = array();
-                    foreach($resultado as $row){
-                        if(!in_array($row->user_id, $final))
-                        {
-                            array_push($final, $row->user_id);
-                        }
-                    }
-                    // Procedemos al envio masivo en base a cada user_id que se encuentre en la variable $final
-                    foreach($final as $row){
-                        // Buscamos en la BD al cliente
-                        $cliente = User::find($row);
-                        // Si encontro al cliente(no tiene que estar eliminado en la bd)
-                        if($cliente)            // Procedemos a registrar en la BD suc cupon y su envio
-                        {
-                            //comprobamos que el codigo generado no se encuentre en la base de datos(Unico)
-                            $sw=1;
-                            while($sw==1)
-                            {
-                                $codigo = $this->codigoGenerador();
-                                $valor = Cupone::where('codigo', $codigo)->get();
-                                if(count($valor)==0)
-                                {
-                                    $sw=0;
-                                }
-                            }
-                            //Se crea el Cupon
-                            $cupon = new Cupone();
-                            $cupon->user_id = Auth::user()->id;
-                            $cupon->producto_id = $request->producto_id;    //pendiente validar
-                            $cupon->cliente_id = $cliente->id;
-                            $cupon->almacene_id = $request->tienda;
-                            $cupon->descuento = $request->producto_descuento;
-                            $cupon->monto_total = $request->producto_total;
-                            $cupon->codigo = $codigo;
-                            $cupon->fecha_inicio = $request->fecha_inicio;
-                            $cupon->fecha_final = $request->fecha_fin;
-                            $cupon->save();
-                         
-                            
-                            //Se preparan los datos para el envio del email
-                            $producto = Producto::find($request->producto_id);
-                            $tienda = Almacene::find($request->tienda);
-                            if($tienda)
-                            {
-                                //Si existe una tienda especifica
-                                $tienda = $tienda->nombre.', '.$tienda->direccion;
-                            }
-                            else
-                            {
-                                //Si puede cobrar en cualquier tienda
-                                $tienda = "Cualquier sucursal";
-                            }
+        // dd($request->all());
+        // se crea el cupon para registrarse el usuario
+        $cupon = new Cupone();
+        $cupon->user_id = Auth::user()->id;
+        $cupon->almacene_id = $request->tienda;
+        $cupon->descuento = $request->producto_descuento;
+        // if ($request->combo_id == null) {
+            $cupon->producto_id = $request->producto_id;
+        // }else{
+            $cupon->combo_id = $request->combo_id;
+        // }
+        $cupon->monto_total = $request->producto_total;
+        $cupon->fecha_inicio = $request->fecha_inicio;
+        $cupon->fecha_final = $request->fecha_fin;
+        $cupon->inicio_publicacion = $request->inicio_publicacion;
+        $cupon->final_publicacion = $request->final_publicacion;
+        $cupon->estado = 'Vigente';
+        $cupon->save();
 
-                            $message = [
-                                'fecha_final' => $request->fecha_fin,
-                                'producto' => $producto->nombre,
-                                'precio_normal' => $request->producto_precio,
-                                'precio_descuento' => $request->producto_total,
-                                'tienda' => $tienda,
-                            ];
-
-                            //Creando imagen de QR
-                            $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
-                            Storage::disk('qrs')->put($codigo.'.png', $png);
-
-                            //Se envia el email
-                            Mail::to($cliente->email)->send(new CuponMail($message, $codigo));  
-                        }
-                    }
-                }
-            }
-            return redirect('Cupon/listado');
-        }
-        else                                // Cupon por una promocion
-        {
-            // Debemos preguntarnos si el cupon es masivo o individual
-            if($request->tipo_envio)        // Para una persona (individual)
-            {
-                // Entonces tiene que existir valores en tipo_envio y en (cliente o email)
-                //dd('Existe tipo envio en producto');
-                if($request->tipo_envio == "1")     // Medio a enviar es un cliente
-                {
-                    // Leer datos de id_cliente
-                    if($request->cliente)
-                    {
-                        $cliente = User::find($request->cliente);
-                        if($cliente)
-                        {
-                            // Se crea el codigo unico de cupon
-                            $sw=1;
-                            while($sw==1)
-                            {
-                                $codigo = $this->codigoGenerador();
-                                $valor = Cupone::where('codigo', $codigo)->get();
-                                if(count($valor)==0)
-                                {
-                                    $sw=0;
-                                }
-                            }
-                            //Almacenaremos el valor total de la promocion
-                            $promo = Combo::find($request->promocion);
-                            $productos_promo = CombosProducto::where('combo_id', $promo->id)->get();
-                            $precio_total_promocion = 0;
-                            foreach($productos_promo as $producto){
-                                $precio_total_promocion = $precio_total_promocion + ($producto->precio*$producto->cantidad);
-                            }
-                            // Se crea el Cupon
-                            $cupon = new Cupone();
-                            $cupon->user_id = Auth::user()->id;
-                            $cupon->cliente_id = $cliente->id;
-                            $cupon->combo_id = $request->promocion;    //pendiente validar
-                            $cupon->almacene_id = $request->tienda;
-                            //$cupon->descuento = $request->producto_descuento;
-                            $cupon->monto_total = $precio_total_promocion;
-                            $cupon->codigo = $codigo;
-                            $cupon->fecha_inicio = $request->fecha_inicio;
-                            $cupon->fecha_final = $request->fecha_fin;
-                            $cupon->save();
-                            // Se preparan los datos de promocion(Combo) y sus respectivos productos
-                            $combo = Combo::find($request->promocion);
-                            $productos_combo = CombosProducto::where('combo_id', $combo->id)->get();
-                            if($request->tienda)            // Si existe una tienda especifica
-                            {
-                                //$tienda = Almacene::find($request->tienda);
-                                $tienda = Almacene::where('id', $request->tienda)->first();
-                                $tienda = $tienda->nombre.', '.$tienda->direccion;
-                            }
-                            else                            // Si puede cobrar en cualquier tienda
-                            {
-                                $tienda = "Cualquier sucursal";
-                            }
-                            // Creando imagen de QR
-                            $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
-                            Storage::disk('qrs')->put($codigo.'.png', $png);
-                            // Se envia el email
-                            Mail::to($cliente->email)->send(new PromocionMail($codigo, $request->fecha_fin, $tienda, $combo, $productos_combo));
-                        }
-                    }
-                }
-                else                                // Medio a enviar es un email
-                {
-                    // Leer datos de email
-                    if($request->email)
-                    {
-                        $cliente = User::where('email', $request->email)->first();
-                        // preguntar si cliente NO esta definido
-                        if(!$cliente)
-                        {
-                            // preguntar por query builder si esta definido
-                            $cliente = DB::table('users')->where('email', $request->email)->first();
-                            if($cliente)
-                            {
-                                // SI esta en la bd pero esta borrado, habilitarlo
-                                $cliente = DB::table('users')->where('email', $request->email)->update(['deleted_at' => NULL]);
-                            }
-                            else    
-                            {
-                                // NO esta en la bd crearlo
-                                $cliente = new User();
-                                $cliente->name = $request->email;
-                                $cliente->rol = 'Cliente';
-                                $cliente->email = $request->email;
-                                $cliente->password = Hash::make($cliente->email);
-                                $cliente->save();
-                            }
-                            $cliente = User::where('email', $request->email)->first();
-                        }
-                        // Se crea el codigo unico de cupon
-                        $sw=1;
-                        while($sw==1)
-                        {
-                            $codigo = $this->codigoGenerador();
-                            $valor = Cupone::where('codigo', $codigo)->get();
-                            if(count($valor)==0)
-                            {
-                                $sw=0;
-                            }
-                        }
-                        //Almacenaremos el valor total de la promocion
-                        $promo = Combo::find($request->promocion);
-                        $productos_promo = CombosProducto::where('combo_id', $promo->id)->get();
-                        $precio_total_promocion = 0;
-                        foreach($productos_promo as $producto){
-                            $precio_total_promocion = $precio_total_promocion + ($producto->precio*$producto->cantidad);
-                        }
-                        // Se crea el Cupon
-                        $cupon = new Cupone();
-                        $cupon->user_id = Auth::user()->id;
-                        $cupon->cliente_id = $cliente->id;
-                        $cupon->combo_id = $request->promocion;    //pendiente validar
-                        $cupon->almacene_id = $request->tienda;
-                        // $cupon->descuento = $request->producto_descuento;
-                        $cupon->monto_total = $precio_total_promocion;
-                        $cupon->codigo = $codigo;
-                        $cupon->fecha_inicio = $request->fecha_inicio;
-                        $cupon->fecha_final = $request->fecha_fin;
-                        $cupon->save();
-                        // Se preparan los datos de promocion(Combo) y sus respectivos productos
-                        $combo = Combo::find($request->promocion);
-                        $productos_combo = CombosProducto::where('combo_id', $combo->id)->get();
-                        if($request->tienda)            // Si existe una tienda especifica
-                        {
-                            //$tienda = Almacene::find($request->tienda);
-                            $tienda = Almacene::where('id', $request->tienda)->first();
-                            $tienda = $tienda->nombre.', '.$tienda->direccion;
-                        }
-                        else                            // Si puede cobrar en cualquier tienda
-                        {
-                            $tienda = "Cualquier sucursal";
-                        }
-                        // Creando imagen de QR
-                        $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
-                        Storage::disk('qrs')->put($codigo.'.png', $png);
-                        // Se envia el email
-                        Mail::to($cliente->email)->send(new PromocionMail($codigo, $request->fecha_fin, $tienda, $combo, $productos_combo));
-                    }
-                }
-            }
-            else                            // Para una grupo de personas (masivo)
-            {
-                // Entonces tiene que existir valores en $request->grupos, preguntamos si esta definido (si hay valores)
-                if($request->grupos)
-                {
-                    // Elaboramos la consulta dinamica donde se guardara en la variable $resultado, todos los grupos enviados de interfaz
-                    $consulta = DB::table("grupos_users");
-                    foreach($request->grupos as $grupo){
-                        $consulta->orWhere('grupo_id', $grupo);
-                    }
-                    $resultado = $consulta->get('user_id');
-                    // Eliminaremos resultados duplicados guardando el resultado en la variable $final
-                    $final = array();
-                    foreach($resultado as $row){
-                        if(!in_array($row->user_id, $final))
-                        {
-                            array_push($final, $row->user_id);
-                        }
-                    }
-                    // Procedemos al envio masivo en base a cada user_id que se encuentre en la variable $final
-                    foreach($final as $row){
-                        // Buscamos en la BD al cliente
-                        $cliente = User::find($row);
-                        // Si encontro al cliente(no tiene que estar eliminado en la bd)
-                        if($cliente)            // Procedemos a registrar en la BD suc cupon y su envio
-                        {
-                            //comprobamos que el codigo generado no se encuentre en la base de datos(Unico)
-                            $sw=1;
-                            while($sw==1)
-                            {
-                                $codigo = $this->codigoGenerador();
-                                $valor = Cupone::where('codigo', $codigo)->get();
-                                if(count($valor)==0)
-                                {
-                                    $sw=0;
-                                }
-                            }
-                            //Almacenaremos el valor total de la promocion
-                            $promo = Combo::find($request->promocion);
-                            $productos_promo = CombosProducto::where('combo_id', $promo->id)->get();
-                            $precio_total_promocion = 0;
-                            foreach($productos_promo as $producto){
-                                $precio_total_promocion = $precio_total_promocion + ($producto->precio*$producto->cantidad);
-                            }
-                            //Se crea el Cupon
-                            $cupon = new Cupone();
-                            $cupon->user_id = Auth::user()->id;
-                            //$cupon->producto_id = $request->producto_id;    //pendiente validar
-                            $cupon->cliente_id = $cliente->id;
-                            $cupon->combo_id = $request->promocion;    //pendiente validar
-                            $cupon->almacene_id = $request->tienda;
-                            //$cupon->descuento = $request->producto_descuento;
-                            $cupon->monto_total = $precio_total_promocion;
-                            $cupon->codigo = $codigo;
-                            $cupon->fecha_inicio = $request->fecha_inicio;
-                            $cupon->fecha_final = $request->fecha_fin;
-                            $cupon->save();
-
-                            // Se preparan los datos de promocion(Combo) y sus respectivos productos
-                            $combo = Combo::find($request->promocion);
-                            $productos_combo = CombosProducto::where('combo_id', $combo->id)->get();
-                            if($request->tienda)            // Si existe una tienda especifica
-                            {
-                                //$tienda = Almacene::find($request->tienda);
-                                $tienda = Almacene::where('id', $request->tienda)->first();
-                                $tienda = $tienda->nombre.', '.$tienda->direccion;
-                            }
-                            else                            // Si puede cobrar en cualquier tienda
-                            {
-                                $tienda = "Cualquier sucursal";
-                            }
-                            // Creando imagen de QR
-                            $png = QrCode::format('png')->color(1,126,191)->size(300)->generate($codigo);
-                            Storage::disk('qrs')->put($codigo.'.png', $png);
-                            // Se envia el email
-                            Mail::to($cliente->email)->send(new PromocionMail($codigo, $request->fecha_fin, $tienda, $combo, $productos_combo));
-                        }
-                    }
-                }
-            }
-            return redirect('Cupon/listado');
-        }
+        return redirect('Cupon/listado');
     }
 
     public function cobrar(Request $request)

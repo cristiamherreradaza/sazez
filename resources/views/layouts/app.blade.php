@@ -136,7 +136,7 @@
                                                                         <i class="fas fa-{{ $icono }}"></i>
                                                                     </span>
                                                                     <div class="w-75 d-inline-block v-middle pl-2">
-                                                                        <h5 class="message-title mb-0 mt-1 text-info">{{ $cupon->user->name }}</h5>
+                                                                        <h5 class="message-title mb-0 mt-1 text-info">{{ $cupon->user_id }}</h5>
                                                                         <span class="font-12 text-nowrap d-block text-muted text-truncate">
                                                                             {{ $item }}
                                                                         </span>

@@ -19,7 +19,7 @@ class CreateCuponesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('producto_id');
             $table->foreign('producto_id')->references('id')->on('productos');
-            $table->unsignedBigInteger('cliente_id');
+            $table->unsignedBigInteger('cliente_id')->nullable();
             $table->foreign('cliente_id')->references('id')->on('users');
             $table->unsignedBigInteger('almacene_id')->nullable();
             $table->foreign('almacene_id')->references('id')->on('almacenes');

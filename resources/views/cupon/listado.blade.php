@@ -22,12 +22,9 @@
             <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
                 <thead>
                     <tr>
-                        <th>Cup&oacute;n</th>
                         <th>Producto</th>
                         <th>Promoción</th>
-                        <th>Cliente</th>
                         <th>Tienda</th>
-                        <th>Cobrado</th>
                         <th>Fecha Inicio</th>
                         <th>Fecha Fin</th>
                         <th>Accion</th>
@@ -128,12 +125,9 @@
             serverSide: true,
             ajax: "{{ url('Cupon/ajax_listado') }}",
             columns: [
-                {data: 'codigo', name: 'codigo'},
                 {data: 'producto_nombre', name: 'productos.nombre'},
                 {data: 'combo_nombre', name: 'combos.nombre'},
-                {data: 'cliente_nombre', name: 'users.name'},
                 {data: 'tienda', name: 'almacenes.nombre'},
-                {data: 'cobrado', name: 'cupones_cobrados.fecha'},
                 {data: 'fecha_inicio', name: 'fecha_inicio'},
                 {data: 'fecha_final', name: 'fecha_final'},
                 {data: 'action'},
