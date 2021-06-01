@@ -229,11 +229,8 @@ class CuponController extends Controller
         $cupon->user_id = Auth::user()->id;
         $cupon->almacene_id = $request->tienda;
         $cupon->descuento = $request->producto_descuento;
-        // if ($request->combo_id == null) {
-            $cupon->producto_id = $request->producto_id;
-        // }else{
-            $cupon->combo_id = $request->combo_id;
-        // }
+        $cupon->producto_id = $request->producto_id;
+        $cupon->combo_id = $request->combo_id;
         $cupon->monto_total = $request->producto_total;
         $cupon->fecha_inicio = $request->fecha_inicio;
         $cupon->fecha_final = $request->fecha_fin;
