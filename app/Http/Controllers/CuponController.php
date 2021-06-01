@@ -234,8 +234,6 @@ class CuponController extends Controller
         $cupon->monto_total = $request->producto_total;
         $cupon->fecha_inicio = $request->fecha_inicio;
         $cupon->fecha_final = $request->fecha_fin;
-        $cupon->inicio_publicacion = $request->inicio_publicacion;
-        $cupon->final_publicacion = $request->final_publicacion;
         $cupon->estado = 'Vigente';
         $cupon->save();
 
