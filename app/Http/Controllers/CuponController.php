@@ -225,8 +225,6 @@ class CuponController extends Controller
 
     public function guardar(Request $request)
     {
-        // dd($request->all());
-        // se crea el cupon para registrarse el usuario
         $cupon = new Cupone();
         $cupon->user_id = Auth::user()->id;
         $cupon->almacene_id = $request->tienda;
