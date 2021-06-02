@@ -15,102 +15,177 @@
             </div>
             <!-- contenido de impresion -->
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h2 class="text-primary text-center">DATOS DEL CUPON</h2>
-                        <h3><span class="text-primary">PROMOCIÓN: </span> {{ $promocion->nombre }}</h3>
-                        <h3 class="text-center"><span class="text-primary">PRODUCTOS </span> </h3>
-                        <div class="table-responsive m-t-40">
-                            <table id="myTable" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center text-primary">#</th>
-                                        <th class="text-primary">Nombre</th>
-                                        <th class="text-center text-primary">Cantidad</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $precioPromo = 0;
-                                    @endphp
-                                    @foreach ($productos_promocion as $key => $p)
-                                    @php
-                                        $precioPromo += $p->precio;
-                                    @endphp
+                @if ($cupon->producto_id == null)
+                    {{-- datos del cupon cuando es promo --}}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="text-primary text-center">DATOS DEL CUPON</h2>
+                            <h4><span class="text-primary">PROMO: </span> {{ $promocion->nombre }}</h4>
+                            <h4 class="text-center"><span class="text-primary">PRODUCTOS </span> </h4>
+                            <div class="table-responsive m-t-40">
+                                <table id="myTable" class="table table-bordered table-striped">
+                                    <thead>
                                         <tr>
-                                            <td class="text-center">{{ ++$key }}</td>
-                                            <td>{{ $p->producto->nombre }}</td>
-                                            <td class="text-center">{{ $p->cantidad }}</td>
+                                            <th class="text-center text-primary">#</th>
+                                            <th class="text-primary">Nombre</th>
+                                            <th class="text-center text-primary">Cantidad</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <h3><span class="text-primary">PRECIO: </span> {{ round($precioPromo, 0) }} Bolivianos</h3>
-                        <hr />
-                        <div id="bloqueRegistro">
-                            <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>
-                            <form action="#" id="formularioCupon">
-                                @csrf
-                                <input type="hidden" name="cupon_id" id="cupon_id" value="{{ $cupon->id }}">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="nombre">
-                                                CARNET
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                            </label>
-                                            <input type="number" class="form-control" name="ci" id="ci" autofocus required>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $precioPromo = 0;
+                                        @endphp
+                                        @foreach ($productos_promocion as $key => $p)
+                                        @php
+                                            $precioPromo += $p->precio;
+                                        @endphp
+                                            <tr>
+                                                <td class="text-center">{{ ++$key }}</td>
+                                                <td>{{ $p->producto->nombre }}</td>
+                                                <td class="text-center">{{ $p->cantidad }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <h4><span class="text-primary">PRECIO: </span> {{ round($precioPromo, 0) }} Bolivianos</h4>
+                            <hr />
+                            <div id="bloqueRegistro">
+                                <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>
+                                <form action="#" id="formularioCupon">
+                                    @csrf
+                                    <input type="hidden" name="cupon_id" id="cupon_id" value="{{ $cupon->id }}">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    CARNET
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <input type="number" class="form-control" name="ci" id="ci" autofocus required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    NOMBRE
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <input type="text" class="form-control" name="name" id="name" required>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="nombre">
-                                                NOMBRE
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                            </label>
-                                            <input type="text" class="form-control" name="name" id="name" required>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    NIT
+                                                </label>
+                                                <input type="number" class="form-control" name="nit" id="nit">
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    RAZON SOCIAL
+                                                </label>
+                                                <input type="text" class="form-control" name="razon_social" id="razon_social">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="nombre">
-                                                NIT
-                                            </label>
-                                            <input type="number" class="form-control" name="nit" id="nit">
+                                    <div class="row">
+
+                                        <div class="col-md-12">
+                                            <button class="btn btn-success btn-block" type="button" onclick="enviaFormularioCupon()">OBTENER CUPON</button>
                                         </div>
-                                    </div>
-                                
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="nombre">
-                                                RAZON SOCIAL
-                                            </label>
-                                            <input type="text" class="form-control" name="razon_social" id="razon_social">
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="row">
-
-                                    <div class="col-md-12">
-                                        <button class="btn btn-success btn-block" type="button" onclick="enviaFormularioCupon()">OBTENER CUPON</button>
                                     </div>
-
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-
+                    {{-- datos del cupon cuando es promo --}}
+                @else
+                    {{-- datos del cupon cuando es por producto --}}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h2 class="text-primary text-center">DATOS DEL CUPON</h2>
+                            <h4><span class="text-primary">PRODUCTO: </span> {{ $producto->nombre }}</h4>
+                            <h4><span class="text-primary">PRECIO: </span> {{ round($cupon->monto_total, 0) }} Bolivianos</h4>
+                            <hr />
+                            <div id="bloqueRegistro">
+                                <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>
+                                <form action="#" id="formularioCupon">
+                                    @csrf
+                                    <input type="hidden" name="cupon_id" id="cupon_id" value="{{ $cupon->id }}">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    CARNET
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <input type="number" class="form-control" name="ci" id="ci" autofocus required>
+                                            </div>
+                                        </div>
+                    
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    NOMBRE
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <input type="text" class="form-control" name="name" id="name" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    NIT
+                                                </label>
+                                                <input type="number" class="form-control" name="nit" id="nit">
+                                            </div>
+                                        </div>
+                    
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="nombre">
+                                                    RAZON SOCIAL
+                                                </label>
+                                                <input type="text" class="form-control" name="razon_social" id="razon_social">
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row">
+                    
+                                        <div class="col-md-12">
+                                            <button class="btn btn-success btn-block" type="button" onclick="enviaFormularioCupon()">OBTENER
+                                                CUPON</button>
+                                        </div>
+                    
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- datos del cupon cuando es por producto --}}
+                @endif
                 <h5 class="font-italic text-center">
                     @php
                         function fechaCastellano ($fecha) {
@@ -132,9 +207,13 @@
 
                         $fechaArray = explode(" ", $cupon->fecha_final);
 
+                        $utilidades = new App\librerias\Utilidades();
+                        $fechaCuponValido = $utilidades->fechaHoraCastellano($cupon->fecha_final);
+
                     @endphp
 
-                    Cupón valido hasta {{ fechaCastellano($cupon->fecha_final) }} Horas: {{ $fechaArray[1] }}</h5>                
+                    Cupón valido hasta {{ $fechaCuponValido }}</h5>
+                    Tiendas:                 
 
             </div>
         </div>

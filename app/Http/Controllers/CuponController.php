@@ -125,7 +125,8 @@ class CuponController extends Controller
                     // Si la fecha_fin del cupon es menor a la fecha actual, muestra todos los botones (Ver Cupon, Cobrar, ELiminar)
                     if(strtotime($cupones->fecha_final) >= strtotime(date('Y-m-d H:i:s')))
                     {
-                        return '<button onclick="cobrar('.$cupones->id.')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                        return '<button onclick="generaQr('.$cupones->id.')" id="boton-'.$cupones->id.'" class="btn waves-effect waves-light btn-outline-dark" title="Genera QR"><i class="fas fa-qrcode"></i> </button>
+                                <button onclick="cobrar('.$cupones->id.')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
                                 <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>
                                 <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
                     }
@@ -201,16 +202,17 @@ class CuponController extends Controller
     public function ver($id)
     {
         $cupon = Cupone::find($id);
-        $almacenes = Almacene::whereNull('estado')->get();
-        if($cupon->producto_id)             // Es un cupon por un producto
+        
+        if($cupon->producto_id)
         {
-            return view('cupon.ver')->with(compact('cupon', 'almacenes'));
+            $producto = Producto::find($cupon->id);
+            return view('cupon.ver_promocion')->with(compact('cupon', 'producto'));
         }
-        else                                // Es un cupon por una promocion
+        else
         {
             $promocion = Combo::find($cupon->combo_id);
             $productos_promocion = CombosProducto::where('combo_id', $promocion->id)->get();
-            return view('cupon.ver_promocion')->with(compact('cupon', 'almacenes', 'promocion', 'productos_promocion'));
+            return view('cupon.ver_promocion')->with(compact('cupon', 'promocion', 'productos_promocion'));
         }
         
     }
@@ -470,6 +472,13 @@ class CuponController extends Controller
 
         }else{
             $clienteId = $buscaUsuario->id;
+
+            $usuario = User::find($buscaUsuario->id);
+            $usuario->name         = $request->name;
+            $usuario->ci           = $request->ci;
+            $usuario->razon_social = $request->razon_social;
+            $usuario->save();
+            // $clienteId = $buscaUsuarioNit->id;
         }
 
         // dd($clienteId);
@@ -506,6 +515,6 @@ class CuponController extends Controller
         }
 
         $datosCuponRegistrado = CuponesCliente::find($cuponId);
-        return view('cupon.muestraRegistroCupon')->with(compact('verificaRegistroCupon', 'datosCuponRegistrado'));
+        return view('cupon.registraClienteCupon')->with(compact('verificaRegistroCupon', 'datosCuponRegistrado'));
     }
 }

@@ -36,6 +36,25 @@
         </div>
     </div>
 </div>
+{{-- modal para qr --}}
+<div class="modal fade" id="modal-qr" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="mySmallModalLabel">QR PROMO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <h5 id="titulo-modal-qr"></h5>
+                <canvas id="qr" class="text-center">
+                    
+                </canvas>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+{{-- fin modal para qr --}}
 
 <!-- Inicio modal cobro cupon -->
 <div id="modal_cobro" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -49,6 +68,8 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script src="{{ asset('dist/js/qrious.min.js') }}"></script>
+
 <script>
     $(function () {
         $('#myTable').DataTable({
@@ -305,8 +326,27 @@
         // sumaSubTotales();
     });
 
+    function generaQr(promoId)
+    {
+        // codigo-qr-cupon
+        $("#modal-qr").modal('show');
+        let filaTabla=document.getElementById('boton-'+promoId).parentNode.parentNode;
+        let producto = filaTabla.cells[0].innerHTML;
+        let promo = filaTabla.cells[1].innerHTML;
+        if(producto == ""){
+            datosPromo = promo;
+        }else{
+            datosPromo = producto;
+        }
+        document.getElementById('titulo-modal-qr').innerHTML = datosPromo;
 
+        var qr = new QRious({
+            element: document.getElementById('qr'),
+            size: 240,
+            value: "{{ url('Cupon/ver') }}/"+promoId
+        });
 
+    }
 </script>
     <script src="{{ asset('assets/libs/moment/min/moment-with-locales.js') }}"></script>
     <script src="{{ asset('assets/libs/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker-custom.js') }}"></script>
