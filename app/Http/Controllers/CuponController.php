@@ -226,15 +226,17 @@ class CuponController extends Controller
     public function guardar(Request $request)
     {
         $cupon = new Cupone();
-        $cupon->user_id = Auth::user()->id;
-        $cupon->almacene_id = $request->tienda;
-        $cupon->descuento = $request->producto_descuento;
-        $cupon->producto_id = $request->producto_id;
-        $cupon->combo_id = $request->combo_id;
-        $cupon->monto_total = $request->producto_total;
+
+        $cupon->user_id      = Auth::user()->id;
+        $cupon->almacene_id  = $request->tienda;
+        $cupon->descuento    = $request->producto_descuento;
+        $cupon->producto_id  = $request->producto_id;
+        $cupon->combo_id     = $request->combo_id;
+        $cupon->monto_total  = $request->producto_total;
         $cupon->fecha_inicio = $request->fecha_inicio;
-        $cupon->fecha_final = $request->fecha_fin;
-        $cupon->estado = 'Vigente';
+        $cupon->fecha_final  = $request->fecha_fin;
+        $cupon->estado       = 'Vigente';
+        
         $cupon->save();
 
         return redirect('Cupon/listado');

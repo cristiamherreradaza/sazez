@@ -48,6 +48,8 @@ Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback
 //REPORTE DE TIENDA
 Route::get('Tienda/publico', 'TiendaController@publico');
 
+// registro de usuarios a los cupones
+Route::get('Cupon/registro', 'CuponController@registro');
 
 // Aqui colocar todas las rutas para los usuarios que no sean clientes.... todavia por definir.
 Route::middleware(['auth', 'admin'])->group(function () {
