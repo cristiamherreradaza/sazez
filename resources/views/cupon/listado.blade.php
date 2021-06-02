@@ -46,8 +46,9 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                <h5 id="titulo-modal-qr"></h5>
-                <canvas id="qr" class="text-center">
+                <h5><span class="text-info">PROMO: </span><span id="titulo-modal-qr"> </span> </h5>
+                <h6><span class="text-info">URL: </span><span id="url-modal-qr"> </span> </h6>
+                <canvas id="qr">
                     
                 </canvas>
             </div>
@@ -339,10 +340,11 @@
             datosPromo = producto;
         }
         document.getElementById('titulo-modal-qr').innerHTML = datosPromo;
+        document.getElementById('url-modal-qr').innerHTML = "{{ url('Cupon/ver') }}/"+promoId;
 
         var qr = new QRious({
             element: document.getElementById('qr'),
-            size: 240,
+            size: 270,
             value: "{{ url('Cupon/ver') }}/"+promoId
         });
 
