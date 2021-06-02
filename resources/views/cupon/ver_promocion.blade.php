@@ -48,64 +48,66 @@
                         </div>
                         <h3><span class="text-primary">PRECIO: </span> {{ round($precioPromo, 0) }} Bolivianos</h3>
                         <hr />
-                        <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>
-                        <form action="{{ url('Cupon/registraClienteCupon') }}">
-                            @csrf
-                            <input type="hidden" name="cupon_id" id="cupon_id" value="{{ $cupon->id }}">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="nombre">
-                                            CARNET
-                                            <span class="text-danger">
-                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                            </span>
-                                        </label>
-                                        <input type="number" class="form-control" name="ci" id="ci" autofocus required>
+                        <div id="bloqueRegistro">
+                            <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>
+                            <form action="#" id="formularioCupon">
+                                @csrf
+                                <input type="hidden" name="cupon_id" id="cupon_id" value="{{ $cupon->id }}">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="nombre">
+                                                CARNET
+                                                <span class="text-danger">
+                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                </span>
+                                            </label>
+                                            <input type="number" class="form-control" name="ci" id="ci" autofocus required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="nombre">
+                                                NOMBRE
+                                                <span class="text-danger">
+                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                </span>
+                                            </label>
+                                            <input type="text" class="form-control" name="name" id="name" required>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="nombre">
-                                            NOMBRE
-                                            <span class="text-danger">
-                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                            </span>
-                                        </label>
-                                        <input type="text" class="form-control" name="name" id="name" required>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="nombre">
+                                                NIT
+                                            </label>
+                                            <input type="number" class="form-control" name="nit" id="nit">
+                                        </div>
+                                    </div>
+                                
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="nombre">
+                                                RAZON SOCIAL
+                                            </label>
+                                            <input type="text" class="form-control" name="razon_social" id="razon_social">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="nombre">
-                                            NIT
-                                        </label>
-                                        <input type="number" class="form-control" name="nit" id="nit">
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        <button class="btn btn-success btn-block" type="button" onclick="enviaFormularioCupon()">OBTENER CUPON</button>
                                     </div>
-                                </div>
-                            
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <label for="nombre">
-                                            RAZON SOCIAL
-                                        </label>
-                                        <input type="text" class="form-control" name="razon_social" id="razon_social">
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="row">
-
-                                <div class="col-md-12">
-                                    <button class="btn btn-success btn-block" type="submit">OBTENER CUPON</button>
                                 </div>
-
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
 
@@ -159,5 +161,41 @@
 		};
 		$("div#printableArea").printArea(options);
 	});
+
+    function enviaFormularioCupon()
+    {
+        let datosFormularioCupon = $("#formularioCupon").serializeArray();
+
+        if(document.getElementById('formularioCupon').checkValidity()){
+            Swal.fire({
+                    type: 'success',
+                    title: 'Excelente',
+                    text: 'Se realizo el registro'
+                    });
+            $.ajax({
+                url: "{{ url('Cupon/registraClienteCupon') }}",
+                data: datosFormularioCupon,
+                type: 'POST',
+                success: function(data) {
+                    $("#bloqueRegistro").html(data);
+                    /*if (data.errorVenta == 0) {
+
+                        window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
+
+                    } else {
+
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'No tienes las cantidades suficientes.'
+                        })
+                    }*/
+                }
+            });
+
+        }else{
+            document.getElementById('formularioCupon').reportValidity()
+        }
+    }
 </script>
 @endsection

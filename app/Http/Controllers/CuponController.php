@@ -2,33 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use QrCode;
 use App\User;
-use App\Cupone;
-use App\Grupo;
-use App\GruposUser;
 use App\Combo;
-use App\CombosProducto;
-use App\CuponesCobrado;
+use App\Grupo;
+use App\Venta;
+use Exception;
+use App\Cupone;
+use DataTables;
 use App\Almacene;
 use App\Producto;
-use App\Venta;
-use App\VentasProducto;
+use App\GruposUser;
 use App\Movimiento;
+use App\CombosProducto;
+use App\CuponesCliente;
+use App\CuponesCobrado;
 use App\Mail\CuponMail;
-use App\Mail\PromocionMail;
+use App\VentasProducto;
 use App\Mail\PruebaMail;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use QrCode;
 use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Hash;
-use Exception;
+use App\Mail\PromocionMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-
 use Illuminate\Support\Facades\DB;
-use DataTables;
+use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class CuponController extends Controller
 {
@@ -430,17 +431,81 @@ class CuponController extends Controller
 
     public function registraClienteCupon(Request $request)
     {
+        // $verificaRegistroCupon = 'Si';
+
         $datosCupon = Cupone::find($request->cupon_id);
 
-        dd($request->nit);
-
         $buscaUsuario = User::where('ci', $request->ci)
-                        ->orWhere(function($query) {
-                            $query->where('nit', $request->nit)
-                            ->whereNotNull('ci');
-                        })
-                        ->first();
+                    ->first();
 
-        dd($buscaUsuario);        
+        if($buscaUsuario == null){
+
+            $buscaUsuarioNit = User::where('nit', $request->nit)
+                            ->whereNotNull('nit')
+                            ->first();
+            // dd($buscaUsuarioNit);
+            if ($buscaUsuarioNit != null) {
+
+                $usuario = User::find($buscaUsuarioNit->id);
+                $usuario->name         = $request->name;
+                $usuario->ci           = $request->ci;
+                $usuario->razon_social = $request->razon_social;
+                $usuario->save();
+                $clienteId = $buscaUsuarioNit->id;
+
+            } else {
+
+                $correoTemporal = date("YmdHis") . '@notiene.com';
+
+                $usuario = new User();
+                $usuario->name         = $request->name;
+                $usuario->ci           = $request->ci;
+                $usuario->razon_social = $request->razon_social;
+                $usuario->email        = $correoTemporal;
+                $usuario->password     = Hash::make('123456789');
+
+                $usuario->save();
+                $clienteId = $usuario->id;
+            }
+
+        }else{
+            $clienteId = $buscaUsuario->id;
+        }
+
+        // dd($clienteId);
+
+        $verificaCupon = CuponesCliente::where('cupone_id', $datosCupon->id)
+                                        ->where('cliente_id', $clienteId)
+                                        ->first();
+        // dd($verificaCupon);
+
+        if($verificaCupon == null){
+
+            $verificaRegistroCupon = 'No';
+
+            $hoy = date("Y-m-d H:i:s");
+
+            $cupon = new CuponesCliente();
+            $cupon->cupone_id      = $datosCupon->id;
+            $cupon->producto_id    = $datosCupon->producto_id;
+            $cupon->combo_id       = $datosCupon->combo_id;
+            $cupon->cliente_id     = $clienteId;
+            $cupon->almacene_id    = $datosCupon->almacene_id;
+            $cupon->fecha_creacion = $hoy;
+            $cupon->descuento      = $datosCupon->descuento;
+            $cupon->monto_total    = $datosCupon->monto_total;
+            $cupon->fecha_inicio   = $datosCupon->fecha_inicio;
+            $cupon->fecha_final    = $datosCupon->fecha_final;
+            $cupon->save();
+
+            $cuponId = $cupon->id;
+        }else{
+
+            $verificaRegistroCupon = 'Si';
+            $cuponId = $verificaCupon->id;
+        }
+
+        $datosCuponRegistrado = CuponesCliente::find($cuponId);
+        return view('cupon.muestraRegistroCupon')->with(compact('verificaRegistroCupon', 'datosCuponRegistrado'));
     }
 }

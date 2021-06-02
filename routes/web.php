@@ -51,7 +51,7 @@ Route::get('Tienda/publico', 'TiendaController@publico');
 // registro de usuarios a los cupones
 // Route::get('Cupon/registro', 'CuponController@registro');
 Route::get('Cupon/ver/{id}', 'CuponController@ver');
-Route::get('Cupon/registraClienteCupon', 'CuponController@registraClienteCupon');
+Route::post('Cupon/registraClienteCupon', 'CuponController@registraClienteCupon');
 
 
 // Aqui colocar todas las rutas para los usuarios que no sean clientes.... todavia por definir.
