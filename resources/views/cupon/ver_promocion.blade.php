@@ -50,32 +50,22 @@
                         <hr />
                         <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>
                         <form action="{{ url('Cupon/registraClienteCupon') }}">
+                            @csrf
+                            <input type="hidden" name="cupon_id" id="cupon_id" value="{{ $cupon->id }}">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="nombre">
-                                            CARNET O NIT
+                                            CARNET
                                             <span class="text-danger">
                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                             </span>
                                         </label>
-                                        <input type="text" class="form-control" name="ci" id="ci" autofocus required>
+                                        <input type="number" class="form-control" name="ci" id="ci" autofocus required>
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="nombre">
-                                            EMAIL
-                                            <span class="text-danger">
-                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                            </span>
-                                        </label>
-                                        <input type="text" class="form-control" name="email" id="email" autofocus required>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
+                                <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="nombre">
                                             NOMBRE
@@ -83,12 +73,35 @@
                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                             </span>
                                         </label>
-                                        <input type="text" class="form-control" name="name" id="name" autofocus required>
+                                        <input type="text" class="form-control" name="name" id="name" required>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="nombre">
+                                            NIT
+                                        </label>
+                                        <input type="number" class="form-control" name="nit" id="nit">
+                                    </div>
+                                </div>
+                            
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="nombre">
+                                            RAZON SOCIAL
+                                        </label>
+                                        <input type="text" class="form-control" name="razon_social" id="razon_social">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
 
                                 <div class="col-md-12">
-                                    <button id="botonImprimir" class="btn btn-success btn-block" type="button">OBTENER CUPON</button>
+                                    <button class="btn btn-success btn-block" type="submit">OBTENER CUPON</button>
                                 </div>
 
                             </div>

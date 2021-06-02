@@ -427,4 +427,20 @@ class CuponController extends Controller
     {
         return view('cupon.prueba');
     }
+
+    public function registraClienteCupon(Request $request)
+    {
+        $datosCupon = Cupone::find($request->cupon_id);
+
+        dd($request->nit);
+
+        $buscaUsuario = User::where('ci', $request->ci)
+                        ->orWhere(function($query) {
+                            $query->where('nit', $request->nit)
+                            ->whereNotNull('ci');
+                        })
+                        ->first();
+
+        dd($buscaUsuario);        
+    }
 }

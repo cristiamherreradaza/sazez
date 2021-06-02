@@ -49,7 +49,10 @@ Route::get('login/google/callback', 'Auth\LoginController@handleProviderCallback
 Route::get('Tienda/publico', 'TiendaController@publico');
 
 // registro de usuarios a los cupones
-Route::get('Cupon/registro', 'CuponController@registro');
+// Route::get('Cupon/registro', 'CuponController@registro');
+Route::get('Cupon/ver/{id}', 'CuponController@ver');
+Route::get('Cupon/registraClienteCupon', 'CuponController@registraClienteCupon');
+
 
 // Aqui colocar todas las rutas para los usuarios que no sean clientes.... todavia por definir.
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -138,7 +141,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Cupon/ajaxBuscaProducto', 'CuponController@ajaxBuscaProducto');//va
     Route::get('Cupon/eliminar/{id}', 'CuponController@eliminar');
     Route::post('Cupon/cobrar', 'CuponController@cobrar');
-    Route::get('Cupon/ver/{id}', 'CuponController@ver');
 
     //MENUS
     Route::get('Menu/listado', 'MenuController@listado');
