@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.cupones')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/lobilist.css') }}">

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.cupones')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/extra-libs/taskboard/css/lobilist.css') }}">
@@ -9,58 +9,106 @@
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <div class="card text-center" id="printableArea">
-            <div class="card-header">
-                SAZEZ
+        <div class="card">
+            <div class="card-header" style="background-color: #2C2E7B;">
+                <img src="{{ asset('assets/images/logoSmartZone.jpg') }}" alt="homepage" class="dark-logo" />
             </div>
             <!-- contenido de impresion -->
             <div class="card-body">
-                <h2>PROMOCION DE DESCUENTO</h2>
                 <div class="row">
-                    <ul class="text-left">
-                        <li><strong> NOMBRE DE PROMOCIÓN : </strong><br> {{ $promocion->nombre }}</li>
-                        <li><strong> PRODUCTOS INCLUIDOS: </strong><br>
-                            @foreach($productos_promocion as $key => $producto)
-                                <strong>Producto {{ ($key+1) }}:</strong> {{ $producto->producto->nombre }}<br>
-                                <strong>Cantidad:</strong> {{ $producto->cantidad }}<br>
-                                <strong>Precio:</strong> {{ round($producto->precio) }} Bs.<br>
-                            @endforeach
-                        </li>
-                        <li>
-                            <strong> TIENDA : </strong><br> 
-                            @if($cupon->almacene_id)
-                                {{ $cupon->almacen->nombre }}, ubicado en {{ $cupon->almacen->direccion }}
-                            @else
-                            <!-- <table>
-                                    @foreach($almacenes as $almacen)
+                    <div class="col-md-12">
+                        <h2 class="text-primary text-center">DATOS DEL CUPON</h2>
+                        <h3><span class="text-primary">PROMOCIÓN: </span> {{ $promocion->nombre }}</h3>
+                        <h3 class="text-center"><span class="text-primary">PRODUCTOS </span> </h3>
+                        <div class="table-responsive m-t-40">
+                            <table id="myTable" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center text-primary">#</th>
+                                        <th class="text-primary">Nombre</th>
+                                        <th class="text-center text-primary">Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
+                                        $precioPromo = 0;
+                                    @endphp
+                                    @foreach ($productos_promocion as $key => $p)
+                                    @php
+                                        $precioPromo += $p->precio;
+                                    @endphp
                                         <tr>
-                                            <td>{{ $almacen->nombre }}, ubicado en {{ $almacen->direccion }}</td>
+                                            <td class="text-center">{{ ++$key }}</td>
+                                            <td>{{ $p->producto->nombre }}</td>
+                                            <td class="text-center">{{ $p->cantidad }}</td>
                                         </tr>
                                     @endforeach
-                                </table> -->
-                                Cualquier Sucursal
-                            @endif
-                        </li>
-                    </ul>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h3><span class="text-primary">PRECIO: </span> {{ round($precioPromo, 0) }} Bolivianos</h3>
+                        <hr />
+                        <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>
+                        <form action="{{ url('Cupon/registraClienteCupon') }}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nombre">
+                                            CARNET O NIT
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" name="ci" id="ci" autofocus required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="nombre">
+                                            EMAIL
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" name="email" id="email" autofocus required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="nombre">
+                                            NOMBRE
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" name="name" id="name" autofocus required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <button id="botonImprimir" class="btn btn-success btn-block" type="button">OBTENER CUPON</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <img src="{{ asset('qrs/' .$cupon->codigo. '.png') }}" alt="">
-                <br>
-                <p><strong>Cupón valido hasta {{ $cupon->fecha_final }}.</strong></p>
-                <p>
-                    Al momento de tu compra, muestra <br>
-                    este ticket y se realizara el descuento.<br>
-                    Visitanos y conoce nuestros ofertas.
-                </p>
-            </div>
-            <!-- contenido de impresion -->
-            <div class="card-footer">
-                © 2015 - {{ date('Y') }} Sazez.net
+
+                <h3 class="text-danger">
+                    @php
+                        setlocale(LC_ALL, "es_ES", 'Spanish_Spain', 'Spanish');
+                        echo iconv('ISO-8859-2', 'UTF-8', strftime("%A, %d de %B de %Y", strtotime($row['date'])));
+                    @endphp
+                    Cupón valido hasta {{ $cupon->fecha_final }}.</h3>                
+
             </div>
         </div>
     </div>
 </div>
+
 <div class="row">
-<button id="botonImprimir" class="btn btn-success btn-block col-md-4 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
 </div>
 @stop
 
