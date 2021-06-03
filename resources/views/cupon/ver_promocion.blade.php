@@ -119,7 +119,8 @@
                         <div class="col-md-12">
                             <h2 class="text-primary text-center">DATOS DEL CUPON</h2>
                             <h4><span class="text-primary">PRODUCTO: </span> {{ $producto->nombre }}</h4>
-                            <h4><span class="text-primary">PRECIO: </span> {{ round($cupon->monto_total, 0) }} Bolivianos</h4>
+                            <h5><span class="text-danger">PRECIO ANTES: </span> <span style="text-decoration:line-through;">{{ round($precio->precio, 0) }} Bs.</span></h5>
+                            <h5><span class="text-info">PRECIO AHORA: </span> {{ round($cupon->monto_total, 0) }} Bs.</h5>
                             <hr />
                             <div id="bloqueRegistro">
                                 <h3 class="text-center text-success">REGISTRATE PARA EL CUPON</h3>

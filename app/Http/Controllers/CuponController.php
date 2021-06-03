@@ -9,6 +9,7 @@ use App\Grupo;
 use App\Venta;
 use Exception;
 use App\Cupone;
+use App\Precio;
 use DataTables;
 use App\Almacene;
 use App\Producto;
@@ -25,8 +26,8 @@ use App\Mail\PromocionMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -206,7 +207,11 @@ class CuponController extends Controller
         if($cupon->producto_id)
         {
             $producto = Producto::find($cupon->id);
-            return view('cupon.ver_promocion')->with(compact('cupon', 'producto'));
+            $precio = Precio::where('producto_id', $cupon->producto_id)
+                            ->where('escala_id', 1)
+                            ->first();
+
+            return view('cupon.ver_promocion')->with(compact('cupon', 'producto', 'precio'));
         }
         else
         {
@@ -517,4 +522,119 @@ class CuponController extends Controller
         $datosCuponRegistrado = CuponesCliente::find($cuponId);
         return view('cupon.registraClienteCupon')->with(compact('verificaRegistroCupon', 'datosCuponRegistrado'));
     }
+
+    public function cobros()
+    {
+    $rol = Auth::user()->rol;
+
+    if ($rol == 'Administrador') {
+
+        $cupones = DB::table('cupones')
+            ->whereNull('cupones.deleted_at')
+            ->leftJoin('productos', 'cupones.producto_id', '=', 'productos.id')
+            ->leftJoin('combos', 'cupones.combo_id', '=', 'combos.id')
+            ->leftJoin('users', 'cupones.cliente_id', '=', 'users.id')
+            ->leftJoin('almacenes', 'cupones.almacene_id', '=', 'almacenes.id')
+            ->leftJoin('cupones_cobrados', 'cupones.id', '=', 'cupones_cobrados.cupone_id')
+            ->select(
+                'cupones.id',
+                'cupones.codigo as codigo',
+                'users.id as cliente_id',
+                'users.name as cliente_nombre',
+                'productos.id as producto_id',
+                'productos.nombre as producto_nombre',
+                'combos.id as combo_id',
+                'combos.nombre as combo_nombre',
+                'almacenes.nombre as tienda',
+                'cupones_cobrados.fecha as cobrado',
+                'cupones.fecha_inicio as fecha_inicio',
+                'cupones.fecha_final as fecha_final',
+                'cupones.estado as estado'
+            )
+            ->orderBy('id', 'desc');
+
+    } else {
+
+        $cupones = DB::table('cupones')
+            ->whereNull('cupones.deleted_at')
+            ->where(function ($query) {
+                $query->where('cupones.almacene_id', Auth::user()->almacen->id)
+                    ->orwhereNull('cupones.almacene_id');
+            })
+            ->leftJoin('productos', 'cupones.producto_id', '=', 'productos.id')
+            ->leftJoin('combos', 'cupones.combo_id', '=', 'combos.id')
+            ->leftJoin('users', 'cupones.cliente_id', '=', 'users.id')
+            ->leftJoin('almacenes', 'cupones.almacene_id', '=', 'almacenes.id')
+            ->leftJoin('cupones_cobrados', 'cupones.id', '=', 'cupones_cobrados.cupone_id')
+            ->select(
+                'cupones.id',
+                'cupones.codigo as codigo',
+                'users.id as cliente_id',
+                'users.name as cliente_nombre',
+                'productos.id as producto_id',
+                'productos.nombre as producto_nombre',
+                'combos.id as combo_id',
+                'combos.nombre as combo_nombre',
+                'almacenes.nombre as tienda',
+                'cupones_cobrados.fecha as cobrado',
+                'cupones.fecha_inicio as fecha_inicio',
+                'cupones.fecha_final as fecha_final',
+                'cupones.estado as estado'
+            )
+            ->orderBy('id', 'desc');
+    }
+
+    return Datatables::of($cupones)->addColumn('action', function ($cupones) {
+        // Si el usuario tiene perfil de administrador
+        if (Auth::user()->perfil_id == 1) {
+            // Si no se cobró el cupón,
+            if ($cupones->estado == 'Vigente') {
+                // Si la fecha_fin del cupon es menor a la fecha actual, muestra todos los botones (Ver Cupon, Cobrar, ELiminar)
+                if (strtotime($cupones->fecha_final) >= strtotime(date('Y-m-d H:i:s'))) {
+                    return '<button onclick="generaQr(' . $cupones->id . ')" id="boton-' . $cupones->id . '" class="btn waves-effect waves-light btn-outline-dark" title="Genera QR"><i class="fas fa-qrcode"></i> </button>
+                                <button onclick="cobrar(' . $cupones->id . ')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                                <button onclick="ver(' . $cupones->id . ')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>
+                                <button onclick="eliminar(' . $cupones->id . ')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+                } else {
+                    return '<button onclick="ver(' . $cupones->id . ')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
+                }
+            }
+            // Si se cobró el cupón, muestra el boton Ver Cupon
+            else {
+                return '<button onclick="ver(' . $cupones->id . ')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
+            }
+        }
+        // Si el usuario no tiene perfil de administrador
+        else {
+            // Si no se cobró el cupón, muestra los botones Ver Cupon y Cobrar
+            if ($cupones->estado == 'Vigente') {
+                // Si la fecha_fin del cupon es menor a la fecha actual, muestra todos los botones (Ver Cupon, Cobrar, ELiminar)
+                if (strtotime($cupones->fecha_final) >= strtotime(date('Y-m-d H:i:s')))
+                //if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final))
+                {
+                    return '<button onclick="cobrar(' . $cupones->id . ')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+                                <button onclick="ver(' . $cupones->id . ')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
+                } else {
+                    return '<button onclick="ver(' . $cupones->id . ')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
+                }
+            }
+            // Si se cobró el cupón, muestra el boton Ver Cupon
+            else {
+                return '<button onclick="ver(' . $cupones->id . ')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>';
+            }
+        }
+        // if(is_null($cupones->cobrado)){
+        //     if(strtotime(date('Y-m-d H:i:s')) >= strtotime($cupones->fecha_final)){
+        //         return '<button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+        //     }else{
+        //         return '<button onclick="cobrar('.$cupones->id.', \''.$cupones->cliente_id.'\', \''.$cupones->producto_id.'\', \''.$cupones->combo_id.'\')" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i> </button>
+        //         <button onclick="ver('.$cupones->id.')" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i> </button>
+        //         <button onclick="eliminar('.$cupones->id.')" class="btn btn-danger" title="Eliminar cupon"><i class="fas fa-trash-alt"></i></button>';
+        //     }
+        // }
+    })
+        ->make(true);
+    }
+
+    
 }
