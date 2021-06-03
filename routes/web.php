@@ -133,7 +133,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //CUPONES
     Route::get('Cupon/nuevo', 'CuponController@nuevo');
     Route::get('Cupon/listado', 'CuponController@listado');
+    Route::get('Cupon/listado_cobros', 'CuponController@listado_cobros');
     Route::get('Cupon/ajax_listado', 'CuponController@ajax_listado');
+    Route::get('Cupon/ajax_cobros', 'CuponController@ajax_cobros');
     //Route::get('Cupon/ajaxMuestraCupon', 'CuponController@ajaxMuestraCupon');
     Route::get('Cupon/cobra_cupon/{id}', 'CuponController@cobra_cupon');
     Route::get('Cupon/pruebaCorreo', 'CuponController@pruebaCorreo');
