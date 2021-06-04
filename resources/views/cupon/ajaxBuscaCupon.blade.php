@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-@if ($cuponCliente != null)
+@if ($cuponClienteVerificado != null)
     <div class="card border-primary">
         <div class="card-header bg-primary">
             <h4 class="mb-0 text-white">
@@ -31,28 +31,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($cuponCliente->producto_id == null)
-                        <td>{{ $cuponCliente->combo->nombre }}</td>
+                        @if ($cuponClienteVerificado->producto_id == null)
+                        <td>{{ $cuponClienteVerificado->combo->nombre }}</td>
                         @else
-                        <td>{{ $cuponCliente->producto->nombre }}</td>
+                        <td>{{ $cuponClienteVerificado->producto->nombre }}</td>
                         @endif
-                        <td>{{ $cuponCliente->nombre }}</td>
-                        <td>{{ $cuponCliente->ci }}</td>
-                        <td>{{ $cuponCliente->fecha_creacion }}</td>
-                            @if ($cuponCliente->estado == 'Expirado')
-                                <td class="text-danger">{{ $cuponCliente->fecha_final }}</td>
+                        <td>{{ $cuponClienteVerificado->nombre }}</td>
+                        <td>{{ $cuponClienteVerificado->ci }}</td>
+                        <td>{{ $cuponClienteVerificado->fecha_creacion }}</td>
+                            @if ($cuponClienteVerificado->estado == 'Expirado')
+                                <td class="text-danger">{{ $cuponClienteVerificado->fecha_final }}</td>
                             @else
-                                <td>{{ $cuponCliente->fecha_final }}</td>
+                                <td>{{ $cuponClienteVerificado->fecha_final }}</td>
                             @endif
                         <td>
-                            @if ($cuponCliente->estado == 'Vigente')
-                                <button onclick="generaQr({{ $cuponCliente->id }})" id="boton{{ $cuponCliente->id }}"
-                                    class="btn waves-effect waves-light btn-outline-dark" title="Genera QR"><i class="fas fa-qrcode"></i> </button>
-                                <button onclick="cobrar({{ $cuponCliente->id }})" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i>
+                            @if ($cuponClienteVerificado->estado == 'Vigente')
+                                <button onclick="cobrar({{ $cuponClienteVerificado->id }})" class="btn btn-primary" title="Cobrar cupon"><i class="fas fa-laptop"></i>
                                 </button>
-                                <button onclick="ver({{ $cuponCliente->id }})" class="btn btn-info" title="Vista impresion cupon"><i class="fas fa-eye"></i>
-                                </button>
-                                <button onclick="eliminar({{ $cuponCliente->id }})" class="btn btn-danger" title="Eliminar cupon"><i
+                                <button onclick="eliminar({{ $cuponClienteVerificado->id }})" class="btn btn-danger" title="Eliminar cupon"><i
                                         class="fas fa-trash-alt"></i></button>
                             @endif
                         </td>
@@ -138,30 +134,6 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
-    function cobrar(id)
-    {
-        window.location.href = "{{ url('Cupon/cobra_cupon') }}/"+id;
-    }
-
-    // function cobrar(cupon_id, cliente_id, producto_id, combo_id)
-    // {
-    //     $.ajax({
-    //         url: "{{ url('Cupon/ajaxMuestraCupon') }}",
-    //         data: {
-    //             cupon_id: cupon_id,
-    //             cliente_id: cliente_id,
-    //             producto_id: producto_id,
-    //             combo_id: combo_id
-    //             },
-    //         type: 'get',
-    //         success: function(data) {
-    //             //$("#muestraCuponAjax").show('slow');
-    //             $("#muestraCuponAjax").html(data);
-    //             $("#modal_cobro").modal('show');
-    //         }
-    //     }); 
-    // }
 
     function ver(cupon_id)
     {

@@ -107,6 +107,12 @@
             });
         }
     }
+
+    function cobrar(id)
+    {
+        window.location.href = "{{ url('Cupon/cobra_cupon') }}/"+id;
+    }
+
 </script>
 
 @endsection

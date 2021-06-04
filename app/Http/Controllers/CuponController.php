@@ -181,8 +181,24 @@ class CuponController extends Controller
 
     public function cobra_cupon($id)
     {
-        $cupon = Cupone::find($id);
-        return view('cupon.cobra_cupon')->with(compact('cupon'));
+        $cupon = CuponesCliente::find($id);
+
+        $precioTotalCombo = 0;
+
+        if($cupon->combo_id != null){
+
+
+            $productosCombo = CombosProducto::where('combo_id', $cupon->combo_id)
+                                ->get();
+
+            foreach ($productosCombo as $key => $pc) {
+
+                $precioTotalCombo += $pc->precio;
+                // dd($precioTotalCombo);
+            }
+        }
+
+        return view('cupon.cobra_cupon')->with(compact('cupon', 'precioTotalCombo'));
     }
 
     // public function ajaxMuestraCupon(Request $request)
@@ -551,8 +567,14 @@ class CuponController extends Controller
 
             }
         }
+
+        $cuponClienteVerificado = CuponesCliente::where('id', $request->codigo)
+                        // ->where('estado', 'Vigente')
+                        ->orWhere('ci', $request->ci)
+                        ->first();
+
         
-        return view('cupon.ajaxBuscaCupon')->with(compact('cuponCliente'));
+        return view('cupon.ajaxBuscaCupon')->with(compact('cuponClienteVerificado'));
 
     }
 }

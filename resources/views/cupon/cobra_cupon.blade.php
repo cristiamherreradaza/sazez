@@ -37,19 +37,19 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="cobro_nombre" type="text" id="cobro_nombre" value="{{ $cupon->user->name }}" class="form-control" required>
+                                <input name="cobro_nombre" type="text" id="cobro_nombre" value="{{ $cupon->cliente->name }}" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Cedula de Identidad</label>
-                                <input name="cobro_ci" type="text" id="cobro_ci" value="{{ $cupon->user->ci }}" class="form-control">
+                                <input name="cobro_ci" type="text" id="cobro_ci" value="{{ $cupon->cliente->ci }}" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Celulares</label>
-                                <input name="cobro_celular" type="text" id="cobro_celular" value="{{ $cupon->user->celulares }}" class="form-control">
+                                <input name="cobro_celular" type="text" id="cobro_celular" value="{{ $cupon->cliente->celulares }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -57,19 +57,19 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
-                                <input name="cobro_email" type="email" id="cobro_email" value="{{ $cupon->user->email }}" class="form-control" readonly>
+                                <input name="cobro_email" type="email" id="cobro_email" value="{{ $cupon->cliente->email }}" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Nit</label>
-                                <input name="cobro_nit" type="text" id="cobro_nit" value="{{ $cupon->user->nit }}" class="form-control">
+                                <input name="cobro_nit" type="text" id="cobro_nit" value="{{ $cupon->cliente->nit }}" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Razon Social</label>
-                                <input name="cobro_razon_social" type="text" id="cobro_razon_social" value="{{ $cupon->user->razon_social }}" class="form-control">
+                                <input name="cobro_razon_social" type="text" id="cobro_razon_social" value="{{ $cupon->cliente->razon_social }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if($cupon->producto_id)
+                            @if($cupon->producto_id != null)
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
@@ -132,7 +132,16 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">Total</label>
-                                            <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $cupon->monto_total }}" class="form-control" readonly>
+                                            @php
+                                                dd($precioTotalCombo);
+                                            @endphp
+                                            @if ($cupon->combo_id != null)
+                                                <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $precioTotalCombo }}" class="form-control" readonly>
+                                                
+                                            @else
+                                                <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $cupon->monto_total }}" class="form-control" readonly>
+                                                
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -203,7 +212,7 @@
                                     <div class="form-group row">
                                         <label for="email2" class="col-sm-5 text-right control-label col-form-label">TOTAL</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" name="cobro_total" id="cobro_total" value="{{ $cupon->monto_total }}" readonly>
+                                            <input type="text" class="form-control" name="cobro_total" id="cobro_total" value="{{ $precioTotalCombo }}" readonly>
                                         </div>
                                     </div>
                                 </div>
