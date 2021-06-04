@@ -23,7 +23,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Codigo Cupon</label>
-                                <input type="number" name="codigo" id="codigo" class="form-control">
+                                <input type="number" name="codigo" id="codigo" class="form-control" autofocus>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -63,6 +63,7 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script src="{{ asset('js/utilidades.js') }}"></script>
 <script>
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -81,8 +82,12 @@
         let carnet = document.getElementById('ci');
         let formulario = document.getElementById('formularioCupon');
 
+        let data = new FormData(formulario);
+        let serialized = serialize(data);
+        console.log(serialized);
+
         if (codigo.value.length == 0 && carnet.value.length == 0) {
-            // alert('debes llenar un campo');
+
             Swal.fire(
                 'Alerta!',
                 'Debes llenar unos de los campos.',
@@ -90,32 +95,18 @@
             )
             
         }else{
-            formulario.submit();
+
+            $.ajax({
+                url: "{{ url('Cupon/ajaxBuscaCupon') }}",
+                data: serialized,
+                type: 'post',
+                success: function(data) {
+                    $("#mostrar").html(data);
+                    $("#mostrar").show('slow');
+                }
+            });
         }
-
-        /*var codigo = $("#codigo").val();
-        var nombre = $("#nombre").val();
-        var tipo = $("#tipo").val();
-        var marca = $("#marca").val();
-        var estado = $("#estado").val();
-        $.ajax({
-            url: "{{ url('Producto/ajax_listado') }}",
-            data: {
-                codigo: codigo,
-                nombre: nombre,
-                tipo: tipo,
-                marca: marca,
-                estado: estado
-                },
-            type: 'get',
-            success: function(data) {
-                $("#mostrar").html(data);
-                $("#mostrar").show('slow');
-            }
-        });*/
     }
-
-
 </script>
 
 @endsection

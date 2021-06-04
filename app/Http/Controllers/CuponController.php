@@ -499,18 +499,20 @@ class CuponController extends Controller
 
             $hoy = date("Y-m-d H:i:s");
 
-            $cupon = new CuponesCliente();
+            $cupon                 = new CuponesCliente();
             $cupon->cupone_id      = $datosCupon->id;
             $cupon->producto_id    = $datosCupon->producto_id;
             $cupon->combo_id       = $datosCupon->combo_id;
             $cupon->cliente_id     = $clienteId;
+            $cupon->nombre         = $request->name;
+            $cupon->ci             = $request->ci;
             $cupon->almacene_id    = $datosCupon->almacene_id;
             $cupon->fecha_creacion = $hoy;
             $cupon->descuento      = $datosCupon->descuento;
             $cupon->monto_total    = $datosCupon->monto_total;
             $cupon->fecha_inicio   = $datosCupon->fecha_inicio;
             $cupon->fecha_final    = $datosCupon->fecha_final;
-            $cupon->estado    = 'Vigente';
+            $cupon->estado         = 'Vigente';
             $cupon->save();
 
             $cuponId = $cupon->id;
@@ -531,6 +533,26 @@ class CuponController extends Controller
 
     public function ajaxBuscaCupon(Request $request)
     {
-        dd($request->all());
+        $cuponCliente = CuponesCliente::where('id', $request->codigo)
+                                // ->where('estado', 'Vigente')
+                                ->orWhere('ci', $request->ci)
+                                ->first();
+
+        if($cuponCliente != null){
+
+            // $diff = Carbon::parse($cuponCliente->fecha_final)->diffInSeconds(Carbon::now());
+            $diff = Carbon::parse($cuponCliente->fecha_final)->lessThan(Carbon::now());
+
+            if($diff == 'true'){
+            // si es menor la fecha cambiamos el estado
+                $cambiaEstado = CuponesCliente::find($cuponCliente->id);
+                $cambiaEstado->estado = 'Expirado';
+                $cambiaEstado->save();
+
+            }
+        }
+        
+        return view('cupon.ajaxBuscaCupon')->with(compact('cuponCliente'));
+
     }
 }

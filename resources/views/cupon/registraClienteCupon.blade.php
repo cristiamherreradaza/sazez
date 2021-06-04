@@ -13,4 +13,5 @@
     <span class="text-info">CI: </span> {{ $datosCuponRegistrado->cliente->ci }}
 </h4>
 <h4><span class="text-info">REGISTRO: </span> {{ $fechaRegistro }}</h4>
+<h2><span class="text-danger">CODIGO DEL CUPON: </span> <span class="font-weight-bold">{{ $datosCuponRegistrado->id }}</span></h2>
 <hr>

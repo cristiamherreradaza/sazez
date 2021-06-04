@@ -31,6 +31,8 @@ class CreateCuponesClientesTable extends Migration
             $table->integer('descuento')->nullable()->default(1);
             $table->decimal('monto_total', 15, 2)->nullable()->default(0);
             $table->string('codigo', 20)->unique()->nullable();
+            $table->string('nombre', 200)->nullable();
+            $table->string('ci', 20)->nullable();
             $table->datetime('fecha_inicio')->nullable();
             $table->datetime('fecha_final')->nullable();
             $table->string('estado', 30)->nullable();
