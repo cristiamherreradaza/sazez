@@ -132,16 +132,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">Total</label>
-                                            @php
-                                                dd($precioTotalCombo);
-                                            @endphp
-                                            @if ($cupon->combo_id != null)
-                                                <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $precioTotalCombo }}" class="form-control" readonly>
-                                                
-                                            @else
                                                 <input name="cobro_promo" type="text" id="cobro_promo" value="{{ $cupon->monto_total }}" class="form-control" readonly>
-                                                
-                                            @endif
                                         </div>
                                     </div>
                                 </div>
