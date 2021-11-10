@@ -314,6 +314,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::post('Alcance/guarda', 'AlcanceController@guarda');
     
+    // REPORTES
     Route::get('Reporte/reporte_tienda', 'ReporteController@reporte_tienda');
     Route::get('Reporte/ajax_tienda_listado', 'ReporteController@ajax_tienda_listado');
     Route::get('Reporte/ventas', 'ReporteController@ventas');
@@ -345,6 +346,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Reporte/ajax_ingresos', 'ReporteController@ajax_ingresos');
     Route::get('Reporte/metas', 'ReporteController@metas');
     Route::get('Reporte/ajaxMetas', 'ReporteController@ajaxMetas');
+    Route::get('Reporte/saldosPrecios', 'ReporteController@saldosPrecios');
+    Route::get('Reporte/ajax_listado_saldos_precios', 'ReporteController@ajax_listado_saldos_precios');
+
 
     //CONFIGURACIONES MENSAJES ELIMINACION VENTA
     Route::get('Configuracione/listadoEliminaVenta', 'ConfiguracioneController@listadoEliminaVenta');
