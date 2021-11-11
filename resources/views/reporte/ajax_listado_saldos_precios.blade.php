@@ -2,7 +2,7 @@
     <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
         <thead>
             <tr>
-                <th>id</th>
+                {{-- <th>id</th> --}}
                 <th>Codigo</th>
                 <th>Producto</th>
                 <th>Tipo</th>
@@ -19,7 +19,7 @@
         <tbody>
             @foreach($productos as $producto)
                 <tr>
-                    <td>{{ $producto->id }}</td>
+                    {{-- <td>{{ $producto->id }}</td> --}}
                     <td>{{ $producto->codigo }}</td>
                     <td>{{ $producto->nombre }}</td>
                     <td>{{ $producto->tipo->nombre }}</td>
