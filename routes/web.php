@@ -143,6 +143,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Cupon/eliminar/{id}', 'CuponController@eliminar');
     Route::post('Cupon/cobrar', 'CuponController@cobrar');
     Route::post('Cupon/ajaxBuscaCupon', 'CuponController@ajaxBuscaCupon');
+    Route::get('Cupon/masivos', 'CuponController@masivos');
+    Route::post('Cupon/guardarmasivo', 'CuponController@guardarmasivo');
+
+
 
     //MENUS
     Route::get('Menu/listado', 'MenuController@listado');

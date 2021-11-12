@@ -17,6 +17,7 @@ class Cupone extends Model
     	'almacene_id',
         'descuento',
         'monto_total',
+        'masivo',
         'codigo',
         'estado',
         'fecha_inicio',

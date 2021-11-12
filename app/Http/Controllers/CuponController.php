@@ -577,4 +577,34 @@ class CuponController extends Controller
         return view('cupon.ajaxBuscaCupon')->with(compact('cuponClienteVerificado'));
 
     }
+
+    public function masivos()
+    {
+        $grupos = Grupo::get();
+        $clientes = User::where('rol', 'Cliente')->get();
+        $almacenes = Almacene::whereNull('estado')->get();
+        $promociones = Combo::whereDate('fecha_final', '>=', date('Y-m-d'))->get();
+        return view('cupon.masivos')->with(compact('almacenes', 'clientes', 'promociones', 'grupos'));
+    }
+
+    public function guardarmasivo(Request $request)
+    {
+        // dd($request->all());
+        $cupon = new Cupone();
+
+        $cupon->user_id      = Auth::user()->id;
+        $cupon->almacene_id  = $request->tienda;
+        $cupon->descuento    = $request->producto_descuento;
+        $cupon->producto_id  = $request->producto_id;
+        $cupon->combo_id     = $request->combo_id;
+        $cupon->monto_total  = $request->producto_total;
+        $cupon->fecha_inicio = $request->fecha_inicio;
+        $cupon->fecha_final  = $request->fecha_fin;
+        $cupon->estado       = 'Vigente';
+        $cupon->masivo       = 'Si';
+        
+        $cupon->save();
+
+        return redirect('Cupon/listado');
+    }
 }
