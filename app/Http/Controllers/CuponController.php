@@ -589,6 +589,13 @@ class CuponController extends Controller
 
     public function guardarmasivo(Request $request)
     {
+        $sw = true;
+        $longitud = 20;
+
+        // $caracteres_permitidos = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        
+        // dd(substr(str_shuffle($caracteres_permitidos), 0, $longitud));
+        // dd(chr(rand(ord('A'), ord('Z'))));
         // dd($request->all());
         $cupon = new Cupone();
 
@@ -598,6 +605,16 @@ class CuponController extends Controller
         $cupon->producto_id  = $request->producto_id;
         $cupon->combo_id     = $request->combo_id;
         $cupon->monto_total  = $request->producto_total;
+
+        while($sw){
+            $caracteres_permitidos = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $codigo = substr(str_shuffle($caracteres_permitidos), 0, $longitud);
+
+            if(!Cupone::where('codigo', $codigo)->first()){
+                $sw = false;
+            }
+        }
+        $cupon->codigo       = $codigo;
         $cupon->fecha_inicio = $request->fecha_inicio;
         $cupon->fecha_final  = $request->fecha_fin;
         $cupon->estado       = 'Vigente';
