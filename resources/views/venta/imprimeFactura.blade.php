@@ -185,7 +185,7 @@
 
 		<table id="datosEmpresaFactura">
 			<tr>
-				<td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La Paz, {{ fechaCastellano($datosVenta->fecha) }}</span></td>
+				<td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosEmpresa->ciudad }}, {{ fechaCastellano($datosVenta->fecha) }}</span></td>
 				<td><b>NIT/CI:<b/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosFactura->nit_cliente }}</td>
 			</tr>
 			<tr>

@@ -84,6 +84,22 @@
                                 <input type="text" name="telefono_fijo" id="telefono_fijo" class="form-control" value="{{ $empresa->telefono_fijo }}" >
                             </div>
                         </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label class="control-label">CIUDAD</label>
+                                <select name="ciudad" id="ciudad" class="form-control">
+                                    <option value="La Paz" {{ ($empresa->ciudad=="La Paz")?'selected':'' }}>La Paz</option>
+                                    <option value="Cochabamba" {{ ($empresa->ciudad=="Cochabamba")?'selected':'' }}>Cochabamba</option>
+                                    <option value="Santa Cruz" {{ ($empresa->ciudad=="Santa Cruz")?'selected':'' }}>Santa Cruz</option>
+                                    <option value="Oruro" {{ ($empresa->ciudad=="Oruro")?'selected':'' }}>Oruro</option>
+                                    <option value="Tarija" {{ ($empresa->ciudad=="Tarija")?'selected':'' }}>Tarija</option>
+                                    <option value="Potosi" {{ ($empresa->ciudad=="Potosi")?'selected':'' }}>Potosi</option>
+                                    <option value="Sucre" {{ ($empresa->ciudad=="Sucre")?'selected':'' }}>Sucre</option>
+                                    <option value="Beni" {{ ($empresa->ciudad=="Beni")?'selected':'' }}>Beni</option>
+                                    <option value="Pando" {{ ($empresa->ciudad=="Pando")?'selected':'' }}>Pando</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
