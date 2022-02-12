@@ -443,7 +443,7 @@
                                 @if ($parametrosFactura != null && $parametrosFactura->estado == 'Activo')
                                     <tr>
                                         <td class="text-right">NIT</td>
-                                        <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>
+                                        <td><input type="text" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>
                                     </tr>
                                     <tr>
                                         <td class="text-right">NOMBRE</td>

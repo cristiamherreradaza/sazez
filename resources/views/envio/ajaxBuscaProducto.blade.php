@@ -48,6 +48,7 @@
 <script>
     $(document).ready(function () {
         $("#tablaProductosEncontrados").on('click', '.btnSelecciona', function () {
+        
 
             $("#listadoProductosAjax").hide('slow');
             $("#termino").val("");
