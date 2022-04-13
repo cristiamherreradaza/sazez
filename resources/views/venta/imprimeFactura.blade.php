@@ -22,6 +22,14 @@
 		body{
 				font-family: Arial, Helvetica, sans-serif;
 				}
+
+        .facturaPequena{
+            font-size: 9pt;
+        }
+
+        .textoCentrado{
+            text-align: center;
+        }
 		#fondo{
 			/*background-image: url("{{ asset('assets/images/factura_szone.jpg') }}");*/
 			/* width: 892px; */
@@ -160,120 +168,230 @@
 	$nombreMes = str_replace($meses_EN, $meses_ES, $mes);
 	return $numeroDia." de ".$nombreMes." de ".$anio;
 	}
-	
-	
+
+
 @endphp
 
-	<div id="fondo">
+    @if (auth()->user()->almacen_id != 12)
+        <div id="fondo">
 
-		<div id="logo"><img src="{{ asset('assets/images/logoSmartZone.jpg') }}" width="150"></div>
-		
-		<table id="datosEmpresaNit" width="300">
-			<tr>
-				<th style="text-align: left;">NIT:</th>
-				<td>{{ $datosEmpresa->nit }}</td>
-			</tr>
-			<tr>
-				<th style="text-align: left;">FACTURA N&deg;:</th>
-				<td>{{ $datosFactura->numero_factura }}</td>
-			</tr>
-			<tr>
-				<th style="text-align: left;">N&deg; AUTORIZACION:</th>
-				<td>{{ $datosFactura->numero_autorizacion }}</td>
-			</tr>
-		</table>
+            <div id="logo"><img src="{{ asset('assets/images/logoSmartZone.jpg') }}" width="150"></div>
 
-		<table id="datosEmpresaFactura">
-			<tr>
-				<td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosEmpresa->ciudad }}, {{ fechaCastellano($datosVenta->fecha) }}</span></td>
-				<td><b>NIT/CI:<b/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosFactura->nit_cliente }}</td>
-			</tr>
-			<tr>
-				<td style="text-align: left;"><b>Se&ntilde;or(es):</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosVenta->cliente->razon_social }}</td>
-				<td></td>
-			</tr>
-		</table>
-		<div id="tablaProductos">
-		<table class="datos" width="892">
-			<thead>
-				<tr>
-					<th style="padding-top: 5px;padding-bottom: 5px;">N&deg;</th>
-					<th>CANTIDAD</th>
-					<th>DESCRIPCION</th>
-					<th>PRECIO UNITARIO</th>
-					<th>SUBTOTAL</th>
-				</tr>
-			</thead>
-			<tbody>
-				@php
-					$sumaSubTotal = 0;
-				@endphp
-				@foreach ($productosVenta as $con => $pv)
-					<tr>
-						<td width="25px">{{ ++$con }}</td>
-						<td style="text-align: right;" width="100px">
-							<span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
-							<span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
-							&nbsp;&nbsp;&nbsp; <b>{{ $pv->cantidad }}
-						</td>
-						<td width="425px" style="text-align: left;">{{ $pv->producto->nombre }}</td>
+            <table id="datosEmpresaNit" width="300">
+                <tr>
+                    <th style="text-align: left;">NIT:</th>
+                    <td>{{ $datosEmpresa->nit }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left;">FACTURA N&deg;:</th>
+                    <td>{{ $datosFactura->numero_factura }}</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left;">N&deg; AUTORIZACION:</th>
+                    <td>{{ $datosFactura->numero_autorizacion }}</td>
+                </tr>
+            </table>
 
-						@php
-							if ($pv->precio_cobrado_mayor>0) {
-								$precio_costo = $pv->precio_cobrado_mayor;
-							}else{
-								$precio_costo = $pv->precio_cobrado;
-							}
-							$subTotal = $precio_costo * $pv->cantidad;
-							$sumaSubTotal += $subTotal;
-						@endphp
+            <table id="datosEmpresaFactura">
+                <tr>
+                    <td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosEmpresa->ciudad
+                        }}, {{ fechaCastellano($datosVenta->fecha) }}</span></td>
+                    <td><b>NIT/CI:<b /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $datosFactura->nit_cliente }}</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;"><b>Se&ntilde;or(es):</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
+                        $datosVenta->cliente->razon_social }}</td>
+                    <td></td>
+                </tr>
+            </table>
+            <div id="tablaProductos">
+                <table class="datos" width="892">
+                    <thead>
+                        <tr>
+                            <th style="padding-top: 5px;padding-bottom: 5px;">N&deg;</th>
+                            <th>CANTIDAD</th>
+                            <th>DESCRIPCION</th>
+                            <th>PRECIO UNITARIO</th>
+                            <th>SUBTOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                        $sumaSubTotal = 0;
+                        @endphp
+                        @foreach ($productosVenta as $con => $pv)
+                        <tr>
+                            <td width="25px">{{ ++$con }}</td>
+                            <td style="text-align: right;" width="100px">
+                                <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
+                                <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
+                                &nbsp;&nbsp;&nbsp; <b>{{ $pv->cantidad }}
+                            </td>
+                            <td width="425px" style="text-align: left;">{{ $pv->producto->nombre }}</td>
 
-						<td style="text-align: right;" width="160px">{{ $precio_costo }}</td>
-						<td style="text-align: right;" width="100px"><b>{{ number_format($subTotal, 2, '.', '') }}</b></td>
-						
-					</tr>
-				@endforeach
-				@php
-					$numeroParaDecimal = number_format($subTotal, 2, '.', '');
-					list($numero, $decimal) = explode('.', $numeroParaDecimal);
-				@endphp
-			</tbody>
-			<tfoot>
-				<td colspan="3" style="text-align: left;">SON: <span id="literalTotal"> </span>{{ $decimal }}/100 BOLIVIANOS</td>
-				<td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
-				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.', '') }}</td>
-			</tfoot>
-			
-		</table>
-		<br />
-		<table class="codigoControlQr" width="100%">
-			<tr>
-				<td>
-					Codigo de Control: {{ $datosFactura->codigo_control }}<br />
-					Fecha limite de Emision: {{ $datosFactura->fecha_limite }}
-				</td>
-				<td><div id="qrcode"></div></td>
-			</tr>
-		</table>
-		<br />
-		<center>
-		"ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A LEY"<br />
-		<b>Ley N&deg; 453: El proveedor debera suministrar el servicio en las modalidades y terminos ofertados o convenidos.</b>
-		<p>&nbsp;</p>
-		<div id="btnImprimir">
-			<input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
-		</div>
-		</center>
-		</div>
+                            @php
+                            if ($pv->precio_cobrado_mayor>0) {
+                            $precio_costo = $pv->precio_cobrado_mayor;
+                            }else{
+                            $precio_costo = $pv->precio_cobrado;
+                            }
+                            $subTotal = $precio_costo * $pv->cantidad;
+                            $sumaSubTotal += $subTotal;
+                            @endphp
 
-		<div id="txtOriginal">ORIGINAL</div>
-		<div id="txtActividad">{{ $datosEmpresa->actividad }}</div>
-		<div id="txtFactura">FACTURA</div>
-		<div id="direccionEmpresa">
-			<span style="font-size: 8pt;">{{ $datosEmpresa->nombre }}</span><br>
-			{{ $datosEmpresa->direccion }}
-		</div>
-	</div>
+                            <td style="text-align: right;" width="160px">{{ $precio_costo }}</td>
+                            <td style="text-align: right;" width="100px"><b>{{ number_format($subTotal, 2, '.', '') }}</b></td>
+
+                        </tr>
+                        @endforeach
+                        @php
+                        $numeroParaDecimal = number_format($subTotal, 2, '.', '');
+                        list($numero, $decimal) = explode('.', $numeroParaDecimal);
+                        @endphp
+                    </tbody>
+                    <tfoot>
+                        <td colspan="3" style="text-align: left;">SON: <span id="literalTotal"> </span>{{ $decimal }}/100
+                            BOLIVIANOS</td>
+                        <td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
+                        <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.',
+                            '') }}</td>
+                    </tfoot>
+
+                </table>
+                <br />
+                <table class="codigoControlQr" width="100%">
+                    <tr>
+                        <td>
+                            Codigo de Control: {{ $datosFactura->codigo_control }}<br />
+                            Fecha limite de Emision: {{ $datosFactura->fecha_limite }}
+                        </td>
+                        <td>
+                            <div id="qrcode"></div>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <center>
+                    "ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A
+                    LEY"<br />
+                    <b>Ley N&deg; 453: El proveedor debera suministrar el servicio en las modalidades y terminos ofertados o
+                        convenidos.</b>
+                    <p>&nbsp;</p>
+                    <div id="btnImprimir">
+                        <input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
+                    </div>
+                </center>
+            </div>
+
+            <div id="txtOriginal">ORIGINAL</div>
+            <div id="txtActividad">{{ $datosEmpresa->actividad }}</div>
+            <div id="txtFactura">FACTURA</div>
+            <div id="direccionEmpresa">
+                <span style="font-size: 8pt;">{{ $datosEmpresa->nombre }}</span><br>
+                {{ $datosEmpresa->direccion }}
+            </div>
+        </div>
+    @else
+    <div style="width: 302px" class="facturaPequena">
+
+        <div class="textoCentrado">
+            {{ $datosEmpresa->nombre }}<br /><br />
+            {{ $datosEmpresa->direccion }}
+        </div>
+        <p class="textoCentrado">FACTURA ORIGINAL</p>
+        <hr />
+
+        <div class="textoCentrado">NIT: {{ $datosEmpresa->nit }}</div>
+        <div class="textoCentrado">FACTURA N&deg;: {{ $datosFactura->numero_factura }}</div>
+        <div class="textoCentrado">N&deg; AUTORIZACION: {{ $datosFactura->numero_autorizacion }}</div>
+
+        <hr />
+        <div class="textoCentrado">{{ $datosEmpresa->actividad }}</div>
+        <br />
+
+        <div>Fecha: {{ $datosEmpresa->ciudad }}, {{ fechaCastellano($datosVenta->fecha) }}</div>
+        <div>Se&ntilde;or(es): {{ $datosVenta->cliente->razon_social }}</div>
+        <div>NIT/CI: {{ $datosFactura->nit_cliente }}</div>
+
+            <div>
+                <table class="datos" width="302">
+                    <thead>
+                        <tr>
+                            <th>CANT.</th>
+                            <th>DESCRIPCION</th>
+                            <th>P/U</th>
+                            <th>SUBTOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                        $sumaSubTotal = 0;
+                        @endphp
+                        @foreach ($productosVenta as $con => $pv)
+                        <tr>
+                            <td style="text-align: right;" width="100px">
+                                <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
+                                <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
+                                &nbsp;&nbsp;&nbsp; <b>{{ $pv->cantidad }}
+                            </td>
+                            <td width="425px" style="text-align: left;">{{ $pv->producto->nombre }}</td>
+
+                            @php
+                            if ($pv->precio_cobrado_mayor>0) {
+                            $precio_costo = $pv->precio_cobrado_mayor;
+                            }else{
+                            $precio_costo = $pv->precio_cobrado;
+                            }
+                            $subTotal = $precio_costo * $pv->cantidad;
+                            $sumaSubTotal += $subTotal;
+                            @endphp
+
+                            <td style="text-align: right;" width="160px">{{ $precio_costo }}</td>
+                            <td style="text-align: right;" width="100px"><b>{{ number_format($subTotal, 2, '.', '') }}</b></td>
+
+                        </tr>
+                        @endforeach
+                        @php
+                        $numeroParaDecimal = number_format($subTotal, 2, '.', '');
+                        list($numero, $decimal) = explode('.', $numeroParaDecimal);
+                        @endphp
+                    </tbody>
+                    <tfoot>
+                        <td colspan="2" style="text-align: left;"></td>
+                        <td style="background-color: #abd4ed;color: #000;">TOTAL</td>
+                        <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.',
+                            '') }}</td>
+                    </tfoot>
+
+                </table>
+                SON: <span id="literalTotal"> </span>{{ $decimal }}/100 BOLIVIANOS
+                <br />
+                <br />
+
+                <div>Codigo de Control: {{ $datosFactura->codigo_control }}</div>
+                <div>Fecha limite de Emision: {{ $datosFactura->fecha_limite }}</div>
+                <br />
+                <center>
+                <div id="qrcode"></div>
+                </center>
+
+
+                <br />
+                <center>
+                    "ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A
+                    LEY"<br />
+                    <b>Ley N&deg; 453: El proveedor debera suministrar el servicio en las modalidades y terminos ofertados o
+                        convenidos.</b>
+                    <p>&nbsp;</p>
+                    <div id="btnImprimir">
+                        <input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
+                    </div>
+                </center>
+            </div>
+
+        </div>
+
+    @endif
 
 	@php
 		// $fechaFecha = $datosVenta->fecha;
@@ -310,13 +428,13 @@
 		// console.log(cadenaQr);
 		var qrcode = new QRCode("qrcode", {
 			text: cadenaQr,
-			width: 70,
-			height: 70,
+			width: 90,
+			height: 90,
 			colorDark : "#000000",
 			colorLight : "#ffffff",
 			correctLevel : QRCode.CorrectLevel.H
 		});
 	</script>
-	
+
 </body>
 </html>
