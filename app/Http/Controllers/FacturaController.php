@@ -148,7 +148,7 @@ class FacturaController extends Controller
     public function almacenes()
     {
         $almacenes = Almacene::whereNull('estado')->get();
-        return view('factura.listado')->with(compact('almacenes'));   
+        return view('factura.listado')->with(compact('almacenes'));
     }
 
     public function formulario_empresa($id)
@@ -239,7 +239,7 @@ class FacturaController extends Controller
         // dd($facturas);
         return view('factura.ajax_listado')->with(compact('facturas'));
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -315,7 +315,7 @@ class FacturaController extends Controller
     {
         //
     }
-    
+
     public function formulario()
     {
         $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
@@ -383,7 +383,7 @@ class FacturaController extends Controller
         }
 
         $cantidadItems = count($request->cantidad);
-        for ($i=0; $i < $cantidadItems; $i++) { 
+        for ($i=0; $i < $cantidadItems; $i++) {
 
             // echo $request->cantidad[$i].' - '.$request->precio[$i].' - '.$request->subtotal[$i]."<br />";
             $venta                  = new Ventasfac();

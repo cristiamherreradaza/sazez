@@ -30,6 +30,12 @@
         .textoCentrado{
             text-align: center;
         }
+
+        .textoCentradoNegrita{
+            text-align: center;
+            font-weight: 800;
+        }
+
 		#fondo{
 			/*background-image: url("{{ asset('assets/images/factura_szone.jpg') }}");*/
 			/* width: 892px; */
@@ -63,14 +69,14 @@
         }
         .datos th {
           height: 10px;
-          background-color: #abd4ed;
+          background-color: #fefefe;
           color: #000;
         }
         .datos td {
           height: 12px;
         }
         .datos th, .datos td {
-          border: 1px solid #ddd;
+          border: 2px solid #000;
           padding: 2px;
           text-align: center;
         }
@@ -298,11 +304,11 @@
             {{ $datosEmpresa->nombre }}<br /><br />
             {{ $datosEmpresa->direccion }}
         </div>
-        <p class="textoCentrado">FACTURA ORIGINAL</p>
+        <p class="textoCentradoNegrita">FACTURA ORIGINAL</p>
         <hr />
 
-        <div class="textoCentrado">NIT: {{ $datosEmpresa->nit }}</div>
-        <div class="textoCentrado">FACTURA N&deg;: {{ $datosFactura->numero_factura }}</div>
+        <div class="textoCentradoNegrita">NIT: {{ $datosEmpresa->nit }}</div>
+        <div class="textoCentradoNegrita">FACTURA N&deg;: {{ $datosFactura->numero_factura }}</div>
         <div class="textoCentrado">N&deg; AUTORIZACION: {{ $datosFactura->numero_autorizacion }}</div>
 
         <hr />
@@ -358,7 +364,7 @@
                     </tbody>
                     <tfoot>
                         <td colspan="2" style="text-align: left;"></td>
-                        <td style="background-color: #abd4ed;color: #000;">TOTAL</td>
+                        <td style="background-color: #fefefe;color: #000;">TOTAL</td>
                         <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.',
                             '') }}</td>
                     </tfoot>
