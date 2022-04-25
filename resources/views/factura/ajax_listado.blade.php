@@ -37,7 +37,7 @@
                     </td>
                     <td>{{ $f->estado }}</td>
                     <td>{{ $f->nit_cliente }}</td>
-                    <td>{{ $f->cliente['razon_social'] }}</td>
+                    <td>{{ ($f->cliente)? $f->cliente['razon_social'] : '' }}</td>
                     <td>{{ $f->monto_compra }}</td>
                     <td>
                         <a href="#" onclick="modifica({{ $f->id }})">{{ $f->codigo_control }}</a>
