@@ -178,9 +178,112 @@
 
 @endphp
 
-    @if (auth()->user()->almacen_id != 12)
-        <div id="fondo">
+    {{--  @dd(auth()->user()->almacen_id, auth()->user()->name)  --}}
 
+    @if (auth()->user()->almacen_id == 2 || auth()->user()->almacen_id == 12)
+
+        <div style="width: 302px" class="facturaPequena">
+
+            <div class="textoCentrado">
+                {{ $datosEmpresa->nombre }}<br /><br />
+                {{ $datosEmpresa->direccion }}
+            </div>
+            <p class="textoCentradoNegrita">FACTURA ORIGINAL</p>
+            <hr />
+
+            <div class="textoCentradoNegrita">NIT: {{ $datosEmpresa->nit }}</div>
+            <div class="textoCentradoNegrita">FACTURA N&deg;: {{ $datosFactura->numero_factura }}</div>
+            <div class="textoCentrado">N&deg; AUTORIZACION: {{ $datosFactura->numero_autorizacion }}</div>
+
+            <hr />
+            <div class="textoCentrado">{{ $datosEmpresa->actividad }}</div>
+            <br />
+
+            <div>Fecha: {{ $datosEmpresa->ciudad }}, {{ fechaCastellano($datosVenta->fecha) }}</div>
+            <div>Se&ntilde;or(es): {{ $datosVenta->cliente->razon_social }}</div>
+            <div>NIT/CI: {{ $datosFactura->nit_cliente }}</div>
+
+            <div>
+                <table class="datos" width="302">
+                    <thead>
+                        <tr>
+                            <th>CANT.</th>
+                            <th>DESCRIPCION</th>
+                            <th>P/U</th>
+                            <th>SUBTOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                        $sumaSubTotal = 0;
+                        @endphp
+                        @foreach ($productosVenta as $con => $pv)
+                        <tr>
+                            <td style="text-align: right;" width="100px">
+                                <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
+                                <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
+                                &nbsp;&nbsp;&nbsp; <b>{{ $pv->cantidad }}
+                            </td>
+                            <td width="425px" style="text-align: left;">{{ $pv->producto->nombre }}</td>
+
+                            @php
+                            if ($pv->precio_cobrado_mayor>0) {
+                            $precio_costo = $pv->precio_cobrado_mayor;
+                            }else{
+                            $precio_costo = $pv->precio_cobrado;
+                            }
+                            $subTotal = $precio_costo * $pv->cantidad;
+                            $sumaSubTotal += $subTotal;
+                            @endphp
+
+                            <td style="text-align: right;" width="160px">{{ $precio_costo }}</td>
+                            <td style="text-align: right;" width="100px"><b>{{ number_format($subTotal, 2, '.', '') }}</b></td>
+
+                        </tr>
+                        @endforeach
+                        @php
+                        $numeroParaDecimal = number_format($subTotal, 2, '.', '');
+                        list($numero, $decimal) = explode('.', $numeroParaDecimal);
+                        @endphp
+                    </tbody>
+                    <tfoot>
+                        <td colspan="2" style="text-align: left;"></td>
+                        <td style="background-color: #fefefe;color: #000;">TOTAL</td>
+                        <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.',
+                            '') }}</td>
+                    </tfoot>
+
+                </table>
+                SON: <span id="literalTotal"> </span>{{ $decimal }}/100 BOLIVIANOS
+                <br />
+                <br />
+
+                <div>Codigo de Control: {{ $datosFactura->codigo_control }}</div>
+                <div>Fecha limite de Emision: {{ $datosFactura->fecha_limite }}</div>
+                <br />
+                <center>
+                <div id="qrcode"></div>
+                </center>
+
+
+                <br />
+                <center>
+                    "ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A
+                    LEY"<br />
+                    <b>Ley N&deg; 453: El proveedor debera suministrar el servicio en las modalidades y terminos ofertados o
+                        convenidos.</b>
+                    <p>&nbsp;</p>
+                    <div id="btnImprimir">
+                        <input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
+                    </div>
+                </center>
+            </div>
+
+        </div>
+
+    @else
+
+        <div id="fondo">
             <div id="logo"><img src="{{ asset('assets/images/logoSmartZone.jpg') }}" width="150"></div>
 
             <table id="datosEmpresaNit" width="300">
@@ -296,105 +399,6 @@
                 <span style="font-size: 8pt;">{{ $datosEmpresa->nombre }}</span><br>
                 {{ $datosEmpresa->direccion }}
             </div>
-        </div>
-    @else
-    <div style="width: 302px" class="facturaPequena">
-
-        <div class="textoCentrado">
-            {{ $datosEmpresa->nombre }}<br /><br />
-            {{ $datosEmpresa->direccion }}
-        </div>
-        <p class="textoCentradoNegrita">FACTURA ORIGINAL</p>
-        <hr />
-
-        <div class="textoCentradoNegrita">NIT: {{ $datosEmpresa->nit }}</div>
-        <div class="textoCentradoNegrita">FACTURA N&deg;: {{ $datosFactura->numero_factura }}</div>
-        <div class="textoCentrado">N&deg; AUTORIZACION: {{ $datosFactura->numero_autorizacion }}</div>
-
-        <hr />
-        <div class="textoCentrado">{{ $datosEmpresa->actividad }}</div>
-        <br />
-
-        <div>Fecha: {{ $datosEmpresa->ciudad }}, {{ fechaCastellano($datosVenta->fecha) }}</div>
-        <div>Se&ntilde;or(es): {{ $datosVenta->cliente->razon_social }}</div>
-        <div>NIT/CI: {{ $datosFactura->nit_cliente }}</div>
-
-            <div>
-                <table class="datos" width="302">
-                    <thead>
-                        <tr>
-                            <th>CANT.</th>
-                            <th>DESCRIPCION</th>
-                            <th>P/U</th>
-                            <th>SUBTOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                        $sumaSubTotal = 0;
-                        @endphp
-                        @foreach ($productosVenta as $con => $pv)
-                        <tr>
-                            <td style="text-align: right;" width="100px">
-                                <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
-                                <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
-                                &nbsp;&nbsp;&nbsp; <b>{{ $pv->cantidad }}
-                            </td>
-                            <td width="425px" style="text-align: left;">{{ $pv->producto->nombre }}</td>
-
-                            @php
-                            if ($pv->precio_cobrado_mayor>0) {
-                            $precio_costo = $pv->precio_cobrado_mayor;
-                            }else{
-                            $precio_costo = $pv->precio_cobrado;
-                            }
-                            $subTotal = $precio_costo * $pv->cantidad;
-                            $sumaSubTotal += $subTotal;
-                            @endphp
-
-                            <td style="text-align: right;" width="160px">{{ $precio_costo }}</td>
-                            <td style="text-align: right;" width="100px"><b>{{ number_format($subTotal, 2, '.', '') }}</b></td>
-
-                        </tr>
-                        @endforeach
-                        @php
-                        $numeroParaDecimal = number_format($subTotal, 2, '.', '');
-                        list($numero, $decimal) = explode('.', $numeroParaDecimal);
-                        @endphp
-                    </tbody>
-                    <tfoot>
-                        <td colspan="2" style="text-align: left;"></td>
-                        <td style="background-color: #fefefe;color: #000;">TOTAL</td>
-                        <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.',
-                            '') }}</td>
-                    </tfoot>
-
-                </table>
-                SON: <span id="literalTotal"> </span>{{ $decimal }}/100 BOLIVIANOS
-                <br />
-                <br />
-
-                <div>Codigo de Control: {{ $datosFactura->codigo_control }}</div>
-                <div>Fecha limite de Emision: {{ $datosFactura->fecha_limite }}</div>
-                <br />
-                <center>
-                <div id="qrcode"></div>
-                </center>
-
-
-                <br />
-                <center>
-                    "ESTA FACTURA CONTRIBUYE AL DESARROLLO DEL PAIS. EL USO ILICITO DE ESTA SERA SANCIONADO DE ACUERDO A
-                    LEY"<br />
-                    <b>Ley N&deg; 453: El proveedor debera suministrar el servicio en las modalidades y terminos ofertados o
-                        convenidos.</b>
-                    <p>&nbsp;</p>
-                    <div id="btnImprimir">
-                        <input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
-                    </div>
-                </center>
-            </div>
-
         </div>
 
     @endif
