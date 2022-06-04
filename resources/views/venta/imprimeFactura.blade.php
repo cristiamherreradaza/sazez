@@ -180,7 +180,7 @@
 
     {{--  @dd(auth()->user()->almacen_id, auth()->user()->name)  --}}
 
-    @if (auth()->user()->almacen_id == 2 || auth()->user()->almacen_id == 12)
+    @if (auth()->user()->almacen_id == 2 || auth()->user()->almacen_id == 12 || auth()->user()->almacen_id == 3)
 
         <div style="width: 302px" class="facturaPequena">
 
