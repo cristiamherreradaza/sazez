@@ -25,7 +25,11 @@
                 <td>{{ $v->id }}</td>
                 <td>{{ $v->user->name }}</td>
                 <td>{{ $v->almacen->nombre }}</td>
-                <td>{{ $v->factura['numero_factura'] }}</td>
+                <td>
+                    @if($v->factura)
+                        {{ $v->factura['numero_factura'] }}
+                    @endif
+                </td>
                 <td>{{ $v->cliente->name }}</td>
                 <td>{{ $v->total }}</td>
                 <td>{{ $v->saldo }}</td>
