@@ -19,17 +19,56 @@ class ClienteController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function inicio()
     {
         return view('cliente.inicio');
     }
-    
+
     public function listado()
     {
-        $clientes = User::where('rol', 'Cliente')->get();
         $almacenes = Almacene::get();
-        return view('cliente.listado')->with(compact('clientes', 'almacenes'));
+        return view('cliente.listado')->with(compact('almacenes'));
+    }
+
+    public function ajaxListadoCliente(Request $request){
+
+        // dd($request->all());
+
+        $queryListado = User::orderBy('id', 'desc');
+        // $queryListado = User::where('rol', 'Cliente');
+
+        if($request->filled('nombre')){
+            $nombre = $request->input('nombre');
+
+            $queryListado->where('name', 'like', "%$nombre%");
+        }
+
+        if($request->filled('cedula')){
+            $cedula = $request->input('cedula');
+
+            $queryListado->where('ci', $cedula);
+
+        }
+
+        if($request->filled('nit')){
+            $nit = $request->input('nit');
+
+            $queryListado->where('nit', $nit);
+
+        }
+
+        $queryListado->where('rol', 'Cliente');
+
+        if($request->filled('nombre') || $request->filled('cedula') || $request->filled('nit')){
+            $queryListado->limit(300);
+        }else{
+            $queryListado->limit(200);
+        }
+
+        $clientes = $queryListado->get();
+
+        return view('cliente.ajaxListadoCliente')->with(compact('clientes'));
     }
 
     public function guardar(Request $request)

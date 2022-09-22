@@ -29,7 +29,7 @@ Route::get('/', 'Auth\LoginController@inicio');
 // });
 
 // Route::get('users/{id}', function ($id) {
-    
+
 // });
 Auth::routes();
 
@@ -129,6 +129,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Cliente/ajaxComboClienteNuevo/{clienteId}', 'ClienteController@ajaxComboClienteNuevo');
     Route::post('Cliente/ajaxEditaCliente', 'ClienteController@ajaxEditaCliente');
     Route::post('Cliente/guardaAjaxClienteEdicion', 'ClienteController@guardaAjaxClienteEdicion');
+    Route::get('Cliente/ajaxListadoCliente', 'ClienteController@ajaxListadoCliente');
+
 
     //CUPONES
     Route::get('Cupon/nuevo', 'CuponController@nuevo');
@@ -248,11 +250,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Entrega/eliminaEntrega/{id}', 'EntregaController@eliminaEntrega');
     Route::get('Entrega/eliminaEnvio/{id}', 'EntregaController@eliminaEnvio');
     Route::post('Entrega/modificar', 'EntregaController@modificar');
-    
+
     Route::post('Entrega/ajaxBuscaProductos', 'EntregaController@ajaxBuscaProductos');
     Route::post('Entrega/adicionaProducto', 'EntregaController@adicionaProducto');
-    
-    
+
+
 
     //TIPOS
     Route::get('Tipo/listado', 'TipoController@listado');
@@ -305,8 +307,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Envio/adicionaProducto', 'EnvioController@adicionaProducto');
     Route::get('Envio/eliminaEnvio/{id}', 'EnvioController@eliminaEnvio');
     Route::get('Envio/vista_previa_envio/{id}', 'EnvioController@vista_previa_envio');
-    
-    //MOVIMIENTOS   
+
+    //MOVIMIENTOS
     Route::get('Movimiento/registraDatos', 'MovimientoController@registraDatos');
     Route::get('Envio/ver_pedido/{id}', 'EnvioController@ver_pedido');
     Route::post('Movimiento/ajaxMuestraTotalesAlmacen', 'MovimientoController@ajaxMuestraTotalesAlmacen');
@@ -317,7 +319,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Alcance/ajax_ventas_meses', 'AlcanceController@ajax_ventas_meses');
 
     Route::post('Alcance/guarda', 'AlcanceController@guarda');
-    
+
     // REPORTES
     Route::get('Reporte/reporte_tienda', 'ReporteController@reporte_tienda');
     Route::get('Reporte/ajax_tienda_listado', 'ReporteController@ajax_tienda_listado');
@@ -384,7 +386,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('Factura/imprimeFactura/{id}', 'FacturaController@imprimeFactura');
     Route::get('Factura/ajaxMod', 'FacturaController@ajaxMod');
     Route::get('Factura/ajaxModificaFactura', 'FacturaController@ajaxModificaFactura');
-    
+
     // PEDIDOS PROEVEEDORES
     Route::get('PedidosProveedore/nuevo', 'PedidosProveedoreController@nuevo');
     Route::post('PedidosProveedore/ajaxBuscaProducto', 'PedidosProveedoreController@ajaxBuscaProducto');
@@ -403,6 +405,6 @@ Route::get('Cupon/test', 'CuponController@codigoGenerador');
 Route::get('Cupon/tests', 'CuponController@test');
 Route::get('/email', function() {
     Mail::to('arielfernandez.rma7@gmail.com')->send(new CuponMail());
-    //return new CuponMail(); 
+    //return new CuponMail();
 });
 Route::get('Cupon/prueba', 'CuponController@pruebaImprime');

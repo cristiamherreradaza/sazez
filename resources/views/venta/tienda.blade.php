@@ -22,7 +22,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body" id="muestraAjaxPromo">
-                
+
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -133,7 +133,7 @@
 
                     </div>
                     <div class="row">
-                    
+
                         <div class="col-md-12">
                             <label class="control-label">Categorias:&nbsp;&nbsp;</label>
                             @foreach ($grupos as $g)
@@ -146,7 +146,7 @@
                             </div>
                             @endforeach
                         </div>
-                    
+
                     </div>
                     <hr>
                     <div class="row">
@@ -163,7 +163,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
                     <a class="btn waves-effect waves-light text-white btn-block btn-success" onclick="guardaAjaxCLiente()" id="btnGuardaCliente" style="display: none;">GUARDAR CLIENTE</a>
@@ -179,7 +179,7 @@
 
     <div class="row">
         <div class="col-md-12">
-        
+
             <div class="card border-dark">
                 <div class="card-header bg-dark">
                     <h4 class="mb-0 text-white">DATOS PARA LA VENTA</h4>
@@ -190,7 +190,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">
-                                    CLIENTE 
+                                    CLIENTE
                                     <small id="tag_nuevo_cliente" class="badge badge-default badge-success form-text text-white" onclick="nuevoCliente()">NUEVO</small>
                                     <small id="tag_edita_cliente" class="badge badge-default badge-info form-text text-white" onclick="editaCliente()" style="display: none;"><span id="tagCliente"></span></small>
                                 </label>
@@ -329,11 +329,11 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                    
+
                                     </tbody>
-                    
+
                                 </table>
-                    
+
                             </div>
                         </div>
                     </div>
@@ -564,7 +564,7 @@
         $(document).on('keyup change', '#efectivo', function () {
             let totalVenta = Number($("#resultadoSubTotales").val());
             let efectivo = Number($("#efectivo").val());
-            let cambio = efectivo - totalVenta; 
+            let cambio = efectivo - totalVenta;
             let numeroSinSigno = Math.abs(cambio);
             $("#cambioVenta").val(numeroSinSigno);
         });
@@ -628,7 +628,7 @@
         $('.subtotal, .subtotalMayor, .subtotalPromocion').each(function(){
             sum += parseFloat(this.value);
         });
-        
+
         $("#resultadoSubTotales").val(sum);
         $("#efectivo").attr({"min": sum});
         valorLiteral = numeroALetras(sum, {
@@ -757,8 +757,9 @@
                             })
 
                             window.location.href = "{{ url('Venta/tienda') }}";
-                            
+
                         }
+
                         // console.log(data);
                         // $("#ajaxMuestraTotalesAlmacenes").html(data);
                     }
@@ -1056,6 +1057,6 @@
             }
         });
     }
-    
+
 </script>
 @endsection

@@ -18,38 +18,33 @@
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>CI</th>
-                        <th>Correo Electronico</th>
-                        <th>Celular</th>
-                        <th>Razón Social</th>
-                        <th>Nit</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($clientes as $key => $cliente)
-                        <tr>
-                            <td>{{ ($key+1) }}</td>
-                            <td>{{ $cliente->name }}</td>
-                            <td>{{ $cliente->ci }}</td>
-                            <td>{{ $cliente->email }}</td>
-                            <td>{{ $cliente->celulares }}</td>
-                            <td>{{ $cliente->razon_social }}</td>
-                            <td>{{ $cliente->nit }}</td>
-                            <td>
-                                <button type="button" class="btn btn-warning" title="Editar cliente"  onclick="editar('{{ $cliente->id }}', '{{ $cliente->name }}', '{{ $cliente->ci }}', '{{ $cliente->email }}', '{{ $cliente->celulares }}', '{{ $cliente->nit }}', '{{ $cliente->razon_social }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $cliente->id }})"><i class="fas fa-key"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar cliente"  onclick="eliminar('{{ $cliente->id }}', '{{ $cliente->name }}')"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Nombre</label>
+                        <input name="nombre_busqueda" type="text" id="nombre_busqueda" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Cedula</label>
+                        <input name="cedula_busqueda" type="number" id="cedula_busqueda" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Nit</label>
+                        <input name="nit_busqueda" type="number" id="nit_busqueda" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <p style="padding-top: 17px;"></p>
+                    <button class="btn btn-block btn-success" onclick="ajaxListadoCliente()">Buscar</button>
+                </div>
+            </div>
+            <div id="ajax_listado">
+
+            </div>
         </div>
     </div>
 </div>
@@ -124,7 +119,7 @@
                                 <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -249,11 +244,8 @@
         $("#botonGuardaNuevoCliente").prop("disabled", false);
         $("#botonGuardaEdicionCliente").prop("disabled", false);
 
-        $('#myTable').DataTable({
-            language: {
-                url: '{{ asset('datatableEs.json') }}'
-            },
-        });
+        ajaxListadoCliente();
+
     });
 
     $.ajaxSetup({
@@ -262,6 +254,29 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function ajaxListadoCliente(){
+        console.log($('#nombre_busqueda').val())
+        console.log($('#cedula_busqueda').val())
+        console.log($('#nit_busqueda').val())
+
+        let nombre = $('#nombre_busqueda').val();
+        let cedula = $('#cedula_busqueda').val();
+        let nit = $('#nit_busqueda').val();
+
+        $.ajax({
+            url: "{{ url('Cliente/ajaxListadoCliente') }}",
+            data: {
+                nombre: nombre,
+                cedula: cedula,
+                nit: nit
+             },
+            type: 'GET',
+            success: function(data) {
+                $('#ajax_listado').html(data)
+            }
+        });
+    }
 
     function nuevo_cliente()
     {

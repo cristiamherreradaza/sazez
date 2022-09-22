@@ -182,9 +182,9 @@ class VentaController extends Controller
                     ->groupBy('productos.id')
                     ->limit(10)
                     ->get();
-                    
+
                     // ->orWhere('productos.codigo', 'like', "%$request->termino%")
-                   
+
                     // ->get();
 
         // $productos->get();
@@ -195,6 +195,9 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
+
+        // dd($request->all());
+
         $facturaId = null;
         // preguntamos si el pago es al contado o credito
         if ($request->pagoContado != "on")
@@ -216,6 +219,8 @@ class VentaController extends Controller
         if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo') {
             // procesamos para el nit del cliente
             $buscaNitCliente = User::where('nit', $request->nit_cliente)->first();
+
+            // dd($buscaNitCliente, "Si");
 
             // verificamos si es publico general para guardar un nuevo cliente
             if ($buscaNitCliente == null) {
@@ -242,8 +247,10 @@ class VentaController extends Controller
             // fin del registro del cliente
         }else{
             $clienteId = $request->cliente_id;
+
+            // dd($clienteId);
         }
-        
+
         // creamos la venta
         $venta              = new Venta();
         $venta->user_id     = Auth::user()->id;
@@ -759,7 +766,7 @@ class VentaController extends Controller
                 $venta = Venta::find($datosVenta->id);
                 $venta->factura_id = $facturaId;
                 $venta->save();
-                
+
             }
         } else {
             $datosFactura = Factura::where("id", $datosVenta->factura_id)->first();
