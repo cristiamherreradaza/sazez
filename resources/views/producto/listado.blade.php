@@ -3,6 +3,7 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 @endsection
 
 @section('metadatos')
@@ -10,6 +11,38 @@
 @endsection
 
 @section('content')
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card border-success">
+            <div class="card-header bg-success">
+                <h4 class="text-white">TIPO DE CAMBIO</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Monto Tipo Cambio Nuevo</label>
+                        <input type="number" name="tipo_cambio" id="tipo_cambio" class="form-control form-control-sm" value="{{ $almacen->tipo_cambio }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Monto Tipo Cambio Actual</label>
+                        <input type="number" name="actual_tipo_cambio" id="actual_tipo_cambio" class="form-control form-control-sm" value="{{ $almacen->actual_tipo_cambio }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Modalidad</label>
+                        <br>
+                        <input name="utilizar" id="utilizar" type="checkbox" data-toggle="toggle" data-on="NUEVO" data-off="ACTUAL" data-onstyle="success" data-offstyle="primary" data-width="100%" {{ ($almacen->modalidad == 'nuevo')? 'checked' : '' }} >
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label"></label>
+                        <button class="btn btn-sm btn-success btn-block mt-2" onclick="actualizarTipoCambio()">Actualizar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12">
         <div class="card border-info">
@@ -22,25 +55,25 @@
                         <div class="form-group">
                             <label class="control-label">Codigo</label>
                             <input type="text" name="codigo" id="codigo" class="form-control">
-                        </div>                    
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label">Nombre</label>
                             <input type="text" name="nombre" id="nombre" class="form-control">
-                        </div>                    
+                        </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label>Seleccionar Tipo</label>
-                                
+
                             <select name="tipo" id="tipo" class="select2 form-control custom-select" style="width: 100%; height:36px;">
                                 <option value=""> Todos </option>
                                 @foreach($tipos as $t)
                                     <option value="{{ $t->id }}"> {{ $t->nombre }} </option>
                                 @endforeach
                             </select>
-                            
+
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -67,7 +100,7 @@
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
-                        </div>                    
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -219,9 +252,9 @@
                                 <input name="descripcion" type="text" id="descripcion" class="form-control" required>
                             </div>
                         </div>
-                        
+
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="valida_adiciona()">ADICIONAR</button>
@@ -265,9 +298,9 @@
                                 <input name="descripcion" type="text" id="descripcion" class="form-control" required>
                             </div>
                         </div>
-                        
+
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn waves-effect waves-light btn-block btn-danger" onclick="valida_quita()">QUITAR</button>
@@ -337,6 +370,7 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
 <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script>
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -525,7 +559,7 @@
     function genera_qr(productoId)
     {
         $("#genera_qr").modal("show");
-        
+
         $.ajax({
             url: "{{ url('Producto/ajaxGeneraQr') }}",
             data: {producto_id: productoId},
@@ -562,13 +596,50 @@
         }else{
             $("#formularioGeneraQr")[0].reportValidity();
         }
-        
+
     }
 
     function muestraImagenProducto(nombre){
         let imagen = `<img src="{{ asset('imagenesProductos')}}/`+nombre+`" width="100%">`;
         $("#muestraImagenProducto").html(imagen);
         $("#imagen_producto").modal("show");
+    }
+
+    function actualizarTipoCambio(){
+        let datos = {
+            tipo_cambio       : $('#tipo_cambio').val(),
+            actual_tipo_cambio: $('#actual_tipo_cambio').val(),
+            utilizar          : $('#utilizar').is(':checked'),
+
+        };
+        $.ajax({
+            url: "{{ url('Producto/actualizarTipoCambio') }}",
+            data: datos,
+            type: 'post',
+            success: function(data) {
+
+                console.log(data);
+
+                if(data.estado == 'success'){
+                    Swal.fire(
+                        'Excelente!',
+                        'Se registro el tipo de cambio con exito!',
+                        'success'
+                    ).then(function() {
+
+                    });
+                }else{
+                    Swal.fire(
+                        'Error!',
+                        'Ocurrio un error al registrar el tipo de cambio!',
+                        'error'
+                    )
+                }
+
+                // $("#mostrar").html(data);
+                // $("#mostrar").show('slow');
+            }
+        });
     }
 
 </script>

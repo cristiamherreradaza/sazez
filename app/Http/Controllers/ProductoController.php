@@ -60,9 +60,9 @@ class ProductoController extends Controller
         $anio = $fecha->format('Y');//obtenes la fecha actual
         $anio_atr = date("Y-m",strtotime($fecha_actual."- 1 year"."+ 1 month"));
         $anio_atras = $anio_atr.'-01';
-        // dd($anio_atras); 
+        // dd($anio_atras);
 
-        //OBTENEMOS LAS FECHA DEL COMIENZO Y FIN DE LAS SEMANA 
+        //OBTENEMOS LAS FECHA DEL COMIENZO Y FIN DE LAS SEMANA
         if (date("D") == "Mon"){
             $inicio_semana = date("Y-m-d");
         } else {
@@ -74,40 +74,54 @@ class ProductoController extends Controller
         // dd($usuario);
         if ($usuario == 'Administrador') {
         //OBTENEMOS LAS VENTAS DIARIAS GLOBALES
-        $venta_diaria = Venta::where('fecha','=',$fecha_actual) 
+        $venta_diaria = Venta::where('fecha','=',$fecha_actual)
                 ->select('*')
                 ->count('fecha');
 
         //OBTENEMOS LAS VENTAS SEMANALES GLOBALES
-        $venta_semanal = Venta::whereBetween('fecha', [$inicio_semana, $fin_semana]) 
+        $venta_semanal = Venta::whereBetween('fecha', [$inicio_semana, $fin_semana])
                 ->select('*')
                 ->count('fecha');
 
         //OBTENEMOS LAS VENTAS MENSUALES GLOBALES
         $venta_mensual = Venta::whereMonth('fecha', $mes)
-                ->whereYear('fecha', $anio) 
+                ->whereYear('fecha', $anio)
                 ->select('*')
                 ->count('fecha');
 
         //OBTENEMOS LAS VENTAS ANUALES GLOBALES
-        $venta_anual = Venta::whereYear('fecha', $anio) 
+        $venta_anual = Venta::whereYear('fecha', $anio)
                 ->select('*')
                 ->count('fecha');
 
         //OBTENEMOS LAS VENTAS ANUALES POR MESES
+        // $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
+        //                             FROM ventas
+        //                             WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+        //                             GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+
         $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
-                                    FROM ventas
-                                    WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
-                                    GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+                                FROM ventas
+                                WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+                                GROUP BY YEAR(fecha), MONTH(fecha)
+                                ORDER BY YEAR(fecha) ASC, MONTH(fecha) ASC");
 
         // $otro = $this->anio_meses($anual_mes);
 
         //OBTENEMOS LOS PRODUCTOS MAS VENDIDOS DEL MES ACTUAL
+        // $productos_mas_vendidos = DB::select("SELECT prod.id, prod.codigo, prod.nombre, tmp.nro
+        //                                         FROM productos prod, (SELECT producto_id, COUNT(producto_id) as nro
+        //                                                                         FROM ventas_productos
+        //                                                                         WHERE MONTH(fecha) = '$mes'
+        //                                                                         GROUP BY producto_id DESC)tmp
+        //                                         WHERE prod.id = tmp.producto_id");
+
         $productos_mas_vendidos = DB::select("SELECT prod.id, prod.codigo, prod.nombre, tmp.nro
                                                 FROM productos prod, (SELECT producto_id, COUNT(producto_id) as nro
                                                                                 FROM ventas_productos
                                                                                 WHERE MONTH(fecha) = '$mes'
-                                                                                GROUP BY producto_id DESC)tmp
+                                                                                GROUP BY producto_id
+                                                                                ORDER BY producto_id DESC)tmp
                                                 WHERE prod.id = tmp.producto_id");
 
         //OBTENEMOS LA LISTA DE PRODUCTOS CON SUS STOCK
@@ -118,51 +132,67 @@ class ProductoController extends Controller
                                                 WHERE prod.id = tmp.producto_id
                                                 ORDER BY tmp.total ASC");
         } else {
-            
+
             $almacen_id = Auth::user()->almacen_id;
             // dd($almacen_id);
            //OBTENEMOS LAS VENTAS DIARIAS GLOBALES
             $venta_diaria = Venta::where('fecha','=',$fecha_actual)
-                    ->where('almacene_id', $almacen_id) 
+                    ->where('almacene_id', $almacen_id)
                     ->select('*')
                     ->count('fecha');
 
             //OBTENEMOS LAS VENTAS SEMANALES GLOBALES
             $venta_semanal = Venta::whereBetween('fecha', [$inicio_semana, $fin_semana])
-                    ->where('almacene_id', $almacen_id)  
+                    ->where('almacene_id', $almacen_id)
                     ->select('*')
                     ->count('fecha');
 
             //OBTENEMOS LAS VENTAS MENSUALES GLOBALES
             $venta_mensual = Venta::whereMonth('fecha', $mes)
-                    ->where('almacene_id', $almacen_id) 
-                    ->whereYear('fecha', $anio) 
+                    ->where('almacene_id', $almacen_id)
+                    ->whereYear('fecha', $anio)
                     ->select('*')
                     ->count('fecha');
 
             //OBTENEMOS LAS VENTAS ANUALES GLOBALES
             $venta_anual = Venta::whereYear('fecha', $anio)
-                    ->where('almacene_id', $almacen_id)  
+                    ->where('almacene_id', $almacen_id)
                     ->select('*')
                     ->count('fecha');
 
             //OBTENEMOS LAS VENTAS ANUALES POR MESES
+            // $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
+            //                             FROM ventas
+            //                             WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+            //                             GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+
             $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
-                                        FROM ventas
-                                        WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
-                                        GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+                                    FROM ventas
+                                    WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+                                    GROUP BY YEAR(fecha), MONTH(fecha)
+                                    ORDER BY YEAR(fecha) ASC, MONTH(fecha) ASC");
 
             // $otro = $this->anio_meses($anual_mes);
 
             //OBTENEMOS LOS PRODUCTOS MAS VENDIDOS DEL MES ACTUAL
+            // $productos_mas_vendidos = DB::select("SELECT DISTINCT prod.id, prod.codigo, prod.nombre, tmp.nro
+            //                                         FROM productos prod, ventas vent, (SELECT vent_prod.producto_id, COUNT(vent_prod.producto_id) as nro
+            //                                                                             FROM ventas ven, ventas_productos vent_prod
+            //                                                                             WHERE ven.almacene_id = '$almacen_id'
+            //                                                                             AND ven.id = vent_prod.venta_id
+            //                                                                             AND MONTH(vent_prod.fecha) = '$mes'
+            //                                                                             GROUP BY vent_prod.producto_id DESC)tmp
+            //                                         WHERE prod.id = tmp.producto_id");
+
             $productos_mas_vendidos = DB::select("SELECT DISTINCT prod.id, prod.codigo, prod.nombre, tmp.nro
-                                                    FROM productos prod, ventas vent, (SELECT vent_prod.producto_id, COUNT(vent_prod.producto_id) as nro
-                                                                                        FROM ventas ven, ventas_productos vent_prod
-                                                                                        WHERE ven.almacene_id = '$almacen_id'
-                                                                                        AND ven.id = vent_prod.venta_id
-                                                                                        AND MONTH(vent_prod.fecha) = '$mes'
-                                                                                        GROUP BY vent_prod.producto_id DESC)tmp
-                                                    WHERE prod.id = tmp.producto_id");
+                                                FROM productos prod, ventas vent, (SELECT vent_prod.producto_id, COUNT(vent_prod.producto_id) as nro
+                                                                                    FROM ventas ven, ventas_productos vent_prod
+                                                                                    WHERE ven.almacene_id = '$almacen_id'
+                                                                                    AND ven.id = vent_prod.venta_id
+                                                                                    AND MONTH(vent_prod.fecha) = '$mes'
+                                                                                    GROUP BY vent_prod.producto_id
+                                                                                    ORDER BY vent_prod.producto_id DESC)tmp
+                                                WHERE prod.id = tmp.producto_id");
 
             //OBTENEMOS LA LISTA DE PRODUCTOS CON SUS STOCK
             $stock_productos = DB::select("SELECT prod.codigo, prod.cantidad_minima, prod.id, prod.nombre, tmp.total
@@ -171,14 +201,14 @@ class ProductoController extends Controller
                                                                             WHERE almacene_id = '$almacen_id'
                                                                             GROUP BY producto_id)tmp
                                                     WHERE prod.id = tmp.producto_id
-                                                    ORDER BY tmp.total ASC"); 
+                                                    ORDER BY tmp.total ASC");
         }
-        
+
         return view('producto.panelControl')->with(compact('venta_diaria', 'venta_semanal', 'venta_mensual', 'venta_anual','productos_mas_vendidos', 'stock_productos'));
     }
 
     public function anio_meses($anual_mes)
-    {   
+    {
         $num = $anual_mes[0]->mes;
         $mes = $this->meses_literal($num);
 
@@ -187,24 +217,24 @@ class ProductoController extends Controller
         //     'cantidad' => $anual_mes[0]->total,
         //     'orden' => 1,
         //     ]);
-        //     
+        //
 
         for ($i=1; $i < 13 ; $i++) {
             $num += 1;
             if (!empty($anual_mes[$i]->mes)) {
                 if ($num == $anual_mes[$i]->mes) {
-                    
+
                 } else {
 
                 }
             } else {
-                
+
             }
             # code...
         }
         // foreach ($anual_mes as $value) {
         //     if ($num == $value->mes && $num < 12) {
-                
+
         //     } else {
 
         //     }
@@ -271,11 +301,21 @@ class ProductoController extends Controller
     {
         $marcas = Marca::get();
         $tipos = Tipo::get();
-        return view('producto.listado')->with(compact('marcas', 'tipos'));
+
+        //PARA EL TIPO DE CAMBIO
+        $usuario = Auth::user();
+        $almacen = $usuario->almacen;
+
+        // $tipo_cambio = $almacen->tipo_cambio == null ? 0 : $almacen->tipo_cambio;
+
+        // dd($almacen);
+
+        return view('producto.listado')->with(compact('marcas', 'tipos', 'almacen'));
     }
 
     public function ajax_listado(Request $request)
     {
+
         //Modo Estatico
         // $productos_en_tienda = Movimiento::where('almacene_id', Auth::user()->almacen->id)
         //             ->where('estado', $request->estado)
@@ -288,10 +328,10 @@ class ProductoController extends Controller
             $consulta = $consulta->where('estado', $request->estado);
         }
         $productos_en_tienda = $consulta->groupBy('producto_id')->get();
-        
+
         // Variable de ayuda para el listado
         $estado = $request->estado;
-                
+
         // En un array guardaremos los id's de los productos de ese almacen
         $array_productos = array();
         foreach($productos_en_tienda as $row){
@@ -320,7 +360,7 @@ class ProductoController extends Controller
     {
         // dd($request->all());
         $configuracion = Configuracione::where('descripcion', 'generacionCodigos')->first();
-        
+
         if ($configuracion->valor == 'No') {
             $codigoGenerado = $request->codigo;
         } else {
@@ -364,7 +404,7 @@ class ProductoController extends Controller
         $nuevoProducto->save();
         $producto_id = $nuevoProducto->id;
 
-        if ($request->has('producto_id')) 
+        if ($request->has('producto_id'))
         {
             // borramos los las caracteristicas, categorias y precios para editar el producto
             $producto_id          = $request->producto_id;
@@ -391,9 +431,9 @@ class ProductoController extends Controller
             }
         }
 
-        if ($request->has('caracteristica') != null) 
+        if ($request->has('caracteristica') != null)
         {
-            foreach ($request->caracteristica as $key => $c) 
+            foreach ($request->caracteristica as $key => $c)
             {
                 if ($c != null) {
                     $caracteristica = new Caracteristica();
@@ -406,7 +446,7 @@ class ProductoController extends Controller
 
         }
 
-        if ($request->has('categorias_valores')) 
+        if ($request->has('categorias_valores'))
         {
             $categorias = $request->categorias_valores;
             $array_categorias = explode(',', $categorias);
@@ -420,7 +460,7 @@ class ProductoController extends Controller
             }
         }
 
-        if ($request->has('precio_venta')) 
+        if ($request->has('precio_venta'))
         {
             $llaves = array_keys($request->precio_venta);
             foreach ($llaves as $key => $ll) {
@@ -436,9 +476,9 @@ class ProductoController extends Controller
 
         }
 
-        if ($request->has('fotos')) 
+        if ($request->has('fotos'))
         {
-            foreach ($request->fotos as $key => $f) 
+            foreach ($request->fotos as $key => $f)
             {
                 $archivo = $f;
                 $direccion = 'imagenesProductos/'; // upload path
@@ -484,13 +524,13 @@ class ProductoController extends Controller
         $escalas = Escala::where('deleted_at', NULL)->get();
         $tipos = Tipo::all();
         return view('producto.edita')->with(compact(
-                                                'producto', 
-                                                'marcas', 
-                                                'categorias', 
-                                                'almacenes', 
-                                                'escalas', 
-                                                'tipos', 
-                                                'categorias_productos', 
+                                                'producto',
+                                                'marcas',
+                                                'categorias',
+                                                'almacenes',
+                                                'escalas',
+                                                'tipos',
+                                                'categorias_productos',
                                                 'precios',
                                                 'caracteristicas_producto',
                                                 'imagenes_producto'
@@ -500,7 +540,7 @@ class ProductoController extends Controller
 
     public function importaExcel(Request $request)
     {
-        if ($archivo = $request->file('excel')) 
+        if ($archivo = $request->file('excel'))
         {
             $direccion = 'excels/'; // upload path
             $nombreArchivo = date('YmdHis') . "." . $archivo->getClientOriginalExtension();
@@ -548,6 +588,11 @@ class ProductoController extends Controller
         $categorias = Categoria::get();
         $almacenes = Almacene::orderBy('nombre', 'asc')->whereNull('estado')->get();
         $categorias_productos = CategoriasProducto::where('producto_id', $id)->get();
+
+        // $almacen = Auth::user()->alamcen;
+
+        // dd($almacenes);
+
         return view('producto.muestra')->with(compact('producto', 'categorias', 'categorias_productos', 'almacenes'));
     }
 
@@ -566,17 +611,17 @@ class ProductoController extends Controller
         Caracteristica::where('producto_id', $productoId)->delete();
         // precio
         Precio::where('producto_id', $productoId)->delete();
-        // categorias 
+        // categorias
         CategoriasProducto::where('producto_id', $productoId)->delete();
-        // imagenes producto 
+        // imagenes producto
         ImagenesProducto::where('producto_id', $productoId)->delete();
-        // combos productos 
+        // combos productos
         CombosProducto::where('producto_id', $productoId)->delete();
-        // pedidos productos 
+        // pedidos productos
         PedidosProducto::where('producto_id', $productoId)->delete();
-        // ventas 
+        // ventas
         VentasProducto::where('producto_id', $productoId)->delete();
-        // cupones 
+        // cupones
         Cupone::where('producto_id', $productoId)->delete();
         // Movimientos
         Movimiento::where('producto_id', $productoId)->delete();
@@ -644,7 +689,7 @@ class ProductoController extends Controller
                 ->addColumn('action', function ($ingresos) {
                     return '<button onclick="ver_pedido(' . $ingresos->numero_ingreso . ')" class="btn btn-info" title="Ver detalle"><i class="fas fa-eye"></i></button>';
                 })
-                ->make(true); 
+                ->make(true);
     }
 
     public function listadoIngresos()
@@ -660,7 +705,7 @@ class ProductoController extends Controller
         $productos = Movimiento::where('numero_ingreso', $id)
                                 ->where('ingreso', '>', 0)
                                 ->get();
-        
+
         if($datos->numero_ingreso_envio){
             // Redirecciona a la pagina con detalle del ingreso y envio
             //dd('Ingreso con envio');
@@ -679,12 +724,12 @@ class ProductoController extends Controller
             //dd('Solo Ingreso');
             return view('producto.ver_ingreso')->with(compact('datos', 'productos'));
         }
-        
+
     }
 
     public function ajaxBuscaIngresoProducto(Request $request)
     {
-        $almacen_id = $request->almacen;   
+        $almacen_id = $request->almacen;
         $productos = Producto::where('nombre', 'like', "%$request->termino%")
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
@@ -700,7 +745,7 @@ class ProductoController extends Controller
                                         ->where('producto_id', $request->producto_id)
                                         ->where('estado', 'Ingreso')
                                         ->first();
-            
+
             if(!$producto_lista){    // En caso de no encontrarlo se creara los registros a ese ingreso/producto
                 if($request->numero_ingreso_envio){
                     //dd($producto_lista);
@@ -710,7 +755,7 @@ class ProductoController extends Controller
                                     ->first();
                     // Buscamos al producto
                     $producto = Producto::find($request->producto_id);
-                    // AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
+                    // AQUI INGRESAMOS EL MATERIAL AL ALMACEN
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $request->producto_id;
@@ -754,7 +799,7 @@ class ProductoController extends Controller
                 }else{
                     // Buscamos al producto
                     $producto = Producto::find($request->producto_id);
-                    //AQUI INGRESAMOS EL MATERIAL AL ALMACEN 
+                    //AQUI INGRESAMOS EL MATERIAL AL ALMACEN
                     $ingreso = new Movimiento();
                     $ingreso->user_id = Auth::user()->id;
                     $ingreso->producto_id = $request->producto_id;
@@ -871,7 +916,7 @@ class ProductoController extends Controller
 
         $precios = Precio::where('producto_id', $producto_id)
                     ->get();
-        
+
         return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios', 'escalas'));
     }
 
@@ -886,7 +931,7 @@ class ProductoController extends Controller
     public function generaQr(Request $request)
     {
         // dd($request->all());
-        
+
         $numeroLote = Qr::max('lote');
 
         if ($numeroLote) {
@@ -897,7 +942,7 @@ class ProductoController extends Controller
 
         $cantidad = $request->cantidadQr;
         $productoId = $request->productoIdQr;
-        for ($i=0; $i < $cantidad; $i++) { 
+        for ($i=0; $i < $cantidad; $i++) {
 
             $numeroQr = Qr::max('numero');
 
@@ -957,7 +1002,7 @@ class ProductoController extends Controller
     }
 
     public function ajaxGuardaPrecio(Request $request)
-    {   
+    {
         // dd($request->all());
         $precios = new Precio();
         $precios->user_id = Auth::user()->id;
@@ -999,10 +1044,10 @@ class ProductoController extends Controller
             $consulta = $consulta->where('estado', $request->estado);
         }
         $productos_en_tienda = $consulta->groupBy('producto_id')->get();
-        
+
         // Variable de ayuda para el listado
         $estado = $request->estado;
-                
+
         // En un array guardaremos los id's de los productos de ese almacen
         $array_productos = array();
         foreach($productos_en_tienda as $row){
@@ -1025,6 +1070,31 @@ class ProductoController extends Controller
         }
         $productos = $query->get();
         return view('producto.ajax_listado_marketing')->with(compact('productos', 'estado'));
+    }
+
+    public function  actualizarTipoCambio(Request $request) {
+        if($request->ajax()){
+
+            $almacen_id         = Auth::user()->almacen->id;
+            $tipo_cambio        = $request->input('tipo_cambio');
+            $actual_tipo_cambio = $request->input('actual_tipo_cambio');
+            $utilizar           = $request->input('utilizar');
+
+            $almacen                     = Almacene::find($almacen_id);
+            $almacen->tipo_cambio        = $tipo_cambio;
+            $almacen->actual_tipo_cambio = $actual_tipo_cambio;
+            $almacen->modalidad          = $utilizar == 'true' ? 'nuevo' : 'actual';
+            $almacen->save();
+
+            $data['estado'] = 'success';
+            $data['text']   = 'Se modifico con exito';
+
+        }else{
+            $data['estado'] = 'error';
+            $data['text']   = 'No se encontro';
+        }
+
+        return $data;
     }
 
 

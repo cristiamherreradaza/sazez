@@ -7,6 +7,8 @@
                 <th>Producto</th>
                 <th>Tipo</th>
                 <th>Marca</th>
+                <th>Precio en $us</th>
+                <th>Tipo Cambio</th>
                 <th>Saldo Total</th>
             </tr>
         </thead>
@@ -33,7 +35,28 @@
                         {
                             $saldo = 0;
                         }
+
+                        // PARA EL PRECIO DEL PRODUCTO
+                        $precioProducto = App\Precio::where('producto_id', $producto->id)->where('escala_id', 1)->first();
                     @endphp
+                    <td>
+                        @if ($precioProducto)
+                            @if ($almacen->modalidad == 'actual')
+                                {{ ceil($precioProducto->precio / $almacen->actual_tipo_cambio) }}
+                            @else
+                                {{ ceil($precioProducto->precio * $almacen->tipo_cambio) }}
+                            @endif
+                        @else
+
+                        @endif
+                    </td>
+                    <td>
+                        @if ($almacen->modalidad == 'actual')
+                            {{ $almacen->actual_tipo_cambio }}
+                        @else
+                            {{ $almacen->tipo_cambio }}
+                        @endif
+                    </td>
                     <td>{{ $saldo }}</td>
                 </tr>
             @endforeach

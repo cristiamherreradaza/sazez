@@ -15,6 +15,9 @@ class Almacene extends Model
     	'direccion',
     	'telefono',
         'estado',
+        'tipo_cambio',
+        'actual_tipo_cambio',
+        'modalidad',
         'deleted_at',
     ];
 

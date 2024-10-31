@@ -197,7 +197,7 @@
                                 <div id="ajaxComboClienteNuevo">
                                     <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
                                         style="width: 100%; height:36px;" onchange="seleccionaCliente()">
-                                        <option value="2" data-tipo="Cliente" data-nit="" data-razon="" data-select2-id="2"> Publico General </option>
+                                        <option value="34" data-tipo="Cliente" data-nit="" data-razon="" data-select2-id="2"> Publico General </option>
                                         @foreach($clientes as $c)
                                             <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}" data-nit="{{ $c->nit }}" data-razon="{{ $c->razon_social }}"> {{ $c->nit }} - {{ $c->razon_social }}</option>
                                         @endforeach
@@ -623,11 +623,14 @@
 
     function sumaSubTotales()
     {
+
         let sum = 0;
 
         $('.subtotal, .subtotalMayor, .subtotalPromocion').each(function(){
             sum += parseFloat(this.value);
         });
+
+        console.log("entre a sumar", sum);
 
         $("#resultadoSubTotales").val(sum);
         $("#efectivo").attr({"min": sum});
@@ -750,18 +753,15 @@
 
                         } else {
 
-                            Swal.fire({
-                                type: 'error',
-                                title: 'Oops...',
-                                text: 'No tienes las cantidades suficientes.'
-                            })
+                            // Swal.fire({
+                            //     type: 'error',
+                            //     title: 'Oops...',
+                            //     text: 'No tienes las cantidades suficientes.'
+                            // })
 
-                            window.location.href = "{{ url('Venta/tienda') }}";
+                            // window.location.href = "{{ url('Venta/tienda') }}";
 
                         }
-
-                        // console.log(data);
-                        // $("#ajaxMuestraTotalesAlmacenes").html(data);
                     }
                 });
 

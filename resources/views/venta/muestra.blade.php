@@ -58,7 +58,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <div class="modal-body">
-                
+
                 <form class="mt-3" action="" method="POST" id="formularioCambiaProducto">
                     @csrf
                     <div class="form-row">
@@ -127,7 +127,8 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-4"><h2><span class="text-info">Venta #</span> {{ $datosVenta->id }}</h2></div>
-                    <div class="col-md-4"><h2><span class="text-info">Cliente:</span> {{ $datosVenta->cliente->name }}</h2></div>
+                    {{-- <div class="col-md-4"><h2><span class="text-info">Cliente:</span> {{ $datosVenta->cliente->name }}</h2></div> --}}
+                    <div class="col-md-4"><h2><span class="text-info">Cliente:</span> {{ $datosVenta->cliente != null? $datosVenta->cliente->name : '' }}</h2></div>
                     <div class="col-md-4"><h2><span class="text-info">Fecha: </span> {{ $datosVenta->fecha }}</h2></div>
                 </div>
             </div>
@@ -194,7 +195,7 @@
                                             $diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
                                             if($diferenciaDias < $pv->producto->dias_garantia):
                                         @endphp
-                                            
+
                                             <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}', '{{ $pv->fecha_garantia }}')">
                                                 <i class="fas fa-exchange-alt"></i>
                                             </button>
@@ -286,7 +287,7 @@
                                 onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
                         </div>
                     </div>
-                </div>   
+                </div>
             @else
                 <div class="col-md-12">
                     <div class="row">
@@ -302,7 +303,7 @@
                     </div>
                 </div>
             @endif
-            
+
         </div>
     </div>
 </div>
@@ -382,12 +383,12 @@
 
             $.ajax({
                 url: "{{ url('Venta/ajaxCambiaProducto') }}",
-                data: {"_token": "{{ csrf_token() }}", 
-                        "productoId": productoCambiaId, 
-                        "ventaId": ventaCambiaId, 
-                        "opcionCambia": opcionCambia, 
-                        "cantidad": cantidadCambio, 
-                        "ventaProductoId": ventaProductoId 
+                data: {"_token": "{{ csrf_token() }}",
+                        "productoId": productoCambiaId,
+                        "ventaId": ventaCambiaId,
+                        "opcionCambia": opcionCambia,
+                        "cantidad": cantidadCambio,
+                        "ventaProductoId": ventaProductoId
                         },
                 type: 'POST',
                 success: function(data) {

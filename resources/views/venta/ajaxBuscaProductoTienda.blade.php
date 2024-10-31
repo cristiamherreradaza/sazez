@@ -1,7 +1,7 @@
 <div class="table-responsive">
     @if ($productos->count()>0)
-        
-    
+
+
     <table class="tablesaw table-striped table-hover table-bordered table no-wrap" id="tablaProductosEncontrados">
         <thead>
             <tr>
@@ -30,7 +30,7 @@
                 $promo = App\CombosProducto::where('producto_id', $p->id)->get();
                 foreach ($promo as $contador => $pro) {
                     $valida = App\Combo::where('id', $pro->combo_id)
-                            ->where('fecha_inicio', '<=', $hoy) 
+                            ->where('fecha_inicio', '<=', $hoy)
                             ->where('fecha_final', '>=', $hoy)
                             ->first();
                     if ($valida != null) {
@@ -76,7 +76,7 @@
                 $arrayPreciosProductosJson = json_encode($arrayPreciosProductos);
 
             @endphp
-                <tr class="item_{{ $p->id }}">                    
+                <tr class="item_{{ $p->id }}">
                     <td>{{ $p->id }}</td>
                     <td><img src="{{ asset('imagenesProductos')."/".$nombre }}" alt="" height="36"
                         onclick="muestraImagenProducto('{{ $nombre }}')"></td>
@@ -93,7 +93,7 @@
                         @forelse ($promosArray as $pA)
                             <small id="tags_promos" class="badge badge-default badge-danger form-text text-white" onclick="muestraPromo({{ $pA }})">P {{ ++$contadorPromos }}</small>
                         @empty
-                            
+
                         @endforelse
                     </td>
                     <td>{{ $p->marca }}</td>
@@ -110,7 +110,14 @@
                         @endforeach
  --}}                        <h3 class="text-info text-right">{{ intval($cantidadTotal->total) }}</h3>
                     </td>
-                    <td><h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3></td>
+                    <td>
+                        {{-- <h3 class="text-primary text-right">{{ $precioProducto->precio }}</h3> --}}
+                        @if ($alamcen->modalidad == 'actual')
+                            <h3 class="text-success text-right">{{ ceil($precioProducto->precio/$alamcen->actual_tipo_cambio) }}</h3>
+                        @else
+                            <h3 class="text-success text-right">{{ ceil($precioProducto->precio*$alamcen->tipo_cambio) }}</h3>
+                        @endif
+                    </td>
                     <td>
                         @if ($cantidadTotal->total > 0)
                             <button type="button" class="btnSelecciona btn btn-info" data-venta="tienda" title="VENTA POR UNIDADES"><i class="fas fa-plus"></i></button>
@@ -119,7 +126,7 @@
                             @endif
                         @endif
                     </td>
-                </tr>    
+                </tr>
             @endforeach
         </tbody>
     </table>
@@ -136,22 +143,25 @@
             $("#termino").val(""); //limpiamos el input de busqueda
             $("#termino").focus(); //posicionamos el foco en el input de busqueda
 
-            let currentRow = $(this).closest("tr"); //agarramos toda la fila de la tabla
-            let id      = currentRow.find("td:eq(0)").text();
-            let imagen      = currentRow.find("td:eq(1)").html();
-            let codigo  = currentRow.find("td:eq(2)").html();
-            let nombre  = currentRow.find("td:eq(3)").html();
-            let marca   = currentRow.find("td:eq(4)").text();
-            let tipo    = currentRow.find("td:eq(5)").text();
-            let modelo  = currentRow.find("td:eq(6)").text();
-            let colores = currentRow.find("td:eq(7)").text();
-            let stock   = currentRow.find("td:eq(8)").html();
-            let precio  = currentRow.find("td:eq(9)").text();
-            let stockNum = currentRow.find("td:eq(10)").text();
+            let currentRow = $(this).closest("tr");                //agarramos toda la fila de la tabla
+            let id         = currentRow.find("td:eq(0)").text();
+            let imagen     = currentRow.find("td:eq(1)").html();
+            let codigo     = currentRow.find("td:eq(2)").html();
+            let nombre     = currentRow.find("td:eq(3)").html();
+            let marca      = currentRow.find("td:eq(4)").text();
+            let tipo       = currentRow.find("td:eq(5)").text();
+            let modelo     = currentRow.find("td:eq(6)").text();
+            let colores    = currentRow.find("td:eq(7)").text();
+            let stock      = currentRow.find("td:eq(8)").html();
+            let precio     = currentRow.find("td:eq(9)").text().trim();
+            let stockNum   = currentRow.find("td:eq(10)").text();
 
             precios = $("#preciosEscalas_"+id).val(); //capturamos los precios del input
             let tipoVenta = $(this).data('venta');
             // preguntamos si la venta es al mayor o al menor
+
+            console.log(tipoVenta);
+
             if(tipoVenta == 'tienda'){
 
                 let buscaItem = itemsPedidoArray.lastIndexOf(id);
@@ -172,7 +182,7 @@
                     ]).draw(false);
                     sumaSubTotales();
                     $("#bloqueProductosUnidad").show('slow'); //mostarmos la tabla de ventas al menor
-                }                
+                }
 
             }else{
 
@@ -197,7 +207,7 @@
                     sumaSubTotales();
                     adicionaItemUnidad(precios, id);
                     $("#bloqueProductosMayor").show('slow'); //mostarmos la tabla de ventas al mayor
-                }                
+                }
 
             }
         });

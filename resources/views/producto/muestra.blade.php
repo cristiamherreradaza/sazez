@@ -31,7 +31,7 @@
                     @if(count($producto->imagenes) != 0)
                         <!-- empiezo de carrusel -->
                         <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
-                            <ol class="carousel-indicators">                    
+                            <ol class="carousel-indicators">
                                 @for($i = 0; $i< count($producto->imagenes); $i++ )
                                     <li data-target="#carouselExampleIndicators2" data-slide-to="{{ $i }}" class="{{ $i==0 ? 'active' : '' }}"></li>
                                 @endfor
@@ -59,7 +59,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="row px-4 py-3">
-                        <h1 class="mt-3"><strong class="text-primary"><u>Descripción del Producto</u></strong></h1>                        
+                        <h1 class="mt-3"><strong class="text-primary"><u>Descripción del Producto</u></strong></h1>
                     </div>
                     <div class="row px-4">
                         <p> {{ $producto->descripcion }} </p>
@@ -89,11 +89,11 @@
                         </div>
                     </div>
                 </div>
-            </div>            
-        </div>        
+            </div>
+        </div>
     </div>
     <div class="row justify-content-md-center">
-        <div class="card col-md-12">           
+        <div class="card col-md-12">
                 <!-- Tabs -->
                 <ul class="nav nav-pills custom-pills justify-content-md-center" id="pills-tab" role="tablist">
                     <li class="nav-item">
@@ -104,7 +104,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-primary" id="pills-profile-tab" data-toggle="pill" href="#especificacion" role="tab" aria-controls="pills-profile" aria-selected="false"><strong>ESPECIFICACIONES</strong></a>
-                    </li>                    
+                    </li>
                 </ul>
                 <!-- Tabs -->
                 <div class="tab-content" id="pills-tabContent">
@@ -118,13 +118,14 @@
                                             <th>Ingresos</th>
                                             <th>Salidas</th>
                                             <th>Stock</th>
+                                            <th>Tipo de Cambio</th>
                                         </tr>
                                     </thead>
                                     <tbody class="text-center">
                                         @foreach($almacenes as $almacen)
                                             <tr>
                                                 <td><strong class="text-primary">{{ $almacen->nombre }}</strong></td>
-                                                @php                                                    
+                                                @php
                                                     $ingreso = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) as total'))
                                                         ->where('producto_id', $producto->id)
                                                         ->where('almacene_id', $almacen->id)
@@ -132,7 +133,7 @@
                                                     $ingreso=intval($ingreso->total);
                                                 @endphp
                                                 <td>{{ $ingreso }}</td>
-                                                @php                                                    
+                                                @php
                                                     $salida = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(salida) as total'))
                                                         ->where('producto_id', $producto->id)
                                                         ->where('almacene_id', $almacen->id)
@@ -141,6 +142,7 @@
                                                 @endphp
                                                 <td>{{ $salida }}</td>
                                                 <td>{{ ($ingreso-$salida) }}</td>
+                                                <td>{{ $almacen->tipo_cambio }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -171,7 +173,7 @@
                             <hr>
                             <p class="mt-4">
                                 {{ $producto->descripcion }}
-                            </p>  
+                            </p>
                             <hr>
                             <h3><strong class="text-danger">Enlace Referencia :</strong></h3>
                                 <a href="{{ $producto->url_referencia }}" target="_blank">{{ $producto->url_referencia }}</a>
@@ -229,7 +231,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
         </div>
     </div>

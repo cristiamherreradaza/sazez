@@ -146,7 +146,7 @@ class VentaController extends Controller
 
     public function ajaxBuscaProductoTienda(Request $request)
     {
-        // dd($request->all());
+
         if($request->tipo != null){
             $tipo = $request->tipo;
         }else{
@@ -159,7 +159,9 @@ class VentaController extends Controller
             $marca = '%';
         }
 
-        // dd($tipo);
+        // dd($tipo, Auth::user()->almacen);
+
+        $alamcen = Auth::user()->almacen;
 
         $almacen_id = Auth::user()->almacen_id;
         $productos = Movimiento::select(
@@ -183,14 +185,17 @@ class VentaController extends Controller
                     ->limit(10)
                     ->get();
 
+                    // ->toSql();
+                    // dd($productos, $almacen_id, $tipo, $marca, $request->termino);
+
                     // ->orWhere('productos.codigo', 'like', "%$request->termino%")
 
                     // ->get();
 
         // $productos->get();
 
-        // dd($productos);
-        return view('venta.ajaxBuscaProductoTienda')->with(compact('productos'));
+        // dd($productos, $alamcen);
+        return view('venta.ajaxBuscaProductoTienda')->with(compact('productos', 'alamcen'));
     }
 
     public function guardaVenta(Request $request)
@@ -214,6 +219,12 @@ class VentaController extends Controller
         $ultimoParametro = Parametros::where('almacene_id', Auth::user()->almacen_id)
             ->latest()
             ->first();
+
+        // dd(
+        //     $ultimoParametro,
+        //     $ultimoParametro != null && $ultimoParametro->estado == 'Activo',
+        //     $request->all()
+        // );
 
         // preguntamos si la venta ya tiene una factura creada
         if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo') {
