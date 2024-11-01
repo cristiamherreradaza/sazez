@@ -7,7 +7,7 @@
                 <th>Producto</th>
                 <th>Tipo</th>
                 <th>Marca</th>
-                <th>Precio en $us</th>
+                <th>Precio en Bs</th>
                 <th>Tipo Cambio</th>
                 <th>Saldo Total</th>
             </tr>
