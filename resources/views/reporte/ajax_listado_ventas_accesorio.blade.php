@@ -33,8 +33,12 @@
                 <td>{{ $venta->producto->tipo->nombre }}</td>
                 @if ($venta->precio_cobrado_mayor > 0)
                     <td style="text-align: right">
-                        <span class="text-info"><b>{{ ($venta->precio_cobrado_mayor>0)?$venta->escala->nombre:"" }}</b></span>&nbsp;&nbsp;
-                        {{ $venta->precio_venta_mayor }}
+                        @if ($venta->escala)
+                            <span class="text-info"><b>{{ ($venta->precio_cobrado_mayor>0)?$venta->escala->nombre:"" }}</b></span>&nbsp;&nbsp;
+                            {{ $venta->precio_venta_mayor }}
+                        @else
+                            {{ $venta->precio_venta_mayor }}
+                        @endif
                     </td>
                     <td style="text-align: right">{{ $venta->precio_cobrado_mayor }}</td>
                 @else
@@ -83,7 +87,7 @@
 
 <script>
     $(function () {
-        
+
         $('#tabla-usuarios').DataTable({
             paging: true,
             dom: 'Bfrtip',
