@@ -87,7 +87,8 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
-                                    <th>Precio estandar</th>
+                                    <th>Precio estandar $us.</th>
+                                    <th>Precio estandar Bs.</th>
                                     <th style="width: 8%">Precio ofertado</th>
                                     <th style="width: 5%">Cantidad</th>
                                     <th class="w-10 text-center">Importe</th>
@@ -113,7 +114,7 @@
                                                     ->where('escala_id', 1)
                                                     ->first();
                                     @endphp
-                                    {{-- <td>{{ $precio->precio }}</td> --}}
+                                    <td>{{ $precio->precio }}</td>
                                     <td>{{ ceil($precio->precio*$alamcen->tipo_cambio) }}</td>
                                     <td><input type="number" class="form-control text-right precio" name="precio[{{ $producto->producto_id }}]" id="precio_{{ $producto->producto_id }}" value="{{ $producto->precio }}" data-id="{{ $producto->producto_id }}" step="any" min="1"></td>
                                     <td><input type="number" class="form-control text-right cantidad" name="cantidad[{{ $producto->producto_id }}]" id="cantidad_{{ $producto->producto_id }}" value="{{ $producto->cantidad }}" data-id="{{ $producto->producto_id }}" min="1"></td>
@@ -127,8 +128,8 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="10" class="text-right">TOTAL</th>
-                                    <th colspan="2"><input type="text" class="form-control text-right" name="totalCompra"
+                                    <th colspan="11" class="text-right">TOTAL</th>
+                                    <th colspan="3"><input type="text" class="form-control text-right" name="totalCompra"
                                             id="resultadoSubTotales" style="width: 120px;" value="{{ $total }}" readonly></th>
                                 </tr>
                             </tfoot>

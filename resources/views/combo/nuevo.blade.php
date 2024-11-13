@@ -27,7 +27,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="text" name="nombre_combo" id="nombre_combo" class="form-control" required>
-                            </div>                    
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
@@ -36,7 +36,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" required>
-                            </div>                    
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
@@ -45,7 +45,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="date" name="fecha_final" id="fecha_final" class="form-control" required>
-                            </div>                    
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group">
@@ -56,7 +56,7 @@
                                         <span class="input-group-text"><i class="ti-search"></i></span>
                                     </div>
                                 </div>
-                            </div>                    
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -86,7 +86,8 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Colores</th>
-                                    <th>Precio estandar</th>
+                                    <th>Precio estandar $us.</th>
+                                    <th>Precio estandar Bs.</th>
                                     <th style="width: 8%">Precio ofertado</th>
                                     <th style="width: 5%">Cantidad</th>
                                     <th class="w-10 text-center">Importe</th>
@@ -97,8 +98,8 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="10" class="text-right">TOTAL</th>
-                                    <th colspan="2"><input type="text" class="form-control text-right" name="totalCompra"
+                                    <th colspan="11" class="text-right">TOTAL</th>
+                                    <th colspan="3"><input type="text" class="form-control text-right" name="totalCompra"
                                             id="resultadoSubTotales" style="width: 120px;" readonly></th>
                                 </tr>
                             </tfoot>
@@ -177,7 +178,7 @@
             sum += parseFloat(this.value);
         });
         // sumaVisible = sum.toLocaleString('en', {useGrouping:true});
-        
+
         $("#resultadoSubTotales").val(sum);
         valorLiteral = numeroALetras(sum, {
             plural: 'Bolivianos',
@@ -256,7 +257,7 @@
         // }
         //alert(date);
 
-        
+
         // //Split de las fechas recibidas para separarlas
         // var x = inicio.split("-");
         // var y = fin.split("-");
@@ -286,7 +287,7 @@
                 title: 'Oops...',
                 text: 'Tienes que adicionar al menos un producto.'
             })
-        }        
+        }
     }
 </script>
 @endsection

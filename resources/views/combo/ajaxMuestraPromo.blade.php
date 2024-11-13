@@ -27,11 +27,13 @@
                     $precioProducto = App\Precio::where('producto_id', $i->producto->id)
                                 ->where('escala_id', 1)
                                 ->first();
-                    $total += $i->precio;
+                    // $total += $i->precio;
+                    $total = $total + $i->precio * $alamcen->tipo_cambio;
                 @endphp
                 {{-- <td class="text-right">{{ $precioProducto->precio }}</td> --}}
                 <td class="text-right">{{ ceil($precioProducto->precio*$alamcen->tipo_cambio) }}</td>
-                <td class="text-info text-right">{{ $i->precio }}</td>
+                {{-- <td class="text-info text-right">{{ $i->precio }}</td> --}}
+                <td class="text-info text-right">{{ ceil($i->precio*$alamcen->tipo_cambio) }}</td>
             </tr>
             @endforeach
         </tbody>

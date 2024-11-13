@@ -203,6 +203,8 @@ class VentaController extends Controller
 
         // dd($request->all());
 
+        $alamcen = Auth::user()->almacen;
+
         $facturaId = null;
         // preguntamos si el pago es al contado o credito
         if ($request->pagoContado != "on")
@@ -305,8 +307,14 @@ class VentaController extends Controller
                         $productosPr->tipo_id        = $ppr->producto->tipo_id;
                         $productosPr->combo_id       = $ppr->combo_id;
                         $productosPr->factura_id     = $facturaId;
-                        $productosPr->precio_venta   = $precioProductoCombo;
-                        $productosPr->precio_cobrado = $precioProductoCombo;
+
+                        // $productosPr->precio_venta   = $precioProductoCombo;
+                        // $productosPr->precio_cobrado = $precioProductoCombo;
+
+                        // CAMBIAMOS AL NUEVO TIPO DE CAMBIO
+                        $productosPr->precio_venta   = $precioProductoCombo * $alamcen->tipo_cambio;
+                        $productosPr->precio_cobrado = $precioProductoCombo * $alamcen->tipo_cambio;
+
                         $productosPr->cantidad       = $cantidadProductosPromo;
                         $productosPr->fecha          = $request->fecha;
                         $productosPr->fecha_garantia = Carbon::now()->addDay($ppr->producto->dias_garantia);
@@ -319,7 +327,10 @@ class VentaController extends Controller
                         $movimientoPromocion->venta_id     = $venta_id;
                         $movimientoPromocion->tipo_id      = $ppr->producto->tipo_id;
                         $movimientoPromocion->producto_id  = $ppr->producto_id;
-                        $movimientoPromocion->precio_venta = $precioProductoCombo;
+
+                        // DE IGUAL MANERA REALIZAMOS PARA LOS MOVIMIENTOS
+                        $movimientoPromocion->precio_venta = $precioProductoCombo * $alamcen->tipo_cambio;
+
                         $movimientoPromocion->salida       = $cantidadProductosPromo;
                         $movimientoPromocion->estado       = 'Venta';
                         $movimientoPromocion->fecha        = $fechaHoraVenta;
@@ -338,7 +349,9 @@ class VentaController extends Controller
                             $movimientoPromocion->venta_id          = $venta_id;
                             $movimientoPromocion->tipo_id           = $ppr->producto->tipo_id;
                             $movimientoPromocion->producto_id       = $ppr->producto_id;
-                            $movimientoPromocion->precio_venta      = $precioProductoCombo;
+
+                            // DE IGUAL MANERA HACEMOS PARA LOS MOVIMINTOS
+                            $movimientoPromocion->precio_venta      = $precioProductoCombo * $alamcen->tipo_cambio;
                             $movimientoPromocion->ingreso           = $cantidadProductosPromo;
                             $movimientoPromocion->estado            = 'Transferencia Mayorista';
                             $movimientoPromocion->fecha             = $fechaHoraVenta;
@@ -592,7 +605,10 @@ class VentaController extends Controller
                         ->where('estado', 'Devuelto')
                         ->get();
         // dd($datosVenta);
-        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta', 'cambiados'));
+
+        $almacen = Auth::user()->almacen;
+
+        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta', 'cambiados', 'almacen'));
     }
 
     public function imprimir($venta_id)

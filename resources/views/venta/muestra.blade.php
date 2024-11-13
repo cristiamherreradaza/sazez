@@ -176,12 +176,17 @@
                                         <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
                                         &nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
                                     <td class="text-right">
-                                        {{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor:$pv->precio_cobrado }}
+                                        {{-- @dd($pv->precio_cobrado_mayor, $pv->precio_cobrado_mayor>0, $pv->precio_cobrado) --}}
+                                        {{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor : $pv->precio_cobrado }}
+                                        {{-- @dd($pv->precio_cobrado*$almacen->tipo_cambio, $pv->precio_cobrado, $almacen->tipo_cambio)
+                                        {{ ($pv->precio_cobrado_mayor>0)? ceil($pv->precio_cobrado_mayor*$almacen->tipo_cambio) : ceil($pv->precio_cobrado*$almacen->tipo_cambio) }} --}}
                                     </td>
                                     @php
                                         if ($pv->precio_cobrado_mayor>0) {
+                                            // $precio_costo = $pv->precio_cobrado_mayor * $almacen->tipo_cambio;
                                             $precio_costo = $pv->precio_cobrado_mayor;
                                         }else{
+                                            // $precio_costo = $pv->precio_cobrado * $almacen->tipo_cambio;
                                             $precio_costo = $pv->precio_cobrado;
                                         }
                                         $subTotal = $precio_costo * $pv->cantidad;
@@ -209,6 +214,7 @@
                         <tfoot>
                             <tr>
                                 <th class="text-center"></th>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
