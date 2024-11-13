@@ -29,9 +29,10 @@
                                 ->first();
                     $total += $i->precio;
                 @endphp
-                <td class="text-right">{{ $precioProducto->precio }}</td>
+                {{-- <td class="text-right">{{ $precioProducto->precio }}</td> --}}
+                <td class="text-right">{{ ceil($precioProducto->precio*$alamcen->tipo_cambio) }}</td>
                 <td class="text-info text-right">{{ $i->precio }}</td>
-            </tr>    
+            </tr>
             @endforeach
         </tbody>
         <tfoot>

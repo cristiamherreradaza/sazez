@@ -28,11 +28,12 @@
                                     ->where('escala_id', 1)
                                     ->first();
                     @endphp
-                    <td>{{ $precio->precio }}</td>
+                    {{-- <td>{{ $precio->precio }}</td> --}}
+                    <td>{{ ceil($precio->precio*$alamcen->tipo_cambio) }}</td>
                     <td>
                         <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
                     </td>
-                </tr>    
+                </tr>
             @endforeach
         </tbody>
     </table>
@@ -59,7 +60,7 @@
             let buscaItem = itemsPedidoArray.lastIndexOf(id);
             if(buscaItem < 0)
             {
-                itemsPedidoArray.push(id);  
+                itemsPedidoArray.push(id);
                 t.row.add([
                     id,
                     codigo,

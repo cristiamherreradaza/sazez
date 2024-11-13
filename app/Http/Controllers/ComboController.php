@@ -19,38 +19,42 @@ class ComboController extends Controller
     {
         return view('combo.nuevo');
     }
-    
+
     public function ajaxBuscaProducto(Request $request)
     {
         $productos = Producto::where('nombre', 'like', "%$request->termino%")
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
-        return view('combo.ajaxBuscaProducto')->with(compact('productos'));
+
+        $alamcen = Auth::user()->almacen;
+
+        return view('combo.ajaxBuscaProducto')->with(compact('productos', 'alamcen'));
     }
 
     public function guarda(Request $request)
     {
+
         // Creacion del Combo
-        $combo = new Combo();
-        $combo->user_id = Auth::user()->id;
-        $combo->nombre = $request->nombre_combo;
+        $combo               = new Combo();
+        $combo->user_id      = Auth::user()->id;
+        $combo->nombre       = $request->nombre_combo;
         $combo->fecha_inicio = $request->fecha_inicio;
-        $combo->fecha_final = $request->fecha_final;
+        $combo->fecha_final  = $request->fecha_final;
         $combo->save();
         $combo_id = $combo->id;
 
         // En la variable llaves se asigna todos los productos que se encuentran en el combo
         $llaves = array_keys($request->precio);
-        foreach ($llaves as $key => $ll) 
+        foreach ($llaves as $key => $ll)
         {
             // Creación de ComboProducto
-            $productosCombo = new CombosProducto();
-            $productosCombo->user_id = Auth::user()->id;
-            $productosCombo->combo_id = $combo_id;
+            $productosCombo              = new CombosProducto();
+            $productosCombo->user_id     = Auth::user()->id;
+            $productosCombo->combo_id    = $combo_id;
             $productosCombo->producto_id = $ll;
-            $productosCombo->precio = $request->precio[$ll];
-            $productosCombo->cantidad = $request->cantidad[$ll];
+            $productosCombo->precio      = $request->precio[$ll];
+            $productosCombo->cantidad    = $request->cantidad[$ll];
             $productosCombo->save();
         }
         return redirect('Combo/listado');
@@ -58,14 +62,15 @@ class ComboController extends Controller
 
     public function editar($id)
     {
+        $alamcen = Auth::user()->almacen;
         $combo = Combo::find($id);
         $productos_combo = CombosProducto::where('combo_id', $id)->get();
-        return view('combo.editar')->with(compact('combo', 'productos_combo'));
+        return view('combo.editar')->with(compact('combo', 'productos_combo', 'alamcen'));
     }
 
     public function actualiza(Request $request)
     {
-        $combo = Combo::find($request->id);        
+        $combo = Combo::find($request->id);
         $combo->user_id = Auth::user()->id;
         $combo->nombre = $request->nombre_combo;
         $combo->fecha_inicio = $request->fecha_inicio;
@@ -73,10 +78,10 @@ class ComboController extends Controller
         $combo->save();
         $combo_id = $combo->id;
         //Eliminamos los productos del combo
-        CombosProducto::where('combo_id', $combo_id)->delete(); 
+        CombosProducto::where('combo_id', $combo_id)->delete();
         //Volvemos a introducirlos
         $llaves = array_keys($request->precio);
-        foreach ($llaves as $key => $ll) 
+        foreach ($llaves as $key => $ll)
         {
             // Creación de ComboProducto
             $productosCombo = new CombosProducto();
@@ -109,7 +114,7 @@ class ComboController extends Controller
     //     $combos_productos->save();
     //     return sw;
     // }
-    
+
     public function agregar_combo_producto(Request $request)
     {
         $combos_productos = new CombosProducto();
@@ -119,7 +124,7 @@ class ComboController extends Controller
         $combos_productos->precio = 0000;
         $combos_productos->save();
     }
-    
+
     public function eliminar_combo_producto(Request $request)
     {
         //dd($request->producto_id);
@@ -160,9 +165,10 @@ class ComboController extends Controller
 
     public function ajaxMuestraPromo(Request $request)
     {
+        $alamcen = Auth::user()->almacen;
         $datosCombo = Combo::find($request->combo_id);
         $itemsCombo = CombosProducto::where('combo_id', $request->combo_id)->get();
-        // dd($itemsCombo);
-        return view('combo.ajaxMuestraPromo')->with(compact('datosCombo', 'itemsCombo'));
+        // dd($itemsCombo, $alamcen);
+        return view('combo.ajaxMuestraPromo')->with(compact('datosCombo', 'itemsCombo', 'alamcen'));
     }
 }

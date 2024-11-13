@@ -28,7 +28,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="text" name="nombre_combo" id="nombre_combo" class="form-control" value="{{ $combo->nombre }}" required>
-                            </div>                    
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
@@ -37,7 +37,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" value="{{ $combo->fecha_inicio }}" required>
-                            </div>                    
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
@@ -46,7 +46,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="date" name="fecha_final" id="fecha_final" class="form-control" value="{{ $combo->fecha_final }}" required>
-                            </div>                    
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group">
@@ -57,7 +57,7 @@
                                         <span class="input-group-text"><i class="ti-search"></i></span>
                                     </div>
                                 </div>
-                            </div>                    
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -113,7 +113,8 @@
                                                     ->where('escala_id', 1)
                                                     ->first();
                                     @endphp
-                                    <td>{{ $precio->precio }}</td>
+                                    {{-- <td>{{ $precio->precio }}</td> --}}
+                                    <td>{{ ceil($precio->precio*$alamcen->tipo_cambio) }}</td>
                                     <td><input type="number" class="form-control text-right precio" name="precio[{{ $producto->producto_id }}]" id="precio_{{ $producto->producto_id }}" value="{{ $producto->precio }}" data-id="{{ $producto->producto_id }}" step="any" min="1"></td>
                                     <td><input type="number" class="form-control text-right cantidad" name="cantidad[{{ $producto->producto_id }}]" id="cantidad_{{ $producto->producto_id }}" value="{{ $producto->cantidad }}" data-id="{{ $producto->producto_id }}" min="1"></td>
                                     <td><input type="number" class="form-control text-right subtotal" name="subtotal[{{ $producto->producto_id }}]" id="subtotal_{{ $producto->producto_id }}" value="{{ ($producto->precio*$producto->cantidad) }}" step="any" style="width: 120px;" readonly></td>
@@ -207,7 +208,7 @@
             sum += parseFloat(this.value);
         });
         // sumaVisible = sum.toLocaleString('en', {useGrouping:true});
-        
+
         $("#resultadoSubTotales").val(sum);
         valorLiteral = numeroALetras(sum, {
             plural: 'Bolivianos',
