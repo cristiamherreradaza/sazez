@@ -312,8 +312,8 @@ class VentaController extends Controller
                         // $productosPr->precio_cobrado = $precioProductoCombo;
 
                         // CAMBIAMOS AL NUEVO TIPO DE CAMBIO
-                        $productosPr->precio_venta   = $precioProductoCombo * $alamcen->tipo_cambio;
-                        $productosPr->precio_cobrado = $precioProductoCombo * $alamcen->tipo_cambio;
+                        $productosPr->precio_venta   = ceil($precioProductoCombo * $alamcen->tipo_cambio);
+                        $productosPr->precio_cobrado = ceil($precioProductoCombo * $alamcen->tipo_cambio);
 
                         $productosPr->cantidad       = $cantidadProductosPromo;
                         $productosPr->fecha          = $request->fecha;
@@ -329,7 +329,7 @@ class VentaController extends Controller
                         $movimientoPromocion->producto_id  = $ppr->producto_id;
 
                         // DE IGUAL MANERA REALIZAMOS PARA LOS MOVIMIENTOS
-                        $movimientoPromocion->precio_venta = $precioProductoCombo * $alamcen->tipo_cambio;
+                        $movimientoPromocion->precio_venta = ceil($precioProductoCombo * $alamcen->tipo_cambio);
 
                         $movimientoPromocion->salida       = $cantidadProductosPromo;
                         $movimientoPromocion->estado       = 'Venta';
@@ -351,7 +351,7 @@ class VentaController extends Controller
                             $movimientoPromocion->producto_id       = $ppr->producto_id;
 
                             // DE IGUAL MANERA HACEMOS PARA LOS MOVIMINTOS
-                            $movimientoPromocion->precio_venta      = $precioProductoCombo * $alamcen->tipo_cambio;
+                            $movimientoPromocion->precio_venta      = ceil($precioProductoCombo * $alamcen->tipo_cambio);
                             $movimientoPromocion->ingreso           = $cantidadProductosPromo;
                             $movimientoPromocion->estado            = 'Transferencia Mayorista';
                             $movimientoPromocion->fecha             = $fechaHoraVenta;

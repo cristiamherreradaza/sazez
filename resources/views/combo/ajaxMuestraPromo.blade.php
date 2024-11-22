@@ -43,9 +43,10 @@
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col">TOTAL</th>
-                <th scope="col" class="text-right">{{ $total }}</th>
+                {{-- <th scope="col" class="text-right">{{ $total }}</th> --}}
+                <th scope="col" class="text-right">{{ ceil($total) }}</th>
             </tr>
         </tfoot>
     </table>
 </div>
-<a class="btn waves-effect waves-light text-white btn-block btn-info" onclick="adicionaPromocion('{{ $datosCombo->id }}', '{{ $datosCombo->nombre }}', '{{ $total }}')">ADICIONA PROMOCION</a>
+<a class="btn waves-effect waves-light text-white btn-block btn-info" onclick="adicionaPromocion('{{ $datosCombo->id }}', '{{ $datosCombo->nombre }}', '{{ ceil($total) }}')">ADICIONA PROMOCION</a>
