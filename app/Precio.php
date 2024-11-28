@@ -16,6 +16,7 @@ class Precio extends Model
         'precio',
         'estado',
         'deleted_at',
+        'almacene_id',
     ];
 
     public function user()
@@ -31,6 +32,11 @@ class Precio extends Model
     public function escala()
     {
         return $this->belongsTo('App\Escala');
+    }
+
+    public function almacene()
+    {
+        return $this->belongsTo('App\Almacene');
     }
 
 }

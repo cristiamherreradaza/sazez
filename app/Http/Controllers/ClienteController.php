@@ -154,7 +154,7 @@ class ClienteController extends Controller
     {
         $valida = 0;
         $consultaEmail = User::where('email', $request->correo)->count();
-        if($consultaEmail > 0){
+        if($consultaEmail > 0 || $request->correo == "" ){
             $valida = 1;
         }
 

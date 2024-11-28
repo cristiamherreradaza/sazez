@@ -69,11 +69,11 @@
                     </div>
                 </div>
             </form>
-            
+
         </div>
         <div class="row">
             <div class="col-md-12" id="listadoProductosAjax">
-        
+
             </div>
         </div>
     </div>
@@ -96,7 +96,7 @@
                             <td><h4><span class="text-info">Fecha:</span> {{ $pedido->fecha }}</h4></td>
                         </tr>
                     </table>
-                    
+
                     <table class="table table-hover">
                         <thead class="bg-inverse text-white">
                             <tr>
@@ -146,7 +146,7 @@
             </div>
         </div>
     </div>
-    
+
     @if(auth()->user()->almacen_id == $pedido->almacen->id || auth()->user()->perfil_id == 1)
         <div class="card-footer">
             <div class="row">
@@ -278,16 +278,37 @@
     {
         let producto_id = $('#producto_id').val();
         let producto_cantidad = $('#producto_cantidad').val();
-        if(producto_id.length > 0 && producto_cantidad > 0){
+        let producto_stock = $('#producto_stock').val();
+        if(producto_id.length > 0 && producto_cantidad > 0 && producto_cantidad != ""){
+
+            console.log(producto_stock);
+            console.log(producto_cantidad);
+            console.log(producto_stock >= producto_cantidad);
+            if(producto_stock >= producto_cantidad){
+
             //alert('ok');
+            }else{
+                $('#producto_cantidad').focus();
+                event.preventDefault();
+                Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'La cantidad solicitada no debe superar el stock disponible.'
+                });
+
+            }
         }else{
+            $('#producto_cantidad').focus();
             event.preventDefault();
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
                 text: 'Tienes que adicionar un producto y que la cantidad a solicitar sea al menos de 1.'
-            })
-        }        
+            });
+
+        }
+
+
     }
 </script>
 @endsection

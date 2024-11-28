@@ -20,8 +20,10 @@
                 // sacamos los precios de los productos
                 $preciosProductos = App\Precio::where('producto_id', $p->id)
                                     ->where('precio', '<>', 0)
+                                    ->where('almacene_id', '=', $almacen_id)
                                     ->get();
                 $contadorPrecios = 0;
+                $arrayPreciosProductos = [];
                 foreach ($preciosProductos as $pep) {
                     $arrayPreciosProductos[$contadorPrecios]["escala_id"] = $pep->escala->id;
                     $arrayPreciosProductos[$contadorPrecios]["nombre"]    = $pep->escala->nombre;
@@ -54,13 +56,14 @@
                     @php
                         $precio = App\Precio::where('producto_id', $p->id)
                                     ->where('escala_id', 1)
+                                    ->where('almacene_id', '=', $almacen_id)
                                     ->first();
                     @endphp
-                    <td>{{ $precio->precio }}</td>
+                    <td>{{ isset($precio) ? $precio->precio : "No definido" }}</td>
                     <td>
                         <button type="button" class="btnSelecciona btn btn-info" title="Adiciona Item"><i class="fas fa-plus"></i></button>
                     </td>
-                </tr>    
+                </tr>
             @endforeach
         </tbody>
     </table>
@@ -89,7 +92,7 @@
             let buscaItem = itemsPedidoArray.lastIndexOf(id);
             if(buscaItem < 0)
             {
-                itemsPedidoArray.push(id);  
+                itemsPedidoArray.push(id);
                 t.row.add([
                     id,
                     codigo,

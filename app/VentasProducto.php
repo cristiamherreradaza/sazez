@@ -24,6 +24,7 @@ class VentasProducto extends Model
         'fecha_garantia',
         'estado',
         'deleted_at',
+        'gc_impreso',
     ];
 
     public function user()
@@ -55,7 +56,7 @@ class VentasProducto extends Model
     {
         return $this->belongsTo('App\Escala');
     }
-    
+
     public function venta()
     {
         return $this->belongsTo('App\Venta');

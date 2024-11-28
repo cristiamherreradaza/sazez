@@ -247,12 +247,26 @@
                         @endphp
                     </tbody>
                     <tfoot>
-                        <td colspan="2" style="text-align: left;"></td>
-                        <td style="background-color: #fefefe;color: #000;">TOTAL</td>
-                        <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.',
-                            '') }}</td>
+                        @php
+                        // Verificamos si la venta se vendio con tarjeta GC
+                        if ($datosGC):
+                            $codigoGC = $datosGC->serial;
+                            $montoGC = $datosGC->monto_GC;
+                            $sumaSubTotal = $sumaSubTotal -$montoGC; // descuento del total de venta con el monto GC
+                        @endphp
+                        <tr>
+                            <td style="background-color: #fefefe;color: #000; text-align: left" colspan="3" >Monto GCard ({{ $codigoGC }}) </td>
+                            <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($montoGC, 2, '.','') }}</td>
+                       </tr>
+                       @php
+                        endif;
+                       @endphp
+                        <tr>
+                            <td colspan="2" style="text-align: left;"></td>
+                            <td style="background-color: #fefefe;color: #000;">TOTAL</td>
+                            <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.','') }}</td>
+                       </tr>
                     </tfoot>
-
                 </table>
                 SON: <span id="literalTotal"> </span>{{ $decimal }}/100 BOLIVIANOS
                 <br />
@@ -359,11 +373,27 @@
                         @endphp
                     </tbody>
                     <tfoot>
+                        @php
+                        // Verificamos si la venta se vendio con tarjeta GC
+                        if ($datosGC):
+                            $codigoGC = $datosGC->serial;
+                            $montoGC = $datosGC->monto_GC;
+                            $sumaSubTotal = $sumaSubTotal -$montoGC; // descuento del total de venta con el monto GC
+                        @endphp
+                        <tr>
+                            <td style="background-color: #fefefe;color: #000; text-align: left" colspan="3" >Monto GCard ({{ $codigoGC }}) </td>
+                            <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($montoGC, 2, '.','') }}</td>
+                       </tr>
+                       @php
+                        endif;
+                       @endphp
+                        <tr>
                         <td colspan="3" style="text-align: left;">SON: <span id="literalTotal"> </span>{{ $decimal }}/100
                             BOLIVIANOS</td>
                         <td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
                         <td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($sumaSubTotal, 2, '.',
                             '') }}</td>
+                        </tr>
                     </tfoot>
 
                 </table>
@@ -444,6 +474,7 @@
 			colorLight : "#ffffff",
 			correctLevel : QRCode.CorrectLevel.H
 		});
+        //window.onload = window.print;
 	</script>
 
 </body>

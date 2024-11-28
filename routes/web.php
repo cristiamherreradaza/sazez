@@ -293,7 +293,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('Venta/elimina', 'VentaController@elimina');
     Route::post('Venta/ajaxCambiaProducto', 'VentaController@ajaxCambiaProducto');
     Route::get('Venta/imprimir/{id}', 'VentaController@imprimir');
+    Route::get('Venta/imprimirGiftcard/{id}/{idProducto}/{gcImpreso}', 'VentaController@imprimirGiftcard');
     Route::post('Venta/ajaxBuscaNitCliente', 'VentaController@ajaxBuscaNitCliente');
+    Route::get('Venta/ajaxBuscaCliente', 'VentaController@ajaxBuscaCliente');
+    Route::get('Venta/ajaxBuscaGiftcard', 'VentaController@ajaxBuscaGiftcard');
     Route::get('Venta/imprimeFactura/{ventaId}', 'VentaController@imprimeFactura');
     Route::get('Venta/infoDispositivo', 'VentaController@infoDispositivo');
     Route::get('Venta/ventasQr', 'VentaController@ventasQr');

@@ -108,7 +108,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input name="email_usuario" type="email" id="email_usuario" onchange="validaEmail()" class="form-control" required>
-                                <small id="msgValidaEmail" class="badge badge-default badge-danger form-text text-white float-left" style="display: none;">El correo ya existe, el cliente ya esta registrado</small>
+                                <small id="msgValidaEmail" class="badge badge-default badge-danger form-text text-white float-left" style="display: none;">Ingrese un correo o el correo ya existe, el cliente ya esta registrado</small>
                             </div>
                         </div>
                     </div>
@@ -197,7 +197,7 @@
                                 <div id="ajaxComboClienteNuevo">
                                     <select name="cliente_id" id="cliente_id" class="select2 form-control custom-select"
                                         style="width: 100%; height:36px;" onchange="seleccionaCliente()">
-                                        <option value="34" data-tipo="Cliente" data-nit="" data-razon="" data-select2-id="2"> Publico General </option>
+                                        {{-- <option value="2" data-tipo="Cliente" data-nit="" data-razon="" data-select2-id="2"> Publico General </option> --}}
                                         @foreach($clientes as $c)
                                             <option value="{{ $c->id }}" data-tipo="{{ $c->rol }}" data-nit="{{ $c->nit }}" data-razon="{{ $c->razon_social }}"> {{ $c->nit }} - {{ $c->razon_social }}</option>
                                         @endforeach
@@ -421,20 +421,42 @@
                                 <tr>
                                     <td class="text-right">TOTAL</td>
                                     <td><input type="text" class="form-control text-right" name="totalCompra"
-                                            id="resultadoSubTotales" style="width: 120px;" readonly>
+                                            id="resultadoSubTotales" style="width: 100%;" readonly>
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="text-right">GIFTCARD</td>
+                                    <td>
+                                        <input name="chkbGiftcard" id="chkbGiftcard" type="checkbox" data-toggle="toggle" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger" data-width="120" onchange="csGiftcard(this)">
+                                    </td>
+                                </tr>
+                                <tr id="areaGiftcard" style="display: none;">
+                                    <td class="text-right" style="display: ;">CODIGO</td>
+                                    <td>
+                                        <select name="codigo_gc" id="codigo_gc" class="select2 form-control custom-select"
+                                            style="width: 150px; height:36px; border-color: slateblue"  onchange="calculaTotalEfectivoMenosMontoGC()" placeholder="Seleccione 1">
+                                            <option value="" placeholder="Seleccione 1">seellll</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr style="width: 100%; font-size: 18px;font-weight: bold">
+                                    <td class="text-right">TOTAL_PAGAR</td>
+                                    <td><input type="text" class="form-control text-right" name="totalCompra"
+                                            id="resultadoTotales" style="width: 100%;" readonly>
+                                    </td>
+                                </tr>
+                                <tr style="width: 100%; font-size: 22px;font-weight: bold">
                                     <td class="text-right">EFECTIVO</td>
-                                    <td><input type="number" name="efectivo" id="efectivo"
-                                            class="form-control text-right text-right" step="any" value="0" style="width: 120px;" min="0"></td>
+                                    <td><input type="number" name="efectivo" id="efectivo" style="width: 100%; font-size: 22px;font-weight: bold; border-color: #299e3d"
+                                            class="form-control text-right text-right" step="any" value="0"  min="0"></td>
                                 </tr>
                                 <tr>
                                     <td class="text-right"><span id="saldoOCambio">CAMBIO</span></td>
                                     <td><input type="number" name="cambioVenta" id="cambioVenta"
                                             class="form-control text-right text-right" step="any" value="0"
-                                            style="width: 120px;" readonly></td>
+                                            style="width: 100%;" readonly></td>
                                 </tr>
+
                                 @php
                                     $parametrosFactura = App\Parametros::where('almacene_id', auth()->user()->almacen_id)
                                                             ->latest()
@@ -442,12 +464,26 @@
                                 @endphp
                                 @if ($parametrosFactura != null && $parametrosFactura->estado == 'Activo')
                                     <tr>
-                                        <td class="text-right">NIT</td>
-                                        <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 160px;" required></td>
+                                        <td class="text-right">FACTURA</td>
+                                        <td>
+                                            <input name="factura" id="factura" type="checkbox" disabled data-toggle="toggle" data-on="SI" data-off="NO" data-onstyle="success" data-offstyle="danger" data-width="120" onchange="csfactura(this)">
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td class="text-right">NOMBRE</td>
-                                        <td><input type="text" name="razon_social_cliente" id="razon_social_cliente" class="form-control text-right text-right" style="width: 180px;" required></td>
+                                        <td class="text-right">NIT/CI(*)</td>
+                                        <td><input type="number" name="nit_cliente" id="nit_cliente" class="form-control text-right text-right" step="any" style="width: 100%; border-color: slateblue" value="0" required disabled></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">NOMBRE(*)</td>
+                                        <td><input type="text" name="razon_social_cliente" id="razon_social_cliente" class="form-control text-left" style="width: 100%; border-color: slateblue" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">NRO.CEL.</td>
+                                        <td><input type="text" name="celulares_cliente" id="celulares_cliente" class="form-control text-right" style="width: 100%; border-color: slateblue"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">CORREO</td>
+                                        <td><input type="email" name="email_cliente" id="email_cliente" class="form-control text-left" style="width: 100%; border-color: slateblue"></td>
                                     </tr>
                                 @endif
                                 <tr>
@@ -527,6 +563,17 @@
 
         $(".select2").select2();
 
+        //ASignacion de cliente por defecto cuando usuario es Admin o Almacen
+        let = clientePorDefecto = "";
+        if("{{ auth()->user()->rol }}" == "Administrador" || "{{ auth()->user()->rol }}" == "Almacen"){
+            clientePorDefecto = "Roger Gonzalo Sanchez Alvarez";
+        }
+        selectCliente(clientePorDefecto);
+
+        mostrarOcultaCamposSegunTotalVenta();
+
+        selectCodigoGC();
+
         // elimina productos de la tabla por unidad
         $('#tablaPedido tbody').on('click', '.btnElimina', function () {
             t.row($(this).parents('tr'))
@@ -562,7 +609,8 @@
 
 
         $(document).on('keyup change', '#efectivo', function () {
-            let totalVenta = Number($("#resultadoSubTotales").val());
+            //let totalVenta = Number($("#resultadoSubTotales").val());
+            let totalVenta = Number($("#resultadoTotales").val()); //@walvarez
             let efectivo = Number($("#efectivo").val());
             let cambio = efectivo - totalVenta;
             let numeroSinSigno = Math.abs(cambio);
@@ -570,6 +618,103 @@
         });
 
     });
+
+
+    function selectCliente(txtBusqueda = '') {
+
+        let clienteIdSelect2 = $("#cliente_id").select2({
+            placeholder: "Seleccione Cliente...",
+            allowClear: true,
+            minimumInputLength: 3,
+            width: '100%',
+            dropdownAutoWidth : true,
+            ajax: {
+                url: "{{ url('Venta/ajaxBuscaCliente') }}",
+                dataType: 'json',
+                type: 'GET',
+                quietMillis: 200,
+                data: function (term, page) {
+                    return {
+                        term: term, //buscar por "term"
+                        page: page // numeor de pagina
+                    };
+                },
+                results: function (data, page) {
+                    //objetoCLiente = JSON.parse(data.datosCliente);
+                    var more = (page * 10) < data.total;
+                    return {results: data.datosCliente, more: more};
+                },
+
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.datosCliente, function (item, index) {
+                            let title = 'ROL: ' + item.rol + '\n' +
+                                        'NOMBRE: ' + item.nombre + '\n' +
+                                        'RAZON SOCIAL: ' + item.razon_social + '\n' +
+                                        'NIT: ' + item.nit + '\n' +
+                                        'CELULAR: ' + item.celulares + '\n' +
+                                        'CORREO: ' + item.email;
+                            return {
+                                text: (index+1) + '. [NIT: ' + item.nit+'] <b>'+item.nombre + '</b> ('+ item.rol + ')',
+                                text_result: '[NIT: ' + item.nit+'] '+item.nombre + ' ('+ item.rol + ')',
+                                title: title,
+                                id: item.id,
+                                tipo: item.rol,
+                                nit: item.nit,
+                                razon_social: item.razon_social,
+                                celulares: item.celulares,
+                                email: item.email,
+                            }
+                        })
+                    };
+                },
+                cache: false
+
+            },
+            formatResult: function (data, term) {
+                return data;
+            },
+            formatSelection: function (data) {
+                return data;
+            },
+            templateSelection: function (data, container) {
+                $(data.element).attr('data-tipo', data.tipo);
+                $(data.element).attr('data-nit', data.nit);
+                $(data.element).attr('data-text_result', data.text_result);
+                $(data.element).attr('title', data.title);
+                $(data.element).attr('data-razon', data.razon_social);
+                $(data.element).attr('data-celular', data.celulares);
+                $(data.element).attr('data-email', data.email);
+                return data.text_result;
+            },
+            dropdownCssClass: "bigdrop",
+            escapeMarkup: function (m) { return m; }
+        });
+
+        // Seleccionar automaticamente cliente cuando usuario es Admin o almacen
+        if(txtBusqueda != ''){
+
+            clienteIdSelect2.on("select2:open", function (e) {
+
+                document.querySelector('.select2-search__field').focus();
+
+                $('.select2-search__field').val(txtBusqueda);
+                $('.select2-search__field').trigger("keyup");
+                $('.select2-results__option').trigger("select");
+
+                setTimeout(function() { $('.select2-results__option').trigger("mouseup"); }, 1000);
+
+            });
+
+            clienteIdSelect2.on('focus', function(){
+                $(this).select2('open');
+            });
+
+            $('#cliente_id').trigger("focus");
+            txtBusqueda = '';
+        }
+        // FIN - Seleccionar automaticamente cliente cuando usuario es Admin o almacen
+    }
 
     // calcula el precio en funcion al cambio de precios tabla unidades
     $(document).on('keyup change', '.precio', function(e){
@@ -623,17 +768,28 @@
 
     function sumaSubTotales()
     {
-
         let sum = 0;
 
         $('.subtotal, .subtotalMayor, .subtotalPromocion').each(function(){
             sum += parseFloat(this.value);
         });
 
-        console.log("entre a sumar", sum);
+        mostrarOcultaCamposSegunTotalVenta(sum);
 
         $("#resultadoSubTotales").val(sum);
-        $("#efectivo").attr({"min": sum});
+
+
+        // calculo con Giftcard
+        sumEfectivo = calculaTotalEfectivoMenosMontoGC(sum);
+
+        $("#resultadoTotales").val(sumEfectivo);
+
+        $("#efectivo").val(sumEfectivo);
+        $("#efectivo").attr({"min": sumEfectivo});
+        montoALiteral(sumEfectivo);
+    }
+
+    function montoALiteral(sum){
         valorLiteral = numeroALetras(sum, {
             plural: 'Bolivianos',
             singular: 'Bolivianos',
@@ -706,7 +862,6 @@
         });
 
         $("#danger-header-modal").modal("show");
-    // alert(promoId);
     }
 
     function muestraExistencias(productoId)
@@ -733,37 +888,61 @@
             // verificamos que las cantidades sean las correctas si es asi enviamos el formulario
             if ($("#formularioVenta")[0].checkValidity()) {
 
-                let datosFormularioVenta = $("#formularioVenta").serializeArray();
-                $("#btnEnviaVenta").hide();
+                Swal.fire({
+                    title: '¿Confirma el registro de la venta?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, realizar la venta!',
+                    cancelButtonText: "Cancelar",
+                }).then((result) => {
+                    if (result.value) {
 
-                $.ajax({
-                    url: "{{ url('Venta/guardaVenta') }}",
-                    data: datosFormularioVenta,
-                    type: 'POST',
-                    success: function(data) {
-                        if (data.errorVenta == 0) {
+                        let datosFormularioVenta = $("#formularioVenta").serializeArray();
+                        $("#btnEnviaVenta").hide();
+                        console.log(datosFormularioVenta);
+                        $.ajax({
+                            url: "{{ url('Venta/guardaVenta') }}",
+                            data: datosFormularioVenta,
+                            type: 'POST',
+                            success: function(data) {
+                                if (data.errorVenta == 0 || data.errorVenta == '0') {
 
-                            Swal.fire({
-                                type: 'success',
-                                title: 'Excelente',
-                                text: 'Se realizo la venta'
-                            });
+                                    Swal.fire({
+                                        type: 'success',
+                                        title: 'Excelente',
+                                        text: 'Se realizo la venta.'
+                                    }).then((result) => {
+                                        // Redirecciona a la ventana de opciones de la Venta
+                                        window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
+                                    })
 
-                            window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
+                                } else if(data.errorVenta == 1 || data.errorVenta == '1') {
 
-                        } else {
+                                    Swal.fire({
+                                        type: 'error',
+                                        title: 'Oops...',
+                                        text: 'No tienes las cantidades suficientes.'
+                                    }).then((result) => {
+                                        // Redirecciona a la ventana de ventas
+                                        window.location.href = "{{ url('Venta/tienda') }}";
+                                    })
 
-                            // Swal.fire({
-                            //     type: 'error',
-                            //     title: 'Oops...',
-                            //     text: 'No tienes las cantidades suficientes.'
-                            // })
+                                } else {
 
-                            // window.location.href = "{{ url('Venta/tienda') }}";
-
-                        }
+                                    Swal.fire({
+                                        type: 'error',
+                                        title: 'Oops...',
+                                        text: data.mensajeError
+                                    }).then((result) => {
+                                        $("#btnEnviaVenta").show();
+                                    })
+                                }
+                            }
+                        });
                     }
-                });
+                })
 
             }else{
                 $("#formularioVenta")[0].reportValidity();
@@ -774,16 +953,18 @@
                 title: 'Oops...',
                 text: 'Tienes que adicionar un producto a la venta!!!'
             })
-            // alert("llena carajo");
         }
     }
 
     function seleccionaCliente()
     {
         let nombreCliente = $("#cliente_id").find(':selected').text();
+        let nombreClienteResult = $("#cliente_id").find(':selected').data('text_result');
         let rolCliente    = $("#cliente_id").find(':selected').data('tipo');
         let nitCliente    = $("#cliente_id").find(':selected').data('nit');
         let razonCliente  = $("#cliente_id").find(':selected').data('razon');
+        let celular  = $("#cliente_id").find(':selected').data('celular');
+        let email  = $("#cliente_id").find(':selected').data('email');
 
         if (rolCliente == 'Mayorista') {
             $("#bloqueEnvioMayorista").show("slow");
@@ -791,14 +972,25 @@
             $("#bloqueEnvioMayorista").hide("slow");
         }
 
-        $("#tagCliente").html('EDITA -'+nombreCliente);
-        $("#nit_cliente").val(nitCliente);
-        $("#razon_social_cliente").val(razonCliente);
-        $("#tag_edita_cliente").show();
+        if(nombreCliente){
+            // Muestra Boton de editar Cliente
+            $("#tagCliente").html('EDITA -'+nombreClienteResult);
+            $("#tag_edita_cliente").show();
+
+            //Asignando resuiltados en campos de factura
+            $("#nit_cliente").val(nitCliente);
+            $("#razon_social_cliente").val(razonCliente);
+            $("#celulares_cliente").val(celular);
+            $("#email_cliente").val(email);
+
+        }else{
+            $("#tag_edita_cliente").hide();
+        }
     }
 
     function nuevoCliente()
     {
+        $("#ajaxFormEditaCliente").html("");
         $("#nombre_usuario").focus();
         $("#nombre_usuario").val('');
         $("#email_usuario").val('');
@@ -806,6 +998,8 @@
         $("#celular_usuario").val('');
         $("#razon_social_usuario").val('');
         $("#nit_usuario").val('');
+        $("#msgValidaEmail").hide();
+        $("#btnGuardaCliente").hide();
         $("#success-header-modal").modal("show");
     }
 
@@ -849,6 +1043,13 @@
     function validaEmail()
     {
         let correo_cliente = $("#email_usuario").val();
+        if(correo_cliente == ""){
+            $("#msgValidaEmail").show();
+            $("#btnGuardaCliente").hide();
+
+        }
+        $("#msgValidaEmail").hide();
+        $("#btnGuardaCliente").hide();
         $.ajax({
             url: "{{ url('Cliente/ajaxVerificaCorreo') }}",
             data: { correo: correo_cliente },
@@ -856,7 +1057,7 @@
             success: function(data) {
                 if (data.valida == 1) {
                     $("#msgValidaEmail").show();
-                    // $("#btnGuardaCliente").hide();
+                    $("#btnGuardaCliente").hide();
                 }else{
                     $("#msgValidaEmail").hide();
                     $("#btnGuardaCliente").show();
@@ -979,7 +1180,8 @@
     function cambiaASaldo()
     {
         let texto = $('#saldoOCambio').text();
-        let montoTotalVenta = $('#resultadoSubTotales').val();
+        //let montoTotalVenta = $('#resultadoSubTotales').val();
+        let montoTotalVenta = $('#resultadoTotales').val(); //@walvarez
         $("#saldoOCambio").text(
             texto == "CAMBIO" ? "SALDO" : "CAMBIO"
         );
@@ -992,12 +1194,33 @@
         }
     }
 
+    //
+    function csfactura(elem)
+    {
+        let isCheckedFactura = $('#'+elem.id).is(":checked");
 
+        if(!isCheckedFactura){
+            //$('#nit_cliente').attr({"readonly": true});
+            $('#nit_cliente').attr("disabled", "disabled");
+            $('#nit_cliente').val('0');
+            $("#razon_social_cliente").val('');
+            $("#celulares_cliente").val('');
+            $("#email_cliente").val('');
+        }else{
+            //$('#nit_cliente').attr({"readonly": false});
+            $('#nit_cliente').removeAttr("disabled");
+        }
+    }
+
+    // Busqueda de datos de cliente en la base de datos
     $(document).on('focusout', '#nit_cliente', function(e) {
 
         let nitCliente = $('#nit_cliente').val();
-        if(nitCliente == 0){
+        if(nitCliente == 0 || nitCliente == ''){
+            document.getElementById('nit_cliente').value = "0";
             document.getElementById('razon_social_cliente').value = "S/N";
+            document.getElementById('celulares_cliente').value = "0";
+            document.getElementById('email_cliente').value = "cliente@notiene.com";
         }else{
             $.ajax({
                 url: "{{ url('Venta/ajaxBuscaNitCliente') }}",
@@ -1008,9 +1231,13 @@
                     console.log(objetoCLiente);
                     if(objetoCLiente.length === 0){
                         // console.log('es vacio');
-                        document.getElementById('razon_social_cliente').value = "S/N";
+                        document.getElementById('razon_social_cliente').value = "";
+                        document.getElementById('celulares_cliente').value = "";
+                        document.getElementById('email_cliente').value = "";
                     }else{
                         document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
+                        document.getElementById('celulares_cliente').value = objetoCLiente.celulares;
+                        document.getElementById('email_cliente').value = objetoCLiente.email;
                     }
                 }
             });
@@ -1057,6 +1284,260 @@
             }
         });
     }
+
+    function mostrarOcultaCamposSegunTotalVenta(totalVenta = '0'){
+        //let totalVenta = Number($("#resultadoSubTotales").val());
+
+
+        console.log(totalVenta);
+
+        if(totalVenta == '0'){
+            $("#efectivo").val(0);
+            $("#efectivo").attr({"readonly": true});
+            //$("#btnEnviaVenta").attr("style", "pointer-events: none");
+
+            $("#btnEnviaVenta").addClass("disabled");
+
+            //$("#btnEnviaVenta").hide();
+            //$('#btnEnviaVenta').attr('disabled', 'disabled');
+            //$('#btnEnviaVenta').removeAttr('href');
+
+            //$("#factura").addClass("disabled");
+
+            $("#factura").attr("disabled", 'disabled');
+            $("#factura").parent('div').addClass("disabled");
+
+            $("#chkbGiftcard").attr("disabled", 'disabled');
+            $("#chkbGiftcard").parent('div').addClass("disabled");
+
+
+        }else{
+            $("#efectivo").attr({"readonly": false});
+            $("#btnEnviaVenta").removeClass("disabled");
+            //$("#btnEnviaVenta").attr({"display": block});
+            //$("#btnEnviaVenta").show();
+            //$('#btnEnviaVenta').removeAttr('style');
+
+            //$("#factura").removeClass("disabled");
+
+            $("#factura").parent('div').removeClass("disabled");
+            $("#factura").removeAttr("disabled");
+
+            $("#chkbGiftcard").parent('div').removeClass("disabled");
+            $("#chkbGiftcard").removeAttr("disabled");
+        }
+
+    }
+
+     // Busqueda de giftcard de cliente en la base de datos
+    //  $(document).on('keyup', '#codigo_gcss', function(e) {
+
+    //     let nitCliente = $('#codigo_gc').val();
+    //     if(nitCliente == 0 || nitCliente == ''){
+    //         document.getElementById('nit_cliente').value = "0";
+    //         document.getElementById('razon_social_cliente').value = "S/N";
+    //         document.getElementById('celulares_cliente').value = "0";
+    //         document.getElementById('email_cliente').value = "cliente@notiene.com";
+    //     }else{
+    //         $.ajax({
+    //             url: "{{ url('Venta/ajaxBuscaNitCliente') }}",
+    //             data: {nitCliente: nitCliente},
+    //             type: 'POST',
+    //             success: function(data) {
+    //                 objetoCLiente = JSON.parse(data.datosCliente);
+    //                 console.log(objetoCLiente);
+    //                 if(objetoCLiente.length === 0){
+    //                     // console.log('es vacio');
+    //                     document.getElementById('razon_social_cliente').value = "";
+    //                     document.getElementById('celulares_cliente').value = "";
+    //                     document.getElementById('email_cliente').value = "";
+    //                 }else{
+    //                     document.getElementById('razon_social_cliente').value = objetoCLiente.razon_social;
+    //                     document.getElementById('celulares_cliente').value = objetoCLiente.celulares;
+    //                     document.getElementById('email_cliente').value = objetoCLiente.email;
+    //                 }
+    //             }
+    //         });
+    //     }
+    //     });
+
+
+
+    // Mostrar/ocultar Entrada codigo GC
+    function csGiftcard(elem){
+
+        let isCheckedGiftcard = $('#'+elem.id).is(":checked");
+
+        //$("#codigo_gc").find(':selected').data('monto_gc')
+
+
+
+        if(isCheckedGiftcard){
+            $('#areaGiftcard').show();
+
+            // $("#codigo_gc").attr("required","required");
+            // $("#codigo_gc").addClass("required");
+            // $("#select2-codigo_gc-container").addClass("required");
+
+
+        }else{
+            $('#areaGiftcard').hide();
+
+            // $("#codigo_gc").removeAttr("required");
+            // $("#codigo_gc").removeClass("required");
+            // $("#select2-codigo_gc-container").removeClass("required");
+
+            $("#codigo_gc").empty().trigger('change');
+        }
+    }
+
+    function selectCodigoGC() {
+
+        let clienteIdSelect2 = $("#codigo_gc").select2({
+            placeholder: "Seleccione...",
+            allowClear: true,
+            minimumInputLength: 2,
+            //width: '50%',
+            dropdownAutoWidth : false,
+            ajax: {
+                url: "{{ url('Venta/ajaxBuscaGiftcard') }}",
+                dataType: 'json',
+                type: 'GET',
+                quietMillis: 200,
+                data: function (term, page) {
+                    return {
+                        term: term, //buscar por "term"
+                        page: page // numeor de pagina
+                    };
+                },
+                results: function (data, page) {
+                    //objetoCLiente = JSON.parse(data.datosCliente);
+                    var more = (page * 10) < data.total;
+                    return {results: data.datosCliente, more: more};
+                },
+
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.datosCliente, function (item, index) {
+                            let title = '[CODIGO GC]: ' + item.serial + '\n' +
+                                        '[MONTO BS]: ' + item.monto_GC;
+                            return {
+                                text: (index+1) + '. [CODIGO GC] ' + item.serial+' <b>[MONTO BS] '+item.monto_GC + '</b>',
+                                //text_result: '<b>Bs. '+item.monto_GC + '</b>' +' [CODIGO: ' + item.serial+']',
+                                text_result: '<b>Bs. '+item.monto_GC + '</b>',
+                                title: title,
+                                venta_id: item.venta_id,
+                                serial: item.serial,
+                                id: item.id,
+                                monto_gc: item.monto_GC,
+                            }
+                        })
+                    };
+                },
+                cache: false
+
+            },
+            formatResult: function (data, term) {
+                return data;
+            },
+            formatSelection: function (data) {
+                return data;
+            },
+            templateSelection: function (data, container) {
+                $(data.element).attr('data-venta_id', data.venta_id);
+                $(data.element).attr('data-serial', data.serial);
+                $(data.element).attr('data-text_result', data.text_result);
+                $(data.element).attr('title', data.title);
+                $(data.element).attr('data-monto_gc', data.monto_gc);
+                return data.text_result;
+            },
+            dropdownCssClass: "bigdrop",
+            escapeMarkup: function (m) { return m; }
+        });
+
+    }
+
+    function calculaTotalEfectivoMenosMontoGC(sumaTotalImporteProductos = '0'){
+
+        console.log("sumaTotalImporteProductos: "  + sumaTotalImporteProductos);
+
+        let resultadoSubTotales;
+        if(sumaTotalImporteProductos === '0'){
+            resultadoSubTotales = Number($("#resultadoSubTotales").val());
+        }else{
+            resultadoSubTotales = sumaTotalImporteProductos;
+        }
+
+        let efectivo = Number($("#efectivo").val());
+        let monto_gc = Number($("#codigo_gc").find(':selected').data('monto_gc'));
+        monto_gc = (monto_gc)? monto_gc : 0;
+
+        let totalAPagarEfectivo = resultadoSubTotales;
+
+        console.log("resultadoSubTotales: " + resultadoSubTotales);
+        console.log("efectivo: " + efectivo);
+        console.log("monto_gc: " + monto_gc);
+
+        if(monto_gc != 0 ){
+
+            totalAPagarEfectivo = resultadoSubTotales - monto_gc;
+
+
+            if(totalAPagarEfectivo < 0){
+
+                Swal.fire({
+                    type: 'warning',
+                    title: 'Monto GiftCard Exedido!',
+                    text: 'El monto del giftcard exede al total de los productos, ingrese otra Tarjeta'
+                }).then((result) => {
+                    totalAPagarEfectivo = resultadoSubTotales;
+                    //csGiftcard("chkbGiftcard");
+                    $("#codigo_gc").empty().trigger('change');
+                    $("#chkbGiftcard").parent('div').removeClass('btn-success');
+                    $("#chkbGiftcard").parent('div').addClass('btn-danger');
+                    $("#chkbGiftcard").parent('div').addClass('off');
+                    $('#areaGiftcard').hide();
+
+                })
+
+           }
+        }
+
+
+        console.log("totalAPagarEfectivo: " + totalAPagarEfectivo);
+        $("#resultadoTotales").val(totalAPagarEfectivo);
+        $("#efectivo").val(totalAPagarEfectivo);
+        $("#efectivo").attr({"min": totalAPagarEfectivo});
+
+        // CAMBIO
+        let efectivoTotal = Number($("#efectivo").val());
+        let cambio = efectivoTotal - totalAPagarEfectivo;
+        let numeroSinSigno = Math.abs(cambio);
+        $("#cambioVenta").val(numeroSinSigno);
+        montoALiteral(totalAPagarEfectivo);
+
+        return totalAPagarEfectivo;
+
+        // let nombreClienteResult = $("#cliente_id").find(':selected').data('text_result');
+        // let rolCliente    = $("#cliente_id").find(':selected').data('tipo');
+        // let nitCliente    = $("#cliente_id").find(':selected').data('nit');
+        // let razonCliente  = $("#cliente_id").find(':selected').data('razon');
+        // let celular  = $("#cliente_id").find(':selected').data('celular');
+        // let email  = $("#cliente_id").find(':selected').data('email');
+
+
+        // let totalVenta = Number($("#resultadoSubTotales").val());
+        // let efectivo = Number($("#efectivo").val());
+        // let cambio = efectivo - totalVenta;
+        // let numeroSinSigno = Math.abs(cambio);
+        // $("#cambioVenta").val(numeroSinSigno);
+
+
+
+
+    }
+
+
 
 </script>
 @endsection

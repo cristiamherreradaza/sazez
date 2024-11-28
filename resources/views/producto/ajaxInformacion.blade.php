@@ -8,6 +8,7 @@
             <tr>
                 <th scope="col">ALMACEN</th>
                 <th scope="col">EXISTENCIAS</th>
+                <th scope="col">ESCALAS</th>
             </tr>
         </thead>
         <tbody>
@@ -15,6 +16,9 @@
             <tr>
                 <td scope="col">{{ $ct->almacen }}</td>
                 <td scope="col">{{ $ct->total }}</td>
+                <td scope="col">
+                    <button class="btn btn-default" onclick="ver_precio_escala('{{ $ct->id }}', '{{ $datosProducto->id }}')" title="Ver escala precio"><i class="fas fa-trash-alt"></i></button>
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -23,7 +27,7 @@
 
 {{-- listado de precios --}}
 @if (auth()->user()->perfil_id == 1)
-    
+
 <div id="ajaxActualizaPrecios">
     <div class="table-responsive">
         <table class="table table-striped">
@@ -53,19 +57,20 @@
 <div class="row">
     <div class="col-md-6">
         <input type="hidden" name="precios_producto_id" id="precios_producto_id" value="{{ $datosProducto->id }}">
+        <input type="hidden" name="almacen_id" id="almacen_id" value="">
 
         <select class="select2 form-control custom-select" name="precios_escala" id="precios_escala" style="width: 100%; height:36px;">
             @foreach ($escalas as $e)
                 <option value="{{ $e->id }}">{{ $e->nombre }}</option>
             @endforeach
-        </select>        
+        </select>
 
     </div>
     <div class="col-md-3">
         <input type="number" name="importePrecios" id="importePrecios" class="form-control" value="1" min="1">
     </div>
     <div class="col-md-3">
-        <button type="button" class="btn waves-effect waves-light btn-success" id="btnAjaxAdicionaPrecio" onclick="adiciona_precio()"><i class="fas fa-plus-circle"></i></button>    
+        <button type="button" class="btn waves-effect waves-light btn-success" id="btnAjaxAdicionaPrecio" onclick="adiciona_precio()"><i class="fas fa-plus-circle"></i></button>
     </div>
 </div>
 @endif
@@ -82,6 +87,7 @@
 
     function adiciona_precio()
     {
+        let almacenId   = $("#almacen_id").val();
         let escala   = $("#precios_escala").val();
         let producto = $("#precios_producto_id").val();
         let precio   = $("#importePrecios").val();
@@ -89,10 +95,10 @@
 
         $.ajax({
             url: "{{ url('Producto/ajaxGuardaPrecio') }}",
-            data: {escala: escala, productoId: producto, precio: precio},
+            data: {almacenId: almacenId, escala: escala, productoId: producto, precio: precio},
             type: 'GET',
             success: function(data) {
-                $("#ajaxActualizaPrecios").load("{{ url('Producto/ajaxMuestraPrecios') }}/"+producto);
+                $("#ajaxActualizaPrecios").load("{{ url('Producto/ajaxMuestraPrecios') }}/"+producto+"/"+almacenId);
                 $("#btnAjaxAdicionaPrecio").show();
             }
         });
@@ -108,5 +114,11 @@
                 $("#ajaxActualizaPrecios").load("{{ url('Producto/ajaxMuestraPrecios') }}/"+productoId);
             }
         });
+    }
+
+    function ver_precio_escala(almacenId, productoId)
+    {
+        $("#almacen_id").val(almacenId);
+        $("#ajaxActualizaPrecios").load("{{ url('Producto/ajaxMuestraPrecios') }}/"+productoId+"/"+almacenId);
     }
 </script>

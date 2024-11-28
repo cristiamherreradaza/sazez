@@ -29,7 +29,8 @@
                                                     ->first();
 
                         $otrosPrecios = App\Precio::where('producto_id', $producto->id)
-                                                    ->where('escala_id', '<>',  1)
+                                                    //->where('escala_id', '<>',  13)
+                                                    ->where('almacene_id', '<>',  null)
                                                     ->get();
 
                         if($imagen){
@@ -46,15 +47,17 @@
                             <td>{{ $producto->marca->nombre }}</td>
                             <td>{{ $precioTienda->precio }}</td>
                             <td>
+
                                 @forelse ($otrosPrecios as $op)
-                                    {{ $op->escala->nombre }}: {{ $op->precio}} <br />
+
+                                {{ isset($op->almacene)? $op->almacene->nombre : "" }}: {{ $op->escala->nombre }}: {{ $op->precio}} <br />
                                 @empty
                                     <p></p>
                                 @endforelse
                             </td>
                             <td>
                                 <button class="btn btn-info" onclick="muestra_producto('{{ $producto->id }}')" title="Ver producto"><i class="fas fa-eye"></i></button>
-                                
+
                                 @php
                                     $movimiento = App\Movimiento::where('producto_id', $producto->id)
                                                                 ->groupBy('producto_id')

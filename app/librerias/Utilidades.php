@@ -1,6 +1,7 @@
 <?php
 
 namespace App\librerias;
+use DateTime;
 
 class Utilidades{
 
@@ -42,5 +43,28 @@ class Utilidades{
         $nombreMes = str_replace($meses_EN, $meses_ES, $mes);
 
         return $nombredia . ", " . $numeroDia . " de " . $nombreMes . " del " . $anio;
+    }
+
+    //Genera numeros aleratorios de un tamaño determinado
+    public static function generarGC($x = 16) {
+
+        $chars = "1234567890";
+
+        $no = "";
+        for ($i=0; $i<$x; $i++) {
+            $rnum = rand(0, 9);
+            $no .= substr($chars,$rnum-1,1);
+       }
+
+       return $no;
+    }
+
+    public function formatoFecha($fecha, $formato){
+
+        $fechaFformato = new DateTime($fecha);
+		$fecha = $fechaFformato->format($formato);
+
+        return $fecha;
+
     }
 }

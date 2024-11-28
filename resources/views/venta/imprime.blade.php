@@ -19,9 +19,9 @@
                 <div class="row">
                     <h3><strong>VENTA : </strong>{{ $venta->id }}</h3>
                     <hr>
-                    <h3><strong>CLIENTE : </strong>{{ $venta->cliente->name }}</h3>
+                    <h3><strong>CLIENTE : </strong>{{ $venta->cliente != null? $venta->cliente->razon_social: "" }}</h3>
                     <hr>
-                    <h3><strong>FECHA : </strong>{{ $venta->fecha }}</h3>
+                    <h3><strong>FECHA VENTA: </strong>{{ $venta->fecha }}</h3>
                     <table class="table">
                         <thead>
                             <tr>
@@ -44,7 +44,8 @@
                                     <td>{{ $productos->producto->marca->nombre }}</td>
                                     <td>{{ $productos->producto->tipo->nombre }}</td>
                                     <td>{{ $productos->cantidad }}</td>
-                                    <td>30/08/2020</td>
+                                    <td>{{ $productos->fecha_garantia }}</td>
+                                    {{-- <td>30-08-2020</td> --}}
                                     @php
                                         if ($productos->precio_cobrado_mayor>0) {
                                             $precio_costo = $productos->precio_cobrado_mayor;
@@ -59,7 +60,10 @@
                         </tbody>
                     </table>
                 </div>
-                <img src="{{ asset('qrs/1UTB-9V3T-6B96.png') }}" alt="">
+                <center>
+                    <div id="qrcode"></div>
+                </center>
+                {{-- <img src="{{ asset('qrs/1UTB-9V3T-6B96.png') }}" alt=""> --}}
                 <br>
                 <p><strong>Codigo de garantia generado en QR</strong></p>
                 <p>
@@ -76,7 +80,7 @@
     </div>
 </div>
 <div class="row">
-    <button id="botonImprimir" class="btn btn-success btn-block col-md-6 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
+    <button id="botonImprimir" class="btn btn-success btn-block col-md-8 print-page" type="button"> <span><i class="fa fa-print"></i> IMPRIMIR </span></button>
 </div>
 @stop
 
@@ -86,6 +90,7 @@
 <script src="{{ asset('assets/extra-libs/sparkline/sparkline.js') }}"></script>
 <script src="{{ asset('dist/js/pages/samplepages/jquery.PrintArea.js') }}"></script>
 <script src="{{ asset('dist/js/pages/invoice/invoice.js') }}"></script>
+<script src="{{ asset('dist/js/qrcode.min.js') }}"></script>
 <script>
     $("#botonImprimir").click(function() {
 		var mode = 'iframe'; //popup
@@ -96,5 +101,17 @@
 		};
 		$("div#printableArea").printArea(options);
 	});
+
+    let cadenaQr = "{{ asset('garantia.html') }}";
+    //let cadenaQr = "http://192.168.0.15/garantia.html";
+    // console.log(cadenaQr);
+    var qrcode = new QRCode("qrcode", {
+        text: cadenaQr,
+        width: 150,
+        height: 150,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
 </script>
 @endsection

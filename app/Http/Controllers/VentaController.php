@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Pago;
 use App\User;
+use App\GiftcardCliente;
 use App\Combo;
 use App\Grupo;
 use App\Venta;
@@ -28,6 +29,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\librerias\Utilidades;
+
 
 class VentaController extends Controller
 {
@@ -113,9 +116,13 @@ class VentaController extends Controller
         $arrayPromociones = [];
         $almacenes = Almacene::get();
         $grupos = Grupo::all();
-        $clientes = User::where('rol', 'Cliente')
-                    ->orWhere('rol', 'Mayorista')
+
+        // Comentado para que no cargue la gran cantidad de clientes registrados
+        /*$clientes = User::where('rol', 'Mayorista')
+                    //->orWhere('rol', 'Mayorista')
                     ->get();
+        */
+        $clientes = array();
 
         $promociones = Combo::where('fecha_inicio', '<=', $hoy)
         ->where('fecha_final', '>=', $hoy)
@@ -146,7 +153,7 @@ class VentaController extends Controller
 
     public function ajaxBuscaProductoTienda(Request $request)
     {
-
+        // dd($request->all());
         if($request->tipo != null){
             $tipo = $request->tipo;
         }else{
@@ -158,8 +165,6 @@ class VentaController extends Controller
         }else{
             $marca = '%';
         }
-
-        // dd($tipo, Auth::user()->almacen);
 
         $alamcen = Auth::user()->almacen;
 
@@ -185,9 +190,6 @@ class VentaController extends Controller
                     ->limit(10)
                     ->get();
 
-                    // ->toSql();
-                    // dd($productos, $almacen_id, $tipo, $marca, $request->termino);
-
                     // ->orWhere('productos.codigo', 'like', "%$request->termino%")
 
                     // ->get();
@@ -200,12 +202,16 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
-
-        // dd($request->all());
-
         $alamcen = Auth::user()->almacen;
-
         $facturaId = null;
+
+        $clienteId = $request->cliente_id;
+
+        // dd( $request->cliente_id,
+        //     $request->venta_tipo_id,
+        //     $request->all());
+        // exit(1);
+
         // preguntamos si el pago es al contado o credito
         if ($request->pagoContado != "on")
         {
@@ -222,18 +228,15 @@ class VentaController extends Controller
             ->latest()
             ->first();
 
-        // dd(
-        //     $ultimoParametro,
-        //     $ultimoParametro != null && $ultimoParametro->estado == 'Activo',
-        //     $request->all()
-        // );
-
         // preguntamos si la venta ya tiene una factura creada
         if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo') {
-            // procesamos para el nit del cliente
-            $buscaNitCliente = User::where('nit', $request->nit_cliente)->first();
 
-            // dd($buscaNitCliente, "Si");
+            // procesamos para el nit del cliente
+            // Busqueda de NIT cliente que tenga perfil "cliente"
+            $buscaNitCliente = User::where('nit', $request->nit_cliente)
+                                    ->where('nit', '<>' , '0')
+                                    ->where('rol', '=' , 'Cliente')
+                                    ->first();
 
             // verificamos si es publico general para guardar un nuevo cliente
             if ($buscaNitCliente == null) {
@@ -241,12 +244,14 @@ class VentaController extends Controller
                 $correoTemporal = date("YmdHis") . '@notiene.com';
 
                 $cliente               = new User();
-                $cliente->name         = $request->razon_social_cliente;
+                $cliente->name         = isset($request->razon_social_cliente) ? $request->razon_social_cliente : "S/N";
                 $cliente->rol          = 'Cliente';
-                $cliente->email        = $correoTemporal;
+                //$cliente->email        = $correoTemporal;
                 $cliente->password     = Hash::make('123456789');
-                $cliente->nit          = $request->nit_cliente;
-                $cliente->razon_social = $request->razon_social_cliente;
+                $cliente->nit          = isset($request->nit_cliente) ? $request->nit_cliente : "0";
+                $cliente->razon_social = isset($request->razon_social_cliente) ? $request->razon_social_cliente : "S/N";
+                $cliente->celulares    = isset($request->celulares_cliente) ? $request->celulares_cliente : "0";
+                $cliente->email        = ($request->email_cliente == "cliente@notiene.com") ? $correoTemporal : $request->email_cliente;
                 $cliente->save();
                 $clienteId = $cliente->id;
             } else {
@@ -254,14 +259,20 @@ class VentaController extends Controller
                 $cliente               = User::find($buscaNitCliente->id);
                 $cliente->nit          = $request->nit_cliente;
                 $cliente->razon_social = $request->razon_social_cliente;
+                $cliente->celulares    = $request->celulares_cliente;
+                $cliente->email        = $request->email_cliente;
                 $cliente->save();
                 $clienteId = $cliente->id;
             }
             // fin del registro del cliente
-        }else{
-            $clienteId = $request->cliente_id;
+        }else if($clienteId == "" || $clienteId == null || !isset($clienteId) ){
 
-            // dd($clienteId);
+            // Retorno de errror al no existir cliente asociado con la venta
+            return response()->json([
+                'errorVenta' => 2,  // retorno error tipo 2, porque no existe cliente seleccionado
+                'mensajeError'  => "Debe registrar un cliente con la venta",
+                'ventaId'  => "0"
+            ]);
         }
 
         // creamos la venta
@@ -288,11 +299,12 @@ class VentaController extends Controller
                     $precioProductoCombo = $ppr->precio;
                     $cantidadProductosPromo = $request->cantidadPromo[$llpr] * $ppr->cantidad;
 
-                    // vemos la cantida de stock en el almacen
+                    // vemos la cantidad de stock en el almacen
                     $cantidadTotalProducto = Movimiento::select(DB::raw('SUM(ingreso) - SUM(salida) as total'))
                         ->where('producto_id', $ppr->producto_id)
                         ->where('almacene_id', Auth::user()->almacen_id)
                         ->first();
+
                     $totalVerificar = $cantidadTotalProducto->total - $cantidadProductosPromo;
 
                     if ($totalVerificar < 0) {
@@ -339,7 +351,7 @@ class VentaController extends Controller
 
                         // pregutamos si se desea enviar los productos al mayorista
                         if($request->envioMayorista == "Si"){
-                            $datosMayorista = User::find($request->cliente_id);
+                            $datosMayorista = User::find($clienteId);  // (modificado by@walvarez)
                             // echo "si enviar";
                             // enviamos productos al manyorista
                             $movimientoPromocion                    = new Movimiento();
@@ -359,7 +371,6 @@ class VentaController extends Controller
                             $movimientoPromocion->save();
                         }
                     }
-
                 }
             }
         }
@@ -415,7 +426,7 @@ class VentaController extends Controller
 
                      // pregutamos si se desea enviar los productos al mayorista
                     if($request->envioMayorista == "Si"){
-                        $datosMayorista = User::find($request->cliente_id);
+                        $datosMayorista = User::find($clienteId);  // (modificado by@walvarez)
                         // echo "si enviar";
                         // enviamos productos al manyorista
                         $movimiento                    = new Movimiento();
@@ -432,6 +443,33 @@ class VentaController extends Controller
                         $movimiento->dispositivo       = session('dispositivo');
                         $movimiento->save();
                     }
+
+                    //******************************************/
+                    // Creacion de la tarjeta GiftCard
+                    if($datosProductoUnidad->tipo->nombre == "GIFTCARD"){
+
+                        $numAleatorio = new Utilidades();
+                        $numeroTargejaGC =  $numAleatorio::generarGC(4) . "-" . $numAleatorio::generarGC(4) . "-" . $numAleatorio::generarGC(4) . "-" . $venta_id;
+
+                        // guardamos los productos giftcard
+                        $productos                 = new GiftcardCliente();
+                        $productos->producto_id    = $ll;
+                        $productos->user_id        = Auth::user()->id;
+                        $productos->almacene_id    = Auth::user()->almacen_id;
+                        $productos->venta_id       = $venta_id;
+                        $productos->fecha_creacion = $fechaHoraVenta;
+                        $productos->cliente_id     = $clienteId;
+                        $productos->monto_GC       = $request->precio_venta[$ll];
+                        $productos->serial         = $numeroTargejaGC;
+                        $productos->fecha_inicio   = $request->fecha;
+                        $productos->fecha_final    = Carbon::now()->addDay($datosProductoUnidad->dias_garantia);
+                        $productos->estado         = "activo";
+                        $productos->save();
+
+                    }
+
+                    //******************************************/
+
                 }
             }
         }
@@ -492,7 +530,7 @@ class VentaController extends Controller
 
                     // pregutamos si se desea enviar los productos al mayorista
                     if($request->envioMayorista == "Si"){
-                        $datosMayorista = User::find($request->cliente_id);
+                        $datosMayorista = User::find($clienteId);  // (modificado by@walvarez)
                         // echo "si enviar";
                         // enviamos productos al manyorista
                         $movimientoMayor                    = new Movimiento();
@@ -510,10 +548,8 @@ class VentaController extends Controller
                         $movimientoMayor->dispositivo       = session('dispositivo');
                         $movimientoMayor->save();
                     }
-
                 }
             }
-
         }
 
         if ($request->pagoContado != "on")
@@ -526,11 +562,24 @@ class VentaController extends Controller
         // guardamos el pago
         $pago             = new Pago();
         $pago->user_id    = Auth::user()->id;
-        $pago->cliente_id = $request->cliente_id;
+        $pago->cliente_id = $clienteId;  // (modificado by@walvarez)
         $pago->venta_id   = $venta_id;
         $pago->fecha      = $request->fecha;
         $pago->importe    = $pagoARegistrar;
         $pago->save();
+
+        // Canje del GIFTCARD
+        if ($request->chkbGiftcard == "on" && $errorVenta == 0){
+
+            $canjeGc = GiftcardCliente::find($request->codigo_gc);
+
+            $canjeGc->fecha_canje       = $fechaHoraVenta;
+            $canjeGc->almacen_canje_id  = Auth::user()->almacen_id;;
+            $canjeGc->venta_canje_id    = $venta_id;
+            $canjeGc->estado            = "canjeado";
+            $canjeGc->cliente_canje_id  = $clienteId;
+            $canjeGc->save();
+        }
 
         if ($errorVenta == 1) {
             // elimnamos la venta
@@ -541,6 +590,11 @@ class VentaController extends Controller
             Movimiento::where('venta_id', $venta_id)->delete();
             VentasProducto::where('venta_id', $venta_id)->delete();
             Pago::where('venta_id', $venta_id)->delete();
+        }else{
+            //Generar/Imprimir factura si se requiere en el momento de la venta
+            if ( isset($request->factura) && $request->factura == "on"){
+                $this->imprimeFactura($venta_id);
+            }
         }
 
         return response()->json([
@@ -563,10 +617,11 @@ class VentaController extends Controller
                         'ventas.id',
                         'almacenes.nombre as almacene',
                         'usuario.name as nombre_usuario',
-                        'users.name as user',
+                        'users.razon_social as user',
                         'ventas.total',
                         'ventas.saldo',
-                        'ventas.fecha'
+                        'ventas.fecha',
+                        'ventas.factura_id'
                     )
                     ->leftJoin('almacenes', 'ventas.almacene_id', '=', 'almacenes.id')
                     ->leftJoin('users', 'ventas.cliente_id', '=', 'users.id')
@@ -594,9 +649,7 @@ class VentaController extends Controller
 
     public function muestra(Request $request, $ventaId)
     {
-        // dd($ventaId);
         $datosVenta = Venta::where('id', $ventaId)->first();
-        // dd($datosVenta);
         $productosVenta = VentasProducto::where('venta_id', $ventaId)->get();
         $opcionesEliminaVenta = Configuracione::where('descripcion', 'comboEliminaVenta')->get();
         $opcionesCambiaProductoVenta = Configuracione::where('descripcion', 'comboCambiaProductoVenta')->get();
@@ -604,11 +657,23 @@ class VentaController extends Controller
                         ->where('venta_id', $ventaId)
                         ->where('estado', 'Devuelto')
                         ->get();
-        // dd($datosVenta);
+
+        //Verificamos si venta tiene Giftcard
+        $verificaVentaConGC = GiftcardCliente::where('venta_canje_id', $ventaId)
+                            ->where('estado', 'canjeado')
+                            ->first();
+        /*if($verificaVentaConGC){
+        $verificaVentaConGC->venta_canje_id;
+        $verificaVentaConGC->cliente_canje_id;
+        $verificaVentaConGC->almacen_canje_id;
+        $verificaVentaConGC->fecha_canje;
+        $verificaVentaConGC->estado;
+        $verificaVentaConGC->save();
+        }*/
 
         $almacen = Auth::user()->almacen;
 
-        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta', 'cambiados', 'almacen'));
+        return view('venta.muestra')->with(compact('datosVenta', 'productosVenta', 'opcionesEliminaVenta', 'opcionesCambiaProductoVenta', 'cambiados','verificaVentaConGC', 'almacen'));
     }
 
     public function imprimir($venta_id)
@@ -618,8 +683,94 @@ class VentaController extends Controller
         return view('venta.imprime')->with(compact('venta', 'productos_venta'));
     }
 
+    // @walvarez
+    public function imprimirGiftcard(Request $request, $venta_id,$producto_id, $gc_impreso){
+
+        $gcImpreso = $gc_impreso;
+        $estado = false;
+        $type = "error";
+        $title = 'HO HAY ACCIONES!';
+        $mensaje = 'NO SE REALIZÓ NINGUNA ACCIÓN';
+
+        $venta = Venta::find($venta_id);
+        $productos_venta = VentasProducto::where('venta_id', $venta_id)
+                            ->where('producto_id', $producto_id)
+                            ->get();
+
+        $gc_data = GiftcardCliente::where('venta_id', $venta_id)
+                            ->where('producto_id', $producto_id)
+                            ->first();
+
+        if(!$gcImpreso || $gcImpreso == false || $gcImpreso == 0 || $gcImpreso == '0'){
+
+            return view('venta.imprimeGiftcard')->with(compact('venta', 'productos_venta', 'producto_id', 'gc_impreso','gc_data'));
+
+        }else if($gcImpreso || $gcImpreso == true || $gcImpreso == 1 || $gcImpreso == '1'){
+
+            // Guarda Estado de impresion
+            $producto_venta_gc = VentasProducto::where('venta_id', $venta_id)
+                                ->where('producto_id', $producto_id)
+                                ->where('gc_impreso', false)
+                                ->first();
+            if($producto_venta_gc != null){
+                $producto_venta_gc->gc_impreso = 1;
+                $producto_venta_gc->save();
+
+                $estado = true;
+                $type = "success";
+                $title = 'IMPRESION DE LA GIFTCARD!';
+                $mensaje = 'La tarjeta GIFTCARD fue IMPRIMIDA.';
+
+            }else{
+
+                $estado = false;
+                $type = "warning";
+                $title = 'GIFTCARD YA IMPRESO!';
+                $mensaje = 'No puede volver a IMPRIMIR La tarjeta GIFTCARD.';
+
+            }
+        }
+
+        if($request->ajax()) {
+            return response()->json([
+                'estado' => $estado,
+                'type' => $type,
+                'title' => $title,
+                'mensaje' => $mensaje
+            ]);
+        }else{
+            return view('venta.imprimeGiftcard')->with(compact('venta', 'productos_venta', 'producto_id', 'gc_impreso','gc_data'));
+        }
+    }
+
+
     public function elimina(Request $request)
     {
+       // dd($request); exit();
+
+       $verificarGC = GiftcardCliente::where('venta_id', $request->ventaId)
+                                    ->where('estado', 'canjeado')
+                                    ->first();
+
+        if($verificarGC){
+
+            return response()->json([
+                'respuesta' => "error",
+                'ventaId' => $request->ventaId,
+                'mensaje' => "No puede eliminar esta venta, Es una GIFTCARD y esta canjeada con la venta Nro: ". $verificarGC->venta_canje_id,
+            ]);
+        }
+
+        //Eliminamos si existe CG activo
+        $inactivarGC = GiftcardCliente::where('venta_id', $request->ventaId)
+                                    ->where('estado', 'activo')
+                                    ->first();
+        if($inactivarGC){
+            $inactivarGC->estado = "inactivo";
+            $inactivarGC->deleted_at = date("Y-m-d H:i:s");
+            $inactivarGC->save();
+        }
+
     	$venta = Venta::find($request->ventaId);
     	$venta->descripcion = $request->opcion_elimina;
     	$venta->save();
@@ -633,12 +784,33 @@ class VentaController extends Controller
     	VentasProducto::where('venta_id', $request->ventaId)->delete();
     	Pago::where('venta_id', $request->ventaId)->delete();
 
-        // Anulamos la factura
+        // Anulamos la factura si existe
     	$eliminaFactura = Factura::where('venta_id', $request->ventaId)->first();
-    	$eliminaFactura->estado = "Anulado";
-    	$eliminaFactura->save();
+        if($eliminaFactura){
+            $eliminaFactura->estado = "Anulado";
+            $eliminaFactura->save();
+        }
 
-    	return redirect('Venta/listado');
+        //Verificamos si venta tiene Giftcard, si tiene restauramos para su canje nuevamente
+        $restauraGC = GiftcardCliente::where('venta_canje_id', $request->ventaId)
+                                    ->where('estado', 'canjeado')
+                                    ->first();
+        if(isset($restauraGC)){
+            $restauraGC->venta_canje_id = null;
+            $restauraGC->cliente_canje_id = null;
+            $restauraGC->almacen_canje_id = null;
+            $restauraGC->fecha_canje = null;
+            $restauraGC->estado = "activo";
+            $restauraGC->save();
+        }
+
+        return response()->json([
+            'respuesta' => "success",
+            'ventaId' => $request->ventaId,
+            'mensaje' => "Se elimino la venta correctamente",
+        ]);
+
+    	//return redirect('Venta/listado');
     }
 
     public function ajaxCambiaProducto(Request $request)
@@ -702,11 +874,15 @@ class VentaController extends Controller
         // $productoVenta = VentasProducto::where('venta_id', $request->productoId);
     }
 
+    // Busqueda de clientes por NIT para Factura
     public function ajaxBuscaNitCliente(Request $request)
     {
         $encontrado = 'No';
         $cliente    = array();
-        $buscaNit   = User::where('nit', $request->nitCliente)->first();
+        $buscaNit   = User::where('nit', $request->nitCliente)
+                        ->where('rol','=','Cliente')
+                        //->orWhere('rol','=','Mayorista')
+                        ->first();
 
         if($buscaNit != null)
         {
@@ -714,8 +890,10 @@ class VentaController extends Controller
             $cliente['id']=$buscaNit->id;
             $cliente['nombre']=$buscaNit->name;
             $cliente['almacene_id']=$buscaNit->almacen_id;
-            $cliente['nit']=$buscaNit->nit;
-            $cliente['razon_social']=$buscaNit->razon_social;
+            $cliente['nit']=($buscaNit->nit)? $buscaNit->nit : "S/NIT" ;
+            $cliente['razon_social']=($buscaNit->razon_social)? $buscaNit->razon_social : "S/N";
+            $cliente['celulares']=($buscaNit->celulares)? $buscaNit->celulares : "";
+            $cliente['email']=($buscaNit->email)? $buscaNit->email : "" ;
 
         }else{
             $encontrado = 'No';
@@ -724,6 +902,75 @@ class VentaController extends Controller
         return response()->json([
             'encontrado'   => $encontrado,
             'datosCliente' => json_encode($cliente),
+        ]);
+    }
+
+    // Busqueda de clientes por NIT para edicion de cliente
+    public function ajaxBuscaCliente(Request $request)
+    {
+        $nitCliente = $request->term['term'];
+        $arrayClientes    = array();
+
+        $buscaNit   = User::whereIn("rol", ['Cliente','Mayorista'])
+                            ->where('name', 'like', "%$nitCliente%")
+                            ->orWhere('nit', 'like', "%$nitCliente%")
+                            ->orWhere('razon_social', 'like', "%$nitCliente%")
+                            ->limit(10)
+                            ->get();
+                            //->toSql();
+
+        if($buscaNit != null)
+        {
+            foreach ($buscaNit as $key => $p) {
+                if($p->rol == 'Cliente' || $p->rol == 'Mayorista'){
+                    $arrayClientes[] = [
+                        'id'      => $p->id,
+                        'nombre'  => $p->name,
+                        'rol'  => $p->rol,
+                        'almacene_id'   => $p->almacen_id,
+                        'nit'    => $p->nit,
+                        'razon_social'  => $p->razon_social,
+                        'celulares' => $p->celulares,
+                        'email' => $p->email
+                    ];
+                }
+            }
+
+        }
+        //dd($buscaNit);
+        return response()->json([
+            'datosCliente' => $arrayClientes
+        ]);
+    }
+
+    // Busqueda de gictcard por codigo
+    public function ajaxBuscaGiftcard(Request $request)
+    {
+        $termino = $request->term['term'];
+        $arrayClientes    = array();
+
+        $resultados   = GiftcardCliente::where('serial', 'like', "%$termino%")
+                                        ->where('estado','activo')
+                                        ->get();
+                            //->toSql();
+
+        if($resultados != null)
+        {
+            foreach ($resultados as $key => $p) {
+                    $arrayClientes[] = [
+                        'id'      => $p->id,
+                        'venta_id'  => $p->venta_id,
+                        'cliente_id'  => $p->cliente_id,
+                        'monto_GC'   => $p->monto_GC,
+                        'serial'    => $p->serial,
+
+                    ];
+            }
+
+        }
+        //dd($buscaNit);
+        return response()->json([
+            'datosCliente' => $arrayClientes
         ]);
     }
 
@@ -799,9 +1046,14 @@ class VentaController extends Controller
             $datosFactura = Factura::where("id", $datosVenta->factura_id)->first();
         }
 
-        // dd($datosVenta);
+        //dd($datosFactura);
 
-        return view('venta.imprimeFactura')->with(compact('datosVenta', 'productosVenta', 'datosFactura', 'datosEmpresa'));
+        //Obtenemos datos de Giftcard con estado "CANJEADO" asociado a la venta
+        $datosGC = GiftcardCliente::where('venta_canje_id',$ventaId)
+                                   ->where('estado', 'canjeado')
+                                   ->first();
+
+        return view('venta.imprimeFactura')->with(compact('datosVenta', 'productosVenta', 'datosFactura', 'datosEmpresa', 'datosGC'));
     }
 
     public function infoDispositivo()

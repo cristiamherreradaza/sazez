@@ -93,7 +93,7 @@ class PedidoController extends Controller
             }else{                                      // Si no existen valores en la tabla
                 $numero = 1;                            // Creara el primero
             }
-    
+
             $pedido                          = new Pedido();
             $pedido->almacene_solicitante_id = Auth::user()->almacen_id;
             $pedido->solicitante_id          = Auth::user()->id;
@@ -105,7 +105,7 @@ class PedidoController extends Controller
             $pedido_id = $pedido->id;
             //arraykeys guarda ids de prod
             $llaves = array_keys($request->item);
-            foreach ($llaves as $key => $ll) 
+            foreach ($llaves as $key => $ll)
             {
                 $productosPedido              = new PedidosProducto();
                 $productosPedido->pedido_id   = $pedido_id;
@@ -157,8 +157,8 @@ class PedidoController extends Controller
                             'pedidos.numero as numero_pedido',
                             'origen.nombre as almacen_origen',
                             'almacenes.nombre as almacen_destino',
-                            'users.name as nombre_usuario', 
-                            'pedidos.fecha as fecha', 
+                            'users.name as nombre_usuario',
+                            'pedidos.fecha as fecha',
                             'pedidos.estado as estado',
                             'pedidos.almacene_solicitante_id as almacen_origen_id',
                             'pedidos.almacene_id as almacen_destino_id'
@@ -204,13 +204,13 @@ class PedidoController extends Controller
                         }
                     }
                 })
-                ->make(true); 
+                ->make(true);
     }
 
     public function adicionaProducto(Request $request)
     {
         $pedido = Pedido::find($request->pedido_id);
-        
+
         if($request->producto_id){
             // Buscaremos si ya existe ese producto en ese pedido
             $producto_lista = PedidosProducto::where('pedido_id', $request->pedido_id)
@@ -244,7 +244,7 @@ class PedidoController extends Controller
         $producto = PedidosProducto::find($id);
         $pedido = Pedido::find($producto->pedido_id);
         $producto->delete();
-        return redirect("Entrega/ver_pedido/$pedido->numero");
+        return redirect("Entrega/ver_pedido/$pedido->id");
     }
 
     public function eliminaPedido($id)

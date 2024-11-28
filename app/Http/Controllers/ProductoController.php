@@ -10,7 +10,7 @@ use App\Venta;
 use App\Cupone;
 use App\Escala;
 use App\Precio;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use App\Almacene;
 use App\Producto;
 use App\Categoria;
@@ -306,16 +306,11 @@ class ProductoController extends Controller
         $usuario = Auth::user();
         $almacen = $usuario->almacen;
 
-        // $tipo_cambio = $almacen->tipo_cambio == null ? 0 : $almacen->tipo_cambio;
-
-        // dd($almacen);
-
         return view('producto.listado')->with(compact('marcas', 'tipos', 'almacen'));
     }
 
     public function ajax_listado(Request $request)
     {
-
         //Modo Estatico
         // $productos_en_tienda = Movimiento::where('almacene_id', Auth::user()->almacen->id)
         //             ->where('estado', $request->estado)
@@ -588,11 +583,6 @@ class ProductoController extends Controller
         $categorias = Categoria::get();
         $almacenes = Almacene::orderBy('nombre', 'asc')->whereNull('estado')->get();
         $categorias_productos = CategoriasProducto::where('producto_id', $id)->get();
-
-        // $almacen = Auth::user()->alamcen;
-
-        // dd($almacenes);
-
         return view('producto.muestra')->with(compact('producto', 'categorias', 'categorias_productos', 'almacenes'));
     }
 
@@ -907,14 +897,18 @@ class ProductoController extends Controller
         $escalas = Escala::get();
         $cantidadTotal = Movimiento::select(
             DB::raw('SUM(movimientos.ingreso) - SUM(movimientos.salida) as total'),
-            'almacenes.nombre as almacen'
+            'almacenes.nombre as almacen',
+            'almacenes.id as id'
         )
         ->leftJoin('almacenes', 'movimientos.almacene_id', '=', 'almacenes.id')
         ->where('movimientos.producto_id', $producto_id)
         ->groupBy('movimientos.almacene_id')
         ->get();
 
+        $almacene_id = 1;
+
         $precios = Precio::where('producto_id', $producto_id)
+                   ->where('almacene_id', $almacene_id)
                     ->get();
 
         return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios', 'escalas'));
@@ -1009,12 +1003,15 @@ class ProductoController extends Controller
         $precios->producto_id = $request->productoId;
         $precios->escala_id = $request->escala;
         $precios->precio = $request->precio;
+        $precios->almacene_id = $request->almacenId;
         $precios->save();
     }
 
     public function ajaxMuestraPrecios(Request $request)
     {
-        $precios = Precio::where("producto_id", $request->productoId)->get();
+        $precios = Precio::where("producto_id", $request->productoId)
+                    ->where('almacene_id', $request->almacenId)
+                    ->get();
         return view('producto.ajaxMuestraPrecios')->with(compact('precios'));
     }
 

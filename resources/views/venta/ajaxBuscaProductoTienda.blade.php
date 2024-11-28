@@ -45,7 +45,11 @@
                     $nombre = "sinImagen.jpg";
                 }
 
-                $precioProducto = App\Precio::where('producto_id', $p->id)->where('escala_id', 1)->first();
+                $precioProducto = App\Precio::where('producto_id', $p->id)
+                                ->where('escala_id', 1)
+                                ->where('almacene_id', '=',null)
+                                ->whereOr('almacene_id', '=',auth()->user()->almacen_id)
+                                ->first();
                 // $cantidadEscala = $precioProducto->escala[]
                 $cantidadTotal = App\Movimiento::select(Illuminate\Support\Facades\DB::raw('SUM(ingreso) - SUM(salida) as total'))
                 ->where('producto_id', $p->id)
@@ -62,17 +66,22 @@
 
                 // sacamos los precios de los productos
                 $preciosProductos = App\Precio::where('producto_id', $p->id)
-                                    ->where('precio', '<>',0)
+                                    //->where('precio', '<>',0)
+                                    ->where('almacene_id', '=',null)
                                     ->get();
+                                    //dd($preciosProductos);
                 $contadorPrecios = 0;
+                $arrayPreciosProductos = [];
                 foreach ($preciosProductos as $pep) {
                     $arrayPreciosProductos[$contadorPrecios]["escala_id"] = $pep->escala->id;
                     $arrayPreciosProductos[$contadorPrecios]["nombre"]    = $pep->escala->nombre;
                     $arrayPreciosProductos[$contadorPrecios]["minimo"]    = $pep->escala->minimo;
                     $arrayPreciosProductos[$contadorPrecios]["maximo"]    = $pep->escala->maximo;
                     $arrayPreciosProductos[$contadorPrecios]["precio"]    = $pep->precio;
+                    $arrayPreciosProductos[$contadorPrecios]["almacene"]  = isset($pep->almacene)?$pep->almacene->nombre:"";
                     $contadorPrecios++;
                 }
+                //dd($arrayPreciosProductos);
                 $arrayPreciosProductosJson = json_encode($arrayPreciosProductos);
 
             @endphp
@@ -143,7 +152,7 @@
             $("#termino").val(""); //limpiamos el input de busqueda
             $("#termino").focus(); //posicionamos el foco en el input de busqueda
 
-            let currentRow = $(this).closest("tr");                //agarramos toda la fila de la tabla
+            let currentRow = $(this).closest("tr");                      //agarramos toda la fila de la tabla
             let id         = currentRow.find("td:eq(0)").text();
             let imagen     = currentRow.find("td:eq(1)").html();
             let codigo     = currentRow.find("td:eq(2)").html();
@@ -154,14 +163,13 @@
             let colores    = currentRow.find("td:eq(7)").text();
             let stock      = currentRow.find("td:eq(8)").html();
             let precio     = currentRow.find("td:eq(9)").text().trim();
-            let stockNum   = currentRow.find("td:eq(10)").text();
+            let stockNum   = currentRow.find("td:eq(8)").text();
+
+            stockNum = Number(stockNum);
 
             precios = $("#preciosEscalas_"+id).val(); //capturamos los precios del input
             let tipoVenta = $(this).data('venta');
             // preguntamos si la venta es al mayor o al menor
-
-            console.log(tipoVenta);
-
             if(tipoVenta == 'tienda'){
 
                 let buscaItem = itemsPedidoArray.lastIndexOf(id);
@@ -196,7 +204,7 @@
                         nombre,
                         marca,
                         stock,
-                        '<select class="form-control" name="escala_id_m['+id+']" id="escala_m_'+id+'" onchange="cambiaPrecioM('+id+')"></select>',
+                        '<select class="form-control" name="escala_id_m['+id+']" id="escala_m_'+id+'" onchange="cambiaPrecioM('+id+')" style="width: 120px;"></select>',
                         `<input type="number" class="form-control text-right cantidadMayor" name="cantidad_m[`+id+`]" id="cantidad_m_`+id+`" value="1" data-idm="`+id+`" min="1" max="`+stockNum+`" style="width: 70px;">`,
                         `<input type="number" class="form-control text-right precioMayor" name="precio_m[`+id+`]" id="precio_m_`+id+`" value="`+precio+`" data-idm="`+id+`" step="any" min="1" style="width: 100px;">
                         <input type="hidden" name="precio_venta_m[`+id+`]" id="precio_venta_m_`+id+`" value="`+precio+`">

@@ -20,7 +20,7 @@
                 <form class="mt-3" action="{{ url('Venta/elimina') }}" method="POST" id="formularioEliminaVenta">
                     @csrf
                     <div class="form-group">
-                        <input type="hidden" value="{{ $datosVenta->id }}" name="ventaId">
+                        <input type="hidden" value="{{ $datosVenta->id }}" name="ventaId" id="ventaId">
                         <select name="opcion_elimina" id="opcion_elimina" class="form-control" onchange="cambiaOpcionEliminaVenta()" required>
                             <option value="">Seleccione una opcion</option>
                             @foreach ($opcionesEliminaVenta as $oev)
@@ -120,22 +120,21 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 {{-- info modal cambia CambiaProductoo --}}
-
+@php  $utilidades = new App\librerias\Utilidades();  @endphp
 <div class="card card-body">
     <div class="invoice-123" id="printableArea">
         <div class="row pt-3">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-4"><h2><span class="text-info">Venta #</span> {{ $datosVenta->id }}</h2></div>
-                    {{-- <div class="col-md-4"><h2><span class="text-info">Cliente:</span> {{ $datosVenta->cliente->name }}</h2></div> --}}
-                    <div class="col-md-4"><h2><span class="text-info">Cliente:</span> {{ $datosVenta->cliente != null? $datosVenta->cliente->name : '' }}</h2></div>
-                    <div class="col-md-4"><h2><span class="text-info">Fecha: </span> {{ $datosVenta->fecha }}</h2></div>
+                    <div class="col-md-4"><h2><span class="text-info">Cliente:</span> {{ $datosVenta->cliente != null? $datosVenta->cliente->razon_social: "" }}</h2></div>
+                    <div class="col-md-4"><h2><span class="text-info">Fecha: </span> {{ $utilidades->formatoFecha($datosVenta->fecha, "d-m-Y") }}</h2></div>
                 </div>
             </div>
             <div class="col-md-12">
                 <div class="table-responsive mt-5" style="clear: both;">
                     <table class="tablesaw table-striped table-hover table-bordered table no-wrap">
-                        <thead>
+                        <thead  class="table-info">
                                 <th class="text-center">#</th>
                                 <th>CODIGO</th>
                                 <th>NOMBRE</th>
@@ -163,66 +162,80 @@
                                         $fechaGarantia = Illuminate\Support\Carbon::createFromDate($pv->fecha_garantia);
                                         $fechaHoy = Illuminate\Support\Carbon::now();
                                         $diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
-                                        if($diferenciaDias > $pv->producto->dias_garantia)
+                                        $fechaHoyMayorFechaGarantia = $fechaHoy->isBefore($fechaGarantia);
+                                       // echo $pv->fecha_garantia. " | " . $fechaHoy;
+                                        //echo "<br>";
+                                        //echo $fechaHoyMayorFechaGarantia ." | ". $diferenciaDias ." | ". $pv->producto->dias_garantia;
+                                        if( ($diferenciaDias < $pv->producto->dias_garantia) && $fechaHoyMayorFechaGarantia)
                                         {
-                                            $mensajeGarantia = 0;
+                                            $classText = "text-success";
+                                            $mensajeGarantia = $diferenciaDias ." dias vigente";
+
                                         }else{
-                                            $mensajeGarantia = $diferenciaDias;
+                                            $classText = "text-danger";
+                                            $mensajeGarantia = "Expirada";
                                         }
                                     @endphp
-                                    <td class="text-primary text-center"><b>{{ $pv->fecha_garantia }} <span class="text-success">({{ $mensajeGarantia }})</span></b></td>
+                                    <td class="text-primary text-center"><b>{{ $utilidades->formatoFecha($pv->fecha_garantia, "d-m-Y") }}
+                                        <br><span class="{{ $classText }}">({{ $mensajeGarantia }})</span></b></td>
                                     <td class="text-right">
                                         <span class="text-info"><b>{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}</b></span>
                                         <span class="text-success"><b>{{ ($pv->combo_id != null)?$pv->combo->nombre:"" }}</b></span>
                                         &nbsp;&nbsp;&nbsp; <b>{{ intval($pv->cantidad) }}</td>
                                     <td class="text-right">
-                                        {{-- @dd($pv->precio_cobrado_mayor, $pv->precio_cobrado_mayor>0, $pv->precio_cobrado) --}}
-                                        {{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor : $pv->precio_cobrado }}
-                                        {{-- @dd($pv->precio_cobrado*$almacen->tipo_cambio, $pv->precio_cobrado, $almacen->tipo_cambio)
-                                        {{ ($pv->precio_cobrado_mayor>0)? ceil($pv->precio_cobrado_mayor*$almacen->tipo_cambio) : ceil($pv->precio_cobrado*$almacen->tipo_cambio) }} --}}
+                                        {{ ($pv->precio_cobrado_mayor>0)?$pv->precio_cobrado_mayor:$pv->precio_cobrado }}
                                     </td>
                                     @php
                                         if ($pv->precio_cobrado_mayor>0) {
-                                            // $precio_costo = $pv->precio_cobrado_mayor * $almacen->tipo_cambio;
                                             $precio_costo = $pv->precio_cobrado_mayor;
                                         }else{
-                                            // $precio_costo = $pv->precio_cobrado * $almacen->tipo_cambio;
                                             $precio_costo = $pv->precio_cobrado;
                                         }
                                         $subTotal = $precio_costo * $pv->cantidad;
                                         $sumaSubTotal += $subTotal;
                                     @endphp
-                                    <td class="text-right"><b>{{ $subTotal }}</b></td>
+                                    <td class="text-right"><b>{{ number_format($subTotal, 2, '.', '') }}</b></td>
                                     <td>
                                         @php
-                                            $fechaGarantia = Illuminate\Support\Carbon::createFromDate($pv->fecha_garantia);
-                                            $fechaHoy = Illuminate\Support\Carbon::now();
-                                            $diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
-                                            if($diferenciaDias < $pv->producto->dias_garantia):
+                                            //$fechaGarantia = Illuminate\Support\Carbon::createFromDate($pv->fecha_garantia);
+                                            //$fechaHoy = Illuminate\Support\Carbon::now();
+                                            //$diferenciaDias = $fechaGarantia->diffInDays($fechaHoy);
+                                            if($diferenciaDias < $pv->producto->dias_garantia && $fechaHoyMayorFechaGarantia):
+                                                $precio_cobrado_mayor = ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"";
                                         @endphp
-
-                                            <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ ($pv->precio_cobrado_mayor>0)?$pv->escala->nombre:"" }}', '{{ $pv->fecha_garantia }}')">
-                                                <i class="fas fa-exchange-alt"></i>
-                                            </button>
+                                                <button type="button" class="btn btn-info" title="CAMBIA PRODUCTO" onclick="cambiaProducto('{{ $pv->producto->id }}', '{{ $pv->id }}', '{{ $pv->producto->nombre }}', '{{ $pv->cantidad }}', '{{ $precio_cobrado_mayor }}', '{{ $pv->fecha_garantia }}')">
+                                                    <i class="fas fa-exchange-alt"></i>
+                                                </button>
                                         @php
+                                                // Mostrar boton impresion TARJETA GIFTCARD si producto venta es de tipo GIFTCARD
+                                                if($pv->tipo->nombre == "GIFTCARD"):
+                                        @endphp
+                                                    <button type="button" class="btn btn-primary" title="IMPRIMIR GIFTCARD" onclick="imprimirGiftcard('{{ $datosVenta->id }}','{{ $pv->producto->id }}', {{ $pv->gc_impreso }})">
+                                                        <i class="fas fa-print"></i>
+                                                    </button>
+                                        @php
+                                                endif;
                                             endif;
                                         @endphp
                                     </td>
                                 </tr>
                             @endforeach
+                            @php if($verificaVentaConGC):
+                                   $sumaSubTotal = $sumaSubTotal - $verificaVentaConGC->monto_GC;
+                            @endphp;
+                                <tr class="table-warning">
+                                    <td colspan="6" class="text-right">Venta Canjeada con tarjeta GIFTCARD Nro: <b>{{ $verificaVentaConGC->serial }}</b> - Fecha Vencimiento GC: <b>{{ $utilidades->formatoFecha($verificaVentaConGC->fecha_final, "d-m-Y") }}</b></td>
+                                    <td colspan="2" class="text-right"><b>MONTO GC (BS.)</b></td>
+                                    <td class="text-right"><b>{{ number_format($verificaVentaConGC->monto_GC, 2, '.', '') }}</b></td>
+                                    <td></td>
+                                </tr>
+                            @php endif; @endphp
                         </tbody>
-                        <tfoot>
+                        <tfoot  class="table-info">
                             <tr>
-                                <th class="text-center"></th>
+                                <th colspan="8" class="text-right">TOTAL COBRADO (BS.)</th>
+                                <th class="text-right">{{ number_format($sumaSubTotal, 2, '.', '') }}</th>
                                 <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th class="text-right"></th>
-                                <th class="text-right">TOTAL</th>
-                                <th class="text-right">{{ $sumaSubTotal }}</th>
-                                <th class="text-right"></th>
                             </tr>
                         </tfoot>
                     </table>
@@ -274,21 +287,41 @@
                 $ultimoParametro = App\Parametros::where('almacene_id', Auth::user()->almacen_id)
                 ->latest()
                 ->first();
+
+                $fechaVenta = Illuminate\Support\Carbon::createFromDate($datosVenta->fecha);
+                $fechaHoy = Illuminate\Support\Carbon::now();
+                $fechaExpiracionFactura = $fechaVenta->addDay(30);
+                $fechaFacturaMayorFechaHoy = $fechaExpiracionFactura->isAfter($fechaHoy);
+                //echo "fechaExpiracionFactura: ". $fechaExpiracionFactura;
+                //echo "<br>fechaFacturaMayorFechaHoy: ". $fechaFacturaMayorFechaHoy;
             @endphp
-            @if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
+            @if ($ultimoParametro != null && $ultimoParametro->estado == 'Activo' && $fechaFacturaMayorFechaHoy)
+                @php
+                    $tagImprimir = "IMPRIMIR FACTURA";
+                    $generarImprimirFactura = "imprimir-factura";
+                    if($datosVenta->factura_id == ""){
+                        $tagImprimir = "GENERAR E IMPRIMIR FACTURA";
+                        $generarImprimirFactura = "generar-factura";
+                    }
+                @endphp
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-4">
-                            <a href="{{ url("Venta/imprimeFactura/$datosVenta->id") }}" target="_blank">
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-info">IMPRIMIR FACTURA</button>
+                        <div class="col-md-3">
+                            <a href="{{ url("Venta/imprimeFactura/$datosVenta->id") }}" target="_blank" id="{{ $generarImprimirFactura }}">
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-info">{{ $tagImprimir }}</button>
                             </a>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <a href="{{ url("Venta/imprimir/$datosVenta->id") }}">
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-primary">IMPRIMIR GARANTIA</button>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
                             <a href="{{ url('Venta/listado') }}">
                                 <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
                             </a>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
                                 onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
                         </div>
@@ -297,12 +330,17 @@
             @else
                 <div class="col-md-12">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <a href="{{ url("Venta/imprimir/$datosVenta->id") }}">
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-primary">IMPRIMIR GARANTIA</button>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
                             <a href="{{ url('Venta/listado') }}">
                                 <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</button>
                             </a>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-danger"
                                 onclick="muestraFormularioEliminaVenta()">ELIMINAR VENTA</button>
                         </div>
@@ -341,17 +379,52 @@
     {
         if ($("#formularioEliminaVenta")[0].checkValidity()) {
 
-        Swal.fire({
-            type: 'success',
-            title: 'Excelente!',
-            text: 'Venta Eliminada'
-        })
-        $("#formularioEliminaVenta").submit();
+            let ventaId = $("#ventaId").val();
+            let opcionElimina = $("#opcion_elimina").val();
+
+            $.ajax({
+                url: "{{ url('Venta/elimina') }}",
+                data: {"_token": "{{ csrf_token() }}",
+                        "ventaId": ventaId,
+                        "opcion_elimina": opcionElimina,
+                        },
+                type: 'POST',
+                success: function(data) {
+                    if(data.respuesta == "success"){
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Excelente!',
+                            text: 'Venta Eliminada'
+                        }).then((result) => {
+                            window.location.href = "{{ url('Venta/listado') }}";
+                        });
+                    }else{
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Atención!',
+                            text: data.mensaje
+                        }).then((result) => {
+                            $("#modalElimina").modal("hide");
+                        });
+                    }
+                }
+            });
+
+
+
+        // Swal.fire({
+        //     type: 'success',
+        //     title: 'Excelente!',
+        //     text: 'Venta Eliminada'
+        // })
+        // $("#formularioEliminaVenta").submit();
 
         }else{
             $("#formularioEliminaVenta")[0].reportValidity();
         }
     }
+
+    function cambiaOpcionEliminaVenta(){}
 
     function cancelaElimnacion()
     {
@@ -371,7 +444,7 @@
         $("#ventaProductoCambia").val(ventaId);
         $("#nombrePaqueteCambio").html(nombrePaquete);
 
-        $("#cantidad_producto_a_cambiar").attr({"max":cantidad});
+        $("#cantidad_producto_a_cambiar").attr({"max":parseInt(cantidad)});
         $("#nombreCambiaProducto").html(nombreProducto);
         $("#productoModificaId").val(productoId);
         $("#modalCambiaProducto").modal("show");
@@ -399,22 +472,69 @@
                 type: 'POST',
                 success: function(data) {
                     // $("#ajaxFormEditaCliente").html(data);
-                    window.location.href = "{{ url("Venta/muestra") }}/"+data.ventaId;
+                    window.location.href = "{{ url('Venta/muestra') }}/"+data.ventaId;
                 }
             });
 
-
-        /*Swal.fire({
-            type: 'success',
-            title: 'Excelente!',
-            text: 'Venta Eliminada'
-        })*/
         // $("#formularioEliminaVenta").submit();
 
         }else{
             $("#formularioCambiaProducto")[0].reportValidity();
         }
 
+    }
+
+    // Generar e imprimir Factura
+    $('#generar-factura').on('click', function(e) {
+        e.preventDefault();
+        console.log($(this).attr("href"));
+
+        Swal.fire({
+            title: '¿Desea Generar e Imprimir la Factura de esta venta?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'SI, facturar',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                window.open($(this).attr("href"), '_blank');
+                return false;
+            }
+        })
+
+
+    });
+
+    function imprimirGiftcard(ventaId,productoId, gcImpreso){
+
+        //gcImpreso = 0;
+
+        if ( !gcImpreso || gcImpreso == false || gcImpreso == 0 ){
+
+            Swal.fire({
+                    title: '¿Confirma IMPRIMIR la tarjeta GIFTCARD?',
+                    type: 'warning',
+                    text: 'Entrara a la ventana de impresion, una vez que imprima la GIFTCARD no podra imprimir nuevamente.',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, entrar a la ventana!',
+                    cancelButtonText: "Cancelar",
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = "{{ url('Venta/imprimirGiftcard') }}/"+ventaId+'/'+productoId+'/'+gcImpreso;
+                    }
+                });
+
+        }else{
+            Swal.fire({
+                    type: 'warning',
+                    title: 'GiftCard Impreso!',
+                    text: 'El tarjeta giftcard ya fue impreso, no puede volver a imprimir.'
+            });
+        }
     }
 
 </script>
