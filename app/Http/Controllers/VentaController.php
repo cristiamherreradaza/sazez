@@ -190,6 +190,8 @@ class VentaController extends Controller
                     ->limit(10)
                     ->get();
 
+                // dd($productos);
+
                     // ->orWhere('productos.codigo', 'like', "%$request->termino%")
 
                     // ->get();
