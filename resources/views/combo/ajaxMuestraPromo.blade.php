@@ -28,7 +28,8 @@
                                 ->where('escala_id', 1)
                                 ->first();
                     // $total += $i->precio;
-                    $total = $total + $i->precio * $alamcen->tipo_cambio;
+                    // $total = $total + $i->precio * $alamcen->tipo_cambio;
+                    $total = $total + ceil($i->precio * $alamcen->tipo_cambio);
                 @endphp
                 {{-- <td class="text-right">{{ $precioProducto->precio }}</td> --}}
                 <td class="text-right">{{ ceil($precioProducto->precio*$alamcen->tipo_cambio) }}</td>

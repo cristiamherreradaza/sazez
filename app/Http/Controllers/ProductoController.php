@@ -905,11 +905,8 @@ class ProductoController extends Controller
         ->groupBy('movimientos.almacene_id')
         ->get();
 
-        $almacene_id = 1;
-
         $precios = Precio::where('producto_id', $producto_id)
-                   ->where('almacene_id', $almacene_id)
-                    ->get();
+                            ->get();
 
         return view('producto.ajaxInformacion')->with(compact('cantidadTotal', 'datosProducto', 'precios', 'escalas'));
     }
