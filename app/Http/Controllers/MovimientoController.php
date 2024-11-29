@@ -19,7 +19,7 @@ class MovimientoController extends Controller
     public function registraDatos()
     {
         // dd($productos[0]->id);
-        for ($i=0; $i < 1000 ; $i++) { 
+        for ($i=0; $i < 1000 ; $i++) {
             $productos = DB::select('select id from productos order by rand() limit 1', [1]);
             $almacenes = DB::select('select id from almacenes order by rand() limit 1', [1]);
             $movimientos = new Movimiento();
@@ -38,7 +38,7 @@ class MovimientoController extends Controller
             $movimientos->precio_compra = rand(15, 1000);
             $movimientos->precio_venta = rand(15, 1000);
             $movimientos->save();
-            echo 'insertando '.$i."<br />"; 
+            echo 'insertando '.$i."<br />";
         }
     }
 
@@ -56,6 +56,7 @@ class MovimientoController extends Controller
                             ->orWhere('codigo', 'like', "%$request->termino%")
                             ->limit(8)
                             ->get();
+
         return view('movimiento.ajaxBuscaProducto')->with(compact('productos', 'almacen_id'));
     }
 
@@ -95,7 +96,7 @@ class MovimientoController extends Controller
 
                 $fecha = date("Y-m-d H:i:s");
                 $llaves = array_keys($request->producto_id);     // Sacamos los items
-                foreach ($llaves as $key => $ll) 
+                foreach ($llaves as $key => $ll)
                 {
                     $cantidaMayor = $request->cantidad[$ll];
                     $cantidadEscala = $request->cantidad_escala_m[$ll];
@@ -167,7 +168,7 @@ class MovimientoController extends Controller
                 $fecha = date("Y-m-d H:i:s");
                 $llaves = array_keys($request->producto_id);
 
-                foreach ($llaves as $key => $ll) 
+                foreach ($llaves as $key => $ll)
                 {
 
                     $cantidaMayor = $request->cantidad[$ll];
@@ -283,7 +284,7 @@ class MovimientoController extends Controller
         if(!$incluye_distribucion){
             $incluye_distribucion = 'No';
         }
-        
+
         $maximo = Movimiento::max('numero');
         if ($maximo) {
             $numero = $maximo + 1;
@@ -317,14 +318,14 @@ class MovimientoController extends Controller
             session(['numero_ingreso' => $numero_ingreso]);
             session(['numero_ingreso_envio' => $numero_ingreso_envio]);
             $file = $request->file('select_file');
-            Excel::import(new IngresoImport, $file); 
+            Excel::import(new IngresoImport, $file);
             // Eliminarmos variables de sesión
             session()->forget('proveedor');
             session()->forget('incluye_distribucion');
             session()->forget('numero');
             session()->forget('numero_ingreso');
             session()->forget('numero_ingreso_envio');
-            
+
             $sw=1;
 
             return response()->json([

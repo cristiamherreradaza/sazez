@@ -20,7 +20,6 @@
                 // sacamos los precios de los productos
                 $preciosProductos = App\Precio::where('producto_id', $p->id)
                                     ->where('precio', '<>', 0)
-                                    ->where('almacene_id', '=', $almacen_id)
                                     ->get();
                 $contadorPrecios = 0;
                 $arrayPreciosProductos = [];
@@ -56,7 +55,6 @@
                     @php
                         $precio = App\Precio::where('producto_id', $p->id)
                                     ->where('escala_id', 1)
-                                    ->where('almacene_id', '=', $almacen_id)
                                     ->first();
                     @endphp
                     <td>{{ isset($precio) ? $precio->precio : "No definido" }}</td>

@@ -8,7 +8,6 @@
             <tr>
                 <th scope="col">ALMACEN</th>
                 <th scope="col">EXISTENCIAS</th>
-                <th scope="col">ESCALAS</th>
             </tr>
         </thead>
         <tbody>
@@ -16,9 +15,6 @@
             <tr>
                 <td scope="col">{{ $ct->almacen }}</td>
                 <td scope="col">{{ $ct->total }}</td>
-                <td scope="col">
-                    <button class="btn btn-default" onclick="ver_precio_escala('{{ $ct->id }}', '{{ $datosProducto->id }}')" title="Ver escala precio"><i class="fas fa-trash-alt"></i></button>
-                </td>
             </tr>
             @endforeach
         </tbody>
@@ -57,7 +53,6 @@
 <div class="row">
     <div class="col-md-6">
         <input type="hidden" name="precios_producto_id" id="precios_producto_id" value="{{ $datosProducto->id }}">
-        <input type="hidden" name="almacen_id" id="almacen_id" value="">
 
         <select class="select2 form-control custom-select" name="precios_escala" id="precios_escala" style="width: 100%; height:36px;">
             @foreach ($escalas as $e)
@@ -87,7 +82,6 @@
 
     function adiciona_precio()
     {
-        let almacenId   = $("#almacen_id").val();
         let escala   = $("#precios_escala").val();
         let producto = $("#precios_producto_id").val();
         let precio   = $("#importePrecios").val();
@@ -95,10 +89,10 @@
 
         $.ajax({
             url: "{{ url('Producto/ajaxGuardaPrecio') }}",
-            data: {almacenId: almacenId, escala: escala, productoId: producto, precio: precio},
+            data: {escala: escala, productoId: producto, precio: precio},
             type: 'GET',
             success: function(data) {
-                $("#ajaxActualizaPrecios").load("{{ url('Producto/ajaxMuestraPrecios') }}/"+producto+"/"+almacenId);
+                $("#ajaxActualizaPrecios").load("{{ url('Producto/ajaxMuestraPrecios') }}/"+producto);
                 $("#btnAjaxAdicionaPrecio").show();
             }
         });
