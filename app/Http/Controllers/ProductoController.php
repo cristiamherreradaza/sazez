@@ -1005,9 +1005,8 @@ class ProductoController extends Controller
 
     public function ajaxMuestraPrecios(Request $request)
     {
-        $precios = Precio::where("producto_id", $request->productoId)
-                    ->where('almacene_id', $request->almacenId)
-                    ->get();
+        $precios = Precio::where("producto_id", $request->productoId)->get();
+
         return view('producto.ajaxMuestraPrecios')->with(compact('precios'));
     }
 
