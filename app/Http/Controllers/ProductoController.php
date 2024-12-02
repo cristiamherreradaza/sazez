@@ -1000,7 +1000,6 @@ class ProductoController extends Controller
         $precios->producto_id = $request->productoId;
         $precios->escala_id = $request->escala;
         $precios->precio = $request->precio;
-        $precios->almacene_id = $request->almacenId;
         $precios->save();
     }
 
