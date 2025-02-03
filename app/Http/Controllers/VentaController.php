@@ -204,6 +204,9 @@ class VentaController extends Controller
 
     public function guardaVenta(Request $request)
     {
+
+        dd($request->all());
+
         $alamcen = Auth::user()->almacen;
         $facturaId = null;
 

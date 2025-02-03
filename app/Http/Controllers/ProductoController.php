@@ -73,64 +73,64 @@ class ProductoController extends Controller
         $usuario = Auth::user()->name;
         // dd($usuario);
         if ($usuario == 'Administrador') {
-        //OBTENEMOS LAS VENTAS DIARIAS GLOBALES
-        $venta_diaria = Venta::where('fecha','=',$fecha_actual)
-                ->select('*')
-                ->count('fecha');
+            //OBTENEMOS LAS VENTAS DIARIAS GLOBALES
+            $venta_diaria = Venta::where('fecha','=',$fecha_actual)
+                    ->select('*')
+                    ->count('fecha');
 
-        //OBTENEMOS LAS VENTAS SEMANALES GLOBALES
-        $venta_semanal = Venta::whereBetween('fecha', [$inicio_semana, $fin_semana])
-                ->select('*')
-                ->count('fecha');
+            //OBTENEMOS LAS VENTAS SEMANALES GLOBALES
+            $venta_semanal = Venta::whereBetween('fecha', [$inicio_semana, $fin_semana])
+                    ->select('*')
+                    ->count('fecha');
 
-        //OBTENEMOS LAS VENTAS MENSUALES GLOBALES
-        $venta_mensual = Venta::whereMonth('fecha', $mes)
-                ->whereYear('fecha', $anio)
-                ->select('*')
-                ->count('fecha');
+            //OBTENEMOS LAS VENTAS MENSUALES GLOBALES
+            $venta_mensual = Venta::whereMonth('fecha', $mes)
+                    ->whereYear('fecha', $anio)
+                    ->select('*')
+                    ->count('fecha');
 
-        //OBTENEMOS LAS VENTAS ANUALES GLOBALES
-        $venta_anual = Venta::whereYear('fecha', $anio)
-                ->select('*')
-                ->count('fecha');
+            //OBTENEMOS LAS VENTAS ANUALES GLOBALES
+            $venta_anual = Venta::whereYear('fecha', $anio)
+                    ->select('*')
+                    ->count('fecha');
 
-        //OBTENEMOS LAS VENTAS ANUALES POR MESES
-        // $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
-        //                             FROM ventas
-        //                             WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
-        //                             GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+            //OBTENEMOS LAS VENTAS ANUALES POR MESES
+            // $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
+            //                             FROM ventas
+            //                             WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+            //                             GROUP BY YEAR(fecha) ASC, MONTH(fecha) ASC");
 
-        $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
-                                FROM ventas
-                                WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
-                                GROUP BY YEAR(fecha), MONTH(fecha)
-                                ORDER BY YEAR(fecha) ASC, MONTH(fecha) ASC");
+            $anual_mes = DB::select("SELECT YEAR(fecha) AS anio, MONTH(fecha) AS mes,  COUNT(fecha) AS total
+                                    FROM ventas
+                                    WHERE fecha BETWEEN '$anio_atras' AND '$fecha_actual'
+                                    GROUP BY YEAR(fecha), MONTH(fecha)
+                                    ORDER BY YEAR(fecha) ASC, MONTH(fecha) ASC");
 
-        // $otro = $this->anio_meses($anual_mes);
+            // $otro = $this->anio_meses($anual_mes);
 
-        //OBTENEMOS LOS PRODUCTOS MAS VENDIDOS DEL MES ACTUAL
-        // $productos_mas_vendidos = DB::select("SELECT prod.id, prod.codigo, prod.nombre, tmp.nro
-        //                                         FROM productos prod, (SELECT producto_id, COUNT(producto_id) as nro
-        //                                                                         FROM ventas_productos
-        //                                                                         WHERE MONTH(fecha) = '$mes'
-        //                                                                         GROUP BY producto_id DESC)tmp
-        //                                         WHERE prod.id = tmp.producto_id");
+            //OBTENEMOS LOS PRODUCTOS MAS VENDIDOS DEL MES ACTUAL
+            // $productos_mas_vendidos = DB::select("SELECT prod.id, prod.codigo, prod.nombre, tmp.nro
+            //                                         FROM productos prod, (SELECT producto_id, COUNT(producto_id) as nro
+            //                                                                         FROM ventas_productos
+            //                                                                         WHERE MONTH(fecha) = '$mes'
+            //                                                                         GROUP BY producto_id DESC)tmp
+            //                                         WHERE prod.id = tmp.producto_id");
 
-        $productos_mas_vendidos = DB::select("SELECT prod.id, prod.codigo, prod.nombre, tmp.nro
-                                                FROM productos prod, (SELECT producto_id, COUNT(producto_id) as nro
-                                                                                FROM ventas_productos
-                                                                                WHERE MONTH(fecha) = '$mes'
-                                                                                GROUP BY producto_id
-                                                                                ORDER BY producto_id DESC)tmp
-                                                WHERE prod.id = tmp.producto_id");
+            $productos_mas_vendidos = DB::select("SELECT prod.id, prod.codigo, prod.nombre, tmp.nro
+                                                    FROM productos prod, (SELECT producto_id, COUNT(producto_id) as nro
+                                                                                    FROM ventas_productos
+                                                                                    WHERE MONTH(fecha) = '$mes'
+                                                                                    GROUP BY producto_id
+                                                                                    ORDER BY producto_id DESC)tmp
+                                                    WHERE prod.id = tmp.producto_id");
 
-        //OBTENEMOS LA LISTA DE PRODUCTOS CON SUS STOCK
-        $stock_productos = DB::select("SELECT prod.codigo, prod.cantidad_minima, prod.id, prod.nombre, tmp.total
-                                                FROM productos prod, (SELECT producto_id, (SUM(ingreso) - SUM(salida))as total
-                                                                        FROM movimientos
-                                                                        GROUP BY producto_id)tmp
-                                                WHERE prod.id = tmp.producto_id
-                                                ORDER BY tmp.total ASC");
+            //OBTENEMOS LA LISTA DE PRODUCTOS CON SUS STOCK
+            $stock_productos = DB::select("SELECT prod.codigo, prod.cantidad_minima, prod.id, prod.nombre, tmp.total
+                                                    FROM productos prod, (SELECT producto_id, (SUM(ingreso) - SUM(salida))as total
+                                                                            FROM movimientos
+                                                                            GROUP BY producto_id)tmp
+                                                    WHERE prod.id = tmp.producto_id
+                                                    ORDER BY tmp.total ASC");
         } else {
 
             $almacen_id = Auth::user()->almacen_id;
@@ -184,15 +184,32 @@ class ProductoController extends Controller
             //                                                                             GROUP BY vent_prod.producto_id DESC)tmp
             //                                         WHERE prod.id = tmp.producto_id");
 
-            $productos_mas_vendidos = DB::select("SELECT DISTINCT prod.id, prod.codigo, prod.nombre, tmp.nro
-                                                FROM productos prod, ventas vent, (SELECT vent_prod.producto_id, COUNT(vent_prod.producto_id) as nro
-                                                                                    FROM ventas ven, ventas_productos vent_prod
-                                                                                    WHERE ven.almacene_id = '$almacen_id'
-                                                                                    AND ven.id = vent_prod.venta_id
-                                                                                    AND MONTH(vent_prod.fecha) = '$mes'
-                                                                                    GROUP BY vent_prod.producto_id
-                                                                                    ORDER BY vent_prod.producto_id DESC)tmp
-                                                WHERE prod.id = tmp.producto_id");
+
+
+            // ------------------------ ESTO ES LO ANTIGUO Y LO QUE TARDA------------------------
+            // $productos_mas_vendidos1 = DB::select("SELECT DISTINCT prod.id, prod.codigo, prod.nombre, tmp.nro
+            //                                     FROM productos prod, ventas vent, (SELECT vent_prod.producto_id, COUNT(vent_prod.producto_id) as nro
+            //                                                                         FROM ventas ven, ventas_productos vent_prod
+            //                                                                         WHERE ven.almacene_id = '$almacen_id'
+            //                                                                         AND ven.id = vent_prod.venta_id
+            //                                                                         AND MONTH(vent_prod.fecha) = '$mes'
+            //                                                                         GROUP BY vent_prod.producto_id
+            //                                                                         ORDER BY vent_prod.producto_id DESC)tmp
+            //                                     WHERE prod.id = tmp.producto_id");
+            // ------------------------ ESTO ES LO ANTIGUO Y LO QUE TARDA------------------------
+
+            $productos_mas_vendidos = DB::table('productos as prod')
+                                                    ->join(DB::raw("(
+                                                        SELECT vent_prod.producto_id, COUNT(vent_prod.producto_id) as nro
+                                                        FROM ventas_productos vent_prod
+                                                        JOIN ventas ven ON ven.id = vent_prod.venta_id
+                                                        WHERE ven.almacene_id = $almacen_id AND MONTH(vent_prod.fecha) = $mes
+                                                        GROUP BY vent_prod.producto_id
+                                                    ) as tmp"), 'prod.id', '=', 'tmp.producto_id')
+                                                    ->select('prod.id', 'prod.codigo', 'prod.nombre', 'tmp.nro')
+                                                    ->orderByDesc('tmp.nro')
+                                                    ->get();
+
 
             //OBTENEMOS LA LISTA DE PRODUCTOS CON SUS STOCK
             $stock_productos = DB::select("SELECT prod.codigo, prod.cantidad_minima, prod.id, prod.nombre, tmp.total
@@ -202,6 +219,8 @@ class ProductoController extends Controller
                                                                             GROUP BY producto_id)tmp
                                                     WHERE prod.id = tmp.producto_id
                                                     ORDER BY tmp.total ASC");
+
+
         }
 
         return view('producto.panelControl')->with(compact('venta_diaria', 'venta_semanal', 'venta_mensual', 'venta_anual','productos_mas_vendidos', 'stock_productos'));
